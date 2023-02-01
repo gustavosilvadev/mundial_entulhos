@@ -1,7 +1,7 @@
 {
-    "name": "Projeto Mundial",
+    "name": "laravel/laravel",
     "type": "project",
-    "description": "Projeto para o gerenciamento de serviços",
+    "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
