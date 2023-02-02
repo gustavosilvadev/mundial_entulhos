@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
+
 use App\Models\Client;
 
-use Response;
 
 class ClientController extends Controller
 {
@@ -48,16 +49,18 @@ public function store(Request $request)
     && isset($request->address)
     && isset($request->zipcode)
     && isset($request->city)
+    && isset($request->state)
     ){
 
         $client = new Client();
-            $client->name = $request->name;
-            $client->email = $request->email;
-            $client->phone = $request->phone;
-            $client->cpf_cnpj = $request->cpf_cnpj;
+            $client->name       = $request->name;
+            $client->email      = $request->email;
+            $client->phone      = $request->phone;
+            $client->cpf_cnpj   = $request->cpf_cnpj;
             $client->address_client = $request->address;
-            $client->postal_code = $request->zipcode;
-            $client->city = $request->city;
+            $client->zipcode    = $request->zipcode;
+            $client->city       = $request->city;
+            $client->state      = $request->state;
 
 
             if($client->save()){
@@ -84,13 +87,14 @@ public function update(Request $request)
         if($client){
 
             $client = Client::find($request->id);
-            $client->name = $request->name;
-            $client->email = $request->email;
-            $client->phone = $request->phone;
-            $client->cpf_cnpj = $request->cpf_cnpj;
+            $client->name       = $request->name;
+            $client->email      = $request->email;
+            $client->phone      = $request->phone;
+            $client->cpf_cnpj   = $request->cpf_cnpj;
             $client->address_client = $request->address;
-            $client->postal_code = $request->zipcode;
-            $client->city = $request->city;
+            $client->zipcode    = $request->zipcode;
+            $client->city       = $request->city;
+            $client->state      = $request->state;
 
 
             if($client->update()){

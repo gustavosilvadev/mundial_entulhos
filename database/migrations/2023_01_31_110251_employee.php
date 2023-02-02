@@ -24,8 +24,9 @@ class Employee extends Migration
             $table->string('phone')->nullable();
             $table->string('cpf_cnpj')->nullable();
             $table->string('address')->nullable();
-            $table->string('postal_code')->nullable();
+            $table->string('zipcode')->nullable();
             $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->boolean('flg_status')->default(1);
             $table->timestamps();
         });

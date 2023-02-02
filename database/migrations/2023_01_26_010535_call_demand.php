@@ -15,7 +15,6 @@ class CallDemand extends Migration
     {
         Schema::create('call_demand', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedinteger('id_client');
             $table->foreignId('id_client')->references('id')->on('client');
             $table->string('service_type')->comment('COLOCACAO|TROCA');
             $table->string('work_address');
@@ -24,6 +23,7 @@ class CallDemand extends Migration
             $table->string('phone')->nullable();
             $table->decimal('price_unit', $precision = 8, $scale = 2);
             $table->boolean('payment_status')->default(0);
+            $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - Atendimento | 2 - Finalizado');
             $table->timestamps();
         });
     }

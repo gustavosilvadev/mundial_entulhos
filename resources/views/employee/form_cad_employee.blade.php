@@ -102,6 +102,14 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="email">Estado</label>
+                                                    <input type="text" class="form-control" name="state" />
+
+                                                </div>
+                                            </div>
+
                                             <div class="col-12 d-flex flex-sm-row flex-column mt-2">
                                                 <button type="submit" class="btn btn-success mb-1 mb-sm-0 mr-0 mr-sm-1">Criar</button>
 

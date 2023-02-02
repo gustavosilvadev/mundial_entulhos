@@ -83,7 +83,7 @@
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-group">
                                                             <label for="last-name-column">CEP</label>
-                                                            <input type="text" id="last-name-column" class="form-control" name="zipcode" value="<?php echo $client->postal_code; ?>"/>
+                                                            <input type="text" id="last-name-column" class="form-control" name="zipcode" value="<?php echo $client->zipcode; ?>"/>
                                                         </div>
                                                     </div>
 
@@ -91,6 +91,13 @@
                                                         <div class="form-group">
                                                             <label for="last-name-column">Cidade</label>
                                                             <input type="text" id="last-name-column" class="form-control" name="city" value="<?php echo $client->city; ?>"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="form-group">
+                                                            <label for="last-name-column">Estado</label>
+                                                            <input type="text" id="last-name-column" class="form-control" name="state" value="<?php echo $client->state; ?>"/>
                                                         </div>
                                                     </div>
 

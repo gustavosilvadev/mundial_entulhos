@@ -20,8 +20,9 @@ class Client extends Migration
             $table->string('phone');
             $table->string('cpf_cnpj');
             $table->string('address_client');
-            $table->string('postal_code');
+            $table->string('zipcode');
             $table->string('city');
+            $table->string('state');
             $table->boolean('flg_status')->default(1);
             $table->timestamps();
         });

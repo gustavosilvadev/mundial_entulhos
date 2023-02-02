@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Employee;
 
-class EmployeeController extends Controller
+class CallDemandController extends Controller
 {
-
+/*
     public function show(Request $request)
     {
 
@@ -38,7 +38,7 @@ class EmployeeController extends Controller
             }
         }
     }
-
+*/
     public function store(Request $request)
     {
         if (isset($request->name)
@@ -74,7 +74,7 @@ class EmployeeController extends Controller
         }
     }
 
-
+/*
     public function update(Request $request)
     {
 
@@ -152,7 +152,7 @@ class EmployeeController extends Controller
             return $this->returnError('Cliente não encontrado',404); 
         }
     }
-
+*/
     private function returnSuccess($dados)
     {
         return [
