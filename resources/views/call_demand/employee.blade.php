@@ -1,9 +1,4 @@
 
-<?php 
-print_r($driver);
-die();
-?>
-
 @include('partials.header')
 
 

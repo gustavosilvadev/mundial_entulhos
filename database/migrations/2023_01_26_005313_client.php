@@ -16,13 +16,16 @@ class Client extends Migration
         Schema::create('client', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('surname');
             $table->string('email')->nullable();
             $table->string('phone');
             $table->string('cpf_cnpj');
-            $table->string('address_client');
+            $table->string('address');
+            $table->integer('number')->nullable();
             $table->string('zipcode');
+            $table->string('district');
+            $table->string('state', 2);
             $table->string('city');
-            $table->string('state');
             $table->boolean('flg_status')->default(1);
             $table->timestamps();
         });

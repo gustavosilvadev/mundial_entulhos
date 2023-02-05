@@ -15,6 +15,7 @@ class DriverController extends Controller
         if(isset($request->id)){
 
 
+
             $driver = Driver::where('id',$request->id)->orderBy('id','DESC')->first();
 
             if(isset($driver)){
@@ -41,6 +42,7 @@ class DriverController extends Controller
     public function showEmployee()
     {
         $employees = Employee::all();
+        
         if($employees){
 
             return view('driver.form_cad_driver',['employees'=> $employees]);
@@ -52,10 +54,11 @@ class DriverController extends Controller
         if (isset($request->employee)){
 
             $driver = new Driver();
-                $driver->id_employee    = $request->id_employee;
+                $driver->id_employee = $request->employee;
 
                 if($driver->save()){
 
+                    dd('success!!');
                     return view('driver.form_cad_driver',["response" => "Dados cadastrados com sucesso"]);
                 }
 

@@ -48,15 +48,19 @@ Route::get('/del_employee/{id}',[EmployeeController::class,'destroy']);
 // Driver
 Route::get('createdriver', [DriverController::class,'showEmployee']);
 Route::post('/save_driver',[DriverController::class,'store']);
-Route::get('driver/{id?}',[DriverController::class,'show']);
-Route::post('/update_driver',[DriverController::class,'update']);
-Route::get('/del_driver/{id}',[DriverController::class,'destroy']);
+// Route::get('driver/{id?}',[DriverController::class,'show']);
+// Route::post('/update_driver',[DriverController::class,'update']);
+// Route::get('/del_driver/{id}',[DriverController::class,'destroy']);
 
 
 // Call Demand
-Route::get('createcalldemand', function(){
-    return view('call_demand.form_cad_employee');
-});
+
+// Route::get('createcalldemand', function(){
+//     return view('call_demand.form_cad_call_demand');
+// });
+
+Route::get('createcalldemand', [CallDemandController::class,'showNameClient']);
+
 Route::post('/save_call_demand',[CallDemandController::class,'store']);
 Route::get('call_demand/{id?}',[CallDemandController::class,'show']);
 Route::post('/update_call_demand',[CallDemandController::class,'update']);

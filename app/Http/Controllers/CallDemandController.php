@@ -5,7 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Employee;
+use App\Models\CallDemand;
+use App\Models\Client;
 
 class CallDemandController extends Controller
 {
@@ -39,30 +40,51 @@ class CallDemandController extends Controller
         }
     }
 */
+
+    public function showNameClient()
+    {
+        $client = Client::all();   
+
+        return view('call_demand.form_cad_call_demand', ['clients' => $client]);
+    }
+
     public function store(Request $request)
     {
-        if (isset($request->name)
-            && isset($request->surname)
-            && isset($request->email)
-            && isset($request->login)
-            && isset($request->password)
+        if (isset($request->id_client)
+            && isset($request->service_type)
+            && isset($request->work_address)
+            && isset($request->phone)
+            && isset($request->price_unit)
         ){
 
-            $employee = new Employee();
-                $employee->name     = $request->name;
-                $employee->surname  = $request->surname;
-                $employee->email    = $request->email;
-                $employee->login    = $request->login;
-                $employee->password = Hash::make($request->password);;
-                $employee->phone = $request->phone;
-                $employee->cpf_cnpj = $request->cpf_cnpj;
-                $employee->address  = $request->address;
-                $employee->zipcode = $request->zipcode;
-                $employee->city = $request->city;
-                $employee->state = $request->state;
+            $calldemand = new CallDemand();
+                // $employee->name     = $request->name;
+                // $employee->surname  = $request->surname;
+                // $employee->email    = $request->email;
+                // $employee->login    = $request->login;
+                // $employee->password = Hash::make($request->password);;
+                // $employee->phone = $request->phone;
+                // $employee->cpf_cnpj = $request->cpf_cnpj;
+                // $employee->address  = $request->address;
+                // $employee->zipcode = $request->zipcode;
+                // $employee->city = $request->city;
+                // $employee->state = $request->state;
+
+                $calldemand->id_client = $request->id_client;
+                $calldemand->service_type = $request->service_type;
+                $calldemand->work_address = $request->work_address;
+                $calldemand->work_district = $request->work_district;
+                $calldemand->comments = $request->comments;
+                $calldemand->phone = $request->phone       ;
+                $calldemand->price_unit = $request->price_unit;
+                $calldemand->payment_status = $request->payment_status;
+                $calldemand->service_status = $request->service_status;
 
 
-                if($employee->save()){
+
+
+
+                if($calldemand->save()){
 
                     return view('employee.form_cad_employee',["response" => "Dados cadastrados com sucesso"]);
                 }

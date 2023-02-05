@@ -28,6 +28,7 @@
                                                 <div class="form-group">
                                                     <label for="username">Nome do Funcionário</label>
                                                     <select class="select2 form-control form-control-lg" name="employee">
+                                                        <option value="">----</option>
                                                         <?php foreach($employees as $employee):?>
                                                             <option value="<?php echo $employee->id; ?>"><?php echo $employee->name; ?></option>
                                                         <?php endforeach; ?>

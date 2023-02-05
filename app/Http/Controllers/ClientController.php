@@ -42,7 +42,9 @@ public function show(Request $request)
 
 public function store(Request $request)
 {
+
     if(isset($request->name)
+    && isset($request->surname)
     && isset($request->email)
     && isset($request->phone)
     && isset($request->cpf_cnpj)
@@ -54,6 +56,7 @@ public function store(Request $request)
 
         $client = new Client();
             $client->name       = $request->name;
+            $client->surname       = $request->surname;
             $client->email      = $request->email;
             $client->phone      = $request->phone;
             $client->cpf_cnpj   = $request->cpf_cnpj;
@@ -73,6 +76,8 @@ public function store(Request $request)
         // }
 
     }else{
+        dd('Dados incompletos!');
+
         return view('client.form_cad_client',["response" => "Dados incompletos!"]);
     }
 }
@@ -88,6 +93,7 @@ public function update(Request $request)
 
             $client = Client::find($request->id);
             $client->name       = $request->name;
+            $client->surname       = $request->surname;
             $client->email      = $request->email;
             $client->phone      = $request->phone;
             $client->cpf_cnpj   = $request->cpf_cnpj;

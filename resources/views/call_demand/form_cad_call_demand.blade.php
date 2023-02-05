@@ -17,31 +17,59 @@
                                 <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                                     <!-- users edit media object start -->
                                     <div class="media mb-2">
-                                        <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">CLIENTE!</mark></h3>    
+                                        <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">DEMANDA!</mark></h3>    
                                     </div>
                                     <!-- users edit media object ends -->
                                     <!-- users edit account form start -->
-                                    <form action="/save_client" method= "POST" id="form" class="form-validate">
+                                    <form action="/save_call_demand" method= "POST" id="form" class="form-validate">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="username">Nome</label>
-                                                    <input type="text" class="form-control"  name="name" id="name" />
+                                                    <label for="username">Nome do cliente</label>
+                                                    {{-- <input type="text" class="form-control"  name="name" id="username" /> --}}
+
+
+                                                    <select class="select2 form-control form-control-lg" name="client">
+                                                        <option value="">----</option>
+                                                        <?php foreach($clients as $client):?>
+                                                            <option value="<?php echo $client->id; ?>"><?php echo $client->name.' '.$client->surname; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="username">Sobrenome</label>
-                                                    <input type="text" class="form-control"  name="surname" id="surname" />
+                                                    <label for="name">Tipo de serviço</label>
+                                                    {{-- <input type="email" class="form-control" name="email" id="email"/> --}}
+                                                    <select class="select2 form-control form-control-lg" name="service_type">
+                                                        <option value="" selected>----</option>
+                                                        <option value="COLOCACAO">COLOCAÇÃO</option>
+                                                        <option value="DEMANDA">DEMANDA</option>
+                                                    </select>                                           
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="name">E-mail</label>
-                                                    <input type="email" class="form-control" name="email" id="email"/>
+                                                    <label for="name">Endereço</label>
+                                                    <input type="text" class="form-control" name="address" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Senha</label>
+                                                    <input type="password" class="form-control" name="password" id="password"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Repetir Senha</label>
+                                                    <input type="password" class="form-control" name="password_repeat" id="password"/>
                                                 </div>
                                             </div>
 
@@ -69,7 +97,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="email">CEP</label>
-                                                    <input type="text" class="form-control" name="zipcode" />
+                                                    <input type="text" pattern="[0-9]{5}" class="form-control" name="zipcode" />
 
                                                 </div>
                                             </div>
@@ -85,6 +113,7 @@
                                                 <div class="form-group">
                                                     <label for="email">Estado</label>
                                                     <input type="text" class="form-control" name="state" />
+
                                                 </div>
                                             </div>
 
