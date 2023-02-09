@@ -68,11 +68,26 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
+                                                    <label for="name">Número</label>
+                                                    <input type="text" class="form-control" name="number" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
                                                     <label for="email">CEP</label>
                                                     <input type="text" class="form-control" name="zipcode" />
 
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="email">Bairro</label>
+                                                    <input type="text" class="form-control" name="district" />
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="email">Cidade</label>

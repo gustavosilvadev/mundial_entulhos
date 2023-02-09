@@ -60,8 +60,8 @@ Route::post('/save_driver',[DriverController::class,'store']);
 // });
 
 Route::get('createcalldemand', [CallDemandController::class,'showNameClient']);
-
-Route::post('/save_call_demand',[CallDemandController::class,'store']);
+Route::post('save_call_demand',[CallDemandController::class,'store']);
 Route::get('call_demand/{id?}',[CallDemandController::class,'show']);
-Route::post('/update_call_demand',[CallDemandController::class,'update']);
-Route::get('/del_call_demand/{id}',[CallDemandController::class,'destroy']);
+
+Route::post('update_call_demand',[CallDemandController::class,'update']);
+Route::get('del_call_demand/{id}',[CallDemandController::class,'destroy']);

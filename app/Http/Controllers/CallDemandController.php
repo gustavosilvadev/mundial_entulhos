@@ -7,39 +7,42 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Models\CallDemand;
 use App\Models\Client;
+use PhpParser\Node\Expr\CallLike;
 
 class CallDemandController extends Controller
 {
-/*
+
     public function show(Request $request)
     {
 
         if(isset($request->id)){
 
 
-            $employee = Employee::where('id',$request->id)->orderBy('id','DESC')->first();
+            $calldemand = CallDemand::where('id',$request->id)->orderBy('id','DESC')->first();
+            $client     = Client::where('id',$calldemand->id_client)->first();
 
-            if(isset($employee)){
+            if(isset($calldemand)){
                 
-
-                return view('employee.employee',['employee' => $employee]);
+                return view('call_demand.preview_call_demand',['calldemand' => $calldemand, 'client' => $client]);
 
             }else{
 
-
-                return view('employee.employee',['employee','']);
+                return view('call_demand.preview_call_demand',['calldemand','']);
             }
 
         }else{
             
-            $employees = Employee::all();
-            
-            if(isset($employees)){
-                return view('employee.form_list_employee',['employees'=> $employees]);
+            $calldemands = CallDemand::all();
+
+            if(isset($calldemands)){
+                return view('call_demand.list_call_demand',['calldemands'=> $calldemands]);
             }
+
+
+            return view('call_demand.list_call_demand');
         }
     }
-*/
+
 
     public function showNameClient()
     {
@@ -50,49 +53,52 @@ class CallDemandController extends Controller
 
     public function store(Request $request)
     {
-        if (isset($request->id_client)
-            && isset($request->service_type)
-            && isset($request->work_address)
-            && isset($request->phone)
-            && isset($request->price_unit)
+
+        if(isset($request->id_client)
+        && isset($request->type_service)
+        && isset($request->address)
+        && isset($request->number)
+        && isset($request->zipcode)
+        && isset($request->city)
+        && isset($request->district)
+        && isset($request->state)
+        && isset($request->phone)
+        && isset($request->price_unit)
         ){
 
+            $calldemand_query = CallDemand::where("id_client",$request->id_client)
+            ->where('service_status','<', 2)
+            ->first();
+
+            if(isset($calldemand_query)){
+                return redirect('createcalldemand');
+            }
+
             $calldemand = new CallDemand();
-                // $employee->name     = $request->name;
-                // $employee->surname  = $request->surname;
-                // $employee->email    = $request->email;
-                // $employee->login    = $request->login;
-                // $employee->password = Hash::make($request->password);;
-                // $employee->phone = $request->phone;
-                // $employee->cpf_cnpj = $request->cpf_cnpj;
-                // $employee->address  = $request->address;
-                // $employee->zipcode = $request->zipcode;
-                // $employee->city = $request->city;
-                // $employee->state = $request->state;
+            $calldemand->id_client     = $request->id_client;
+            $calldemand->type_service  = $request->type_service;
+            $calldemand->address       = $request->address;
+            $calldemand->number        = $request->number;
+            $calldemand->zipcode       = $request->zipcode;
+            $calldemand->city          = $request->city;
+            $calldemand->district      = $request->district;
+            $calldemand->state         = $request->state;
+            $calldemand->comments      = $request->comments;
+            $calldemand->phone         = $request->phone;
+            $calldemand->price_unit    = $request->price_unit;
+            $calldemand->date_begin    = (isset($request->date_begin) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_begin))) : '');
+            $calldemand->date_end      = (isset($request->date_end) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_end))) : '');
+        
+            if($calldemand->save()){
+                // return view('call_demand.form_cad_call_demand',["response" => "Dados cadastrados com sucesso"]);
+                return redirect('createcalldemand');
+            }
 
-                $calldemand->id_client = $request->id_client;
-                $calldemand->service_type = $request->service_type;
-                $calldemand->work_address = $request->work_address;
-                $calldemand->work_district = $request->work_district;
-                $calldemand->comments = $request->comments;
-                $calldemand->phone = $request->phone       ;
-                $calldemand->price_unit = $request->price_unit;
-                $calldemand->payment_status = $request->payment_status;
-                $calldemand->service_status = $request->service_status;
-
-
-
-
-
-                if($calldemand->save()){
-
-                    return view('employee.form_cad_employee',["response" => "Dados cadastrados com sucesso"]);
-                }
-
-                return view('employee.form_cad_employee',["response" => "Erro ao cadastrar o funcionário"]);
-
+            return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);        
+        
         }else{
-            return view('employee.form_cad_employee',["response" => "Dados incompletos!"]);
+            // return view('call_demand.form_cad_call_demand',["response" => "Dados incompletos!"]);
+            return redirect('/createcalldemand');
         }
     }
 

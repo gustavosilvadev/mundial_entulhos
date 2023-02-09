@@ -28,6 +28,8 @@ class CallDemand extends Migration
             $table->decimal('price_unit', $precision = 8, $scale = 2);
             $table->boolean('payment_status')->default(0);
             $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - Atendimento | 2 - Finalizado');
+            $table->dateTime('date_begin')->nullable();
+            $table->dateTime('date_end')->nullable();
             $table->timestamps();
         });
     }

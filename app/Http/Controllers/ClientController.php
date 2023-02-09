@@ -49,19 +49,24 @@ public function store(Request $request)
     && isset($request->phone)
     && isset($request->cpf_cnpj)
     && isset($request->address)
+    && isset($request->number)
     && isset($request->zipcode)
-    && isset($request->city)
+    && isset($request->district)
     && isset($request->state)
+    && isset($request->city)
     ){
 
         $client = new Client();
             $client->name       = $request->name;
-            $client->surname       = $request->surname;
+            $client->surname    = $request->surname;
             $client->email      = $request->email;
             $client->phone      = $request->phone;
             $client->cpf_cnpj   = $request->cpf_cnpj;
-            $client->address_client = $request->address;
+            $client->address    = $request->address;
+            $client->number     = $request->number;
             $client->zipcode    = $request->zipcode;
+            $client->district   = $request->district;
+            $client->state      = $request->state;
             $client->city       = $request->city;
             $client->state      = $request->state;
 
@@ -80,6 +85,7 @@ public function store(Request $request)
 
         return view('client.form_cad_client',["response" => "Dados incompletos!"]);
     }
+
 }
 
 public function update(Request $request)
@@ -93,14 +99,18 @@ public function update(Request $request)
 
             $client = Client::find($request->id);
             $client->name       = $request->name;
-            $client->surname       = $request->surname;
+            $client->surname    = $request->surname;
             $client->email      = $request->email;
             $client->phone      = $request->phone;
             $client->cpf_cnpj   = $request->cpf_cnpj;
-            $client->address_client = $request->address;
+            $client->address    = $request->address;
+            $client->number     = $request->number;
             $client->zipcode    = $request->zipcode;
-            $client->city       = $request->city;
+            $client->district   = $request->district;
             $client->state      = $request->state;
+            $client->city       = $request->city;
+            $client->state      = $request->state;            
+            
 
 
             if($client->update()){
