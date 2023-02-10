@@ -5,6 +5,8 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\CallDemandController;
+use App\Http\Controllers\DumpsterServiceDemandController;
+use App\Http\Controllers\ClientInfoPaymentController;
 use Illuminate\Http\Request;
 
 
@@ -54,14 +56,20 @@ Route::post('/save_driver',[DriverController::class,'store']);
 
 
 // Call Demand
-
-// Route::get('createcalldemand', function(){
-//     return view('call_demand.form_cad_call_demand');
-// });
-
 Route::get('createcalldemand', [CallDemandController::class,'showNameClient']);
 Route::post('save_call_demand',[CallDemandController::class,'store']);
 Route::get('call_demand/{id?}',[CallDemandController::class,'show']);
 
-Route::post('update_call_demand',[CallDemandController::class,'update']);
-Route::get('del_call_demand/{id}',[CallDemandController::class,'destroy']);
+// Route::post('update_call_demand',[CallDemandController::class,'update']);
+// Route::get('del_call_demand/{id}',[CallDemandController::class,'destroy']);
+
+// Dumpsdumpster service demand
+Route::get('createdumpsterservicedemand', [DumpsterServiceDemandController::class,'showNameDriverDemand']);
+Route::post('save_dumpster_service_demand',[DumpsterServiceDemandController::class,'store']);
+// Route::get('dumpster_service_demand/{id?}',[DumpsterServiceDemandController::class,'show']);
+
+
+// Client Info Payment
+Route::get('clientinfopayment/{id?}', [ClientInfoPaymentController::class,'showInfoClientInfoPayment']);
+Route::post('save_client_info_payment',[ClientInfoPaymentController::class,'store']);
+// Route::get('dumpster_service_demand/{id?}',[DumpsterServiceDemandController::class,'show']);

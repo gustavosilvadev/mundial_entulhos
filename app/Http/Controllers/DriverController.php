@@ -58,14 +58,16 @@ class DriverController extends Controller
 
                 if($driver->save()){
 
-                    dd('success!!');
-                    return view('driver.form_cad_driver',["response" => "Dados cadastrados com sucesso"]);
+                    // return view('driver.form_cad_driver',["response" => "Dados cadastrados com sucesso"]);
+                    return redirect('createdriver');
                 }
 
-                return view('driver.form_cad_driver',["response" => "Erro ao cadastrar o motorista"]);
+                // return view('driver.form_cad_driver',["response" => "Erro ao cadastrar o motorista"]);
+                return redirect('createdriver');
 
         }else{
-            return view('driver.form_cad_driver',["response" => "Dados incompletos!"]);
+            // return view('driver.form_cad_driver',["response" => "Dados incompletos!"]);
+            return redirect('createdriver');
         }
     }
 

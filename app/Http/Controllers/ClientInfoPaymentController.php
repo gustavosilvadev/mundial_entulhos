@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Hash;
 use App\Models\CallDemand;
-use App\Models\Client;
+use App\Models\Driver;
+use App\Models\DumpsterServiceDemand;
+use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\CallLike;
 
-class CallDemandController extends Controller
+class ClientInfoPaymentController extends Controller
 {
 
     public function show(Request $request)
     {
-
+/*
         if(isset($request->id)){
 
 
@@ -41,65 +42,51 @@ class CallDemandController extends Controller
 
             return view('call_demand.list_call_demand');
         }
+*/        
     }
 
-
-    public function showNameClient()
+    public function showInfoClientInfoPayment(Request $request)
     {
-        $client = Client::all();   
+        
+        print('Id do cliente: '.$request->id);
+        die();
 
-        return view('call_demand.form_cad_call_demand', ['clients' => $client]);
+
+    }
+
+    public function showNameDriverDemand()
+    {
+        $call_demands = CallDemand::where('service_status','<',2)->get();
+        $drivers      = Driver::join('employee', function($join){
+            $join->on('driver.id_employee', '=', 'employee.id')->where('driver.flg_status', 1);
+        })->get(['driver.id','employee.name']);
+
+        return view('dumpster_service_demand.form_cad_service_demand', ['call_demands' => $call_demands, 'drivers' => $drivers]);
     }
 
     public function store(Request $request)
     {
+        if(isset($request->id_driver) && isset($request->id_call_demand)){
 
-        if(isset($request->id_client)
-        && isset($request->type_service)
-        && isset($request->address)
-        && isset($request->number)
-        && isset($request->zipcode)
-        && isset($request->city)
-        && isset($request->district)
-        && isset($request->state)
-        && isset($request->phone)
-        && isset($request->price_unit)
-        ){
+            $dumpster_service_demand = new DumpsterServiceDemand();
+            $dumpster_service_demand->id_driver         = $request->id_driver;
+            $dumpster_service_demand->id_call_demand    = $request->id_call_demand;
+            $dumpster_service_demand->start_service_date       = now();
+            $dumpster_service_demand->dumpster_allocate_date   = null;
+            $dumpster_service_demand->dumpster_collected_date  = null;
+            $dumpster_service_demand->end_service_date = null;
 
-            // $calldemand_query = CallDemand::where("id_client",$request->id_client)
-            // ->where('service_status','<', 2)
-            // ->first();
-
-            // if(isset($calldemand_query)){
-            //     return redirect('createcalldemand');
-            // }
-
-            $calldemand = new CallDemand();
-            $calldemand->id_client     = $request->id_client;
-            $calldemand->type_service  = $request->type_service;
-            $calldemand->address       = $request->address;
-            $calldemand->number        = $request->number;
-            $calldemand->zipcode       = $request->zipcode;
-            $calldemand->city          = $request->city;
-            $calldemand->district      = $request->district;
-            $calldemand->state         = $request->state;
-            $calldemand->comments      = $request->comments;
-            $calldemand->phone         = $request->phone;
-            // $calldemand->price_unit    = $request->price_unit;
-            $calldemand->price_unit    = preg_replace('/[^0-9]+/','.',str_replace('.','',$request->price_unit));
-            $calldemand->date_begin    = (isset($request->date_begin) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_begin))) : '');
-            $calldemand->date_end      = (isset($request->date_end) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_end))) : '');
-        
-            if($calldemand->save()){
+            if($dumpster_service_demand->save()){
                 // return view('call_demand.form_cad_call_demand',["response" => "Dados cadastrados com sucesso"]);
-                return redirect('createcalldemand');
+                return redirect('createdumpsterservicedemand');
             }
 
-            return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);        
+            // return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);        
+            return redirect('/createdumpsterservicedemand');
         
         }else{
             // return view('call_demand.form_cad_call_demand',["response" => "Dados incompletos!"]);
-            return redirect('/createcalldemand');
+            return redirect('/createdumpsterservicedemand');
         }
     }
 

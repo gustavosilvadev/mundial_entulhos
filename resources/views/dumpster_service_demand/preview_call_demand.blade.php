@@ -110,8 +110,7 @@
                                                         <span class="font-weight-bold">2</span>
                                                     </td>
                                                     <td class="py-1">
-                                                        {{-- <span class="font-weight-bold"><?php echo 'R$'.str_replace('.', ',', $calldemand->price_unit); ?></span> --}}
-                                                        <span class="font-weight-bold"><?php echo 'R$'.number_format($calldemand->price_unit, 2, ',', '.'); ?></span>
+                                                        <span class="font-weight-bold"><?php echo 'R$'.str_replace('.', ',', $calldemand->price_unit); ?></span>
                                                     </td>
                                                 </tr>
                                             </tbody>
