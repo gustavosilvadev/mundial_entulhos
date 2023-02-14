@@ -41,6 +41,7 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
+
         if (isset($request->name)
             && isset($request->surname)
             && isset($request->email)
@@ -54,12 +55,12 @@ class EmployeeController extends Controller
                 $employee->email    = $request->email;
                 $employee->login    = $request->login;
                 $employee->password = Hash::make($request->password);;
-                $employee->phone = $request->phone;
+                $employee->phone    = $request->phone;
                 $employee->cpf_cnpj = $request->cpf_cnpj;
                 $employee->address  = $request->address;
-                $employee->zipcode = $request->zipcode;
-                $employee->city = $request->city;
-                $employee->state = $request->state;
+                $employee->zipcode  = $request->zipcode;
+                $employee->city     = $request->city;
+                $employee->state    = $request->state;
 
 
                 if($employee->save()){

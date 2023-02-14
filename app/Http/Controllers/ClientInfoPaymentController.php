@@ -45,14 +45,14 @@ class ClientInfoPaymentController extends Controller
 */        
     }
 
-    public function showInfoClientInfoPayment(Request $request)
+
+    public function showInfoClientInfoPayment()
     {
-        
-        print('Id do cliente: '.$request->id);
-        die();
+        // $client = Client::all();   
+        // return view('call_demand.form_cad_call_demand', ['clients' => $client]);
 
-
-    }
+        return view('info_payment.form_cad_info_payment');
+    }    
 
     public function showNameDriverDemand()
     {

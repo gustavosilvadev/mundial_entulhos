@@ -42,7 +42,7 @@ Route::get('createemployee', function(){
     return view('employee.form_cad_employee');
 });
 
-Route::post('/save_employee',[EmployeeController::class,'store']);
+Route::post('save_employee',[EmployeeController::class,'store']);
 Route::get('employee/{id?}',[EmployeeController::class,'show']);
 Route::post('/update_employee',[EmployeeController::class,'update']);
 Route::get('/del_employee/{id}',[EmployeeController::class,'destroy']);
@@ -70,6 +70,7 @@ Route::post('save_dumpster_service_demand',[DumpsterServiceDemandController::cla
 
 
 // Client Info Payment
-Route::get('clientinfopayment/{id?}', [ClientInfoPaymentController::class,'showInfoClientInfoPayment']);
+// Route::get('clientinfopayment/{id?}', [ClientInfoPaymentController::class,'showInfoClientInfoPayment']);
+Route::get('clientinfopayment', [ClientInfoPaymentController::class,'showInfoClientInfoPayment']);
 Route::post('save_client_info_payment',[ClientInfoPaymentController::class,'store']);
 // Route::get('dumpster_service_demand/{id?}',[DumpsterServiceDemandController::class,'show']);

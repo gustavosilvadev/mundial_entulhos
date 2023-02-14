@@ -49,7 +49,7 @@
 
                                                         <i data-feather="more-vertical" class="drag-icon"></i>
                                                         <div class="title-wrapper">
-                                                            <a href="lista_conteudo_categoria/{{$employee->id}}" class="href">
+                                                            <a href="employee/{{$employee->id}}" class="href">
                                                                 <span class="todo-title"><?php echo $employee->name; ?></span>
                                                             </a>
                                                         </div>

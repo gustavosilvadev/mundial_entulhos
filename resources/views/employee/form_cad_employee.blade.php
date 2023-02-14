@@ -110,6 +110,20 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-4">
+
+                                                <div class="custom-control custom-switch custom-switch-success">
+                                                    <p class="mb-50">Ativo</p>
+                                                    <input type="checkbox" state="state" class="custom-control-input" id="customSwitch111" checked />
+                                                    <label class="custom-control-label" for="customSwitch111">
+                                                        <span class="switch-icon-left"><i data-feather="check"></i></span>
+                                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
+                                                    </label>
+                                                </div>
+
+
+                                            </div>                                            
+
                                             <div class="col-12 d-flex flex-sm-row flex-column mt-2">
                                                 <button type="submit" class="btn btn-success mb-1 mb-sm-0 mr-0 mr-sm-1">Criar</button>
 

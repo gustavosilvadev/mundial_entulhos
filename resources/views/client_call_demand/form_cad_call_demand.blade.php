@@ -30,34 +30,23 @@
 
                                                 <div class="row">
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="username">Tipo de Serviço</label>
-                                                            <select class="form-control" name="type_service">
-                                                                <option value="" selected>----</option>
-                                                                <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                <option value="TROCA">TROCA</option>
-                                                            </select>            
-                                                        </div>
-                                                    </div>                                                    
-
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <span class="title">DATA PEDIDO:</span>
-                                                            <input type="text" name="date_begin" id="date_begin" class="form-control invoice-edit-input date-picker" />
+                                                            <span class="title">Data início:</span>
+                                                            <input type="text" name="date_begin" class="form-control invoice-edit-input date-picker" />
                                                         </div>
                                                         
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <span class="title">PREVISÃO DE RETIRADA:</span>
+                                                            <span class="title">Data fim:</span>
                                                             <input type="text" name="date_end" class="form-control invoice-edit-input due-date-picker" />
                                                         </div>    
                                                     </div>
                                                     
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="username">CLIENTE</label>
+                                                            <label for="username">Nome do cliente</label>
                                                             <select class="select2 form-control form-control-lg" name="id_client">
                                                                 <option value="">----</option>
                                                                 <?php if(isset($clients)):?>
@@ -77,7 +66,7 @@
                                                         </div>
                                                     </div>
             
-                                                    <div class="col-md-2">
+                                                    <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="number">Número</label>
                                                             <input type="text" class="form-control" name="number" />
@@ -123,72 +112,16 @@
                                                         </div>
                                                     </div>
             
-                                                    <div class="col-md-2">
+                                                    <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="price_unit">Preço UNIT.</label>
-                                                            <input type="number" name="price_unit" class="form-control" value="0" />
-                                                            
-
+                                                            <label for="price_unit">Preço por unidade</label>
+                                                            <input type="text" class="form-control" name="price_unit" />
                                                         </div>
                                                     </div>
             
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label for="price_unit">TOTAL DE CAÇAMBAS</label>
-                                                            <input type="number" name="dumpster_total" class="form-control" value="0" min="0" max="1000" placeholder="0" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label for="price_unit">TOTAL EM ABERTO</label>
-                                                            <input type="number" name="dumpster_total_opened" class="form-control" value="0" min="0" max="1000" placeholder="0" />
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="username">ATERRO</label>
-                                                            <select class="select2 form-control form-control-lg" name="id_landfill">
-                                                                <option value="">----</option>
-                                                                <option value="">RETEK</option>
-                                                                <option value="">FORMIGA</option>
-                                                                <option value="">PEDRO</option>
-                                                               
-                                                            </select>
-            
-                                                        </div>
-                                                    </div>                                                    
-
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="username">PERÍODO DO DIA</label>
-                                                            <select class="select2 form-control form-control-lg" name="period">
-                                                                <option value="">----</option>
-                                                                <option value="">DIURNO</option>
-                                                                <option value="">NOTURNO</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="username">MOTORISTA</label>
-                                                            <select class="select2 form-control form-control-lg" name="id_driver">
-                                                                <option value="">----</option>
-                                                                <?php if(isset($drivers)):?>
-                                                                    <?php foreach($drivers as $driver):?>
-                                                                        <option value="<?php echo $driver->id; ?>"><?php echo $driver->name.' '.$driver->surname; ?></option>
-                                                                    <?php endforeach; ?>
-                                                                <?php endif; ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-
                                                     <div class="col-md-12">
                                                         <div class="form-group mb-2">
-                                                            <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
+                                                            <label for="note" class="form-label font-weight-bold">Observação:</label>
                                                             <textarea class="form-control" rows="2" id="note" name="comments"></textarea>
                                                         </div>
                                                     </div>
@@ -211,17 +144,18 @@
                     <div class="col-xl-3 col-md-4 col-12">
                         <div class="card">
                             <div class="card-body">
+                                {{-- <button class="btn btn-success btn-block mb-75" disabled>Salvar</button> --}}
                                 <button type="submit" class="btn btn-success btn-block mb-75">Salvar</button>                                
                             </div>
                         </div>
-                        {{-- <div class="mt-2">
+                        <div class="mt-2">
                             <p class="mb-50">Tipo de serviço</p>
                             <select class="form-control" name="type_service">
                                 <option value="" selected>----</option>
                                 <option value="COLOCACAO">COLOCAÇÃO</option>
                                 <option value="TROCA">TROCA</option>
                             </select>
-                        </div> --}}
+                        </div>
                     </div>
                     <!-- Invoice Add Right ends -->
                 </div>
@@ -294,12 +228,6 @@
 <script>
 
     $(document).ready(function(){
-
-        $('input').inputmask();
-
-        var today = new Date();
-        $('#date_begin').val(((today.getDate() )) + "/" + ((today.getMonth() + 1)) + "/" + today.getFullYear());
-
         $("#form").validate({
             rules: {
                 email: {
@@ -307,6 +235,25 @@
                     email: true
                 }
             }
+        });
+
+        $("#email").blur(function(){
+
+            let email = $(this).val();
+
+            $.ajax({
+                'url': 'gera_login?email='+email,
+                'type': 'GET',
+                'data': {},
+
+                success: function(response){
+                    $('input[name=login]').val(response);
+
+                },
+                error: function(response){
+                    alert('Error'+ Object.value(response));
+                }
+            });
         });
     });
 

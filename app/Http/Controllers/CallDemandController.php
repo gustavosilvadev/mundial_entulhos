@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Hash;
 use App\Models\CallDemand;
 use App\Models\Client;
-use PhpParser\Node\Expr\CallLike;
+use App\Models\Driver;
 
 class CallDemandController extends Controller
 {
@@ -46,9 +45,12 @@ class CallDemandController extends Controller
 
     public function showNameClient()
     {
-        $client = Client::all();   
+        $clients = Client::all();   
+        $drivers = Driver::join('employee', function($join){
+            $join->on('driver.id_employee', '=', 'employee.id')->where('driver.flg_status', 1);
+        })->get(['driver.id','employee.name']); 
 
-        return view('call_demand.form_cad_call_demand', ['clients' => $client]);
+        return view('call_demand.form_cad_call_demand', ['clients' => $clients, 'drivers' => $drivers]);
     }
 
     public function store(Request $request)
@@ -66,13 +68,6 @@ class CallDemandController extends Controller
         && isset($request->price_unit)
         ){
 
-            // $calldemand_query = CallDemand::where("id_client",$request->id_client)
-            // ->where('service_status','<', 2)
-            // ->first();
-
-            // if(isset($calldemand_query)){
-            //     return redirect('createcalldemand');
-            // }
 
             $calldemand = new CallDemand();
             $calldemand->id_client     = $request->id_client;
@@ -85,7 +80,6 @@ class CallDemandController extends Controller
             $calldemand->state         = $request->state;
             $calldemand->comments      = $request->comments;
             $calldemand->phone         = $request->phone;
-            // $calldemand->price_unit    = $request->price_unit;
             $calldemand->price_unit    = preg_replace('/[^0-9]+/','.',str_replace('.','',$request->price_unit));
             $calldemand->date_begin    = (isset($request->date_begin) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_begin))) : '');
             $calldemand->date_end      = (isset($request->date_end) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_end))) : '');

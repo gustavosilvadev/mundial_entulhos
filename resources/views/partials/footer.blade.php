@@ -13,6 +13,7 @@
     <script src="{{ URL::asset('app-assets/vendors/js/vendors.min.js') }}"></script>
     <!-- BEGIN Vendor JS-->
 
+    
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ URL::asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('app-assets/vendors/js/editors/quill/katex.min.js') }}"></script>
@@ -35,6 +36,7 @@
     <!-- BEGIN: Page JS-->
     <script src="{{ URL::asset('app-assets/js/scripts/pages/page-blog-edit.js') }}"></script>
     <script src="{{ URL::asset('app-assets/js/scripts/pages/app-todo.js') }}"></script>
+    {{-- <script src="{{ URL::asset('app-assets/js/scripts/forms/form-input-mask.js') }}"></script> --}}
     <!-- END: Page JS-->
 
     <script>
