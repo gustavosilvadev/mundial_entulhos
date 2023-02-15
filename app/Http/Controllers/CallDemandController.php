@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Response;
 use App\Models\CallDemand;
 use App\Models\Client;
 use App\Models\Driver;
+use App\Models\Landfill;
 
 class CallDemandController extends Controller
 {
@@ -48,9 +49,15 @@ class CallDemandController extends Controller
         $clients = Client::all();   
         $drivers = Driver::join('employee', function($join){
             $join->on('driver.id_employee', '=', 'employee.id')->where('driver.flg_status', 1);
-        })->get(['driver.id','employee.name']); 
+        })->get(['driver.id','employee.name']);
 
-        return view('call_demand.form_cad_call_demand', ['clients' => $clients, 'drivers' => $drivers]);
+        $landfills = Landfill::select('id','name')->where('flg_status', 1)->get();
+        
+        return view('call_demand.form_cad_call_demand', [
+            'clients' => $clients, 
+            'drivers' => $drivers,
+            'landfills' => $landfills
+        ]);
     }
 
     public function store(Request $request)
@@ -66,6 +73,9 @@ class CallDemandController extends Controller
         && isset($request->state)
         && isset($request->phone)
         && isset($request->price_unit)
+        && isset($request->id_landfill)
+        && isset($request->id_driver)
+        && isset($request->period)
         ){
 
 
@@ -81,6 +91,9 @@ class CallDemandController extends Controller
             $calldemand->comments      = $request->comments;
             $calldemand->phone         = $request->phone;
             $calldemand->price_unit    = preg_replace('/[^0-9]+/','.',str_replace('.','',$request->price_unit));
+            $calldemand->id_landfill   = $request->id_landfill;
+            $calldemand->id_driver     = $request->id_driver;
+            $calldemand->period        = $request->period;
             $calldemand->date_begin    = (isset($request->date_begin) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_begin))) : '');
             $calldemand->date_end      = (isset($request->date_end) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_end))) : '');
         

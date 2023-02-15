@@ -14,8 +14,10 @@ class CallDemand extends Migration
     public function up()
     {
         Schema::create('call_demand', function (Blueprint $table) {
+            
             $table->id();
             $table->foreignId('id_client')->references('id')->on('client');
+            $table->integer('id_driver');
             $table->string('type_service')->comment('COLOCACAO|TROCA');
             $table->string('address');
             $table->integer('number')->nullable();
@@ -26,11 +28,16 @@ class CallDemand extends Migration
             $table->string('comments')->nullable();
             $table->string('phone')->nullable();
             $table->decimal('price_unit', $precision = 8, $scale = 2);
+            $table->integer('dumpster_total')->nullable();
+            $table->integer('dumpster_total_opened')->nullable();
+            $table->integer('id_landfill')->nullable();
+            $table->string('period')->nullable();
             $table->boolean('payment_status')->default(0);
             $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - Atendimento | 2 - Finalizado');
             $table->dateTime('date_begin')->nullable();
             $table->dateTime('date_end')->nullable();
             $table->timestamps();
+
         });
     }
 

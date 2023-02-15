@@ -134,13 +134,13 @@
             
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label for="price_unit">TOTAL DE CAÇAMBAS</label>
+                                                            <label for="dumpster_total">TOTAL DE CAÇAMBAS</label>
                                                             <input type="number" name="dumpster_total" class="form-control" value="0" min="0" max="1000" placeholder="0" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label for="price_unit">TOTAL EM ABERTO</label>
+                                                            <label for="dumpster_total_opened">TOTAL EM ABERTO</label>
                                                             <input type="number" name="dumpster_total_opened" class="form-control" value="0" min="0" max="1000" placeholder="0" />
                                                         </div>
                                                     </div>
@@ -148,12 +148,19 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="username">ATERRO</label>
+                                                            <label for="landfill">ATERRO</label>
                                                             <select class="select2 form-control form-control-lg" name="id_landfill">
                                                                 <option value="">----</option>
-                                                                <option value="">RETEK</option>
+                                                                {{-- <option value="">RETEK</option>
                                                                 <option value="">FORMIGA</option>
-                                                                <option value="">PEDRO</option>
+                                                                <option value="">PEDRO</option> --}}
+
+                                                                <option value="">----</option>
+                                                                <?php if(isset($landfills)):?>
+                                                                    <?php foreach($landfills as $landfill):?>
+                                                                        <option value="<?php echo $landfill->id; ?>"><?php echo $landfill->name; ?></option>
+                                                                    <?php endforeach; ?>
+                                                                <?php endif; ?>                                                                
                                                                
                                                             </select>
             
@@ -162,7 +169,7 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="username">PERÍODO DO DIA</label>
+                                                            <label for="period">PERÍODO DO DIA</label>
                                                             <select class="select2 form-control form-control-lg" name="period">
                                                                 <option value="">----</option>
                                                                 <option value="">DIURNO</option>
@@ -173,7 +180,7 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="username">MOTORISTA</label>
+                                                            <label for="driver">MOTORISTA</label>
                                                             <select class="select2 form-control form-control-lg" name="id_driver">
                                                                 <option value="">----</option>
                                                                 <?php if(isset($drivers)):?>

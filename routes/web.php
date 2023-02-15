@@ -7,7 +7,8 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\CallDemandController;
 use App\Http\Controllers\DumpsterServiceDemandController;
 use App\Http\Controllers\ClientInfoPaymentController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\LandfillController;
+// use Illuminate\Http\Request;
 
 
 
@@ -53,6 +54,13 @@ Route::post('/save_driver',[DriverController::class,'store']);
 // Route::get('driver/{id?}',[DriverController::class,'show']);
 // Route::post('/update_driver',[DriverController::class,'update']);
 // Route::get('/del_driver/{id}',[DriverController::class,'destroy']);
+
+
+// Landfill
+Route::get('createlandfill', function(){
+    return view('landfill.form_cad_landfill');
+});
+Route::post('save_landfill',[LandfillController::class,'store']);
 
 
 // Call Demand
