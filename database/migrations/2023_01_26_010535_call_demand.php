@@ -30,6 +30,7 @@ class CallDemand extends Migration
             $table->decimal('price_unit', $precision = 8, $scale = 2);
             $table->integer('dumpster_total')->nullable();
             $table->integer('dumpster_total_opened')->nullable();
+            $table->integer('dumpster_number')->default(0);
             $table->integer('id_landfill')->nullable();
             $table->string('period')->nullable();
             $table->boolean('payment_status')->default(0);

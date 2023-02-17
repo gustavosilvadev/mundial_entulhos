@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use App\Models\CallDemand;
 use App\Models\Client;
@@ -32,8 +33,70 @@ class CallDemandController extends Controller
 
         }else{
             
-            $calldemands = CallDemand::all();
+            // $calldemands = CallDemand::all();
 
+            $calldemands = DB::table('call_demand')
+                ->join('client', 'client.id', '=','call_demand.id_client')
+                ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+                ->join('employee', 'employee.id', '=', 'driver.id_employee')
+                ->select(
+                    'client.id as id_client',
+                    'client.name as name_client',
+                    'client.surname as surname_client',
+                    'call_demand.id as id_demand',
+                    'call_demand.type_service  as type_service',
+                    'call_demand.date_begin as date_begin',
+                    'call_demand.date_end as date_end',
+                    'call_demand.address as address_service',
+                    'call_demand.number as number_address_service',
+                    'call_demand.zipcode as zipcode_address_service',
+                    'call_demand.city as city_address_service',
+                    'call_demand.district as district_address_service',
+                    'call_demand.state as state_address_service',
+                    'call_demand.comments as comments_demand',
+                    'call_demand.phone as phone_demand',
+                    'call_demand.price_unit',
+                    'call_demand.dumpster_total',
+                    'call_demand.dumpster_total_opened',
+                    'call_demand.dumpster_number',
+                    'call_demand.id_landfill',
+                    'call_demand.period',
+                    'employee.name as driver_name',
+                    'employee.surname as driver_surname',
+                    'call_demand.service_status',
+                    'call_demand.updated_at',
+                )->get();
+
+/*
+            $calldemands = Client::join('call_demand', function($join){
+                $join->on('client.id', '=', 'call_demand.id_client');
+                $join->on('driver.id', '=', 'call_demand.id_driver');
+            })->select(
+                'client.id as id_client',
+                'client.name as name_client',
+                'client.surname as surname_client',
+                'call_demand.id as id_demand',
+                'call_demand.type_service  as type_service',
+                'call_demand.date_begin as date_begin',
+                'call_demand.date_end as date_end',
+                'call_demand.address as address_service',
+                'call_demand.number as number_address_service',
+                'call_demand.zipcode as zipcode_address_service',
+                'call_demand.city as city_address_service',
+                'call_demand.district as district_address_service',
+                'call_demand.state as state_address_service',
+                'call_demand.comments as comments_demand',
+                'call_demand.phone as phone_demand',
+                'call_demand.price_unit',
+                'call_demand.dumpster_total',
+                'call_demand.dumpster_total_opened',
+                'call_demand.dumpster_number',
+                'call_demand.id_landfill',
+                'call_demand.period',
+                'call_demand.service_status',
+                'call_demand.updated_at',
+            )->get();
+*/
             if(isset($calldemands)){
                 return view('call_demand.list_call_demand',['calldemands'=> $calldemands]);
             }
@@ -63,6 +126,7 @@ class CallDemandController extends Controller
     public function store(Request $request)
     {
 
+
         if(isset($request->id_client)
         && isset($request->type_service)
         && isset($request->address)
@@ -77,7 +141,6 @@ class CallDemandController extends Controller
         && isset($request->id_driver)
         && isset($request->period)
         ){
-
 
             $calldemand = new CallDemand();
             $calldemand->id_client     = $request->id_client;
@@ -94,6 +157,11 @@ class CallDemandController extends Controller
             $calldemand->id_landfill   = $request->id_landfill;
             $calldemand->id_driver     = $request->id_driver;
             $calldemand->period        = $request->period;
+            $calldemand->dumpster_total = $request->dumpster_total;
+            $calldemand->dumpster_total_opened = $request->dumpster_total_opened;
+            
+
+
             $calldemand->date_begin    = (isset($request->date_begin) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_begin))) : '');
             $calldemand->date_end      = (isset($request->date_end) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_end))) : '');
         
@@ -104,7 +172,9 @@ class CallDemandController extends Controller
 
             return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);        
         
+die('AAASDASD');            
         }else{
+die('error');            
             // return view('call_demand.form_cad_call_demand',["response" => "Dados incompletos!"]);
             return redirect('/createcalldemand');
         }

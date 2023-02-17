@@ -44,14 +44,14 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <span class="title">DATA PEDIDO:</span>
-                                                            <input type="text" name="date_begin" id="date_begin" class="form-control invoice-edit-input date-picker" />
+                                                            <input type="text" name="date_begin" id="date_format" class="form-control dt-date flatpickr-range dt-input" data-column="5"  data-column-index="4"/>
                                                         </div>
-                                                        
                                                     </div>
+                                                    
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <span class="title">PREVISÃO DE RETIRADA:</span>
-                                                            <input type="text" name="date_end" class="form-control invoice-edit-input due-date-picker" />
+                                                            <input type="text" name="date_end" id="date_format" class="form-control dt-date flatpickr-range dt-input" data-column="5"  data-column-index="4"/>
                                                         </div>    
                                                     </div>
                                                     
@@ -87,7 +87,8 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="zipcode">CEP</label>
-                                                            <input type="text" pattern="[0-9]{5}" class="form-control" name="zipcode" />
+                                                            {{-- <input type="text" pattern="[0-9]{5}" class="form-control" name="zipcode" /> --}}
+                                                            <input type="text" class="form-control" name="zipcode" />
             
                                                         </div>
                                                     </div>
@@ -150,11 +151,7 @@
                                                         <div class="form-group">
                                                             <label for="landfill">ATERRO</label>
                                                             <select class="select2 form-control form-control-lg" name="id_landfill">
-                                                                <option value="">----</option>
-                                                                {{-- <option value="">RETEK</option>
-                                                                <option value="">FORMIGA</option>
-                                                                <option value="">PEDRO</option> --}}
-
+                                                            
                                                                 <option value="">----</option>
                                                                 <?php if(isset($landfills)):?>
                                                                     <?php foreach($landfills as $landfill):?>
@@ -172,8 +169,8 @@
                                                             <label for="period">PERÍODO DO DIA</label>
                                                             <select class="select2 form-control form-control-lg" name="period">
                                                                 <option value="">----</option>
-                                                                <option value="">DIURNO</option>
-                                                                <option value="">NOTURNO</option>
+                                                                <option value="DIURNO">DIURNO</option>
+                                                                <option value="NOTURNO">NOTURNO</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -302,7 +299,7 @@
 
     $(document).ready(function(){
 
-        $('input').inputmask();
+        // $('input').inputmask();
 
         var today = new Date();
         $('#date_begin').val(((today.getDate() )) + "/" + ((today.getMonth() + 1)) + "/" + today.getFullYear());

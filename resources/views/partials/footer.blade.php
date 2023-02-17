@@ -21,10 +21,16 @@
     <script src="{{ URL::asset('app-assets/vendors/js/editors/quill/quill.min.js') }}"></script>
 
     
-    <script src="{{ URL::asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ URL::asset('app-assets/vendors/js/extensions/dragula.min.js') }}"></script>
     <script src="{{ URL::asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
     <script src="{{ URL::asset('app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
+
+
+    <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
 
     <!-- END: Page Vendor JS-->
 
@@ -36,7 +42,9 @@
     <!-- BEGIN: Page JS-->
     <script src="{{ URL::asset('app-assets/js/scripts/pages/page-blog-edit.js') }}"></script>
     <script src="{{ URL::asset('app-assets/js/scripts/pages/app-todo.js') }}"></script>
-    {{-- <script src="{{ URL::asset('app-assets/js/scripts/forms/form-input-mask.js') }}"></script> --}}
+    <script src="{{ URL::asset('app-assets/js/scripts/tables/table-datatables-advanced.js') }}"></script>
+
+    
     <!-- END: Page JS-->
 
     <script>
@@ -47,6 +55,17 @@
                     height: 14
                 });
             }
+
+
+            $('#date_format').flatpickr({
+                // l10ns: languages['${e://Field/Q_Language}'],
+                dateFormat: "d/m/Y",
+                // minDate: "02/16/2023",
+                // maxDate: "today"
+                // minDate: "today"
+            });
+
+
         })
     </script>    
 </body>
