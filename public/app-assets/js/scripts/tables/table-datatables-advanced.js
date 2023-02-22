@@ -169,15 +169,62 @@ $(function () {
   // Advanced Filter table
   if (dt_adv_filter_table.length) {
     var dt_adv_filter = dt_adv_filter_table.DataTable({
-      ajax: assetPath + 'data/table-datatable.json',
+      // ajax: assetPath + 'data/table-datatable.json',
+      ajax: 'http://127.0.0.1:8000/teste_lista_items',
       columns: [
+        /*
         { data: 'responsive_id' },
+        { data: 'avatar' },
         { data: 'full_name' },
         { data: 'email' },
         { data: 'post' },
         { data: 'city' },
         { data: 'start_date' },
         { data: 'salary' }
+        */
+
+
+        { data: 'id_demand' },
+        { data: 'type_service' },
+        { data: 'date_begin' },
+        { data: 'name_client' },
+        { data: 'address_service' },
+        { data: 'district_address_service' },
+        { data: 'phone_demand' },
+        { data: 'price_unit' },
+        { data: 'comments_demand' },
+        { data: 'dumpster_total' },
+        { data: 'dumpster_number' },
+        { data: 'date_difference' },
+        { data: 'date_end' },
+        { data: 'date_effective_withdrawal' },
+        { data: 'service_status' },
+        { data: 'landfill_name' },
+        { data: 'period' },
+        { data: 'driver_name' }
+
+
+        // { data: 'id_demand' },
+        // { data: 'type_service' },
+        // { data: 'date_begin' },
+        // { data: 'name_client' },
+        // { data: 'date_end' }
+        // { data: 'address_service' },
+        // { data: 'district_address_service' },
+        // { data: 'phone_demand' },
+        // { data: 'price_unit' },
+        // { data: 'comments_demand' },
+        // { data: 'dumpster_total' },
+        // { data: 'dumpster_total_opened' },
+        // { data: 'dumpster_number' },
+        // { data: 'date_difference' },
+        // { data: 'id_landfill' },
+        // { data: 'update_at' },
+        // { data: 'service_status' },
+        // { data: 'period' },
+        // { data: 'name_driver' },
+        // { data: 'updated_at' }
+
       ],
 
       columnDefs: [
@@ -195,7 +242,7 @@ $(function () {
           display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-              return 'Details of ' + data['full_name'];
+              return 'Detalhes: ' + data['name_client'];
             }
           }),
           type: 'column',
@@ -275,7 +322,7 @@ $(function () {
           display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-              return 'Details of ' + data['full_name'];
+              return 'Detalhes: ' + data['full_name'];
             }
           }),
           type: 'column',

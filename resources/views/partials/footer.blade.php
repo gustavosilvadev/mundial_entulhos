@@ -1,3 +1,14 @@
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
 <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
 
@@ -57,7 +68,8 @@
             }
 
 
-            $('#date_format').flatpickr({
+            // $('#date_format').flatpickr({
+            $('.date_format').flatpickr({
                 // l10ns: languages['${e://Field/Q_Language}'],
                 dateFormat: "d/m/Y",
                 // minDate: "02/16/2023",

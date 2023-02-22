@@ -1,5 +1,5 @@
-
 @include('partials.header')
+<!--
 <div class="app-content content ">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
@@ -11,7 +11,7 @@
                 <form action="/save_call_demand" method= "POST" id="form" class="form-validate">
                 @csrf
                 <div class="row invoice-add">
-                    <!-- Invoice Add Left starts -->
+
                     <div class="col-xl-9 col-md-8 col-12">
                         <div class="card invoice-preview-card">
 
@@ -19,14 +19,14 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="tab-content">
-                                            <!-- Account Tab starts -->
+
                                             <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                                                <!-- users edit media object start -->
+
                                                 <div class="media mb-2">
                                                     <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">DEMANDA!</mark></h3>    
                                                 </div>
-                                                <!-- users edit media object ends -->
-                                                <!-- users edit account form start -->
+                                                
+                                                
 
                                                 <div class="row">
 
@@ -44,14 +44,14 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <span class="title">DATA PEDIDO:</span>
-                                                            <input type="text" name="date_begin" id="date_format" class="form-control dt-date flatpickr-range dt-input" data-column="5"  data-column-index="4"/>
+                                                            <input type="text" name="date_begin" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format" data-column="5"  data-column-index="4"/>
                                                         </div>
                                                     </div>
                                                     
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <span class="title">PREVISÃO DE RETIRADA:</span>
-                                                            <input type="text" name="date_end" id="date_format" class="form-control dt-date flatpickr-range dt-input" data-column="5"  data-column-index="4"/>
+                                                            <input type="text" name="date_end" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format" data-column="5"  data-column-index="4"/>
                                                         </div>    
                                                     </div>
                                                     
@@ -200,37 +200,29 @@
                                                 </div>
 
                                              
-                                                <!-- users edit account form ends -->
+                                                
                                             </div>
-                                            <!-- Account Tab ends -->
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </section>                            
                         </div>
                     </div>
-                    <!-- Invoice Add Left ends -->
+                    
 
-                    <!-- Invoice Add Right starts -->
+
                     <div class="col-xl-3 col-md-4 col-12">
                         <div class="card">
                             <div class="card-body">
                                 <button type="submit" class="btn btn-success btn-block mb-75">Salvar</button>                                
                             </div>
                         </div>
-                        {{-- <div class="mt-2">
-                            <p class="mb-50">Tipo de serviço</p>
-                            <select class="form-control" name="type_service">
-                                <option value="" selected>----</option>
-                                <option value="COLOCACAO">COLOCAÇÃO</option>
-                                <option value="TROCA">TROCA</option>
-                            </select>
-                        </div> --}}
                     </div>
-                    <!-- Invoice Add Right ends -->
+
                 </div>
             </form>
-                <!-- Add New Customer Sidebar -->
+
                 <div class="modal modal-slide-in fade" id="add-new-customer-sidebar" aria-hidden="true">
                     <div class="modal-dialog sidebar-lg">
                         <div class="modal-content p-0">
@@ -283,14 +275,256 @@
                         </div>
                     </div>
                 </div>
-                <!-- /Add New Customer Sidebar -->
+                
             </section>
 
         </div>
     </div>
 </div>
+-->
 
 
+<div class="app-content content ">
+    
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <div class="row" id="basic-table">
+
+                <div class="row" id="table-responsive">
+                    <div class="col-12">
+                        
+                        <div class="card">
+                            <div style="display: block;overflow-x: auto;white-space: nowrap;" >
+                                <form action="/save_call_demand" method= "POST" id="form" class="form-validate">
+                                    @csrf
+                                    <div class="row invoice-add">
+                    
+                                        <div class="col-xl-9 col-md-8 col-12">
+                                            <div class="card invoice-preview-card">
+                    
+                                                <section class="app-user-edit">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="tab-content">
+                    
+                                                                <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
+                    
+                                                                    <div class="media mb-2">
+                                                                        <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">DEMANDA!</mark></h3>    
+                                                                    </div>
+                                                                    
+                                                                    
+                    
+                                                                    <div class="row">
+                    
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="username">Tipo de Serviço</label>
+                                                                                <select class="form-control" name="type_service">
+                                                                                    <option value="" selected>----</option>
+                                                                                    <option value="COLOCACAO">COLOCAÇÃO</option>
+                                                                                    <option value="TROCA">TROCA</option>
+                                                                                </select>            
+                                                                            </div>
+                                                                        </div>                                                    
+                    
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <span class="title">DATA PEDIDO:</span>
+                                                                                <input type="text" name="date_begin" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format" data-column="5"  data-column-index="4"/>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <span class="title">PREVISÃO DE RETIRADA:</span>
+                                                                                <input type="text" name="date_end" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format" data-column="5"  data-column-index="4"/>
+                                                                            </div>    
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="username">CLIENTE</label>
+                                                                                <select class="select2 form-control form-control-lg" name="id_client">
+                                                                                    <option value="">----</option>
+                                                                                    <?php if(isset($clients)):?>
+                                                                                        <?php foreach($clients as $client):?>
+                                                                                            <option value="<?php echo $client->id; ?>"><?php echo $client->name.' '.$client->surname; ?></option>
+                                                                                        <?php endforeach; ?>
+                                                                                    <?php endif; ?>
+                                                                                </select>
+                                
+                                                                            </div>
+                                                                        </div>
+                                
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="address">Endereço</label>
+                                                                                <input type="text" class="form-control" name="address" />
+                                                                            </div>
+                                                                        </div>
+                                
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label for="number">Número</label>
+                                                                                <input type="text" class="form-control" name="number" />
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="zipcode">CEP</label>
+                                                                                {{-- <input type="text" pattern="[0-9]{5}" class="form-control" name="zipcode" /> --}}
+                                                                                <input type="text" class="form-control" name="zipcode" />
+                                
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="city">Cidade</label>
+                                                                                <input type="text" class="form-control" name="city" />
+                                
+                                                                            </div>
+                                                                        </div>
+                                
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="district">Bairro</label>
+                                                                                <input type="text" class="form-control" name="district" />
+                                
+                                                                            </div>
+                                                                        </div>
+                                
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="state">Estado</label>
+                                                                                <input type="text" class="form-control" name="state" />
+                                
+                                                                            </div>
+                                                                        </div>
+                                
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="phone">Telefone</label>
+                                                                                <input type="text" class="form-control" name="phone" />
+                                                                            </div>
+                                                                        </div>
+                                
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label for="price_unit">Preço UNIT.</label>
+                                                                                <input type="number" name="price_unit" class="form-control" value="0" />
+                                                                                
+                    
+                                                                            </div>
+                                                                        </div>
+                                
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label for="dumpster_total">TOTAL DE CAÇAMBAS</label>
+                                                                                <input type="number" name="dumpster_total" class="form-control" value="0" min="0" max="1000" placeholder="0" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <div class="form-group">
+                                                                                <label for="dumpster_total_opened">TOTAL EM ABERTO</label>
+                                                                                <input type="number" name="dumpster_total_opened" class="form-control" value="0" min="0" max="1000" placeholder="0" />
+                                                                            </div>
+                                                                        </div>
+                    
+                    
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="landfill">ATERRO</label>
+                                                                                <select class="select2 form-control form-control-lg" name="id_landfill">
+                                                                                
+                                                                                    <option value="">----</option>
+                                                                                    <?php if(isset($landfills)):?>
+                                                                                        <?php foreach($landfills as $landfill):?>
+                                                                                            <option value="<?php echo $landfill->id; ?>"><?php echo $landfill->name; ?></option>
+                                                                                        <?php endforeach; ?>
+                                                                                    <?php endif; ?>                                                                
+                                                                                   
+                                                                                </select>
+                                
+                                                                            </div>
+                                                                        </div>                                                    
+                    
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="period">PERÍODO DO DIA</label>
+                                                                                <select class="select2 form-control form-control-lg" name="period">
+                                                                                    <option value="">----</option>
+                                                                                    <option value="DIURNO">DIURNO</option>
+                                                                                    <option value="NOTURNO">NOTURNO</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                    
+                                                                        <div class="col-md-4">
+                                                                            <div class="form-group">
+                                                                                <label for="driver">MOTORISTA</label>
+                                                                                <select class="select2 form-control form-control-lg" name="id_driver">
+                                                                                    <option value="">----</option>
+                                                                                    <?php if(isset($drivers)):?>
+                                                                                        <?php foreach($drivers as $driver):?>
+                                                                                            <option value="<?php echo $driver->id; ?>"><?php echo $driver->name.' '.$driver->surname; ?></option>
+                                                                                        <?php endforeach; ?>
+                                                                                    <?php endif; ?>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                    
+                    
+                                                                        <div class="col-md-12">
+                                                                            <div class="form-group mb-2">
+                                                                                <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
+                                                                                <textarea class="form-control" rows="2" id="note" name="comments"></textarea>
+                                                                            </div>
+                                                                        </div>
+                    
+                                                                    </div>
+                    
+                                                                 
+                                                                    
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>                            
+                                            </div>
+                                        </div>
+                                        
+                    
+                    
+                                        <div class="col-xl-3 col-md-4 col-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <button type="submit" class="btn btn-success btn-block mb-75">Salvar</button>                                
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                    </div>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 @include('partials.footer')
@@ -298,8 +532,6 @@
 <script>
 
     $(document).ready(function(){
-
-        // $('input').inputmask();
 
         var today = new Date();
         $('#date_begin').val(((today.getDate() )) + "/" + ((today.getMonth() + 1)) + "/" + today.getFullYear());

@@ -37,6 +37,7 @@ class CallDemand extends Migration
             $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - Atendimento | 2 - Finalizado');
             $table->dateTime('date_begin')->nullable();
             $table->dateTime('date_end')->nullable();
+            $table->dateTime('date_effective_withdrawal')->nullable();
             $table->timestamps();
 
         });

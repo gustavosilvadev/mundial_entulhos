@@ -21,7 +21,6 @@ if(str_contains(url()->full(),"page")){
 
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
-<!-- BEGIN: Head-->
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -76,11 +75,83 @@ if(str_contains(url()->full(),"page")){
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
-<!-- END: Head-->
 
-<!-- BEGIN: Body-->
-
-<!-- <body class="vertical-layout vertical-menu-modern 1-column navbar-floating footer-static menu-collapsed py-2" data-open="click" data-menu="vertical-menu-modern" data-col="1-column"> -->
-{{-- <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col=""> --}}
 <body class="vertical-layout vertical-menu-modern blank-page navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="blank-page">
+{{-- @include('partials.nav_admin') --}}
 
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+            <div class="content-body">
+
+                <!-- NAVIGATION -->
+                <nav class="navbar navbar-expand-md navbar-light justify-content-end justify-content-md-between w-100">
+                    <button class="btn btn-icon navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i data-feather="align-justify" class="font-medium-5"></i>
+                    </button>
+                    <div class="collapse navbar-collapse bg-dark text-white" id="navbarSupportedContent">
+                
+                        <div class="profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0">
+                            <ul class="nav nav-pills mb-0">
+                                <li class="nav-item">
+                                    <a class="nav-link font-weight-bold " href="/call_demand">
+                                        <span class="d-none d-md-block" style="color:white">Pedidos</span>
+                                        <i data-feather="rss" class="d-block d-md-none"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link font-weight-bold" href="/client">
+                                        <span class="d-none d-md-block" style="color:white">Clientes</span>
+                                        <i data-feather="info" class="d-block d-md-none"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link font-weight-bold" href="javascript:void(0)">
+                                        <span class="d-none d-md-block" style="color:white">Funcionários</span>
+                                        <i data-feather="image" class="d-block d-md-none"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link font-weight-bold" href="javascript:void(0)">
+                                        <span class="d-none d-md-block" style="color:white">Motoristas</span>
+                                        <i data-feather="users" class="d-block d-md-none"></i>
+                                    </a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link font-weight-bold" href="javascript:void(0)">
+                                        <span class="d-none d-md-block" style="color:white">Aterros</span>
+                                        <i data-feather="users" class="d-block d-md-none"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="p-1">
+                    <div class="app-content content ">
+                        <div class="content-header row">
+                            <div class="content-header-left col-md-9 col-12 mb-2">
+                                <div class="row breadcrumbs-top">
+                                    <div class="col-12">
+                                        <h2 class="content-header-title float-left mb-0">Pedidos</h2>
+                                        <div class="breadcrumb-wrapper">
+                                            <ol class="breadcrumb">
+                                                <li class="breadcrumb-item"><a href="index.html">Home</a>
+                                                </li>
+                                                <li class="breadcrumb-item active">Pedidos
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="content-body">
+
+                        

@@ -13,6 +13,110 @@ use App\Models\Landfill;
 class CallDemandController extends Controller
 {
 
+    public function showAPI(Request $request)
+    {
+        if(isset($request->id)){
+
+            /*
+                $calldemand = CallDemand::where('id',$request->id)->orderBy('id','DESC')->first();
+                $client     = Client::where('id',$calldemand->id_client)->first();
+
+                if(isset($calldemand)){
+                    // return view('call_demand.preview_call_demand',['calldemand' => $calldemand, 'client' => $client]);
+                    // return $calldemand;
+
+                    // $tagNameIndex = array('data' => $calldemand);
+                    // return $tagNameIndex;
+
+                }
+            */
+
+            $calldemand = DB::table('call_demand')
+                ->join('client', 'client.id', '=','call_demand.id_client')
+                ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+                ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
+                ->join('employee', 'employee.id', '=', 'driver.id_employee')
+                ->select(
+                    'call_demand.id as id_demand',
+                    'client.id as id_client',
+                    DB::raw("CONCAT(client.name, ' ', client.surname) as name_client"),
+                    'call_demand.type_service  as type_service',
+                    DB::raw('DATE_FORMAT(call_demand.date_begin, "%d/%m/%Y") as date_begin'),
+                    DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
+                    DB::raw('DATE_FORMAT(call_demand.date_effective_withdrawal, "%d/%m/%Y") as date_effective_withdrawal'),
+                    'call_demand.address as address_service',
+                    'call_demand.number as number_address_service',
+                    'call_demand.zipcode as zipcode_address_service',
+                    'call_demand.city as city_address_service',
+                    'call_demand.district as district_address_service',
+                    'call_demand.state as state_address_service',
+                    'call_demand.comments as comments_demand',
+                    'call_demand.phone as phone_demand',
+                    // 'call_demand.price_unit',
+
+                    'call_demand.dumpster_total',
+                    'call_demand.dumpster_total_opened',
+                    'call_demand.dumpster_number',
+                    DB::raw('DATEDIFF(call_demand.date_end, call_demand.date_begin) AS date_difference'),
+                    'landfill.name as landfill_name',
+                    'call_demand.period',
+                    DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
+                    DB::raw('if(call_demand.service_status = 0, "PENDENTE","OK") as service_status'),
+                    DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
+                )
+                ->where('call_demand.id', '=', $request->id)->get();
+
+                if(isset($calldemand)){
+                $tagNameIndex = array('data' => $calldemand);
+                return $tagNameIndex;
+
+                }                
+
+        }else{
+            
+            // $calldemands = CallDemand::all();
+
+            $calldemands = DB::table('call_demand')
+                ->join('client', 'client.id', '=','call_demand.id_client')
+                ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+                ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
+                ->join('employee', 'employee.id', '=', 'driver.id_employee')
+                ->select(
+                    'call_demand.id as id_demand',
+                    'client.id as id_client',
+                    DB::raw("CONCAT(client.name, ' ', client.surname) as name_client"),
+                    'call_demand.type_service  as type_service',
+                    DB::raw('DATE_FORMAT(call_demand.date_begin, "%d/%m/%Y") as date_begin'),
+                    DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
+                    DB::raw('DATE_FORMAT(call_demand.date_effective_withdrawal, "%d/%m/%Y") as date_effective_withdrawal'),
+                    'call_demand.address as address_service',
+                    'call_demand.number as number_address_service',
+                    'call_demand.zipcode as zipcode_address_service',
+                    'call_demand.city as city_address_service',
+                    'call_demand.district as district_address_service',
+                    'call_demand.state as state_address_service',
+                    'call_demand.comments as comments_demand',
+                    'call_demand.phone as phone_demand',
+                    // 'call_demand.price_unit',
+
+                    'call_demand.dumpster_total',
+                    'call_demand.dumpster_total_opened',
+                    'call_demand.dumpster_number',
+                    DB::raw('DATEDIFF(call_demand.date_end, call_demand.date_begin) AS date_difference'),
+                    'landfill.name as landfill_name',
+                    'call_demand.period',
+                    DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
+                    DB::raw('if(call_demand.service_status = 0, "PENDENTE","OK") as service_status'),
+                    DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
+                )->get();
+
+            if(isset($calldemands)){
+                $tagNameIndex = array('data' => $calldemands );
+                return $tagNameIndex;
+            }
+        }
+    }
+
     public function show(Request $request)
     {
 
@@ -67,36 +171,6 @@ class CallDemandController extends Controller
                     'call_demand.updated_at',
                 )->get();
 
-/*
-            $calldemands = Client::join('call_demand', function($join){
-                $join->on('client.id', '=', 'call_demand.id_client');
-                $join->on('driver.id', '=', 'call_demand.id_driver');
-            })->select(
-                'client.id as id_client',
-                'client.name as name_client',
-                'client.surname as surname_client',
-                'call_demand.id as id_demand',
-                'call_demand.type_service  as type_service',
-                'call_demand.date_begin as date_begin',
-                'call_demand.date_end as date_end',
-                'call_demand.address as address_service',
-                'call_demand.number as number_address_service',
-                'call_demand.zipcode as zipcode_address_service',
-                'call_demand.city as city_address_service',
-                'call_demand.district as district_address_service',
-                'call_demand.state as state_address_service',
-                'call_demand.comments as comments_demand',
-                'call_demand.phone as phone_demand',
-                'call_demand.price_unit',
-                'call_demand.dumpster_total',
-                'call_demand.dumpster_total_opened',
-                'call_demand.dumpster_number',
-                'call_demand.id_landfill',
-                'call_demand.period',
-                'call_demand.service_status',
-                'call_demand.updated_at',
-            )->get();
-*/
             if(isset($calldemands)){
                 return view('call_demand.list_call_demand',['calldemands'=> $calldemands]);
             }
@@ -172,9 +246,9 @@ class CallDemandController extends Controller
 
             return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);        
         
-die('AAASDASD');            
+
         }else{
-die('error');            
+
             // return view('call_demand.form_cad_call_demand',["response" => "Dados incompletos!"]);
             return redirect('/createcalldemand');
         }

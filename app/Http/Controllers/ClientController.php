@@ -35,7 +35,7 @@ public function show(Request $request)
         $clients = Client::all();
         
         if(isset($clients)){
-            return view('client.form_list_client',['clients'=> $clients]);
+            return view('client.list_client',['clients'=> $clients]);
         }
     }
 }
