@@ -298,6 +298,9 @@
                     <div class="col-12">
                         
                         <div class="card">
+                            <div class="card-header">
+                                <a href="/createcalldemand" class="btn btn-success">NOVO</a>
+                            </div>
                             <div style="display: block;overflow-x: auto;white-space: nowrap;" >
                                 <form action="/save_call_demand" method= "POST" id="form" class="form-validate">
                                     @csrf

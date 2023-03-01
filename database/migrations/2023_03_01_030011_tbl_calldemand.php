@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CallDemand extends Migration
+class TblCalldemand extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CallDemand extends Migration
             $table->id();
             $table->foreignId('id_client')->references('id')->on('client');
             $table->integer('id_driver');
-            $table->string('type_service')->comment('COLOCACAO|TROCA');
+            $table->string('type_service')->comment('COLOCACAO|TROCA|REMOÇÃO');
             $table->string('address');
             $table->integer('number')->nullable();
             $table->string('zipcode');
@@ -32,13 +32,15 @@ class CallDemand extends Migration
             $table->integer('dumpster_total_opened')->nullable();
             $table->integer('dumpster_number')->default(0);
             $table->integer('id_landfill')->nullable();
-            $table->string('period')->nullable();
-            $table->boolean('payment_status')->default(0);
-            $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - Atendimento | 2 - Finalizado');
-            $table->dateTime('date_begin')->nullable();
-            $table->dateTime('date_end')->nullable();
-            $table->dateTime('date_effective_withdrawal')->nullable();
-            $table->timestamps();
+            $table->string('period')->nullable(); // Período de retirada, remoção, troca
+            $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - Em andamento | 2 - Finalizado');
+            $table->dateTime('date_begin')->nullable(); // Data de ABERTURA do pedido
+            $table->dateTime('date_end')->nullable(); // Data de finalização do pedido
+            $table->dateTime('date_allocation_dumpster')->nullable(); // Data de alocação da caçamba
+            $table->dateTime('date_removal_dumpster')->nullable(); // Data de retirada da caçamba == Data da Previsão de Retirada
+            $table->dateTime('date_change_dumpster')->nullable(); // Data de troca da caçamba
+            $table->dateTime('date_effective_removal_dumpster')->nullable(); // Data de retirada efetiva da caçamba
+            $table->timestamps(); // create_at - Data do Pedido
 
         });
     }

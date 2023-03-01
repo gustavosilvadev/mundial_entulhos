@@ -14,8 +14,6 @@ class DriverController extends Controller
 
         if(isset($request->id)){
 
-
-
             $driver = Driver::where('id',$request->id)->orderBy('id','DESC')->first();
 
             if(isset($driver)){

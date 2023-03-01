@@ -190,6 +190,7 @@ $(function () {
         { data: 'name_client' },
         { data: 'address_service' },
         { data: 'district_address_service' },
+        { data: 'city_address_service' },
         { data: 'phone_demand' },
         { data: 'price_unit' },
         { data: 'comments_demand' },
@@ -202,29 +203,6 @@ $(function () {
         { data: 'landfill_name' },
         { data: 'period' },
         { data: 'driver_name' }
-
-
-        // { data: 'id_demand' },
-        // { data: 'type_service' },
-        // { data: 'date_begin' },
-        // { data: 'name_client' },
-        // { data: 'date_end' }
-        // { data: 'address_service' },
-        // { data: 'district_address_service' },
-        // { data: 'phone_demand' },
-        // { data: 'price_unit' },
-        // { data: 'comments_demand' },
-        // { data: 'dumpster_total' },
-        // { data: 'dumpster_total_opened' },
-        // { data: 'dumpster_number' },
-        // { data: 'date_difference' },
-        // { data: 'id_landfill' },
-        // { data: 'update_at' },
-        // { data: 'service_status' },
-        // { data: 'period' },
-        // { data: 'name_driver' },
-        // { data: 'updated_at' }
-
       ],
 
       columnDefs: [

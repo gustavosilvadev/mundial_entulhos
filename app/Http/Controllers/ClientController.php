@@ -73,12 +73,11 @@ public function store(Request $request)
 
             if($client->save()){
 
-                return view('client.form_cad_client',["response" => "Dados cadastrados com sucesso"]);
+                // return view('client.form_cad_client',["response" => "Dados cadastrados com sucesso"]);
+                return redirect('client');
             }
 
             return view('client.form_cad_client',["response" => "Erro ao cadastrar o cliente"]);
-
-        // }
 
     }else{
         dd('Dados incompletos!');
@@ -115,10 +114,12 @@ public function update(Request $request)
 
             if($client->update()){
 
-                return view('client.client',[
-                    'response' => $this->returnSuccess("Dados atualizados com sucesso"),
-                    'client' => $client
-                ]);
+                // return view('client.client',[
+                //     'response' => $this->returnSuccess("Dados atualizados com sucesso"),
+                //     'client' => $client
+                // ]);
+
+                return redirect('client/'.$request->id);
 
             }else{
                 return $this->returnError('Erro ao atualizar os dados do usuário',500); 

@@ -104,10 +104,11 @@ class EmployeeController extends Controller
 
                 if($employee->update()){
 
-                    return view('employee.employee',[
-                        'response' => $this->returnSuccess("Dados atualizados com sucesso"),
-                        'employee' => $employee
-                    ]);
+                    // return view('employee.employee',[
+                    //     'response' => $this->returnSuccess("Dados atualizados com sucesso"),
+                    //     'employee' => $employee
+                    // ]);
+                    return redirect('employee');                    
 
                 }else{
                     return $this->returnError('Erro ao atualizar os dados do funcionário',500); 

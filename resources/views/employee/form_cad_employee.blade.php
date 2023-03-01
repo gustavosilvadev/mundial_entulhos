@@ -8,19 +8,19 @@
             <div class="content-header row">
             </div>
             <div class="content-body">
-                <!-- users edit start -->
+                
                 <section class="app-user-edit">
                     <div class="card">
                         <div class="card-body">
                             <div class="tab-content">
-                                <!-- Account Tab starts -->
+                                
                                 <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                                    <!-- users edit media object start -->
+                                    
                                     <div class="media mb-2">
                                         <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">FUNCIONÁRIO!</mark></h3>    
                                     </div>
-                                    <!-- users edit media object ends -->
-                                    <!-- users edit account form start -->
+                                    
+                                    
                                     <form action="/save_employee" method= "POST" id="form" class="form-validate">
                                         @csrf
                                         <div class="row">
@@ -130,15 +130,13 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <!-- users edit account form ends -->
+
                                 </div>
-                                <!-- Account Tab ends -->
+
                             </div>
                         </div>
                     </div>
                 </section>
-                <!-- users edit ends -->
-
             </div>
         </div>
     </div>

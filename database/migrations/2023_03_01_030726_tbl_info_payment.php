@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ClientInfoPayment extends Migration
+class TblInfoPayment extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class ClientInfoPayment extends Migration
      */
     public function up()
     {
-
         Schema::create('client_info_payment', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_call_demand')->references('id')->on('call_demand');
+            $table->boolean('status_payment')->default(0); // Satatus de pagamento
             $table->string('nf_receipt');
             $table->string('method_payment');
             $table->string('administrator');

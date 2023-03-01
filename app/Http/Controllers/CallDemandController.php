@@ -17,20 +17,6 @@ class CallDemandController extends Controller
     {
         if(isset($request->id)){
 
-            /*
-                $calldemand = CallDemand::where('id',$request->id)->orderBy('id','DESC')->first();
-                $client     = Client::where('id',$calldemand->id_client)->first();
-
-                if(isset($calldemand)){
-                    // return view('call_demand.preview_call_demand',['calldemand' => $calldemand, 'client' => $client]);
-                    // return $calldemand;
-
-                    // $tagNameIndex = array('data' => $calldemand);
-                    // return $tagNameIndex;
-
-                }
-            */
-
             $calldemand = DB::table('call_demand')
                 ->join('client', 'client.id', '=','call_demand.id_client')
                 ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
@@ -43,7 +29,10 @@ class CallDemandController extends Controller
                     'call_demand.type_service  as type_service',
                     DB::raw('DATE_FORMAT(call_demand.date_begin, "%d/%m/%Y") as date_begin'),
                     DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
-                    DB::raw('DATE_FORMAT(call_demand.date_effective_withdrawal, "%d/%m/%Y") as date_effective_withdrawal'),
+                    DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+                    DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster, "%d/%m/%Y") as date_removal_dumpster'),
+                    DB::raw('DATE_FORMAT(call_demand.date_change_dumpster, "%d/%m/%Y") as date_change_dumpster'),
+                    DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),                    
                     'call_demand.address as address_service',
                     'call_demand.number as number_address_service',
                     'call_demand.zipcode as zipcode_address_service',
@@ -52,8 +41,7 @@ class CallDemandController extends Controller
                     'call_demand.state as state_address_service',
                     'call_demand.comments as comments_demand',
                     'call_demand.phone as phone_demand',
-                    // 'call_demand.price_unit',
-
+                    DB::raw('CONCAT("R$","",format(call_demand.price_unit,2,"Pt_BR"))  as price_unit'),
                     'call_demand.dumpster_total',
                     'call_demand.dumpster_total_opened',
                     'call_demand.dumpster_number',
@@ -61,7 +49,7 @@ class CallDemandController extends Controller
                     'landfill.name as landfill_name',
                     'call_demand.period',
                     DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
-                    DB::raw('if(call_demand.service_status = 0, "PENDENTE","OK") as service_status'),
+                    DB::raw('if(call_demand.service_status = 0, "PENDENTE","") as service_status'),
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
                 )
                 ->where('call_demand.id', '=', $request->id)->get();
@@ -74,8 +62,6 @@ class CallDemandController extends Controller
 
         }else{
             
-            // $calldemands = CallDemand::all();
-
             $calldemands = DB::table('call_demand')
                 ->join('client', 'client.id', '=','call_demand.id_client')
                 ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
@@ -88,7 +74,10 @@ class CallDemandController extends Controller
                     'call_demand.type_service  as type_service',
                     DB::raw('DATE_FORMAT(call_demand.date_begin, "%d/%m/%Y") as date_begin'),
                     DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
-                    DB::raw('DATE_FORMAT(call_demand.date_effective_withdrawal, "%d/%m/%Y") as date_effective_withdrawal'),
+                    DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+                    DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster, "%d/%m/%Y") as date_removal_dumpster'),
+                    DB::raw('DATE_FORMAT(call_demand.date_change_dumpster, "%d/%m/%Y") as date_change_dumpster'),
+                    DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
                     'call_demand.address as address_service',
                     'call_demand.number as number_address_service',
                     'call_demand.zipcode as zipcode_address_service',
@@ -97,8 +86,7 @@ class CallDemandController extends Controller
                     'call_demand.state as state_address_service',
                     'call_demand.comments as comments_demand',
                     'call_demand.phone as phone_demand',
-                    // 'call_demand.price_unit',
-
+                    DB::raw('CONCAT("R$","",format(call_demand.price_unit,2,"Pt_BR"))  as price_unit'),
                     'call_demand.dumpster_total',
                     'call_demand.dumpster_total_opened',
                     'call_demand.dumpster_number',
@@ -151,6 +139,10 @@ class CallDemandController extends Controller
                     'call_demand.type_service  as type_service',
                     'call_demand.date_begin as date_begin',
                     'call_demand.date_end as date_end',
+                    'call_demand.date_allocation_dumpster as date_allocation_dumpster',
+                    'call_demand.date_removal_dumpster as date_removal_dumpster',
+                    'call_demand.date_change_dumpster as date_change_dumpster',
+                    'call_demand.date_effective_removal_dumpster as date_effective_removal_dumpster',
                     'call_demand.address as address_service',
                     'call_demand.number as number_address_service',
                     'call_demand.zipcode as zipcode_address_service',
