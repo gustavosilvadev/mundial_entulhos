@@ -38,7 +38,6 @@ class LandfillController extends Controller
 
     public function store(Request $request)
     {
-
         if(isset($request->name)
         && isset($request->email)
         && isset($request->phone)

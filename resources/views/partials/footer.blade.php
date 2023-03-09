@@ -1,12 +1,13 @@
+{{-- 
+</div>
+</div>
+</div> 
+
 </div>
 
 </div>
 </div>
-
-</div>
-</div>
-</div>
-
+--}}
 
 
 <div class="sidenav-overlay"></div>
@@ -42,6 +43,11 @@
     <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script>
     <script src="{{ URL::asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
+    
+    <script src="{{ URL::asset('app-assets/vendors/js/forms/cleave/cleave.min.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/vendors/js/forms/cleave/addons/cleave-phone.pt.js') }}"></script>
+
+
 
     <!-- END: Page Vendor JS-->
 
@@ -54,8 +60,9 @@
     <script src="{{ URL::asset('app-assets/js/scripts/pages/page-blog-edit.js') }}"></script>
     <script src="{{ URL::asset('app-assets/js/scripts/pages/app-todo.js') }}"></script>
     <script src="{{ URL::asset('app-assets/js/scripts/tables/table-datatables-advanced.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/js/scripts/forms/form-input-mask.js') }}"></script>
 
-    
+
     <!-- END: Page JS-->
 
     <script>

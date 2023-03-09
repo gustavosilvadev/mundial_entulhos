@@ -76,16 +76,11 @@ if(str_contains(url()->full(),"page")){
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
-<body class="vertical-layout vertical-menu-modern blank-page navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="blank-page">
-{{-- @include('partials.nav_admin') --}}
+{{-- <body class="vertical-layout vertical-menu-modern blank-page navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="blank-page"> --}}
+<body class="vertical-layout vertical-menu-modern  blank-page navbar-floating footer-static menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="">
 
-<div class="app-content content ">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
-    <div class="content-wrapper">
-            <div class="content-body">
-
-                <!-- NAVIGATION -->
+<!-- NAVIGATION -->
+<!--                
                 <nav class="navbar navbar-expand-md navbar-light justify-content-end justify-content-md-between w-100">
                     <button class="btn btn-icon navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i data-feather="align-justify" class="font-medium-5"></i>
@@ -132,171 +127,6 @@ if(str_contains(url()->full(),"page")){
                 </nav>
 
 
-            <!-- TESTE -->
-            <!-- Responsive tables start -->
-            <!--                
-                <div class="row" id="table-responsive">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Responsive tables</h4>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text">
-                                    Responsive tables allow tables to be scrolled horizontally with ease. Make any table responsive across all
-                                    viewports by adding <code class="highlighter-rouge">.table-responsive</code> class on
-                                    <code class="highlighter-rouge">.table</code>. Or, pick a maximum breakpoint with which to have a responsive
-                                    table up to by adding <code class="highlighter-rouge"> .table-responsive{-sm|-md|-lg|-xl}</code>. Read full
-                                    documentation
-                                    <a href="https://getbootstrap.com/docs/4.3/content/tables/#responsive-tables" target="_blank">here.</a>
-                                </p>
-                                <div class="alert alert-info">
-                                    <div class="alert-body">
-                                        <h4 class="text-warning">Vertical clipping/truncation</h4>
-                                        <p>
-                                            Responsive tables make use of <code class="highlighter-rouge">overflow-y: hidden</code>, which clips off
-                                            any content that goes beyond the bottom or top edges of the table. In particular, this can clip off
-                                            dropdown menus and other third-party widgets.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table mb-0 ">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="text-nowrap">#</th>
-                                            <th scope="col" class="text-nowrap">Heading 1</th>
-                                            <th scope="col" class="text-nowrap">Heading 2</th>
-                                            <th scope="col" class="text-nowrap">Heading 3</th>
-                                            <th scope="col" class="text-nowrap">Heading 4</th>
-                                            <th scope="col" class="text-nowrap">Heading 5</th>
-                                            <th scope="col" class="text-nowrap">Heading 6</th>
-                                            <th scope="col" class="text-nowrap">Heading 7</th>
-                                            <th scope="col" class="text-nowrap">Heading 8</th>
-                                            <th scope="col" class="text-nowrap">Heading 9</th>
-                                            <th scope="col" class="text-nowrap">Heading 10</th>
-                                            <th scope="col" class="text-nowrap">Heading 11</th>
-                                            <th scope="col" class="text-nowrap">Heading 12</th>
-                                            <th scope="col" class="text-nowrap">Heading 13</th>
-                                            <th scope="col" class="text-nowrap">Heading 14</th>
-                                            <th scope="col" class="text-nowrap">Heading 15</th>
-                                            <th scope="col" class="text-nowrap">Heading 16</th>
-                                            <th scope="col" class="text-nowrap">Heading 17</th>
-                                            <th scope="col" class="text-nowrap">Heading 18</th>
-                                            <th scope="col" class="text-nowrap">Heading 19</th>
-                                            <th scope="col" class="text-nowrap">Heading 20</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="text-nowrap">1</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                            <td class="text-nowrap">Table cell</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>                                            
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>
-                                            <td>Table cell</td>                                            
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            -->                
-            <!-- Responsive tables end -->
-            <!-- TESTE -->
-
-
-
 
                 <div class="p-1">
                     <div class="app-content content ">
@@ -321,4 +151,4 @@ if(str_contains(url()->full(),"page")){
 
                         <div class="content-body">
 
-                        
+-->

@@ -1,5 +1,7 @@
 @include('partials.header')
-<div class="app-content content ">
+@include('partials.nav')
+
+<div class="app-content content">
     
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>

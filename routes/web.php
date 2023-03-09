@@ -19,20 +19,13 @@ Route::get('/', function ():array {
     return ['code'=>200,"response"=>"Success"];
 });
 
-
-//Client
-// Route::get('/client/{id?}', [ClientController::class, 'showClient']);
-// Route::post('/client', [ClientController::class, 'store']);
-// Route::get('/client/{id?}', [ClientController::class, 'showClient']);
-
-
 // Client
 Route::get('createclient', function(){
     return view('client.form_cad_client');
 });
 
 Route::post('/save_client',[ClientController::class,'store']);
-Route::get('client/{id?}',[ClientController::class,'show']);
+Route::get('/client/{id?}',[ClientController::class,'show']);
 Route::post('/update_client',[ClientController::class,'update']);
 Route::get('/del_client/{id}',[ClientController::class,'destroy']);
 

@@ -193,6 +193,9 @@ class CallDemandController extends Controller
     {
 
 
+
+        dd($request);
+
         if(isset($request->id_client)
         && isset($request->type_service)
         && isset($request->address)
