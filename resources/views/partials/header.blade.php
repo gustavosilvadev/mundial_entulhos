@@ -74,6 +74,7 @@ if(str_contains(url()->full(),"page")){
     <!-- END: Page CSS-->
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+
 </head>
 
 {{-- <body class="vertical-layout vertical-menu-modern blank-page navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="blank-page"> --}}

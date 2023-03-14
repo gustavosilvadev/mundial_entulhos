@@ -192,9 +192,7 @@ class CallDemandController extends Controller
     public function store(Request $request)
     {
 
-
-
-        dd($request);
+        $price_unit = str_replace('R$','',$request->price_unit);
 
         if(isset($request->id_client)
         && isset($request->type_service)
@@ -205,10 +203,15 @@ class CallDemandController extends Controller
         && isset($request->district)
         && isset($request->state)
         && isset($request->phone)
-        && isset($request->price_unit)
+        && isset($price_unit)
         && isset($request->id_landfill)
         && isset($request->id_driver)
         && isset($request->period)
+        && isset($request->date_begin)
+        // && isset($request->date_end)
+        && isset($request->date_removal_dumpster)
+        && isset($request->date_effective_removal_dumpster)
+        && isset($request->dumpster_number)
         ){
 
             $calldemand = new CallDemand();
@@ -222,17 +225,19 @@ class CallDemandController extends Controller
             $calldemand->state         = $request->state;
             $calldemand->comments      = $request->comments;
             $calldemand->phone         = $request->phone;
-            $calldemand->price_unit    = preg_replace('/[^0-9]+/','.',str_replace('.','',$request->price_unit));
+            $calldemand->price_unit    = preg_replace('/[^0-9]+/','.',str_replace('.','',$price_unit));
             $calldemand->id_landfill   = $request->id_landfill;
             $calldemand->id_driver     = $request->id_driver;
             $calldemand->period        = $request->period;
             $calldemand->dumpster_total = $request->dumpster_total;
             $calldemand->dumpster_total_opened = $request->dumpster_total_opened;
+            $calldemand->dumpster_number = $request->dumpster_number;
             
-
-
-            $calldemand->date_begin    = (isset($request->date_begin) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_begin))) : '');
-            $calldemand->date_end      = (isset($request->date_end) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_end))) : '');
+            $calldemand->date_begin = (isset($request->date_begin) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_begin))) : '');
+            // $calldemand->date_end   = (isset($request->date_end) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_end))) : '');
+            $calldemand->date_allocation_dumpster  = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
+            $calldemand->date_removal_dumpster   = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
+            $calldemand->date_effective_removal_dumpster = (isset($request->date_effective_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_effective_removal_dumpster))) : '');
         
             if($calldemand->save()){
                 // return view('call_demand.form_cad_call_demand',["response" => "Dados cadastrados com sucesso"]);

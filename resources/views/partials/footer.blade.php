@@ -9,7 +9,6 @@
 </div>
 --}}
 
-
 <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
 
@@ -19,7 +18,6 @@
     </footer>
     <button class="btn btn-dark btn-lg btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
     <!-- END: Footer-->
-
 
     <!-- BEGIN: Vendor JS-->
     <script src="{{ URL::asset('app-assets/vendors/js/vendors.min.js') }}"></script>

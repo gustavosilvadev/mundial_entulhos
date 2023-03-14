@@ -34,70 +34,70 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="username">Sobrenome</label>
+                                                    <label for="surname">Sobrenome</label>
                                                     <input type="text" class="form-control"  name="surname" id="user_surname" />
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="name">E-mail</label>
+                                                    <label for="email">E-mail</label>
                                                     <input type="email" class="form-control" name="email" id="email"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="name">Login</label>
+                                                    <label for="login">Login</label>
                                                     <input type="text" class="form-control" name="login" id="login"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="name">Senha</label>
+                                                    <label for="password">Senha</label>
                                                     <input type="password" class="form-control" name="password" id="password"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="name">Repetir Senha</label>
+                                                    <label for="password_repeat">Repetir Senha</label>
                                                     <input type="password" class="form-control" name="password_repeat" id="password"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="name">Telefone</label>
+                                                    <label for="phone">Telefone</label>
                                                     <input type="text" class="form-control" name="phone" />
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="name">CPF/CNPJ</label>
+                                                    <label for="cpf_cnpj">CPF/CNPJ</label>
                                                     <input type="text" class="form-control" name="cpf_cnpj" />
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="name">Endereço</label>
+                                                    <label for="address">Endereço</label>
                                                     <input type="text" class="form-control" name="address" />
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="email">CEP</label>
+                                                    <label for="zipcode">CEP</label>
                                                     <input type="text" pattern="[0-9]{5}" class="form-control" name="zipcode" />
 
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="email">Cidade</label>
+                                                    <label for="city">Cidade</label>
                                                     <input type="text" class="form-control" name="city" />
 
                                                 </div>
@@ -105,7 +105,7 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="email">Estado</label>
+                                                    <label for="state">Estado</label>
                                                     <input type="text" class="form-control" name="state" />
 
                                                 </div>
@@ -151,10 +151,47 @@
     $(document).ready(function(){
         $("#form").validate({
             rules: {
+                name: {
+                    required: true
+                },
+                surname: {
+                    required: true
+                },
                 email: {
                     required: true,
                     email: true
+                },
+                login: {
+                    required: true
+                },
+                password: {
+                    required: true
+                },
+                password_repeat: {
+                    required: true
+                },
+                phone: {
+                    required: true
+                },
+                cpf_cnpj: {
+                    required: true
+                },
+                address: {
+                    required: true
+                },
+                zipcode: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+                state: {
+                    required: true
                 }
+
+
+
+                
             }
         });
 

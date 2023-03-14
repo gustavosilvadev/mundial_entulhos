@@ -18,7 +18,10 @@ $(function () {
     blockMask = $('.block-mask'),
     delimiterMask = $('.delimiter-mask'),
     customDelimiter = $('.custom-delimiter-mask'),
-    prefixMask = $('.prefix-mask');
+    prefixMask = $('.prefix-mask'),
+    zipcodeMask = $('.zipcode-mask'),
+    priceUnit = $('.price_unit');
+
 
   // Credit Card
   if (creditCard.length) {
@@ -32,8 +35,11 @@ $(function () {
   // Phone Number
   if (phoneMask.length) {
     new Cleave(phoneMask, {
-      phone: true,
-      phoneRegionCode: 'US'
+      // phone: true,
+      // phoneRegionCode: 'US'
+      delimiter: '-',
+      blocks: [5, 4],
+      uppercase: true      
     });
   }
 
@@ -94,6 +100,25 @@ $(function () {
       prefix: '+63',
       blocks: [3, 3, 3, 4],
       uppercase: true
+    });
+  }
+
+  if(zipcodeMask.length) {
+    new Cleave(zipcodeMask, {
+      delimiter: '-',
+      blocks: [5, 3],
+      uppercase: true
+    });
+  }
+
+  if(priceUnit.length) {
+    new Cleave(priceUnit, {
+      numeral: true,
+      numeralDecimalMark: ',',
+      delimiter: '.',      
+      blocks: [0, 2],
+      prefix: 'R$',
+      rawValueTrimPrefix: true
     });
   }
 });

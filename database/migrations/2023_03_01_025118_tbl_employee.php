@@ -16,7 +16,7 @@ class TblEmployee extends Migration
         Schema::create('employee', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('surname', 30);            
+            $table->string('surname', 100);            
             $table->string('email', 50);
             $table->string('login', 50);
             $table->longText('password');

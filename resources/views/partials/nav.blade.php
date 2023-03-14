@@ -8,7 +8,7 @@
                     <li class="nav-item mr-auto">
                         <a class="navbar-brand" href="/">
                             <span class="brand-logo">
-                                <img src="../../../app-assets/images/logo/logo_icon_seu_coerente.svg">
+                                <img src="../../../app-assets/images/logo/logo_temp.svg">
                             </span>
                         </a>
                     </li>
@@ -86,14 +86,14 @@
 
                     <ul class="menu-content">
                         <li class="nav-item">
-                            <a class="d-flex align-items-center" href="/lista_todas_categorias_edit">
+                            <a class="d-flex align-items-center" href="/createdriver">
 
                                 <span class="menu-title text-truncate" data-i18n="Invoice">Novo</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="d-flex align-items-center" href="/lista_todos_conteudos_edit">
+                            <a class="d-flex align-items-center" href="#">
 
                                 <span class="menu-title text-truncate" data-i18n="Invoice">Lista de Motoristas</span>
                             </a>                            

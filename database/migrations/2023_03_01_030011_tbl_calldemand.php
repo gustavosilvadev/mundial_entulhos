@@ -20,7 +20,7 @@ class TblCalldemand extends Migration
             $table->integer('id_driver');
             $table->string('type_service')->comment('COLOCACAO|TROCA|REMOÇÃO');
             $table->string('address');
-            $table->integer('number')->nullable();
+            $table->string('number')->nullable();
             $table->string('zipcode');
             $table->string('city');
             $table->string('district');
