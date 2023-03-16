@@ -13,10 +13,9 @@ use App\Http\Controllers\LandfillController;
 
 
 
-Route::get('/', function ():array {
+Route::get('/', function () {
     
-    // return view('welcome');
-    return ['code'=>200,"response"=>"Success"];
+    return view('main.home');
 });
 
 // Client
@@ -29,6 +28,8 @@ Route::get('/client/{id?}',[ClientController::class,'show']);
 Route::post('/update_client',[ClientController::class,'update']);
 Route::get('/del_client/{id}',[ClientController::class,'destroy']);
 
+Route::get('/find_demmand_client',[ClientController::class,'checkDemandOpendClient']);
+Route::get('/show_info_client',[ClientController::class,'showInfoClient']);
 
 //Employee
 Route::get('createemployee', function(){
@@ -60,6 +61,9 @@ Route::post('save_landfill',[LandfillController::class,'store']);
 Route::get('createcalldemand', [CallDemandController::class,'showNameClient']);
 Route::post('save_call_demand',[CallDemandController::class,'store']);
 Route::get('call_demand/{id?}',[CallDemandController::class,'show']);
+
+Route::get('demand_list_client/{id?}',[CallDemandController::class,'showInfoClientDemand']);
+
 
 Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);
 

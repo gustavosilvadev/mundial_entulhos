@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 
 use App\Models\Client;
+use App\Models\CallDemand;
 
 
 class ClientController extends Controller
@@ -38,6 +39,34 @@ public function show(Request $request)
             return view('client.list_client',['clients'=> $clients]);
         }
     }
+}
+
+
+// Verifica se existe chamados em aberto de um cliente em específico
+public function checkDemandOpendClient(Request $request):bool
+{
+
+    $call_demand = CallDemand::where('id_client',$request->id)->first();
+    // return array('message_info' => "O cliente possui atendimento em aberto. Deseja abrir um novo chamado mesmo assim? ");
+    // return (isset($call_demand) ? true : false);
+    if(isset($call_demand)){
+        return true;
+    }else
+        return false;
+}
+
+// Exibe informações sobre o cliente
+public function showInfoClient(Request $request)
+{
+    
+    $client = Client::where('id',$request->id)->first();
+
+    if(isset($client)){
+        return $client;
+    }else{
+        return [];
+    }
+
 }
 
 public function store(Request $request)

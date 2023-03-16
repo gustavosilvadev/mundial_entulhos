@@ -4,65 +4,8 @@
 <div class="app-content content">
 
     <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
     <div class="content-wrapper">
-        <div class="content-header row">
-        </div>
-
         <div class="content-body">
-
-
-{{-- teste modal popup --}}
-
-<section id="basic-modals">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Basic Modal</h4>
-                </div>
-                <div class="card-body">
-                    <div class="demo-inline-spacing">
-                        <!-- Basic trigger modal -->
-                        <div class="basic-modal">
-                            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#alert_chamado_aberto">
-                                Modal de aviso
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade text-left" id="alert_chamado_aberto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="myModalLabel1">Aviso!</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            {{-- <h5>Check First Paragraph</h5> --}}
-                                            <p>
-                                                Este cliente possui uma atividade em aberta. Deseja abrir um novo chamado mesmo assim?
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-warning" data-dismiss="modal">Visualizar chamado </button>
-                                            <button type="button" class="btn btn-success" data-dismiss="modal">Sim</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Basic trigger modal end -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- teste modal popup --}}
-
 
             <div class="row" id="table-responsive">        
                 <div class="col-12">
@@ -88,10 +31,6 @@
                                                                 <section class="app-user-edit">
                                                                     <div class="card">
                                                                         <div class="card-body">
-
-
-
-
                                                                             <div class="tab-content">
                                     
                                                                                 <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
@@ -102,7 +41,7 @@
                                                                                         <div class="col-md-12">
                                                                                             <div class="form-group">
                                                                                                 <label for="id_client">CLIENTE</label>
-                                                                                                <select class="select2 form-control form-control-lg" name="id_client" id="pesquisa_cliente">
+                                                                                                <select class="select2 form-control form-control-lg" name="id_client" id="search_data_client">
                                                                                                     <option value="">----</option>
                                                                                                     <?php if(isset($clients)):?>
                                                                                                         <?php foreach($clients as $client):?>
@@ -175,28 +114,28 @@
                                                                                         <div class="col-md-4">
                                                                                             <div class="form-group">
                                                                                                 <label for="address">Endereço</label>
-                                                                                                <input type="text" class="form-control only-text" name="address" minlength="2" maxlength="44" />
+                                                                                                <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" />
                                                                                             </div>
                                                                                         </div>
                                                 
                                                                                         <div class="col-md-2">
                                                                                             <div class="form-group">
                                                                                                 <label for="number">Número</label>
-                                                                                                <input type="text" class="form-control" name="number" minlength="1" maxlength="6"/>
+                                                                                                <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6"/>
                                                                                             </div>
                                                                                         </div>
                                                                                         
                                                                                         <div class="col-md-4">
                                                                                             <div class="form-group">
                                                                                                 <label for="zipcode">CEP</label>
-                                                                                                    <input type="text" class="form-control zipcode-mask" name="zipcode" placeholder="00000-00" />
+                                                                                                    <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" />
                                                                                             </div>
                                                                                         </div>
                                                                                         
                                                                                         <div class="col-md-4">
                                                                                             <div class="form-group">
                                                                                                 <label for="district">Bairro</label>
-                                                                                                <input type="text" class="form-control only-text" name="district" minlength="2" maxlength="44"/>
+                                                                                                <input type="text" class="form-control only-text" name="district" id="district" minlength="2" maxlength="44"/>
                                                 
                                                                                             </div>
                                                                                         </div>
@@ -204,7 +143,7 @@
                                                                                         <div class="col-md-2">
                                                                                             <div class="form-group">
                                                                                                 <label for="city">Cidade</label>
-                                                                                                <input type="text" class="form-control only-text" name="city" minlength="2" maxlength="18"/>
+                                                                                                <input type="text" class="form-control only-text" name="city" id="city" minlength="2" maxlength="18"/>
                                                 
                                                                                             </div>
                                                                                         </div>
@@ -212,7 +151,7 @@
                                                                                         <div class="col-md-1">
                                                                                             <div class="form-group">
                                                                                                 <label for="state">Estado</label>
-                                                                                                <input type="text" class="form-control only-text" name="state" maxlength="2" onkeydown="return /[a-z]/i.test(event.key)"/>
+                                                                                                <input type="text" class="form-control only-text" name="state" id="state" maxlength="2" onkeydown="return /[a-z]/i.test(event.key)"/>
                                                 
                                                                                             </div>
                                                                                         </div>
@@ -221,7 +160,7 @@
                                                                                             <div class="form-group">
                                                                                                 <label for="phone">Telefone</label>
                                                                                                 {{-- <input type="phone" class="form-control phone-number-mask" name="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeydown="return /^\d*$/.test(value)"/> --}}
-                                                                                                <input type="phone" class="form-control phone-number-mask" name="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" />
+                                                                                                <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" />
                                                                                             </div>
                                                                                         </div>
                                                 
@@ -339,6 +278,46 @@
                     </div>
                 </div>
             </div>
+
+            <section id="basic-modals">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <div class="demo-inline-spacing">
+                                    <div class="basic-modal">
+                                        <div class="modal fade text-left" id="alert_demand_opened" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="myModalLabel1">Aviso!</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        <p>
+                                                            Este cliente possui uma atividade em aberta. Deseja abrir um novo chamado mesmo assim?
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-warning" data-dismiss="modal" id="redirect_list_demand_client">Visualizar chamado </button>
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal" id="no_redirect_list_demand_client">Sim</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </div>
 
 
@@ -352,7 +331,6 @@
 
 <script>
 
-
     $(document).ready(function(){
 
         let today = new Date();
@@ -362,10 +340,66 @@
         let month   = dateObj.getUTCMonth() + 1; //months from 1-12
         let day     = dateObj.getUTCDate();
         let year    = dateObj.getUTCFullYear();
-        
-        newDate     = day + "/" + month + "/" + year;
+        let  newDate  = day + "/" + month + "/" + year;
         $('.date_today').val(newDate);
 
+        $("#search_data_client").on('change', function(){
+            
+            let id_client = $(this).val();
+
+            $.ajax({
+                method: 'GET',
+                url: '/find_demmand_client',
+                data: {id : id_client},
+                success: function(dataResponse) {
+
+                    if(dataResponse)
+                    {
+                        $("#alert_demand_opened").modal('show');
+                    }
+
+                    findDemandClient(id_client);
+
+                },
+                error: function(responseError){
+                    alert(responseError);
+                }
+            });
+        });
+
+        $('#redirect_list_demand_client').click(function(){
+            let id_client = $("#search_data_client option:selected").val();
+            window.location.replace("demand_list_client/" + id_client);
+
+        });
+
+        $('#no_redirect_list_demand_client').click(function(){
+            $("#alert_demand_opened").modal('hide');
+            findDemandClient(id_client);
+        });
+
+
+        function findDemandClient(id_client){
+            $.ajax({
+                method: 'GET',
+                url: '/show_info_client',
+                data: {id : id_client},
+                success: function(dataResponse) {
+                    $("#address").val(dataResponse.address);
+                    $("#number").val(dataResponse.number);
+                    $("#zipcode").val(dataResponse.zipcode);
+                    $("#district").val(dataResponse.district);
+                    $("#state").val(dataResponse.state);
+                    $("#city").val(dataResponse.city);
+                    $("#phone").val(dataResponse.phone);
+
+                },
+                error: function(responseError){
+                    alert(responseError);
+                }
+            });
+        }
+        
         $("#form").validate({
             rules: {
                 type_service: {
@@ -457,9 +491,6 @@
         
 
     });
-
-    
-    
 
     function onlynumber(evt) {
         let theEvent = evt || window.event;

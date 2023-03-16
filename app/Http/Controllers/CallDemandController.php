@@ -108,10 +108,11 @@ class CallDemandController extends Controller
     public function show(Request $request)
     {
 
-        if(isset($request->id)){
+        $id_demand = $request->id;
 
-
-            $calldemand = CallDemand::where('id',$request->id)->orderBy('id','DESC')->first();
+        if(isset($id_demand)){
+            
+            $calldemand = CallDemand::where('id',$id_demand)->orderBy('id','DESC')->first();
             $client     = Client::where('id',$calldemand->id_client)->first();
 
             if(isset($calldemand)){
@@ -189,6 +190,74 @@ class CallDemandController extends Controller
         ]);
     }
 
+    public function showInfoClientDemand(Request $request)
+    {
+        $responseListDemandClient =  $this->showListDemandClient($request->id);
+        return view('call_demand.preview_list_demand_client', $responseListDemandClient);
+    }
+
+    public function showListDemandClient($id_client)
+    {
+        
+        if(isset($id_client)){
+        
+            $calldemands = CallDemand::where('id_client',$id_client)
+                            ->join('client', 'client.id', '=','call_demand.id_client')
+                            ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+                            ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
+                            ->join('employee', 'employee.id', '=', 'driver.id_employee')
+                            ->select(
+                                'call_demand.id as id_demand',
+                                'client.id as id_client',
+                                DB::raw("CONCAT(client.name, ' ', client.surname) as name_client"),
+                                'call_demand.type_service  as type_service',
+                                DB::raw('DATE_FORMAT(call_demand.date_begin, "%d/%m/%Y") as date_begin'),
+                                DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
+                                DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+                                DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster, "%d/%m/%Y") as date_removal_dumpster'),
+                                DB::raw('DATE_FORMAT(call_demand.date_change_dumpster, "%d/%m/%Y") as date_change_dumpster'),
+                                DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),                    
+                                'call_demand.address as address_service',
+                                'call_demand.number as number_address_service',
+                                'call_demand.zipcode as zipcode_address_service',
+                                'call_demand.city as city_address_service',
+                                'call_demand.district as district_address_service',
+                                'call_demand.state as state_address_service',
+                                'call_demand.comments as comments_demand',
+                                'call_demand.phone as phone_demand',
+                                DB::raw('CONCAT("R$","",format(call_demand.price_unit,2,"Pt_BR"))  as price_unit'),
+                                'call_demand.dumpster_total',
+                                'call_demand.dumpster_total_opened',
+                                'call_demand.dumpster_number',
+                                DB::raw('DATEDIFF(call_demand.date_end, call_demand.date_begin) AS date_difference'),
+                                'landfill.name as landfill_name',
+                                'call_demand.period',
+                                DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
+                                DB::raw('if(call_demand.service_status = 0, "PENDENTE","ENTREGUE") as service_status'),
+                                DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
+                            )            
+                            ->orderBy('call_demand.service_status')
+                            ->get();
+            
+            $infoClient  = Client::where('id',$id_client)->first();
+            return array('calldemands' => $calldemands, 'infoclient' => $infoClient);
+
+            /*
+            $client     = Client::where('id',$calldemand->id_client)->first();
+
+            if(isset($calldemand)){
+                
+                return view('call_demand.preview_call_demand',['calldemand' => $calldemand, 'client' => $client]);
+
+            }else{
+
+                return view('call_demand.preview_call_demand',['calldemand','']);
+            }
+            */
+
+        }
+    }
+
     public function store(Request $request)
     {
 
@@ -234,13 +303,12 @@ class CallDemandController extends Controller
             $calldemand->dumpster_number = $request->dumpster_number;
             
             $calldemand->date_begin = (isset($request->date_begin) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_begin))) : '');
-            // $calldemand->date_end   = (isset($request->date_end) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_end))) : '');
             $calldemand->date_allocation_dumpster  = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
             $calldemand->date_removal_dumpster   = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
             $calldemand->date_effective_removal_dumpster = (isset($request->date_effective_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_effective_removal_dumpster))) : '');
         
             if($calldemand->save()){
-                // return view('call_demand.form_cad_call_demand',["response" => "Dados cadastrados com sucesso"]);
+
                 return redirect('createcalldemand');
             }
 
