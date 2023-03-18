@@ -67,6 +67,7 @@
                                                     <th class="py-1">Data Fim</th>
                                                     <th class="py-1">Quantidade</th>
                                                     <th class="py-1">Total</th>
+                                                    <th class="py-1"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -77,6 +78,7 @@
                                                         <p class="card-text mb-25">CEP: <?php echo $calldemand->zipcode; ?></p>
                                                         
                                                     </td>
+
                                                     <td class="py-1">
                                                         <span class="font-weight-bold"><?php echo $calldemand->date_begin; ?></span>
                                                     </td>
@@ -84,12 +86,18 @@
                                                     <td class="py-1">
                                                         <span class="font-weight-bold"><?php echo $calldemand->date_end; ?></span>
                                                     </td>
+
                                                     <td class="py-1">
                                                         <span class="font-weight-bold">2</span>
                                                     </td>
                                                     <td class="py-1">
                                                         <span class="font-weight-bold"><?php echo 'R$'.number_format($calldemand->price_unit, 2, ',', '.'); ?></span>
                                                     </td>
+
+                                                    <td class="py-1">
+                                                        <a href="/editcalldemand/{{$calldemand->id}}" class="btn btn-warning">Editar</a>
+                                                    </td>
+                                                    
                                                 </tr>
                                             </tbody>
                                         </table>

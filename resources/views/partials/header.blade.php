@@ -50,6 +50,7 @@ if(str_contains(url()->full(),"page")){
 
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
+
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
     <!-- END: Vendor CSS-->
 
@@ -77,79 +78,27 @@ if(str_contains(url()->full(),"page")){
 
 </head>
 
-{{-- <body class="vertical-layout vertical-menu-modern blank-page navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="blank-page"> --}}
 <body class="vertical-layout vertical-menu-modern  blank-page navbar-floating footer-static menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="">
 
-<!-- NAVIGATION -->
-<!--                
-                <nav class="navbar navbar-expand-md navbar-light justify-content-end justify-content-md-between w-100">
-                    <button class="btn btn-icon navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i data-feather="align-justify" class="font-medium-5"></i>
-                    </button>
-                    <div class="collapse navbar-collapse bg-dark text-white" id="navbarSupportedContent">
-                
-                        <div class="profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0">
-                            <ul class="nav nav-pills mb-0">
-                                <li class="nav-item">
-                                    <a class="nav-link font-weight-bold " href="/call_demand">
-                                        <span class="d-none d-md-block" style="color:white">Pedidos</span>
-                                        <i data-feather="rss" class="d-block d-md-none"></i>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link font-weight-bold" href="/client">
-                                        <span class="d-none d-md-block" style="color:white">Clientes</span>
-                                        <i data-feather="info" class="d-block d-md-none"></i>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link font-weight-bold" href="/employee">
-                                        <span class="d-none d-md-block" style="color:white">Funcionários</span>
-                                        <i data-feather="image" class="d-block d-md-none"></i>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link font-weight-bold" href="javascript:void(0)">
-                                        <span class="d-none d-md-block" style="color:white">Motoristas</span>
-                                        <i data-feather="users" class="d-block d-md-none"></i>
-                                    </a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="nav-link font-weight-bold" href="javascript:void(0)">
-                                        <span class="d-none d-md-block" style="color:white">Aterros</span>
-                                        <i data-feather="users" class="d-block d-md-none"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                
-                        </div>
+{{-- 
+    <nav class="header-navbar navbar navbar-expand-lg  floating-nav navbar-light navbar-shadow">
+        <div class="navbar-container d-flex content">
+            <div class="bookmark-wrapper d-flex align-items-center">
+                <h1>MUNDIAL ENTULHOS</h1>
+            </div>
+            <ul class="nav navbar-nav align-items-center ml-auto">
+                <li class="nav-item dropdown dropdown-user">
+                    <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">Admin</span><span class="user-status">Admin</span></div>
+                        <span class="avatar">
+                            <img class="round" src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"><span class="avatar-status-online"></span>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user"><a class="dropdown-item" href="#"><i class="mr-50" data-feather="user"></i> Configurações</a><a class="dropdown-item" href="app-email.html"><i class="mr-50" data-feather="mail"></i> Sobre</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="page-auth-login-v2.html"><i class="mr-50" data-feather="power"></i> Sair</a>
                     </div>
-                </nav>
-
-
-
-                <div class="p-1">
-                    <div class="app-content content ">
-                        <div class="content-header row">
-                            <div class="content-header-left col-md-9 col-12 mb-2">
-                                <div class="row breadcrumbs-top">
-                                    <div class="col-12">
-                                        <h2 class="content-header-title float-left mb-0">Pedidos</h2>
-                                        <div class="breadcrumb-wrapper">
-                                            <ol class="breadcrumb">
-                                                <li class="breadcrumb-item"><a href="index.html">Home</a>
-                                                </li>
-                                                <li class="breadcrumb-item active">Pedidos
-                                                </li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="content-body">
-
--->
+                </li>
+            </ul>
+        </div>
+    </nav> --}}

@@ -39,7 +39,10 @@
     <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
     <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script> 
+
+
+
     <script src="{{ URL::asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
     
     <script src="{{ URL::asset('app-assets/vendors/js/forms/cleave/cleave.min.js') }}"></script>
@@ -65,6 +68,9 @@
 
     <script>
         $(window).on('load', function() {
+
+            $('#table_teste_gustavo').DataTable();
+            
             if (feather) {
                 feather.replace({
                     width: 14,

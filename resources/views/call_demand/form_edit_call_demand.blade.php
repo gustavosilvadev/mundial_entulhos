@@ -1,3 +1,23 @@
+
+<?php 
+
+// print_r($info_demand);
+// echo '<BR /> *** <BR />';
+// echo '<BR /> *** <BR />';
+
+
+
+// print($landfills);
+
+// die();
+// foreach($clients as $client){
+    
+//     echo  $client->id.' -> '.$client->name.' '.$client->surname."<BR />";
+// }
+
+// die();
+?>
+
 @include('partials.header')
 @include('partials.nav')
 
@@ -16,7 +36,7 @@
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">DEMANDA!</mark></h3>                                            
+                                                <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">EDITAR</ins> <mark class="bg-dark text-white">DEMANDA!</mark></h3>                                            
                                             </div>
 
                                             <div class="card-body">
@@ -259,7 +279,7 @@
                                                         <div class="col-xl-3 col-md-4 col-12">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <button type="submit" class="btn btn-success btn-block mb-75">Salvar</button>                                
+                                                                    <button type="submit" class="btn btn-warning btn-block mb-75">ATUALIZAR</button>                                
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -332,6 +352,33 @@
 <script>
 
     $(document).ready(function(){
+
+        let id_demand = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+
+        $.get("/getInfoDemand/" + id_demand).done(function( data ){
+            
+            $("input[name='date_begin']").val(data.date_begin);
+            $("input[name='date_allocation_dumpster']").val(data.date_allocation_dumpster);
+            $("input[name='date_removal_dumpster']").val(data.date_removal_dumpster);
+            $("input[name='date_effective_removal_dumpster']").val(data.date_effective_removal_dumpster);
+            $("input[name='address']").val(data.address_service);
+            $("input[name='number']").val(data.number_address_service);
+            $("input[name='zipcode']").val(data.zipcode_address_service);
+            $("input[name='district']").val(data.district_address_service);
+            $("input[name='city']").val(data.city_address_service);
+            $("input[name='state']").val(data.state_address_service);
+            $("input[name='phone']").val(data.phone_demand);
+            $("input[name='price_unit']").val(data.price_unit);
+            $("input[name='dumpster_total']").val(data.dumpster_total);
+            $("input[name='dumpster_total_opened']").val(data.dumpster_total_opened);
+            $("input[name='dumpster_number']").val(data.dumpster_number);
+            $("textarea").val(data.comments_demand);
+
+
+        }).fail(function(){
+            alert('Erro ao carregar as informações!!');
+        });
+
 
         let today = new Date();
         $('#date_begin').val(((today.getDate() )) + "/" + ((today.getMonth() + 1)) + "/" + today.getFullYear());

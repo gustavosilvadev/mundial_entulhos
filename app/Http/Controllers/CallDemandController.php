@@ -13,10 +13,11 @@ use App\Models\Landfill;
 class CallDemandController extends Controller
 {
 
-    public function showAPI(Request $request)
+    // public function showAPI(Request $request)
+    public function showAPI($id_demand)
     {
-        if(isset($request->id)){
 
+        if(isset($id_demand)){
             $calldemand = DB::table('call_demand')
                 ->join('client', 'client.id', '=','call_demand.id_client')
                 ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
@@ -52,11 +53,12 @@ class CallDemandController extends Controller
                     DB::raw('if(call_demand.service_status = 0, "PENDENTE","") as service_status'),
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
                 )
-                ->where('call_demand.id', '=', $request->id)->get();
+                ->where('call_demand.id', '=', $id_demand)->get();
 
                 if(isset($calldemand)){
-                $tagNameIndex = array('data' => $calldemand);
-                return $tagNameIndex;
+
+                    $tagNameIndex = array('data' => $calldemand);
+                    return $tagNameIndex;
 
                 }                
 
@@ -105,10 +107,10 @@ class CallDemandController extends Controller
         }
     }
 
-    public function show(Request $request)
+    // public function show(Request $request)
+    public function show($id)
     {
-
-        $id_demand = $request->id;
+        $id_demand = $id;
 
         if(isset($id_demand)){
             
@@ -174,8 +176,9 @@ class CallDemandController extends Controller
     }
 
 
-    public function showNameClient()
+    public function callFormCreateDemand()
     {
+/*        
         $clients = Client::all();   
         $drivers = Driver::join('employee', function($join){
             $join->on('driver.id_employee', '=', 'employee.id')->where('driver.flg_status', 1);
@@ -188,7 +191,31 @@ class CallDemandController extends Controller
             'drivers' => $drivers,
             'landfills' => $landfills
         ]);
+*/
+
+
+        return view('call_demand.form_cad_call_demand', $this->showInfoParamsDemand());
+
     }
+
+
+    public function showInfoParamsDemand()
+    {
+
+        $clients = Client::all(); 
+        $drivers = Driver::join('employee', function($join){
+            $join->on('driver.id_employee', '=', 'employee.id')->where('driver.flg_status', 1);
+        })->get(['driver.id','employee.name']);
+
+        $landfills = Landfill::select('id','name')->where('flg_status', 1)->get();
+        return [
+            'clients' => $clients, 
+            'drivers' => $drivers,
+            'landfills' => $landfills
+        ];
+
+    }
+
 
     public function showInfoClientDemand(Request $request)
     {
@@ -322,56 +349,39 @@ class CallDemandController extends Controller
         }
     }
 
-/*
-    public function update(Request $request)
+
+    public function update($id_demand)
     {
+/*        
+        if(isset($id_demand)){
 
-        if($request->id){
+            $data_demand        = array('info_demand' => $this->showAPI($id_demand)['data'][0]);
+            $infoParamsDemand   = $this->showInfoParamsDemand();
 
-            $employee = Employee::where("id",$request->id)->first();
-            
-            if($employee){
+            if($data_demand){
+
+                // return view('call_demand.form_edit_call_demand', array_push($infoParamsDemand, $data_demand));
                 
-                $employee->name     = $request->name;
-                $employee->surname  = $request->surname;
-                $employee->email    = $request->email;
-                $employee->login    = $request->login;
-                
-                if(isset($request->password)){
-
-                    $employee->password = Hash::make($request->password);
-                }
-
-                $employee->phone    = $request->phone;
-                $employee->cpf_cnpj = $request->cpf_cnpj;
-                $employee->address  = $request->address;
-                $employee->zipcode  = $request->zipcode;
-                $employee->city     = $request->city;
-                $employee->state    = $request->state;
-
-                if($employee->update()){
-
-                    return view('employee.employee',[
-                        'response' => $this->returnSuccess("Dados atualizados com sucesso"),
-                        'employee' => $employee
-                    ]);
-
-                }else{
-                    return $this->returnError('Erro ao atualizar os dados do funcionário',500); 
-                }
-
-            }else{
-                return $this->returnError('Funcionário não encontrado',404);
-
+                // return view('call_demand.form_edit_call_demand', $infoParamsDemand);
+                return view('call_demand.form_edit_call_demand', $data_demand,$infoParamsDemand);
             }
-
-        }else{
-            return $this->returnError('Funcionário não encontrado',404); 
+            
         }
-    
+        
+        die('Error!!!!');
+*/   
+        $infoParamsDemand   = $this->showInfoParamsDemand();     
+        return view('call_demand.form_edit_call_demand', $infoParamsDemand);
+    }
+
+    public function showInfoToForm($id_demand)
+    {
+        // return 'Funcionando!! id: '.$id;
+        return $this->showAPI($id_demand)['data'][0];
     }
 
 
+/*
     public function destroy(Request $request)
     {
 
