@@ -49,6 +49,27 @@ Route::get('driver/{id?}',[DriverController::class,'show']);
 // Route::post('/update_driver',[DriverController::class,'update']);
 // Route::get('/del_driver/{id}',[DriverController::class,'destroy']);
 
+// Sessão Motorista (EDITAR)
+
+
+/********************************** TAREFAS !!!! **************************************************/
+/********************************** TAREFAS !!!! **************************************************/
+/********************************** TAREFAS !!!! **************************************************/
+/********************************** TAREFAS !!!! **************************************************/
+/********************************** TAREFAS !!!! **************************************************/
+Route::get('/area_motorista_temp', [DriverController::class, 'exibirDemandasAtivas']);
+
+// Sessão Cliente (EDITAR)
+Route::get('/area_cliente_temp', [ClientController::class, 'exibirFormCadastroBasico']);
+
+
+// Sessão Endereços que a empresa atende e não atende (EDITAR)
+Route::get('/exibir_enderecos_temp', [CallDemandController::class, 'exibirListaEnderecosAtivos']);
+/********************************** TAREFAS !!!! **************************************************/
+/********************************** TAREFAS !!!! **************************************************/
+/********************************** TAREFAS !!!! **************************************************/
+/********************************** TAREFAS !!!! **************************************************/
+/********************************** TAREFAS !!!! **************************************************/
 
 // Landfill
 Route::get('createlandfill', function(){
@@ -64,10 +85,11 @@ Route::get('call_demand/{id?}',[CallDemandController::class,'show']);
 
 Route::get('demand_list_client/{id?}',[CallDemandController::class,'showInfoClientDemand']);
 
+Route::get('editcalldemand/{id}',[CallDemandController::class,'showUpdateForm']);
+Route::post('change_call_demand',[CallDemandController::class,'update']);
 
 Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);
 
-Route::get('editcalldemand/{id}',[CallDemandController::class,'update']);
 Route::get('getInfoDemand/{id}',[CallDemandController::class,'showInfoToForm']);
 
 
@@ -84,3 +106,5 @@ Route::post('save_dumpster_service_demand',[DumpsterServiceDemandController::cla
 Route::get('clientinfopayment', [ClientInfoPaymentController::class,'showInfoClientInfoPayment']);
 Route::post('save_client_info_payment',[ClientInfoPaymentController::class,'store']);
 // Route::get('dumpster_service_demand/{id?}',[DumpsterServiceDemandController::class,'show']);
+
+

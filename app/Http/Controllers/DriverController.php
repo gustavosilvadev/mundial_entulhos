@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CallDemandController;
 use Illuminate\Http\Request;
 use App\Models\Driver;
 use App\Models\Employee;
@@ -28,11 +29,14 @@ class DriverController extends Controller
             }
 
         }else{
-            
-            $drivers = Driver::all();
-            
-            if(isset($drivers)){
-                return view('driver.form_list_driver',['drivers'=> $drivers]);
+
+            $employees = Driver::join('employee', function($join){
+                $join->on('driver.id_employee', '=', 'employee.id')->where('driver.flg_status', 1);
+            })->get(['driver.id','employee.name']);
+
+
+            if(isset($employees)){
+                return view('driver.form_list_driver',['employee'=> $employees]);
             }
         }
     }
@@ -130,6 +134,36 @@ class DriverController extends Controller
         }else{
             return $this->returnError('Motorista não encontrado',404); 
         }
+    }
+
+    public function exibirDemandasAtivas()
+    {
+/*        
+        echo "001# - EXIBIR: LISTA DE DEMANDAS ATIVAS";
+        echo "<BR />";
+        echo "002# - BOTÕES PARA ATUALIZAR DEMANDA";
+        echo "<BR />";
+        echo "003# - EXIBIR MAPA DO TRAJETO";
+        echo "<BR />";
+        echo "004# - EXIBIR ROTA";
+        echo "<BR />";
+        echo "005# - REDIRECIONAR PARA WHATSAPP";
+        echo "<BR />";
+
+        die();
+
+*/
+
+        $call_demands = CallDemandController::showApi(null);
+        
+        // foreach ($call_demands['data'] as $key => $value) {
+        //     echo $value->name_client.'<BR />';
+        // }
+
+        if(isset($call_demands['data'])){
+            return view('driver.list_demand_driver',['call_demands'=> $call_demands['data']]);
+        }        
+
     }
 
     private function returnSuccess($dados)

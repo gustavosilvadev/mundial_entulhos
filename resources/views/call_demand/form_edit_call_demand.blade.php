@@ -41,7 +41,7 @@
 
                                             <div class="card-body">
                                         
-                                                <form action="/save_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
+                                                <form action="/change_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
                                                     @csrf
                                                     <div class="row invoice-add">
                                     

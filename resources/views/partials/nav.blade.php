@@ -101,8 +101,6 @@
                     </ul>
                 </li>
 
-
-
                 <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Aterros</span></a>
 
                     <ul class="menu-content">
@@ -120,7 +118,18 @@
                             </a>                            
                         </li> --}}
                     </ul>
-                </li>                
+                </li>
+
+                <li class=" nav-item"><a class="d-flex align-items-center" href="/area_motorista_temp">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span class="menu-title text-truncate" data-i18n="Todo">Area do Motorista</span></a>
+                </li>
+
+                <li class=" nav-item"><a class="d-flex align-items-center" href="/area_cliente_temp">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span class="menu-title text-truncate" data-i18n="Todo">Area do CLIENTE</span></a>
+                </li>
+
             </ul>
         </div>
     </div>

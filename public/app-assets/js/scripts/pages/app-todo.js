@@ -11,6 +11,10 @@
 
 $(function () {
   var taskTitle,
+    taskNameClient,
+    taskDateBegin,
+    taskDescription,
+    taskPhone,
     flatPickr = $('.task-due-date'),
     newTaskModal = $('.sidebar-todo-modal'),
     newTaskForm = $('#form-modal-todo'),
@@ -339,11 +343,31 @@ $(function () {
     var quill_editor = $('#task-desc .ql-editor'); // ? Dummy data as not connected with API or anything else
     quill_editor[0].innerHTML =
       'Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.';
-    taskTitle = $(this).find('.todo-title');
-    var $title = $(this).find('.todo-title').html();
 
-    // apply all variable values to fields
-    newTaskForm.find('.new-todo-item-title').val($title);
+    taskTitle   = $(this).find('.todo-title-address');
+    var $title  = $(this).find('.todo-title-address').html();
+    newTaskForm.find('.todo-item-title-address').text($title);
+
+
+    taskDateBegin   = $(this).find('.todo-date-begin');
+    var $dateBegin  = $(this).find('.todo-date-begin').html();
+    newTaskForm.find('.todo-item-date-begin').text($dateBegin);
+    console.log($dateBegin);
+
+    taskDescription   = $(this).find('.todo-description');
+    var $description  = $(this).find('.todo-description').html();
+    newTaskForm.find('.todo-item-description').text($description);
+
+ // Nome
+    taskNameClient   = $(this).find('.todo-name-client');
+    var $nameClient  = $(this).find('.todo-name-client').html();
+    newTaskForm.find('.todo-name-client').text($nameClient);
+ 
+// Telefone
+    taskPhone   = $(this).find('.todo-phone');
+    var $phone  = $(this).find('.todo-phone').html();
+    newTaskForm.find('.todo-phone').text($phone);    
+
   });
 
   // Updating Data Values to Fields
@@ -352,8 +376,23 @@ $(function () {
       var isValid = newTaskForm.valid();
       e.preventDefault();
       if (isValid) {
-        var $edit_title = newTaskForm.find('.new-todo-item-title').val();
+        var $edit_title = newTaskForm.find('.todo-item-title-address').val();
         $(taskTitle).text($edit_title);
+        
+        // var $edit_name_client = newTaskForm.find('.todo-item-name-client').val();
+        // $(taskNameClient).val($edit_name_client);
+        
+        var $edit_date_begin = newTaskForm.find('.todo-item-date-begin').val();
+        $(taskDateBegin).text($edit_date_begin);
+
+        var $edit_description = newTaskForm.find('.todo-item-description').val();
+        $(taskDescription).text($edit_description);
+
+        var $edit_name_client = newTaskForm.find('.todo-name-client').val();
+        $(taskNameClient).text($edit_name_client);
+
+        var $edit_phone = newTaskForm.find('.todo-phone').val();
+        $(taskPhone).text($edit_phone);
 
         toastr['success']('Data Saved', '💾 Task Action!', {
           closeButton: true,
@@ -371,7 +410,7 @@ $(function () {
       todoTaskListWrapper
         .find('li')
         .sort(function (a, b) {
-          return $(b).find('.todo-title').text().toUpperCase() < $(a).find('.todo-title').text().toUpperCase() ? 1 : -1;
+          return $(b).find('.todo-title-address').text().toUpperCase() < $(a).find('.todo-title-address').text().toUpperCase() ? 1 : -1;
         })
         .appendTo(todoTaskList);
     });
@@ -382,7 +421,7 @@ $(function () {
       todoTaskListWrapper
         .find('li')
         .sort(function (a, b) {
-          return $(b).find('.todo-title').text().toUpperCase() > $(a).find('.todo-title').text().toUpperCase() ? 1 : -1;
+          return $(b).find('.todo-title-address').text().toUpperCase() > $(a).find('.todo-title-address').text().toUpperCase() ? 1 : -1;
         })
         .appendTo(todoTaskList);
     });

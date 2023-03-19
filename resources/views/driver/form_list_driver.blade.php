@@ -41,29 +41,29 @@
                             <!-- Todo List starts -->
                             <div class="todo-task-list-wrapper list-group">
                                 <?php if(isset($employees)): ?>
-                                <ul class="todo-task-list media-list" id="todo-task-list">
-                                    <?php foreach($employees as $employee): ?>
-                                        <li>
-                                            <div class="todo-title-wrapper">
-                                                <div class="todo-title-area">
+                                    <ul class="todo-task-list media-list" id="todo-task-list">
+                                        <?php foreach($employees as $employee): ?>
+                                            <li>
+                                                <div class="todo-title-wrapper">
+                                                    <div class="todo-title-area">
 
-                                                        <i data-feather="more-vertical" class="drag-icon"></i>
-                                                        <div class="title-wrapper">
-                                                            <a href="lista_conteudo_categoria/{{$employee->id}}" class="href">
-                                                                <span class="todo-title"><?php echo $employee->name; ?></span>
-                                                            </a>
+                                                            <i data-feather="more-vertical" class="drag-icon"></i>
+                                                            <div class="title-wrapper">
+                                                                <a href="lista_conteudo_categoria/{{$employee->id}}" class="href">
+                                                                    <span class="todo-title"><?php echo $employee->name; ?></span>
+                                                                </a>
+                                                            </div>
+
+                                                    </div>
+                                                    <div class="todo-item-action">
+                                                        <div class="badge-wrapper mr-1">
+                                                            <a href="/employee/{{$employee->id}}"><div class="badge badge-pill badge-light-dark todo-item">Editar</div> </a>
                                                         </div>
-
-                                                </div>
-                                                <div class="todo-item-action">
-                                                    <div class="badge-wrapper mr-1">
-                                                        <a href="/employee/{{$employee->id}}"><div class="badge badge-pill badge-light-dark todo-item">Editar</div> </a>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
                                 <?php else: ?>
                                     <div class="no-results">
                                         <h5>Vazio</h5>

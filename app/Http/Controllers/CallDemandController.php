@@ -50,7 +50,8 @@ class CallDemandController extends Controller
                     'landfill.name as landfill_name',
                     'call_demand.period',
                     DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
-                    DB::raw('if(call_demand.service_status = 0, "PENDENTE","") as service_status'),
+                    // DB::raw('if(call_demand.service_status = 0, "PENDENTE","") as service_status'),
+                    DB::raw('if(call_demand.service_status = 0, "PENDENTE","FINALIZADO") as service_status'),
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
                 )
                 ->where('call_demand.id', '=', $id_demand)->get();
@@ -60,10 +61,10 @@ class CallDemandController extends Controller
                     $tagNameIndex = array('data' => $calldemand);
                     return $tagNameIndex;
 
-                }                
+                }
 
         }else{
-            
+/*
             $calldemands = DB::table('call_demand')
                 ->join('client', 'client.id', '=','call_demand.id_client')
                 ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
@@ -102,6 +103,49 @@ class CallDemandController extends Controller
 
             if(isset($calldemands)){
                 $tagNameIndex = array('data' => $calldemands );
+                return $tagNameIndex;
+            }
+*/
+            $calldemand = DB::table('call_demand')
+            ->join('client', 'client.id', '=','call_demand.id_client')
+            ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+            ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
+            ->join('employee', 'employee.id', '=', 'driver.id_employee')
+            ->select(
+                'call_demand.id as id_demand',
+                'client.id as id_client',
+                DB::raw("CONCAT(client.name, ' ', client.surname) as name_client"),
+                'call_demand.type_service  as type_service',
+                DB::raw('DATE_FORMAT(call_demand.date_begin, "%d/%m/%Y") as date_begin'),
+                DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
+                DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+                DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster, "%d/%m/%Y") as date_removal_dumpster'),
+                DB::raw('DATE_FORMAT(call_demand.date_change_dumpster, "%d/%m/%Y") as date_change_dumpster'),
+                DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),                    
+                'call_demand.address as address_service',
+                'call_demand.number as number_address_service',
+                'call_demand.zipcode as zipcode_address_service',
+                'call_demand.city as city_address_service',
+                'call_demand.district as district_address_service',
+                'call_demand.state as state_address_service',
+                'call_demand.comments as comments_demand',
+                'call_demand.phone as phone_demand',
+                DB::raw('CONCAT("R$","",format(call_demand.price_unit,2,"Pt_BR"))  as price_unit'),
+                'call_demand.dumpster_total',
+                'call_demand.dumpster_total_opened',
+                'call_demand.dumpster_number',
+                DB::raw('DATEDIFF(call_demand.date_end, call_demand.date_begin) AS date_difference'),
+                'landfill.name as landfill_name',
+                'call_demand.period',
+                DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
+                // DB::raw('if(call_demand.service_status = 0, "PENDENTE","FINALIZADO") as service_status'),
+                DB::raw('call_demand.service_status as service_status'),
+                DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
+            )->get();
+
+            if(isset($calldemand)){
+
+                $tagNameIndex = array('data' => $calldemand);
                 return $tagNameIndex;
             }
         }
@@ -350,7 +394,7 @@ class CallDemandController extends Controller
     }
 
 
-    public function update($id_demand)
+    public function showUpdateForm($id_demand)
     {
 /*        
         if(isset($id_demand)){
@@ -372,6 +416,12 @@ class CallDemandController extends Controller
 */   
         $infoParamsDemand   = $this->showInfoParamsDemand();     
         return view('call_demand.form_edit_call_demand', $infoParamsDemand);
+    }
+
+    public function update(Request $request){
+        
+        print_r($request);
+        die();
     }
 
     public function showInfoToForm($id_demand)

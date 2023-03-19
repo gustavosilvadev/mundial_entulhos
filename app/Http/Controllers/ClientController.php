@@ -196,6 +196,25 @@ public function destroy(Request $request)
     }
 }
 
+
+public function exibirFormCadastroBasico()
+{
+    echo "001# - EXIBIR: formulário básico";
+    echo "<BR />";
+    echo "002# - Botão direcionamento para whatsapp";
+    echo "<BR />";
+    echo "003# - Consulta se atendemos determinada região";
+    echo "<BR />";
+    echo "004# - NOTIFICAR TEMPO DE RETORNO";
+    echo "<BR />";
+    echo "004# - CADASTRO DE LOGIN E SENHA";
+    echo "<BR />";
+
+    echo "<BR />";
+
+    die();
+}
+
 private function returnSuccess($dados)
 {
     return [
