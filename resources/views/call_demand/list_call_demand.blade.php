@@ -88,7 +88,7 @@
 
                                     <td class="control sorting_1" tabindex="0" style="display:none;"></td>
                                     
-                                    <td class="text-nowrap"><a class="btn btn-info">Detalhes</a></td>
+                                    <td class="text-nowrap"><a href="/editcalldemand/{{$value->id_demand}}" class="btn btn-info">Detalhes</a></td>
                                     <td class="text-nowrap"><?php echo $value->type_service; ?></td>
                                     <td class="text-nowrap"><?php echo $value->date_begin; ?></td>
                                     <td class="text-nowrap"><?php echo $value->name_client.' '.$value->surname_client; ?></td>

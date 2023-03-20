@@ -333,6 +333,27 @@
 
     $(document).ready(function(){
 
+        // ZipCode
+        $("#zipcode").change(function(){
+            let zipcode = $(this).val().trim().replace("-", "");
+            
+            let settings = {
+            "url": "https://viacep.com.br/ws/" + zipcode.trim() + "/json/",
+            "method": "GET",
+            "timeout": 0,
+            };
+
+            $.ajax(settings).done(function (dataResponse) {
+
+                $("#district").val(dataResponse.bairro);
+                $("#city").val(dataResponse.localidade);
+                $("#state").val(dataResponse.uf);
+
+            });
+
+        });
+        // ZipCode
+
         let today = new Date();
         $('#date_begin').val(((today.getDate() )) + "/" + ((today.getMonth() + 1)) + "/" + today.getFullYear());
 

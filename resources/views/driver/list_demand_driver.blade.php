@@ -1,9 +1,3 @@
-<?php 
-// print_r($call_demands);
-// die();
-
-// $call_demand->id_demand
-?>
 
 @include('partials.header')
 @include('partials.nav')
@@ -54,7 +48,6 @@
                                     
                                     <?php foreach($call_demands as $call_demand): ?>
                                         <input type="hidden" class="id_demand" value="{{ $call_demand->id_demand }}" />
-                                        {{-- <input type="hidden" class="todo-name-client" value="{{ $call_demand->id_demand }}" /> --}}
                                         
                                         <li class="todo-item">
                                             <div class="todo-title-wrapper">
@@ -83,7 +76,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="todo-item-action">
-                                                    
+
                                                     <div class="badge-wrapper mr-1">
 
                                                                 <?php 
@@ -95,6 +88,12 @@
                                                                         </div>';
                                                                         
                                                                         
+                                                                    }elseif($call_demand->service_status == 1){
+                
+                                                                        echo '
+                                                                        <div class="badge badge-pill badge-light-warning">
+                                                                        <div class="badge badge-pill badge-light-warning">ATENDENDO</div>
+                                                                        </div>';
                                                                     }else{
                 
                                                                         echo '
@@ -106,6 +105,7 @@
 
                                                     </div>
                                                     <label class="text-nowrap text-muted mr-1 todo-date-begin">{{ $call_demand->date_begin }}</label>
+                                                    <label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">{{ $call_demand->id_demand }}</label>
                                                     <label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">{{ $call_demand->comments_demand }}</label>
                                                     <label class="text-nowrap text-muted mr-1 todo-name-client" style="display: none;">{{ $call_demand->phone_demand }}</label>
                                                 </div>
@@ -126,16 +126,16 @@
 
                     <!-- Right Sidebar starts -->
 
-{{-- EXCLUIR--}}    
                     <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
                         <div class="modal-dialog sidebar-lg">
                             <div class="modal-content p-0">
-                                {{-- <form id="form-modal-todo" class="todo-modal needs-validation" novalidate onsubmit="return false"> --}}
+
                                 <form id="form-modal-todo" class="todo-modal needs-validation" >
+                                    @csrf
                                     <div class="modal-header align-items-center mb-1">
-                                        <h5 class="modal-title">Add Task</h5>
+                                        
                                         <div class="todo-item-action d-flex align-items-center justify-content-between ml-auto">
-                                            <span class="todo-item-favorite cursor-pointer mr-75"><i data-feather="star" class="font-medium-2"></i></span>
+
                                             <button type="button" class="close font-large-1 font-weight-normal py-0" data-dismiss="modal" aria-label="Close">
                                                 ×
                                             </button>
@@ -151,7 +151,7 @@
 
                                             <div class="form-group">
                                                 <h3 for="task-due-date" class="form-label">Endereço</h3>
-                                                <p class="todo-item-title-address" ></p>
+                                                <a class="todo-item-title-address" href="#"></a>
                                             </div>
 
                                             <div class="form-group">
@@ -173,10 +173,13 @@
                                                 <div class="desc-toolbar border-top-0 d-none"></div>
                                                 
                                             </div>
+                                            
+                                            <input type="hidden" name= "id_demand" class="todo-id-demand" />
                                         </div>
 
                                         <div class="form-group my-1">
-                                            <button type="button" class="btn btn-success d-none update-btn update-todo-item mr-1">Iniciar Atendimento</button>
+
+                                            <input type="submit" class="btn btn-success" id="update_active_call_demand" value="Iniciar Atendimento" />
                                             <button type="button" class="btn btn-outline-danger update-btn d-none my-2" data-dismiss="modal">Cancelar</button>
                                         </div>
                                     </div>
@@ -184,8 +187,6 @@
                             </div>
                         </div>
                     </div>
-{{-- EXCLUIR--}}
-
                     <!-- Right Sidebar ends -->
 
                 </div>
@@ -201,32 +202,33 @@
     $( document ).ready(function() {
 
         $("form").submit(function(a){
-            // Ajax 
-            /*
 
             let id_demand = this.id_demand.value;
-            
+
             $.ajax({
-                method: 'GET',
-                url: '/active_call_demand',
-                data: {id : id_demand, },
+                "_token": "{{ csrf_token() }}",
+                method: 'POST',
+                url: '/change_status_call_demand',
+                data: {
+                    id : id_demand,
+                    id_driver : 1  // iD DA SESSÃO DO MOTORISTA
+                },
                 success: function(dataResponse) {
 
-                    if(dataResponse)
-                    {
-                        $("#alert_demand_opened").modal('show');
-                    }
+                    alert($dataResponse);
+                    console.log($dataResponse);
+                    if(dataResponse){
+                        alert('Atualizado!');
+                        location.reload();
 
-                    findDemandClient(id_client);
+                    }
 
                 },
                 error: function(responseError){
+                    console.log(responseError);
                     alert(responseError);
                 }
             });
-            */
-
-
         });
     });
 </script>

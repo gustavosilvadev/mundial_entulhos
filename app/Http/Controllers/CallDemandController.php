@@ -51,7 +51,8 @@ class CallDemandController extends Controller
                     'call_demand.period',
                     DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
                     // DB::raw('if(call_demand.service_status = 0, "PENDENTE","") as service_status'),
-                    DB::raw('if(call_demand.service_status = 0, "PENDENTE","FINALIZADO") as service_status'),
+                    // DB::raw('if(call_demand.service_status = 0, "PENDENTE","FINALIZADO") as service_status'),
+                    DB::raw('IF(call_demand.service_status = 0, "PENDENTE", IF(call_demand.service_status = 1, "ATENDENDO", "FINALIZADO")) as service_status'),
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
                 )
                 ->where('call_demand.id', '=', $id_demand)->get();
@@ -151,13 +152,14 @@ class CallDemandController extends Controller
         }
     }
 
-    // public function show(Request $request)
-    public function show($id)
+    // public function show($id_demand)
+    public function show(Request $request)
     {
-        $id_demand = $id;
 
-        if(isset($id_demand)){
+        if(isset($request->id)){
             
+            $id_demand = $request->id;
+
             $calldemand = CallDemand::where('id',$id_demand)->orderBy('id','DESC')->first();
             $client     = Client::where('id',$calldemand->id_client)->first();
 
@@ -461,6 +463,35 @@ class CallDemandController extends Controller
         }
     }
 */
+    public function updateStatusDemandDriver(Request $request)
+    {
+
+        $call_demand = CallDemand::where('id',$request->id)->first();
+
+        print_r($call_demand->service_status);
+        die();
+
+        if($call_demand->service_status == 0){
+
+            $call_demand = CallDemand::where('id',$request->id)->update([
+                'id_driver' => $request->id_driver,
+                'service_status' => 1 // ATENDENDO
+            ]);
+
+        }elseif($call_demand->service_status == 1){
+
+            $call_demand = CallDemand::where('id',$request->id)->update([
+                'id_driver' => $request->id_driver,
+                'date_end' => date('Y-m-d H:i:s'),
+                'service_status' => 2 // FINALIZADO
+            ]);
+
+        }
+
+        return $call_demand;
+
+    }
+
     private function returnSuccess($dados)
     {
         return [

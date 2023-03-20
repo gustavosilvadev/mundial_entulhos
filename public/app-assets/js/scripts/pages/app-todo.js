@@ -11,6 +11,7 @@
 
 $(function () {
   var taskTitle,
+    taskIdDemand,
     taskNameClient,
     taskDateBegin,
     taskDescription,
@@ -240,8 +241,10 @@ $(function () {
         var todoTitle = $('.sidebar-todo-modal .new-todo-item-title').val();
         var date = $('.sidebar-todo-modal .task-due-date').val(),
           selectedDate = new Date(date),
-          month = new Intl.DateTimeFormat('en', { month: 'short' }).format(selectedDate),
-          day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(selectedDate),
+          // month = new Intl.DateTimeFormat('en', { month: 'short' }).format(selectedDate),
+          month = '',
+          // day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(selectedDate),
+          day = '',
           todoDate = month + ' ' + day;
 
         // Badge calculation loop
@@ -258,6 +261,7 @@ $(function () {
         });
         // HTML Output
         if (todoTitle != '') {
+/*
           $(todoTaskList).prepend(
             '<li class="todo-item">' +
               '<div class="todo-title-wrapper">' +
@@ -295,12 +299,15 @@ $(function () {
               '</div>' +
               '</li>'
           );
+*/
         }
+/*        
         toastr['success']('Data Saved', '💾 Task Action!', {
           closeButton: true,
           tapToDismiss: false,
           rtl: isRtl
         });
+*/        
         $(newTaskModal).modal('hide');
         overlay.removeClass('show');
       }
@@ -335,25 +342,42 @@ $(function () {
         '<button type="button" class="btn btn-sm btn-outline-success complete-todo-item waves-effect waves-float waves-light" data-dismiss="modal">Completed</button>'
       );
     } else {
+/*      
       modalTitle.html(
         '<button type="button" class="btn btn-sm btn-outline-secondary complete-todo-item waves-effect waves-float waves-light" data-dismiss="modal">Mark Complete</button>'
       );
+*/      
     }
     taskTag.val('').trigger('change');
     var quill_editor = $('#task-desc .ql-editor'); // ? Dummy data as not connected with API or anything else
     quill_editor[0].innerHTML =
       'Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.';
 
+// Endereço da demanda
     taskTitle   = $(this).find('.todo-title-address');
-    var $title  = $(this).find('.todo-title-address').html();
+    var $title  = $(this).find('.todo-title-address').html().trim();
+    let addressFrom = "Rua Alberto Correia Francfort, 211 - Jardim Vista Alegre";
+    let addressItem  = $title.split('-');
+
+    // console.log(addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6]);
+    $title = addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6];
+
+    newTaskForm.find('.todo-item-title-address').attr("href", "https://www.google.com/maps/dir/" + addressFrom + "/" + $title);
+    newTaskForm.find('.todo-item-title-address').attr("target", "_blank");;
     newTaskForm.find('.todo-item-title-address').text($title);
 
-
+// Data de início do atendimento
     taskDateBegin   = $(this).find('.todo-date-begin');
     var $dateBegin  = $(this).find('.todo-date-begin').html();
     newTaskForm.find('.todo-item-date-begin').text($dateBegin);
-    console.log($dateBegin);
 
+//Id Demanda
+taskIdDemand   = $(this).find('.todo-id-demand');
+var $idDemand  = $(this).find('.todo-id-demand').html();
+// newTaskForm.find('.todo-id-demand').text($idDemand);
+newTaskForm.find('.todo-id-demand').val($idDemand);
+
+//Descrição / Observação    
     taskDescription   = $(this).find('.todo-description');
     var $description  = $(this).find('.todo-description').html();
     newTaskForm.find('.todo-item-description').text($description);
@@ -366,7 +390,7 @@ $(function () {
 // Telefone
     taskPhone   = $(this).find('.todo-phone');
     var $phone  = $(this).find('.todo-phone').html();
-    newTaskForm.find('.todo-phone').text($phone);    
+    newTaskForm.find('.todo-phone').text($phone);
 
   });
 
@@ -384,6 +408,9 @@ $(function () {
         
         var $edit_date_begin = newTaskForm.find('.todo-item-date-begin').val();
         $(taskDateBegin).text($edit_date_begin);
+
+        var $id_demand = newTaskForm.find('.todo-id-demand').val();
+        $(taskIdDemand).text($id_demand);
 
         var $edit_description = newTaskForm.find('.todo-item-description').val();
         $(taskDescription).text($edit_description);

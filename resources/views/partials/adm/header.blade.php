@@ -1,6 +1,6 @@
 <?php 
 $title = "";
-
+/*
     $url    = url()->full();
     $title  = substr($url,strripos($url,"/") + 1);
 
@@ -10,7 +10,7 @@ $title = "";
         $title = $title[1];
 
     }
-
+*/
  ?>
 
 

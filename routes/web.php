@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserEmployeeController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\CallDemandController;
 use App\Http\Controllers\DumpsterServiceDemandController;
@@ -11,6 +13,26 @@ use App\Http\Controllers\LandfillController;
 // use Illuminate\Http\Request;
 
 
+
+// Sessão 
+Route::middleware('usersession')->group(function(){
+
+
+});
+
+//Usuario
+Route::get('/page-administrator', function(){
+    return view('user.login');
+});
+
+Route::get('perfil-create', function(){
+    return view('user.form_cad_perfil');
+});
+
+Route::get('ger-login',[UserEmployeeController::class,'generateLogin']);
+Route::post('/perfil-save',[UserEmployeeController::class,'store']);
+
+Route::post('login',[UserEmployeeController::class,'conectLogin']);
 
 
 Route::get('/', function () {
@@ -57,7 +79,10 @@ Route::get('driver/{id?}',[DriverController::class,'show']);
 /********************************** TAREFAS !!!! **************************************************/
 /********************************** TAREFAS !!!! **************************************************/
 /********************************** TAREFAS !!!! **************************************************/
-Route::get('/area_motorista_temp', [DriverController::class, 'exibirDemandasAtivas']);
+Route::get('/driver_demand', [DriverController::class, 'showDemands']);
+
+// resolver problema ao Clicar no botão Inciar Atendimento
+Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
 
 // Sessão Cliente (EDITAR)
 Route::get('/area_cliente_temp', [ClientController::class, 'exibirFormCadastroBasico']);

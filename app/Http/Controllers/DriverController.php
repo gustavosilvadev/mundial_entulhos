@@ -7,6 +7,7 @@ use App\Http\Controllers\CallDemandController;
 use Illuminate\Http\Request;
 use App\Models\Driver;
 use App\Models\Employee;
+use App\Models\DriverDemand;
 
 class DriverController extends Controller
 {
@@ -56,16 +57,16 @@ class DriverController extends Controller
         if (isset($request->employee)){
 
             $driver = new Driver();
-                $driver->id_employee = $request->employee;
+            $driver->id_employee = $request->employee;
 
-                if($driver->save()){
+            if($driver->save()){
 
-                    // return view('driver.form_cad_driver',["response" => "Dados cadastrados com sucesso"]);
-                    return redirect('createdriver');
-                }
-
-                // return view('driver.form_cad_driver',["response" => "Erro ao cadastrar o motorista"]);
+                // return view('driver.form_cad_driver',["response" => "Dados cadastrados com sucesso"]);
                 return redirect('createdriver');
+            }
+
+            // return view('driver.form_cad_driver',["response" => "Erro ao cadastrar o motorista"]);
+            return redirect('createdriver');
 
         }else{
             // return view('driver.form_cad_driver',["response" => "Dados incompletos!"]);
@@ -136,34 +137,44 @@ class DriverController extends Controller
         }
     }
 
-    public function exibirDemandasAtivas()
+    // public function exibirDemandasAtivas()
+    public function showDemands()
     {
-/*        
-        echo "001# - EXIBIR: LISTA DE DEMANDAS ATIVAS";
-        echo "<BR />";
-        echo "002# - BOTÕES PARA ATUALIZAR DEMANDA";
-        echo "<BR />";
-        echo "003# - EXIBIR MAPA DO TRAJETO";
-        echo "<BR />";
-        echo "004# - EXIBIR ROTA";
-        echo "<BR />";
-        echo "005# - REDIRECIONAR PARA WHATSAPP";
-        echo "<BR />";
-
-        die();
-
-*/
 
         $call_demands = CallDemandController::showApi(null);
         
-        // foreach ($call_demands['data'] as $key => $value) {
-        //     echo $value->name_client.'<BR />';
-        // }
-
         if(isset($call_demands['data'])){
             return view('driver.list_demand_driver',['call_demands'=> $call_demands['data']]);
         }        
 
+    }
+
+    public function updateStatusDemand(Request $request)
+    {
+
+        return 'FUNCIONANDO!';
+        if(isset($request->id) && isset($request->id_driver)){
+
+            $update_status_demand = CallDemandController::updateStatusDemandDriver($request);
+
+
+            if($update_status_demand){
+                
+                $call_demand    = CallDemandController::showAPI($request->id)['data'][0];
+                $driver_demand  = new DriverDemand();
+                $driver_demand->id_call_demand  = $request->id;
+                $driver_demand->id_driver       = $request->id_driver;
+                $driver_demand->type_service    = $call_demand->type_service;
+
+    
+                if($driver_demand->save()){
+
+                    return true;
+                }
+
+
+            }
+        }
     }
 
     private function returnSuccess($dados)
