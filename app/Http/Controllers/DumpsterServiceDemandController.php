@@ -81,85 +81,13 @@ class DumpsterServiceDemandController extends Controller
         }
     }
 
-/*
-    public function update(Request $request)
-    {
+    public function showDaysDumpsterCounty(){
 
-        if($request->id){
+        return view('dumpster_service_demand.form_cad_days_dumpster',[]);
 
-            $employee = Employee::where("id",$request->id)->first();
-            
-            if($employee){
-                
-                $employee->name     = $request->name;
-                $employee->surname  = $request->surname;
-                $employee->email    = $request->email;
-                $employee->login    = $request->login;
-                
-                if(isset($request->password)){
-
-                    $employee->password = Hash::make($request->password);
-                }
-
-                $employee->phone    = $request->phone;
-                $employee->cpf_cnpj = $request->cpf_cnpj;
-                $employee->address  = $request->address;
-                $employee->zipcode  = $request->zipcode;
-                $employee->city     = $request->city;
-                $employee->state    = $request->state;
-
-                if($employee->update()){
-
-                    return view('employee.employee',[
-                        'response' => $this->returnSuccess("Dados atualizados com sucesso"),
-                        'employee' => $employee
-                    ]);
-
-                }else{
-                    return $this->returnError('Erro ao atualizar os dados do funcionário',500); 
-                }
-
-            }else{
-                return $this->returnError('Funcionário não encontrado',404);
-
-            }
-
-        }else{
-            return $this->returnError('Funcionário não encontrado',404); 
-        }
-    
     }
 
 
-    public function destroy(Request $request)
-    {
-
-        if(isset($request->id) && isset($request->email) && isset($request->cpf_cnpj)){
-            
-            $employee = Employee::where("id",$request->id)->first();
-            
-            if($employee){
-
-                $employee = Employee::where('id',$request->id)->where('email',$request->email)->update(['flg_status' => false]);
-
-                if($employee){
-
-                    return $this->returnSuccess("Cliente removido com sucesso");
-                
-                }else{
-                    return $this->returnError('Erro ao remover cliente',500); 
-                }
-
-            }else{
-                return $this->returnError('Cliente não encontrado',404); 
-
-            }
-
-        }else{
-            return $this->returnError('Cliente não encontrado',404); 
-        }
-    }
-*/
     private function returnSuccess($dados)
     {
         return [

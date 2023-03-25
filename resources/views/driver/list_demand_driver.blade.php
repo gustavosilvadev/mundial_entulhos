@@ -65,7 +65,6 @@
                                                                 ' - '.$call_demand->district_address_service.
                                                                 ' - '.$call_demand->state_address_service; 
                                                             }}
- 
                                                         </span>
 
                                                         <span class="todo-name-client d-none">{{ $call_demand->name_client; }}</span>
@@ -151,7 +150,12 @@
 
                                             <div class="form-group">
                                                 <h3 for="task-due-date" class="form-label">Endereço</h3>
-                                                <a class="todo-item-title-address" href="#"></a>
+                                                <p class="todo-item-title-address"></p>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <p><a class="todo-item-address-waze" href="#"></a></p>
+                                                <p><a class="todo-item-address-google-maps" href="#"></a></p>
                                             </div>
 
                                             <div class="form-group">
@@ -160,7 +164,7 @@
                                             </div>                                            
 
                                             <div class="form-group">
-                                                <h3 for="task-due-date" class="form-label">Abertura do chamado</h3>
+                                                <h3 for="task-due-date" class="form-label">Data do chamado</h3>
                                                 <p class="todo-item-date-begin" ></p>
 
                                             </div>

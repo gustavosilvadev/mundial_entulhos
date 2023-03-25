@@ -489,7 +489,6 @@ class CallDemandController extends Controller
         }
 
         return $call_demand;
-
     }
 
     private function returnSuccess($dados)

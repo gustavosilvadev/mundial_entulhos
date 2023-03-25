@@ -359,12 +359,23 @@ $(function () {
     let addressFrom = "Rua Alberto Correia Francfort, 211 - Jardim Vista Alegre";
     let addressItem  = $title.split('-');
 
-    // console.log(addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6]);
     $title = addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6];
-
-    newTaskForm.find('.todo-item-title-address').attr("href", "https://www.google.com/maps/dir/" + addressFrom + "/" + $title);
-    newTaskForm.find('.todo-item-title-address').attr("target", "_blank");;
+    // newTaskForm.find('.todo-item-title-address').attr("href", "https://www.google.com/maps/dir/" + addressFrom + "/" + $title);
+    // newTaskForm.find('.todo-item-title-address').attr("target", "_blank");;
     newTaskForm.find('.todo-item-title-address').text($title);
+
+// Waze
+    let $address_to = addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6];
+    console.log($address_to.replace(/ /g,"%20"));
+    newTaskForm.find('.todo-item-address-waze').attr("href", "https://www.waze.com/ul?q=" + $address_to);
+    newTaskForm.find('.todo-item-address-waze').attr("target", "_blank");;
+    newTaskForm.find('.todo-item-address-waze').text('Abrir Waze');
+
+// Google maps 
+    newTaskForm.find('.todo-item-address-google-maps').attr("href", "https://www.google.com/maps/dir/" + addressFrom + "/" + $address_to);
+    newTaskForm.find('.todo-item-address-google-maps').attr("target", "_blank");;
+    newTaskForm.find('.todo-item-address-google-maps').text('Abrir Google Maps');
+
 
 // Data de início do atendimento
     taskDateBegin   = $(this).find('.todo-date-begin');

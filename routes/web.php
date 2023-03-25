@@ -89,7 +89,9 @@ Route::get('/area_cliente_temp', [ClientController::class, 'exibirFormCadastroBa
 
 
 // Sessão Endereços que a empresa atende e não atende (EDITAR)
-Route::get('/exibir_enderecos_temp', [CallDemandController::class, 'exibirListaEnderecosAtivos']);
+Route::get('/cacamba_dias_municipio', [DumpsterServiceDemandController::class, 'showDaysDumpsterCounty']);
+
+
 /********************************** TAREFAS !!!! **************************************************/
 /********************************** TAREFAS !!!! **************************************************/
 /********************************** TAREFAS !!!! **************************************************/

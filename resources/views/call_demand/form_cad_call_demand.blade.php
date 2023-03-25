@@ -1,13 +1,14 @@
 @include('partials.header')
 @include('partials.nav')
 
-<div class="app-content content">
+<div class="app-content content ">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
     <div class="content-wrapper">
         <div class="content-body">
 
-            <div class="row" id="table-responsive">        
+            <div class="row" id="table-responsive ">
+                {{-- <div class="col-12" style="margin-top:120px"> --}}
                 <div class="col-12">
                     <div class="card">
                         <div class="todo-app-list">
