@@ -26,29 +26,31 @@
                                                 <p>
                                                     <code>.Municípios correspondentes ao estado de São Paulo
                                                 </p>
-                                                <form class="needs-validation" novalidate>
+                                                <form class="needs-validation" onsubmit ='return false;' novalidate>
                                                     <div class="form-row">
                                                         <div class="col-md-4 col-12 mb-3">
                                                             <div class="form-group">
                                                                 <label for="type_service">Municípios</label>
-                                                                <select class="select2 form-control form-control-lg" name="type_service">
+                                                                <select class="select2 form-control form-control-lg" name="type_service" id="search_days">
                                                                     <option value="" selected>----</option>
-                                                                    <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                    <option value="TROCA">TROCA</option>
-                                                                    <option value="RETIRADA">RETIRADA</option>
+                                                                    <?php if(isset($list_counties)):?>
+                                                                        <?php  foreach($list_counties as $value): ?>
+                                                                            <option value="{{$value->id}}">{{$value->name_county}}</option>
+                                                                        <?php  endforeach; ?>
+                                                                    <?php  endif; ?>
                                                                 </select>            
                                                             </div>
                                                         </div>
 
                                                         
                                                         <div class="col-md-4 col-12 mb-3">
-                                                            <label for="validationTooltip02">Quantidade de Dias</label>
-                                                            <input type="number" name="dumpster_total" class="form-control" value="0" min="0" max="1000" placeholder="0" />
-                                                            <div class="valid-tooltip">Looks good!</div>
-                                                            
+                                                            <label for="validationTooltip02">Dias</label>
+                                                            <input type="number" name="dumpster_total" class="form-control" id="days_dumpster_county" value="0" min="0" max="1000" placeholder="0" />
+                                                            <div class="valid-feedback">Atualizado com sucesso.</div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-success" type="submit">Atualizar</button>
+                                                    <button class="btn btn-success" id="btn_atualizar">Atualizar</button>
+
                                                 </form>
                                             </div>
                                         </div>
@@ -115,196 +117,56 @@
 
     $(document).ready(function(){
 
-        // ZipCode
-        $("#zipcode").change(function(){
-            let zipcode = $(this).val().trim().replace("-", "");
+        $("#search_days").on('change', function(){
             
-            let settings = {
-            "url": "https://viacep.com.br/ws/" + zipcode.trim() + "/json/",
-            "method": "GET",
-            "timeout": 0,
-            };
+            $('.valid-feedback').hide();
 
-            $.ajax(settings).done(function (dataResponse) {
-
-                $("#district").val(dataResponse.bairro);
-                $("#city").val(dataResponse.localidade);
-                $("#state").val(dataResponse.uf);
-
-            });
-
-        });
-        // ZipCode
-
-        let today = new Date();
-        $('#date_begin').val(((today.getDate() )) + "/" + ((today.getMonth() + 1)) + "/" + today.getFullYear());
-
-        let dateObj = new Date();
-        let month   = dateObj.getUTCMonth() + 1; //months from 1-12
-        let day     = dateObj.getUTCDate();
-        let year    = dateObj.getUTCFullYear();
-        let  newDate  = day + "/" + month + "/" + year;
-        $('.date_today').val(newDate);
-
-        $("#search_data_client").on('change', function(){
-            
-            let id_client = $(this).val();
+            let id_county = $(this).val();
 
             $.ajax({
                 method: 'GET',
-                url: '/find_demmand_client',
-                data: {id : id_client},
+                url: '/dias_municipio',
+                data: {id : id_county},
                 success: function(dataResponse) {
-
-                    if(dataResponse)
-                    {
-                        $("#alert_demand_opened").modal('show');
-                    }
-
-                    findDemandClient(id_client);
-
+                    $('#days_dumpster_county').val(dataResponse);
                 },
                 error: function(responseError){
                     alert(responseError);
                 }
             });
         });
+        
+        $('#btn_atualizar').click(function(){
+            
 
-        $('#redirect_list_demand_client').click(function(){
-            let id_client = $("#search_data_client option:selected").val();
-            window.location.replace("demand_list_client/" + id_client);
+            let id_county   = $('#search_days').val();
+            let days_county = $('#days_dumpster_county').val();
+            $('.valid-feedback').hide();
 
-        });
-
-        $('#no_redirect_list_demand_client').click(function(){
-            $("#alert_demand_opened").modal('hide');
-            findDemandClient(id_client);
-        });
-
-
-        function findDemandClient(id_client){
             $.ajax({
-                method: 'GET',
-                url: '/show_info_client',
-                data: {id : id_client},
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                method: 'POST',
+                url: '/atualiza_dias_cacamba_municipio',
+                data: {
+                    id : id_county,
+                    days : days_county
+                },
                 success: function(dataResponse) {
-                    $("#address").val(dataResponse.address);
-                    $("#number").val(dataResponse.number);
-                    $("#zipcode").val(dataResponse.zipcode);
-                    $("#district").val(dataResponse.district);
-                    $("#state").val(dataResponse.state);
-                    $("#city").val(dataResponse.city);
-                    $("#phone").val(dataResponse.phone);
+
+                    $('.valid-feedback').show();
 
                 },
                 error: function(responseError){
                     alert(responseError);
                 }
             });
-        }
-        
-        $("#form").validate({
-            rules: {
-                type_service: {
-                    required: true
-                },
-                date_begin: {
-                    required: true
-                },
-                date_removal_dumpster: {
-                    required: true
-                },
-                date_effective_removal_dumpster: {
-                    required: true
-                },
-                id_client: {
-                    required: true
-                },
-                address: {
-                    required: true
-                },
-                number: {
-                    required: true
-                },
-                zipcode: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                district: {
-                    required: true
-                },
-                state: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 2
-                },
-                phone: {
-                    required: true
-                },
-                price_unit: {
-                    required: true
-                },
-                dumpster_total: {
-                    required: true
-                },
-                dumpster_total_opened: {
-                    required: true
-                },
-                id_landfill: {
-                    required: true
-                },
-                period: {
-                    required: true
-                },
-                id_driver: {
-                    required: true
-                },
-                note: {
-                    required: true
-                }
 
-            },
 
-            messages:{
-                type_service: "Campo <b>Tipo de serviço</b> deve ser preenchido!",
-                date_begin: "Campo <b>Data Pedido</b> deve ser preenchido!",
-                date_removal_dumpster: "Campo <b>Previsao de Retirada</b> deve ser preenchido!",
-                date_effective_removal_dumpster: "Campo <b>Previsão de Retirada Efetiva</b> deve ser preenchido!",
-                id_client: "Campo <b>Cliente</b> deve ser preenchido!",
-                address: "Campo <b>Endereço</b> deve ser preenchido!",
-                number: "Campo <b>Número</b> deve ser preenchido!",
-                zipcode: "Campo <b>CEP</b> deve ser preenchido!",
-                city: "Campo <b>Cidade</b> deve ser preenchido!",
-                district: "Campo <b>Bairro</b> deve ser preenchido!",
-                state: "Campo <b>Estado</b> deve ser preenchido!",
-                phone: "Campo <b>Telefone</b> deve ser preenchido!",
-                price_unit: "Campo <b>Preço Unidade</b> deve ser preenchido!",
-                dumpster_total: "Campo <b>Total de Caçambas</b> deve ser preenchido!",
-                dumpster_total_opened: "Campo <b>Total em aberto</b> deve ser preenchido!",
-                id_landfill: "Campo <b>Aterro</b> deve ser preenchido!",
-                period: "Campo <b>Período</b> deve ser preenchido!",
-                id_driver: "Campo <b>Motorista</b> deve ser preenchido!",
-                note: "Campo <b>Observação</b> deve ser preenchido!"            
 
-            }            
         });
-        
         
 
     });
 
-    function onlynumber(evt) {
-        let theEvent = evt || window.event;
-        let key = theEvent.keyCode || theEvent.which;
-        key = String.fromCharCode( key );
-        //let regex = /^[0-9.,]+$/;
-        let regex = /^[0-9.]+$/;
-        if( !regex.test(key) ) {
-            theEvent.returnValue = false;
-            if(theEvent.preventDefault) theEvent.preventDefault();
-        }
-    }          
 
 </script>

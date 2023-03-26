@@ -41,9 +41,9 @@ Route::get('/', function () {
 });
 
 // Client
-Route::get('createclient', function(){
-    return view('client.form_cad_client');
-});
+// Route::get('createclient', function(){
+//     return view('client.form_cad_client');
+// });
 
 Route::post('/save_client',[ClientController::class,'store']);
 Route::get('/client/{id?}',[ClientController::class,'show']);
@@ -89,7 +89,10 @@ Route::get('/area_cliente_temp', [ClientController::class, 'exibirFormCadastroBa
 
 
 // Sessão Endereços que a empresa atende e não atende (EDITAR)
-Route::get('/cacamba_dias_municipio', [DumpsterServiceDemandController::class, 'showDaysDumpsterCounty']);
+Route::get('/cacamba_dias_municipio', [DumpsterServiceDemandController::class, 'showCounties']);
+Route::get('/dias_municipio', [DumpsterServiceDemandController::class, 'showDaysDumpsterCounty']);
+
+Route::post('/atualiza_dias_cacamba_municipio',[DumpsterServiceDemandController::class,'updateDaysDumpsterCounty']);
 
 
 /********************************** TAREFAS !!!! **************************************************/

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Response;
 use App\Models\CallDemand;
 use App\Models\Driver;
 use App\Models\DumpsterServiceDemand;
+use App\Models\CountyDaysDumpster;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\CallLike;
 
@@ -81,11 +82,46 @@ class DumpsterServiceDemandController extends Controller
         }
     }
 
-    public function showDaysDumpsterCounty(){
+    public function showCounties(){
 
-        return view('dumpster_service_demand.form_cad_days_dumpster',[]);
+        $list_counties = CountyDaysDumpster::get();
+        return view('dumpster_service_demand.form_cad_days_dumpster',['list_counties' => $list_counties]);
 
     }
+
+    public function showDaysDumpsterCounty(Request $request){
+
+        if(isset($request->id) && is_numeric($request->id))
+        {
+
+            $days = CountyDaysDumpster::find($request->id);
+            return $days->days;
+        }
+    }
+
+    public function updateDaysDumpsterCounty(Request $request){
+
+        if(isset($request->id) 
+            && is_numeric($request->id)
+            && isset($request->days) 
+            && is_numeric($request->days)
+            )
+        {
+
+            $county_days_dumpster = CountyDaysDumpster::where('id',$request->id)
+            ->update([
+                'days' => $request->days
+            ]);
+
+            if($county_days_dumpster === true){
+                return true;
+            }
+            return false;
+
+        }
+
+    }
+
 
 
     private function returnSuccess($dados)

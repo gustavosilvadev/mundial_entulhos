@@ -34,7 +34,7 @@ class TblCalldemand extends Migration
             $table->integer('id_landfill')->nullable();
             $table->string('period')->nullable(); // Período de retirada, remoção, troca
             $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - Em andamento | 2 - Finalizado');
-            $table->dateTime('date_begin')->nullable(); // Data de ABERTURA do pedido
+            // $table->dateTime('date_begin')->nullable(); // Data de ABERTURA do pedido
             $table->dateTime('date_end')->nullable(); // Data de finalização do pedido
             $table->dateTime('date_allocation_dumpster')->nullable(); // Data de alocação da caçamba
             $table->dateTime('date_removal_dumpster')->nullable(); // Data de retirada da caçamba == Data da Previsão de Retirada

@@ -53,64 +53,26 @@
                                                 
                                                                                             </div>
                                                                                         </div>
+
+                                                                                        <div class="col-md-12">
+                                                                                            <div class="form-group">
+                                                                                                <label for="id_client">CLIENTE NOVO</label>
+                                                                                                <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44"/>
+                                                
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
+                                                                                   
                                                                                     <hr />
                                                                                     
                                                                                     <div class="row">
+                                                                                      
                                                                                         <div class="col-md-4">
                                                                                             <div class="form-group">
-                                                                                                <label for="type_service">Tipo de Serviço</label>
-                                                                                                <select class="select2 form-control form-control-lg" name="type_service">
-                                                                                                    <option value="" selected>----</option>
-                                                                                                    <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                                                    <option value="TROCA">TROCA</option>
-                                                                                                    <option value="RETIRADA">RETIRADA</option>
-                                                                                                </select>            
+                                                                                                <label for="zipcode">CEP</label>
+                                                                                                    <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" />
                                                                                             </div>
-                                                                                        </div>                                                    
-                                    
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <span class="title" for="date_begin">DATA DO PEDIDO:</span>
-                                                                                                <input type="text" name="date_begin" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_today" data-column="5"  data-column-index="4"/>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <span class="title" for="date_allocation_dumpster">DATA DE ALOCAÇÃO:</span>
-                                                                                                <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format" data-column="5"  data-column-index="4"/>
-                                                                                            </div>    
-                                                                                        </div>
-
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <span class="title" for="date_removal_dumpster">PREVISÃO DE RETIRADA:</span>
-                                                                                                <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format" data-column="5"  data-column-index="4"/>
-                                                                                            </div>    
-                                                                                        </div>
-
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <span class="title" for="date_effective_removal_dumpster">PREVISÃO DE RETIRADA EFETIVA:</span>
-                                                                                                <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format" data-column="5"  data-column-index="4"/>
-                                                                                            </div>    
                                                                                         </div>                                                                                        
-                                                                                        
-                                                                                        {{-- <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <label for="id_client">CLIENTE</label>
-                                                                                                <select class="select2 form-control form-control-lg" name="id_client">
-                                                                                                    <option value="">----</option>
-                                                                                                    <?php if(isset($clients)):?>
-                                                                                                        <?php foreach($clients as $client):?>
-                                                                                                            <option value="<?php echo $client->id; ?>"><?php echo $client->name.' '.$client->surname; ?></option>
-                                                                                                        <?php endforeach; ?>
-                                                                                                    <?php endif; ?>
-                                                                                                </select>
-                                                
-                                                                                            </div>
-                                                                                        </div> --}}
                                                 
                                                                                         <div class="col-md-4">
                                                                                             <div class="form-group">
@@ -123,13 +85,6 @@
                                                                                             <div class="form-group">
                                                                                                 <label for="number">Número</label>
                                                                                                 <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6"/>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <label for="zipcode">CEP</label>
-                                                                                                    <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" />
                                                                                             </div>
                                                                                         </div>
                                                                                         
@@ -160,7 +115,7 @@
                                                                                         <div class="col-md-4">
                                                                                             <div class="form-group">
                                                                                                 <label for="phone">Telefone</label>
-                                                                                                {{-- <input type="phone" class="form-control phone-number-mask" name="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeydown="return /^\d*$/.test(value)"/> --}}
+                                                                                                
                                                                                                 <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" />
                                                                                             </div>
                                                                                         </div>
@@ -213,16 +168,7 @@
                                                                                             </div>
                                                                                         </div>                                                    
                                     
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <label for="period">PERÍODO DO DIA</label>
-                                                                                                <select class="select2 form-control form-control-lg" name="period">
-                                                                                                    <option value="">----</option>
-                                                                                                    <option value="DIURNO">DIURNO</option>
-                                                                                                    <option value="NOTURNO">NOTURNO</option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                        </div>
+
                                     
                                                                                         <div class="col-md-4">
                                                                                             <div class="form-group">
@@ -248,6 +194,68 @@
                                     
                                                                                     </div>
                                     
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <label for="type_service">Tipo de Serviço</label>
+                                                                                                <select class="select2 form-control form-control-lg" name="type_service">
+                                                                                                    <option value="" selected>----</option>
+                                                                                                    <option value="COLOCACAO">COLOCAÇÃO</option>
+                                                                                                    <option value="TROCA">TROCA</option>
+                                                                                                    <option value="RETIRADA">RETIRADA</option>
+                                                                                                </select>            
+                                                                                            </div>
+                                                                                        </div>                                                    
+{{--                                     
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="form-group">
+                                                                                                <span class="title" for="date_begin">DATA DO PEDIDO:</span>
+                                                                                                <input type="text" name="date_begin" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_today" data-column="5"  data-column-index="4"/>
+                                                                                            </div>
+                                                                                        </div>
+--}}
+
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <label for="period">PERÍODO DO DIA</label>
+                                                                                                <select class="select2 form-control form-control-lg" name="period">
+                                                                                                    <option value="">----</option>
+                                                                                                    <option value="DIURNO">DIURNO</option>
+                                                                                                    <option value="NOTURNO">NOTURNO</option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <span class="title" for="date_allocation_dumpster">DATA DE ALOCAÇÃO:</span>
+                                                                                                <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster" data-column="5"  data-column-index="4"/>
+                                                                                            </div>    
+                                                                                        </div>
+
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <span class="title" for="date_removal_dumpster">PREVISÃO DE RETIRADA:</span>
+                                                                                                <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format" data-column="5"  data-column-index="4"/>
+                                                                                            </div>    
+                                                                                        </div>
+
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <span class="title" for="date_effective_removal_dumpster">RETIRADA EFETIVA:</span>
+                                                                                                <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster" data-column="5"  data-column-index="4"/>
+                                                                                            </div>    
+                                                                                        </div> 
+
+                                                                                        <div class="col-md-2">
+                                                                                            <div class="form-group">
+                                                                                                <span class="title">TOTAL DE DIAS</span>
+                                                                                                <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" />
+                                                                                            </div>    
+                                                                                        </div> 
+                                                                                        
+                                                                                        
+
+                                                                                    </div>
                                                                                 </div>
                                                                                 
                                                                             </div>
@@ -260,7 +268,8 @@
                                                         <div class="col-xl-3 col-md-4 col-12">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <button type="submit" class="btn btn-success btn-block mb-75">Salvar</button>                                
+                                                                    <button type="submit" class="btn btn-success btn-block mb-75">Salvar</button>
+                                                                    <button type="reset" class="btn btn-warning btn-block mb-75">Limpar Formulário</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -334,6 +343,33 @@
 
     $(document).ready(function(){
 
+
+        $('.date_effective_removal_dumpster').blur(function(){
+
+            let data_alocacao_cacamba = $('.date_allocation_dumpster').val().split('/');
+            mes = data_alocacao_cacamba[1];
+            dia = data_alocacao_cacamba[0];
+            ano = data_alocacao_cacamba[2];
+
+            data_alocacao  = new Date(mes + '/' + dia + '/' + ano);
+
+            let data_retirada_efetiva  = $(this).val().split('/');
+            mes = data_retirada_efetiva[1];
+            dia = data_retirada_efetiva[0];
+            ano = data_retirada_efetiva[2];
+
+            data_retirada_efetiva  = new Date(mes + '/' + dia + '/' + ano);
+
+            const diffTime = Math.abs(data_retirada_efetiva - data_alocacao);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            
+            if(isNaN(diffDays) == false){
+                $('.total_days').val(diffDays);
+            }
+
+
+        });
+
         // ZipCode
         $("#zipcode").change(function(){
             let zipcode = $(this).val().trim().replace("-", "");
@@ -346,6 +382,7 @@
 
             $.ajax(settings).done(function (dataResponse) {
 
+                $("#address").val(dataResponse.logradouro);
                 $("#district").val(dataResponse.bairro);
                 $("#city").val(dataResponse.localidade);
                 $("#state").val(dataResponse.uf);

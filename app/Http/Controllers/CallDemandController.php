@@ -239,16 +239,20 @@ class CallDemandController extends Controller
         ]);
 */
 
-
         return view('call_demand.form_cad_call_demand', $this->showInfoParamsDemand());
 
     }
 
-
     public function showInfoParamsDemand()
     {
 
-        $clients = Client::all(); 
+        $clients  = DB::table('client')
+        ->join('call_demand', 'call_demand.id_client', '=','client.id')
+        ->groupBy('call_demand.id_client')
+        ->orderBy('client.id', 'desc')
+        ->select('client.id','client.name','client.surname')
+        ->get();
+        
         $drivers = Driver::join('employee', function($join){
             $join->on('driver.id_employee', '=', 'employee.id')->where('driver.flg_status', 1);
         })->get(['driver.id','employee.name']);
@@ -261,7 +265,6 @@ class CallDemandController extends Controller
         ];
 
     }
-
 
     public function showInfoClientDemand(Request $request)
     {

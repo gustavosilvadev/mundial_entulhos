@@ -94,12 +94,14 @@
                 <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Clientes</span></a>
 
                     <ul class="menu-content">
+                        {{-- 
                         <li class="nav-item">
                             <a class="d-flex align-items-center" href="/createclient">
 
                                 <span class="menu-title text-truncate" data-i18n="Invoice">Novo Cliente</span>
                             </a>
-                        </li>
+                        </li> 
+                        --}}
 
                         <li class="nav-item">
                             <a class="d-flex align-items-center" href="/client">
