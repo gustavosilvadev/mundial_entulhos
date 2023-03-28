@@ -18,7 +18,37 @@ class CallDemandController extends Controller
     {
 
         if(isset($id_demand)){
-            $calldemand = DB::table('call_demand')
+
+            $calldemandsNoDriver = DB::table('call_demand')
+                ->select(
+                    'call_demand.name as name',
+                    'call_demand.id as id_demand',
+                    'call_demand.type_service  as type_service',
+                    DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
+                    DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+                    DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster, "%d/%m/%Y") as date_removal_dumpster'),
+                    DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),                    
+                    'call_demand.address as address_service',
+                    'call_demand.number as number_address_service',
+                    'call_demand.zipcode as zipcode_address_service',
+                    'call_demand.city as city_address_service',
+                    'call_demand.district as district_address_service',
+                    'call_demand.state as state_address_service',
+                    'call_demand.comments as comments_demand',
+                    'call_demand.phone as phone_demand',
+                    DB::raw('CONCAT("R$","",format(call_demand.price_unit,2,"Pt_BR"))  as price_unit'),
+                    'call_demand.dumpster_total',
+                    'call_demand.dumpster_total_opened',
+                    'call_demand.dumpster_number',
+                    'call_demand.period',
+                    DB::raw('IF(call_demand.service_status = 0, "PENDENTE", IF(call_demand.service_status = 1, "ATENDENDO", "FINALIZADO")) as service_status'),
+                    DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
+                )
+                ->where('call_demand.id', '=', $id_demand)->get();
+
+
+
+            $calldemands = DB::table('call_demand')
                 ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
                 ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
                 ->join('employee', 'employee.id', '=', 'driver.id_employee')
@@ -50,12 +80,44 @@ class CallDemandController extends Controller
                 )
                 ->where('call_demand.id', '=', $id_demand)->get();
 
-                if(isset($calldemand)){
+                
+                // if(isset($calldemand)){
 
-                    $tagNameIndex = array('data' => $calldemand);
-                    return $tagNameIndex;
+                //     $tagNameIndex = array('data' => $calldemand);
+                //     return $tagNameIndex;
 
+                // }
+
+                $tagNameIndex = array();
+
+                if($calldemands->isEmpty() != true && $calldemandsNoDriver->isEmpty() != true){
+
+                    $tagNameIndex =[
+                        'datanodriver'=> $calldemandsNoDriver,
+                        'data'=> $calldemands
+                    ];
+    
+                }elseif($calldemands->isEmpty() != true && $calldemandsNoDriver->isEmpty() != false){
+                    $tagNameIndex =[
+                        'datanodriver'=> '',
+                        'data'=> $calldemands
+                    ];
+    
+                }elseif($calldemands->isEmpty() != false && $calldemandsNoDriver->isEmpty() != true){
+                    
+                    $tagNameIndex =[
+                        'datanodriver'=> $calldemandsNoDriver,
+                        'data'=> ''
+                    ];
+                }else{
+                    
+                    $tagNameIndex =[
+                        'datanodriver'=> '',
+                        'data'=> ''
+                    ];
                 }
+
+                return $tagNameIndex;
 
         }else{
 
@@ -104,13 +166,11 @@ class CallDemandController extends Controller
     // public function show($id_demand)
     public function show(Request $request)
     {
-
         if(isset($request->id)){
             
             $id_demand = $request->id;
 
             $calldemand = CallDemand::where('id',$id_demand)->orderBy('id','DESC')->first();
-            // $client     = Client::where('id',$calldemand->id_client)->first();
 
             if(isset($calldemand)){
                 
@@ -158,8 +218,61 @@ class CallDemandController extends Controller
                     'call_demand.updated_at',
                 )->get();
 
-            if(isset($calldemands)){
-                return view('call_demand.list_call_demand',['calldemands'=> $calldemands]);
+
+
+            $calldemandsNoDriver = DB::table('call_demand')
+            ->select(
+                'call_demand.id as id_demand',
+                'call_demand.name as name',
+                'call_demand.type_service  as type_service',
+                'call_demand.created_at as created_at',
+                'call_demand.date_end as date_end',
+                'call_demand.date_allocation_dumpster as date_allocation_dumpster',
+                'call_demand.date_removal_dumpster as date_removal_dumpster',
+                'call_demand.date_effective_removal_dumpster as date_effective_removal_dumpster',
+                'call_demand.address as address_service',
+                'call_demand.number as number_address_service',
+                'call_demand.zipcode as zipcode_address_service',
+                'call_demand.city as city_address_service',
+                'call_demand.district as district_address_service',
+                'call_demand.state as state_address_service',
+                'call_demand.comments as comments_demand',
+                'call_demand.phone as phone_demand',
+                'call_demand.price_unit',
+                'call_demand.dumpster_total',
+                'call_demand.dumpster_total_opened',
+                'call_demand.dumpster_number',
+                'call_demand.id_landfill',
+                'call_demand.period',
+                'call_demand.service_status',
+                'call_demand.updated_at',
+            )->get();  
+
+            if($calldemands->isEmpty() != true && $calldemandsNoDriver->isEmpty() != true){
+
+                return view('call_demand.list_call_demand',[
+                    'calldemandsnodriver'=> $calldemandsNoDriver,
+                    'calldemands'=> $calldemands
+                ]);
+
+            }elseif($calldemands->isEmpty() != true && $calldemandsNoDriver->isEmpty() != false){
+                return view('call_demand.list_call_demand',[
+                    'calldemandsnodriver'=> '',
+                    'calldemands'=> $calldemands
+                ]);
+
+            }elseif($calldemands->isEmpty() != false && $calldemandsNoDriver->isEmpty() != true){
+                
+                return view('call_demand.list_call_demand',[
+                    'calldemandsnodriver'=> $calldemandsNoDriver,
+                    'calldemands'=> ''
+                ]);
+            }else{
+                
+                return view('call_demand.list_call_demand',[
+                    'calldemandsnodriver'=> '',
+                    'calldemands'=> ''
+                ]);
             }
 
 

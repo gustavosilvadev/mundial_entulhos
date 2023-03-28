@@ -24,27 +24,27 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="username">Nome</label>
-                                                    <input type="text" class="form-control"  name="name" id="username" />
+                                                    <input type="text" class="form-control"  name="name" id="username" autocomplete="off"/>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="name">Sobrenome</label>
-                                                    <input type="text" class="form-control" name="surname" />
+                                                    <input type="text" class="form-control" name="surname" autocomplete="off"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="name">E-mail</label>
-                                                    <input type="text" class="form-control" name="email" id="email"/>
+                                                    <input type="text" class="form-control" name="email" id="email" autocomplete="off"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="email">Login</label>
-                                                    <input type="text" class="form-control" name="login" />
+                                                    <input type="text" class="form-control" name="login" autocomplete="off"/>
 
                                                 </div>
                                             </div>

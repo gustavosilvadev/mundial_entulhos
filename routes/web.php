@@ -97,11 +97,12 @@ Route::post('login',[UserEmployeeController::class,'conectLogin']);
 Route::get('/logout',[UserEmployeeController::class,'logoutAccount']);
 
 
-Route::get('/', function () {
+// Route::get('/', function () {
     
-    return view('main.home');
-});
+//     return view('main.home');
+// });
 
+Route::get('/', [ClientController::class, 'exibirFormCadastroBasico']);
 
 // Sessão Cliente (EDITAR)
 Route::get('/new_demand_client', [ClientController::class, 'exibirFormCadastroBasico']);

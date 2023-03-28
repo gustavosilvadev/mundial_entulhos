@@ -1,7 +1,7 @@
 <?php
 
-print_r($calldemand);
-die();
+// print_r($calldemand);
+// die();
 ?>
 
 @include('partials.header')

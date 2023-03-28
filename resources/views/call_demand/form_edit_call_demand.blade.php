@@ -1,18 +1,4 @@
 
-<?php
-
-// foreach ($data as $key => $value) {
-//     echo $value->dumpster_total.'<BR />';
-//     echo $value->dumpster_total_opened.'<BR />';
-//     echo $value->dumpster_number.'<BR />';
-
-// }
-
-// die();
-
-?>
-
-
 @include('partials.header')
 @include('partials.nav')
 
@@ -48,11 +34,223 @@
                                                                     <div class="card">
                                                                         <div class="card-body">
                                                                             <div class="tab-content">
-                                    
-                                                                                <?php
-                                                                                if(isset($data)):
-                                                                                    foreach ($data as $key => $value):
 
+                                                                                <?php
+                                                                                if(!empty($datanodriver)):
+                                                                                    foreach ($datanodriver as $key => $value):
+                                                                                ?>
+                                                                                    <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
+                                        
+                                                                                        <div class="media mb-2"></div>
+
+                                                                                        <div class="row">
+
+                                                                                            <div class="col-md-12">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="id_client">CLIENTE NOVO</label>
+                                                                                                    <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}"/>
+                                                    
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    
+                                                                                        <hr />
+                                                                                        
+                                                                                        <div class="row">
+                                                                                        
+                                                                                            <div class="col-md-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="zipcode">CEP</label>
+                                                                                                        <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" value="{{ $value->zipcode_address_service }}"/>
+                                                                                                </div>
+                                                                                            </div>                                                                                        
+                                                    
+                                                                                            <div class="col-md-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="address">Endereço</label>
+                                                                                                    <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" value="{{ $value->address_service }}"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                    
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="number">Número</label>
+                                                                                                    <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6" value="{{ $value->number_address_service }}"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            
+                                                                                            <div class="col-md-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="district">Bairro</label>
+                                                                                                    <input type="text" class="form-control only-text" name="district" id="district" minlength="2" maxlength="44" value="{{ $value->district_address_service }}"/>
+                                                    
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="city">Cidade</label>
+                                                                                                    <input type="text" class="form-control only-text" name="city" id="city" minlength="2" maxlength="50" value="{{ $value->city_address_service }}"/>
+                                                    
+                                                                                                </div>
+                                                                                            </div>
+                                                    
+                                                                                            <div class="col-md-1">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="state">Estado</label>
+                                                                                                    <input type="text" class="form-control only-text" name="state" id="state" maxlength="2" onkeydown="return /[a-z]/i.test(event.key)" value="{{ $value->state_address_service }}"/>
+                                                    
+                                                                                                </div>
+                                                                                            </div>
+                                                    
+                                                                                            <div class="col-md-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="phone">Telefone</label>
+                                                                                                    
+                                                                                                    <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" value="{{ $value->phone_demand }}"/>
+                                                                                                </div>
+                                                                                            </div>
+                                                    
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="price_unit">Preço UNIT.</label>
+                                                                                                    <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="{{ $value->price_unit }}"/>
+                                                                                                    
+                                        
+                                                                                                </div>
+                                                                                            </div>
+                                                    
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="dumpster_total">TOTAL DE CAÇAMBAS</label>
+                                                                                                    <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_total }}"/>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="dumpster_total_opened">TOTAL EM ABERTO</label>
+                                                                                                    <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_total_opened }}"/>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="dumpster_total_opened">Nº CAÇAMBA</label>
+                                                                                                    <input type="number" name="dumpster_number" class="form-control" id="dumpster_number" min="0" max="1000" placeholder="0"  value="{{ $value->dumpster_number }}"/>
+                                                                                                </div>
+                                                                                            </div>
+                                        
+                                        
+                                                                                            <div class="col-md-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="landfill">ATERRO</label>
+                                                                                                    <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill">
+                                                                                                    
+                                                                                                        <option value="">----</option>
+                                                                                                        <?php if(isset($landfills)):?>
+                                                                                                            <?php foreach($landfills as $landfill):?>
+                                                                                                                <option value="<?php echo $landfill->id; ?>" id="<?php echo $landfill->id; ?>"><?php echo $landfill->name; ?></option>
+                                                                                                            <?php endforeach; ?>
+                                                                                                        <?php endif; ?>                                                                
+                                                                                                    
+                                                                                                    </select>
+                                                    
+                                                                                                </div>
+                                                                                            </div>                                                    
+                                        
+
+                                        
+                                                                                            <div class="col-md-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="driver">MOTORISTA</label>
+                                                                                                    <select class="select2 form-control form-control-lg" name="id_driver">
+                                                                                                        <option value="">----</option>
+                                                                                                        <?php if(isset($drivers)):?>
+                                                                                                            <?php foreach($drivers as $driver):?>
+                                                                                                                <option value="<?php echo $driver->id; ?>"><?php echo $driver->name.' '.$driver->surname; ?></option>
+                                                                                                            <?php endforeach; ?>
+                                                                                                        <?php endif; ?>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                        
+                                        
+                                                                                            <div class="col-md-12">
+                                                                                                <div class="form-group mb-2">
+                                                                                                    <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
+                                                                                                    <textarea class="form-control" rows="2" id="note" name="comments" value="{{ $value->price_unit }}"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                        
+                                                                                        </div>
+                                        
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="type_service">Tipo de Serviço</label>
+                                                                                                    <select class="select2 form-control form-control-lg" id="type_service" name="type_service">
+                                                                                                        <option value="" selected>----</option>
+                                                                                                        <option value="COLOCACAO">COLOCAÇÃO</option>
+                                                                                                        <option value="TROCA">TROCA</option>
+                                                                                                        <option value="RETIRADA">RETIRADA</option>
+                                                                                                    </select>            
+                                                                                                </div>
+                                                                                            </div>                                                    
+
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="period">PERÍODO DO DIA</label>
+                                                                                                    <select class="select2 form-control form-control-lg" id="period" name="period">
+                                                                                                        <option value="">----</option>
+                                                                                                        <option value="DIURNO">DIURNO</option>
+                                                                                                        <option value="NOTURNO">NOTURNO</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
+                                                                                                    {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/> --}}
+                                                                                                    <input type="text"   class="form-control dt-date " data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/>
+
+                                                                                                </div>    
+                                                                                            </div>
+
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <span class="title" for="date_removal_dumpster">DATA RETIRADA:</span>
+                                                                                                    <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4" value="{{ $value->date_removal_dumpster }}"/>
+                                                                                                </div>    
+                                                                                            </div>
+
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <span class="title" for="date_effective_removal_dumpster">RETIRADA EFETIVA:</span>
+                                                                                                    <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}"/>
+                                                                                                </div>    
+                                                                                            </div> 
+
+                                                                                            <div class="col-md-2">
+                                                                                                <div class="form-group">
+                                                                                                    <span class="title">TOTAL DE DIAS</span>
+                                                                                                    <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" />
+                                                                                                </div>    
+                                                                                            </div> 
+                                                                                            
+                                                                                            
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                <?php 
+                                                                                    endforeach;
+                                                                                endif;
+                                                                                ?>                                                                                
+
+
+                                                                                <?php
+                                                                                if(!empty($data)):
+                                                                                    foreach ($data as $key => $value):
                                                                                 ?>
                                                                                     <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                                         

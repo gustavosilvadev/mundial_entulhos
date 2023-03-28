@@ -1,5 +1,8 @@
 @include('partials.header')
+<?php 
+if(session('id_user') != null && session('login') != null){ ?>
 @include('partials.nav')
+<?php } ?>
 
 <div class="app-content content ">
     <div class="content-overlay"></div>
@@ -222,7 +225,7 @@
                     </div>
                 </div>
             </div>
-
+{{-- 
             <section id="basic-modals">
                 <div class="row">
                     <div class="col-12">
@@ -260,7 +263,8 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> 
+--}}
 
         </div>
 
