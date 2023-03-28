@@ -61,6 +61,8 @@ class EmployeeController extends Controller
                 $employee->zipcode  = $request->zipcode;
                 $employee->city     = $request->city;
                 $employee->state    = $request->state;
+                $employee->access_permission    = $request->access_permission;
+                
 
 
                 if($employee->save()){
@@ -85,6 +87,11 @@ class EmployeeController extends Controller
             
             if($employee){
                 
+                if($request->access_permission != 0){
+
+                    $employee->access_permission = $request->access_permission;
+                }
+
                 $employee->name     = $request->name;
                 $employee->surname  = $request->surname;
                 $employee->email    = $request->email;

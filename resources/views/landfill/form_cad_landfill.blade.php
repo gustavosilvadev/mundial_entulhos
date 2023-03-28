@@ -126,14 +126,14 @@
 <script>
 
     $(document).ready(function(){
-        $("#form").validate({
-            rules: {
-                email: {
-                    required: true,
-                    email: true
-                }
-            }
-        });
+        // $("#form").validate({
+        //     rules: {
+        //         email: {
+        //             required: true,
+        //             email: true
+        //         }
+        //     }
+        // });
 
         $("#email").blur(function(){
 

@@ -78,18 +78,57 @@
                 });
             }
 
-
-            // $('#date_format').flatpickr({
             $('.date_format').flatpickr({
-                // l10ns: languages['${e://Field/Q_Language}'],
                 dateFormat: "d/m/Y",
-                // minDate: "02/16/2023",
-                // maxDate: "today"
-                // minDate: "today"
             });
 
 
-        })
+            $('.date_format_allocation').flatpickr({
+                dateFormat: "d/m/Y",
+                minDate: dataDiaSeguinteFormatada(),
+            });
+            
+            $('.date_format_removal').flatpickr({
+                dateFormat: "d/m/Y",
+                minDate: dataDiaSeguinteFormatada(),
+            });
+            
+            $('.date_format_effective_removal').flatpickr({
+                dateFormat: "d/m/Y",
+                minDate: dataDiaSeguinteFormatada(),
+            });
+
+
+        });
+
+        let dataAtualFormatada = () => {
+            let data = new Date(),
+                dia  = data.getDate().toString(),
+                diaF = (dia.length == 1) ? '0'+dia : dia,
+                mes  = (data.getMonth()+1).toString(), 
+                mesF = (mes.length == 1) ? '0'+mes : mes,
+                anoF = data.getFullYear();
+            return diaF+"/"+mesF+"/"+anoF;
+        };
+
+        let dataDiaSeguinteFormatada = () => {
+
+            let d = new Date();
+            d.setDate(d.getDate() + 1);
+
+            let year = d.getFullYear()
+            let month = String(d.getMonth() + 1)
+            let day = String(d.getDate())
+
+            month = month.length == 1 ? 
+            month.padStart('2', '0') : month;
+
+            day = day.length == 1 ? 
+            day.padStart('2', '0') : day;
+
+            return `${day}/${month}/${year}`;
+        };
+
     </script>    
 </body>
 <!-- END: Body-->

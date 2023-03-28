@@ -64,7 +64,8 @@
 
                                 <th></th>
                                 <th>COLOCACAO/TROCA</th>
-                                <th>DATA PEDIDO</th>
+                                <th>DATA ABERTURA</th>
+                                <th>DATA ALOCAÇÃO</th>
                                 <th>CLIENTE</th>
                                 <th>ENDEREÇO DA OBRA</th>
                                 <th>BAIRRO</th>
@@ -90,8 +91,9 @@
                                     
                                     <td class="text-nowrap"><a href="/editcalldemand/{{$value->id_demand}}" class="btn btn-info">Detalhes</a></td>
                                     <td class="text-nowrap"><?php echo $value->type_service; ?></td>
-                                    <td class="text-nowrap"><?php echo $value->date_begin; ?></td>
-                                    <td class="text-nowrap"><?php echo $value->name_client.' '.$value->surname_client; ?></td>
+                                    <td class="text-nowrap"><?php echo $value->created_at; ?></td>
+                                    <td class="text-nowrap"><?php echo $value->date_allocation_dumpster; ?></td>
+                                    <td class="text-nowrap"><?php echo $value->name; ?></td>
                                     <td class="text-nowrap"><?php echo $value->address_service; ?></td>
                                     <td class="text-nowrap"><?php echo $value->district_address_service; ?></td>
                                     <td class="text-nowrap"><?php echo $value->phone_demand; ?></td>

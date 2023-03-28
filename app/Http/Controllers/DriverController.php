@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CallDemandController;
 use Illuminate\Http\Request;
 use App\Models\Driver;
 use App\Models\Employee;
-use App\Models\DriverDemand;
+use App\Models\CallDemand;
+// use App\Models\DriverDemand;
 
 class DriverController extends Controller
 {
@@ -56,15 +58,24 @@ class DriverController extends Controller
     {
         if (isset($request->employee)){
 
-            $driver = new Driver();
-            $driver->id_employee = $request->employee;
+            $employee = Employee::where("id",$request->employee)->first();
+            $employee->access_permission = 2;
+            $employee->update();
 
-            if($driver->save()){
 
-                // return view('driver.form_cad_driver',["response" => "Dados cadastrados com sucesso"]);
-                return redirect('createdriver');
+            $driver_check = Driver::where("id_employee",$request->employee)->first();
+
+
+            if(!$driver_check){
+                $driver = new Driver();
+                $driver->id_employee = $request->employee;
+
+                if($driver->save()){
+
+                    // return view('driver.form_cad_driver',["response" => "Dados cadastrados com sucesso"]);
+                    return redirect('createdriver');
+                }
             }
-
             // return view('driver.form_cad_driver',["response" => "Erro ao cadastrar o motorista"]);
             return redirect('createdriver');
 
@@ -140,41 +151,86 @@ class DriverController extends Controller
     // public function exibirDemandasAtivas()
     public function showDemands()
     {
+        $id_driver_session = session('id_user');
+        $call_demands = $this->showDemandsClient($id_driver_session);
 
-        $call_demands = CallDemandController::showApi(null);
-        
-        if(isset($call_demands['data'])){
+        if($call_demands['data']->isEmpty() != true){
             return view('driver.list_demand_driver',['call_demands'=> $call_demands['data']]);
-        }        
+        }
 
+            return view('driver.list_demand_driver',['call_demands' => '']);
+    }
+
+    public function showDemandsClient($id_employee)
+    {
+        $calldemand = DB::table('call_demand')
+        // ->join('client', 'client.id', '=','call_demand.id_client')
+        ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+        ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
+        ->join('employee', 'employee.id', '=', 'driver.id_employee')
+        ->select(
+            'call_demand.id as id_demand',
+            DB::raw("CONCAT(call_demand.name) as name_client"),
+            'call_demand.type_service  as type_service',
+            DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
+            DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+            DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster, "%d/%m/%Y") as date_removal_dumpster'),
+            DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),                    
+            'call_demand.address as address_service',
+            'call_demand.number as number_address_service',
+            'call_demand.zipcode as zipcode_address_service',
+            'call_demand.city as city_address_service',
+            'call_demand.district as district_address_service',
+            'call_demand.state as state_address_service',
+            'call_demand.comments as comments_demand',
+            'call_demand.phone as phone_demand',
+            DB::raw('CONCAT("R$","",format(call_demand.price_unit,2,"Pt_BR"))  as price_unit'),
+            'call_demand.dumpster_total',
+            'call_demand.dumpster_total_opened',
+            'call_demand.dumpster_number',
+            DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
+            'landfill.name as landfill_name',
+            'call_demand.period',
+            DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
+            DB::raw('call_demand.service_status as service_status'),
+            DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
+        )->where('employee.id', $id_employee)->get();
+        // )->where('employee.id', 3)->get();
+
+        // if(isset($calldemand)){
+
+        //     $tagNameIndex = array('data' => $calldemand);
+        //     return $tagNameIndex;
+        // }
+
+        return array('data' => $calldemand);
     }
 
     public function updateStatusDemand(Request $request)
     {
+        return $request->id;
+        
+        $id_driver_session = 1;
 
-        return 'FUNCIONANDO!';
-        if(isset($request->id) && isset($request->id_driver)){
-
-            $update_status_demand = CallDemandController::updateStatusDemandDriver($request);
-
-
-            if($update_status_demand){
+        // if(isset($request->id) && isset($id_driver_session)){
+        //     $call_demand = CallDemand::where('id',$request->id)->first();
+            
+        //     if($call_demand){
                 
-                $call_demand    = CallDemandController::showAPI($request->id)['data'][0];
-                $driver_demand  = new DriverDemand();
-                $driver_demand->id_call_demand  = $request->id;
-                $driver_demand->id_driver       = $request->id_driver;
-                $driver_demand->type_service    = $call_demand->type_service;
+        //         $call_demand->id_driver       = $id_driver_session;
+        //         $call_demand->date_end        = date('Y-m-d H:i:s');
+        //         $call_demand->service_status  = 2;
 
-    
-                if($driver_demand->save()){
+                
+        //         if($call_demand->update()){
 
-                    return true;
-                }
-
-
-            }
-        }
+        //             return true;
+                    
+        //         }else{
+        //             return false;
+        //         }
+        //     }
+        // }
     }
 
     private function returnSuccess($dados)

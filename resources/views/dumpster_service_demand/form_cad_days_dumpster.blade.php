@@ -10,7 +10,6 @@
         <div class="content-body">
 
             <div class="row" id="table-responsive ">
-                {{-- <div class="col-12" style="margin-top:120px"> --}}
                 <div class="col-12">
                     <div class="card">
                         <div class="todo-app-list">

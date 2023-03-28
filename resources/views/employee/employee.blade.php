@@ -40,10 +40,24 @@
                                                         @endif
                                                     @endif
                                             
-                                                    <form action="/update_employee" method= "POST" id="form" class="form-validate">
+                                                    <form action="/update_employee" method= "POST" id="form" class="form-validate" autocomplete="off">
                                                         @csrf
                                                         <input type="hidden" name="id" value="<?php echo $employee->id; ?>"/>
                                                         <div class="row">
+                                                            <div class="col-md-4 col-4">
+                                                                <div class="form-group">
+                                                                    <label for="role">Perfil</label>
+                                                                    <select class="select2 form-control form-control-lg"  name="access_permission" required>
+                                                                        <option value="0">---</option>
+                                                                        <option value="1">Administrador</option>
+                                                                        <option value="2">Motorista</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+
+                                        
                                                             <div class="col-md-6 col-12">
                                                                 <div class="form-group">
                                                                     <label for="first-name-column">Nome</label>
@@ -149,4 +163,40 @@
     </div>
 </div>
 
+
 @include('partials.footer')
+
+<script>
+
+    $(document).ready(function(){
+        $("#form").validate({
+                rules: {
+                    access_permission: {
+                        required: true
+                    },
+    
+                    name: {
+                        required: true
+                    },
+                    surname: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    login: {
+                        required: true
+                    }
+                },
+    
+                messages:{
+                    access_permission: "Campo <b>Perfil</b> deve ser preenchido!",
+                    name: "Campo <b>Nome</b> deve ser preenchido!",
+                    surname: "Campo <b>Sobrenome</b> deve ser preenchido!",
+                    email: "Campo <b>Email</b> deve ser preenchido!",
+                    login: "Campo <b>Login</b> deve ser preenchido!"
+                }            
+            });
+    });
+    
+    </script>

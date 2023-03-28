@@ -61,6 +61,16 @@
                                                     <input type="password" class="form-control" name="repeat_password" />
                                                 </div>
                                             </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="role">Perfil</label>
+                                                    <select class="select2 form-control form-control-lg"  name="access_permission">
+                                                        <option value="0">---</option>
+                                                        <option value="1">Administrador</option>
+                                                        <option value="2">Motorista</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
                                             <div class="col-12 d-flex flex-sm-row flex-column mt-2">
                                                 <button type="submit" class="btn btn-success mb-1 mb-sm-0 mr-0 mr-sm-1">Criar</button>

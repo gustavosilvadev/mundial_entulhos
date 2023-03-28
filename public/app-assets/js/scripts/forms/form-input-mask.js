@@ -35,10 +35,8 @@ $(function () {
   // Phone Number
   if (phoneMask.length) {
     new Cleave(phoneMask, {
-      // phone: true,
-      // phoneRegionCode: 'US'
       delimiter: '-',
-      blocks: [5, 4],
+      blocks: [7, 4],
       uppercase: true      
     });
   }

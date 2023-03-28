@@ -25,9 +25,17 @@
 
                                 <form class="auth-login-form mt-2" action="login" method="POST">
                                     @csrf
+
+                                    <?php if(isset($response)): ?>
+                                        <div class="text-danger">{{ $response }}</div>
+                                    <?php 
+                                            unset($response);
+                                        endif; 
+                                    ?>
+                                    
                                     <div class="form-group">
                                         <label for="login-email" class="form-label">Email/Login</label>
-                                        <input type="text" class="form-control" id="login-email" name="login"  aria-describedby="login-email" tabindex="1" autofocus />
+                                        <input type="text" class="form-control" id="login-email" name="login"  aria-describedby="login-email" tabindex="1" autofocus autocomplete="off"/>
                                     </div>
 
                                     <div class="form-group">
@@ -44,6 +52,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group">
                                         <a class="" href="perfil-create">Criar conta </a>
                                     </div>

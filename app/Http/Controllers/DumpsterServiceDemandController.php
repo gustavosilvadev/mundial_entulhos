@@ -89,14 +89,24 @@ class DumpsterServiceDemandController extends Controller
 
     }
 
-    public function showDaysDumpsterCounty(Request $request){
+    public function showDaysDumpsterCounty(Request $request)
+    {
 
         if(isset($request->id) && is_numeric($request->id))
         {
 
             $days = CountyDaysDumpster::find($request->id);
             return $days->days;
+        
+        }elseif(isset($request->city) && is_string($request->city)){
+  
+            
+            $result = CountyDaysDumpster::whereRaw('UPPER(`name_county`) LIKE "%'.strtoupper($request->city.'%"'))->get();
+
+            return $result[0]->days;
         }
+
+        return null;
     }
 
     public function updateDaysDumpsterCounty(Request $request){

@@ -1,3 +1,9 @@
+<?php
+
+print_r($calldemand);
+die();
+?>
+
 @include('partials.header')
 <div class="app-content content ">
     

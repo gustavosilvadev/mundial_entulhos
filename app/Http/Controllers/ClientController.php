@@ -46,9 +46,9 @@ public function show(Request $request)
 public function checkDemandOpendClient(Request $request):bool
 {
 
-    $call_demand = CallDemand::where('id_client',$request->id)->first();
-    // return array('message_info' => "O cliente possui atendimento em aberto. Deseja abrir um novo chamado mesmo assim? ");
-    // return (isset($call_demand) ? true : false);
+    $call_demand = CallDemand::find($request->id);
+
+    
     if(isset($call_demand)){
         return true;
     }else
@@ -59,7 +59,7 @@ public function checkDemandOpendClient(Request $request):bool
 public function showInfoClient(Request $request)
 {
     
-    $client = Client::where('id',$request->id)->first();
+    $client = CallDemand::where('id',$request->id)->first();
 
     if(isset($client)){
         return $client;
@@ -199,20 +199,77 @@ public function destroy(Request $request)
 
 public function exibirFormCadastroBasico()
 {
-    echo "001# - EXIBIR: formulário básico";
-    echo "<BR />";
-    echo "002# - Botão direcionamento para whatsapp";
-    echo "<BR />";
-    echo "003# - Consulta se atendemos determinada região";
-    echo "<BR />";
-    echo "004# - NOTIFICAR TEMPO DE RETORNO";
-    echo "<BR />";
-    echo "004# - CADASTRO DE LOGIN E SENHA";
-    echo "<BR />";
+/*
+    echo "001# - EXIBIR: formulário básico"; -- OK
+    echo "002# - Botão direcionamento para whatsapp"; -- OK
+    echo "003# - Consulta se atendemos determinada região"; -- PENDENTE
+    echo "004# - NOTIFICAR TEMPO DE RETORNO"; -- PENDENTE
+    echo "004# - CADASTRO DE LOGIN E SENHA"; -- PENDENTE
 
-    echo "<BR />";
+*/    
 
-    die();
+    // return view('client.form_cad_call_demand_cliente', $this->showInfoParamsDemand());
+    return view('client.form_cad_call_demand_cliente');
+}
+
+
+public function saveDataDemandClient(Request $request)
+{
+
+    if(isset($request->client_name_new)
+    && isset($request->type_service)
+    && isset($request->address)
+    && isset($request->number)
+    && isset($request->zipcode)
+    && isset($request->city)
+    && isset($request->district)
+    && isset($request->state)
+    && isset($request->phone)
+    && isset($request->period)
+    && isset($request->date_allocation_dumpster)
+    && isset($request->date_removal_dumpster)
+    && isset($request->dumpster_total)
+    ){
+
+        $calldemand = new CallDemand();
+        $calldemand->name          = $request->client_name_new;
+        $calldemand->type_service  = $request->type_service;
+        $calldemand->address       = $request->address;
+        $calldemand->number        = $request->number;
+        $calldemand->zipcode       = $request->zipcode;
+        $calldemand->city          = $request->city;
+        $calldemand->district      = $request->district;
+        $calldemand->state         = $request->state;
+        $calldemand->comments      = $request->comments;
+        $calldemand->phone         = $request->phone;
+        $calldemand->price_unit    = 0.00;
+        $calldemand->id_driver     = 0;
+        $calldemand->period        = $request->period;
+        $calldemand->dumpster_total = $request->dumpster_total;
+        $calldemand->dumpster_number = 0;
+        
+        $calldemand->date_allocation_dumpster  = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
+        $calldemand->date_removal_dumpster   = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
+
+        if($calldemand->save()){
+
+            return redirect('/new_demand_client')->with($this->returnSuccess('Salvo com sucesso'));
+            // return view('client.form_cad_call_demand_cliente', $this->returnSuccess('Salvo com sucesso'));
+        }
+
+        // return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);        
+
+        return redirect('/new_demand_client')->with($this->returnError('Erro ao cadastrar'));
+        // return view('client.form_cad_call_demand_cliente', $this->returnError('Erro ao cadastrar'));
+    
+
+    }else{
+
+        return redirect('/new_demand_client')->with($this->returnError('Dados incompletos'));
+
+        // return view('client.form_cad_call_demand_cliente', $this->returnError('Dados incompletos'));
+    }
+
 }
 
 private function returnSuccess($dados)

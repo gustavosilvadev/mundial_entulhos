@@ -39,16 +39,17 @@ class LandfillController extends Controller
     public function store(Request $request)
     {
         if(isset($request->name)
-        && isset($request->email)
-        && isset($request->phone)
-        && isset($request->cpf_cnpj)
-        && isset($request->address)
-        && isset($request->number)
-        && isset($request->zipcode)
-        && isset($request->district)
-        && isset($request->city)
-        && isset($request->state)
-        ){
+        // && isset($request->email)
+        // && isset($request->phone)
+        // && isset($request->cpf_cnpj)
+        // && isset($request->address)
+        // && isset($request->number)
+        // && isset($request->zipcode)
+        // && isset($request->district)
+        // && isset($request->city)
+        // && isset($request->state)
+        )
+        {
             $landfill = new Landfill();
             $landfill->name = $request->name;
             $landfill->email = $request->email;

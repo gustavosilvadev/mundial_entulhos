@@ -46,9 +46,10 @@ class UserEmployeeController extends Controller
     public function conectLogin(Request $request)
     {
 
-
+        $removedUser = null;
 
         if(filter_var($request->login, FILTER_VALIDATE_EMAIL)){
+
             $removedUser = Employee::where("login","=",$request->login)
                                 ->where("flg_status","=",0)->first();
         }else{
@@ -74,30 +75,30 @@ class UserEmployeeController extends Controller
             if(Hash::check($request->password,$LoginUser->password) == true){
                 
                 session(['id_user' => $LoginUser->id,
+                        'access_permission' => $LoginUser->access_permission,
                         'name' => $LoginUser->name,
                         'surname' => $LoginUser->surname,
                         'login' => $LoginUser->login,
                         'email' => $LoginUser->email]);
                 
                 // return redirect('/lista_todas_categorias_edit');
+                return redirect('/');
 
             }else
-                // return view('usuario.login',["response" => "Senha incorreta"]);
-die('Não funcionou!');
+                return view('user.login',["response" => "Senha incorreta"]);
+
 
         }else{
-            return view('usuario.login',["response" => "Login inválido, verifique login e senha"]);
+
+
+            return view('user.login',["response" => "Login inválido, verifique login e senha"]);
         }
     }
 
-    public function desconectarLogin()
+    public function logoutAccount()
     {
-        // TAREFA
-        // Limpar sessão !!!!
-
-        // Session::flush();
-        return redirect('/page=administrator');
-
+        session::flush();
+        return redirect('/login');
     }
 
     public function store(Request $request)
@@ -108,9 +109,8 @@ die('Não funcionou!');
             && isset($request->login) 
             && isset($request->email) 
             && isset($request->password)
+            && isset($request->access_permission)
         ){
-
-
 
             if($request->password == $request->repeat_password)
             {
@@ -131,6 +131,7 @@ die('Não funcionou!');
                     $employee->surname = $request->surname;
                     $employee->email = $request->email;
                     $employee->login = $request->login;
+                    $employee->access_permission = $request->access_permission;
                     $employee->password = Hash::make($request->password);
             
                     if(!$employee->save()){

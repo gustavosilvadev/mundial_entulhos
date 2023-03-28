@@ -1,4 +1,3 @@
-
 @include('partials.header')
 @include('partials.nav')
 
@@ -43,9 +42,10 @@
 
                         <!-- Todo List starts -->
                         <div class="todo-task-list-wrapper list-group">
-                            <?php if(isset($call_demands)): ?>                            
+                            <?php if(is_object($call_demands)): ?>
+
                                 <ul class="todo-task-list media-list" id="todo-task-list">
-                                    
+
                                     <?php foreach($call_demands as $call_demand): ?>
                                         <input type="hidden" class="id_demand" value="{{ $call_demand->id_demand }}" />
                                         
@@ -103,24 +103,25 @@
                                                                 ?>
 
                                                     </div>
-                                                    <label class="text-nowrap text-muted mr-1 todo-date-begin">{{ $call_demand->date_begin }}</label>
+                                                    <label class="text-nowrap text-muted mr-1 todo-date-begin">{{ $call_demand->created_at }}</label>
                                                     <label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">{{ $call_demand->id_demand }}</label>
                                                     <label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">{{ $call_demand->comments_demand }}</label>
                                                     <label class="text-nowrap text-muted mr-1 todo-name-client" style="display: none;">{{ $call_demand->phone_demand }}</label>
                                                 </div>
                                             </div>
                                         </li>
-
                                     <?php endforeach; ?>
                                     
                                 </ul>
-                            <?php else: ?>                            
-                                <div class="no-results">
+                            <?php else: ?>
+                                                       
+                                <div class="no-results" style="display: block">
                                     <h5>Sem pedido disponível</h5>
                                 </div>
                             <?php endif; ?>
                         </div>
                         <!-- Todo List ends -->
+                    
                     </div>
 
                     <!-- Right Sidebar starts -->
@@ -182,8 +183,10 @@
                                         </div>
 
                                         <div class="form-group my-1">
+                                            {{-- <?php if($call_demand->service_status == 0):?> --}}
+                                                <input type="submit" class="btn btn-success" id="update_active_call_demand" value="Iniciar Atendimento" />
+                                            {{-- <?php endif;?> --}}
 
-                                            <input type="submit" class="btn btn-success" id="update_active_call_demand" value="Iniciar Atendimento" />
                                             <button type="button" class="btn btn-outline-danger update-btn d-none my-2" data-dismiss="modal">Cancelar</button>
                                         </div>
                                     </div>
@@ -208,31 +211,27 @@
         $("form").submit(function(a){
 
             let id_demand = this.id_demand.value;
-
-            $.ajax({
-                "_token": "{{ csrf_token() }}",
-                method: 'POST',
-                url: '/change_status_call_demand',
-                data: {
-                    id : id_demand,
-                    id_driver : 1  // iD DA SESSÃO DO MOTORISTA
-                },
-                success: function(dataResponse) {
-
-                    alert($dataResponse);
-                    console.log($dataResponse);
-                    if(dataResponse){
-                        alert('Atualizado!');
-                        location.reload();
-
+            if(id_demand){
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    method: 'POST',
+                    url: '/change_status_call_demand',
+                    data: {
+                        _token:'{{ csrf_token() }}',
+                        id : id_demand
+                    },
+                    success: function(dataResponse) {
+alert(dataResponse);
+                        // if(dataResponse){
+                        //     location.reload();
+                        // }
+                    },
+                    error: function(responseError){
+                        console.log(responseError);
+                        alert(responseError);
                     }
-
-                },
-                error: function(responseError){
-                    console.log(responseError);
-                    alert(responseError);
-                }
-            });
+                });
+            }
         });
     });
 </script>

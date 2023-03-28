@@ -17,12 +17,25 @@
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">DEMANDA!</mark></h3>                                            
+                                                <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white"></mark></h3>
+
                                             </div>
 
                                             <div class="card-body">
-                                        
-                                                <form action="/save_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
+                                                <p>
+                                                    Preencha o formulário, ou entre em contato via <a href="https://api.whatsapp.com/send?phone=5511963679880&text=Ola!%20Gostaria%20de%20mais%20detalhes" target="_blank">Whatsapp</a>. Em breve iremos responder
+                                                </p>
+
+                                                <?php 
+                                                    if((isset($code) && isset($data)) && ($code == 200)){
+                                                ?>
+                                                    <div class="valid-feedback">{{ $data }}</div>
+                                                
+                                                <?php }elseif((isset($code) && isset($data)) && ($code != 200)) { ?>
+                                                    <div class="invalid-feedback">{{ $data }}</div>
+                                                <?php } ?>
+
+                                                <form action="/save_call_demand_cliente" method= "POST" id="form" class="form-validate" autocomplete="off">
                                                     @csrf
                                                     <div class="row invoice-add">
                                     
@@ -41,22 +54,7 @@
                                                                                     <div class="row">
                                                                                         <div class="col-md-12">
                                                                                             <div class="form-group">
-                                                                                                <label for="id_client">CLIENTE</label>
-                                                                                                <select class="select2 form-control form-control-lg" name="id_client" id="search_data_client">
-                                                                                                    <option value="">----</option>
-                                                                                                    <?php if(isset($clients)):?>
-                                                                                                        <?php foreach($clients as $client):?>
-                                                                                                            <option value="<?php echo $client->id; ?>"><?php echo $client->name; ?></option>
-                                                                                                        <?php endforeach; ?>
-                                                                                                    <?php endif; ?>
-                                                                                                </select>
-                                                
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="col-md-12">
-                                                                                            <div class="form-group">
-                                                                                                <label for="id_client">CLIENTE NOVO</label>
+                                                                                                <label for="id_client">Nome</label>
                                                                                                 <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44"/>
                                                 
                                                                                             </div>
@@ -122,67 +120,11 @@
                                                 
                                                                                         <div class="col-md-2">
                                                                                             <div class="form-group">
-                                                                                                <label for="price_unit">Preço UNIT.</label>
-                                                                                                <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="0" />
-                                                                                                
-                                    
-                                                                                            </div>
-                                                                                        </div>
-                                                
-                                                                                        <div class="col-md-2">
-                                                                                            <div class="form-group">
                                                                                                 <label for="dumpster_total">TOTAL DE CAÇAMBAS</label>
                                                                                                 <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" value="0" min="0" max="1000" placeholder="0" />
                                                                                             </div>
                                                                                         </div>
 
-                                                                                        <div class="col-md-2">
-                                                                                            <div class="form-group">
-                                                                                                <label for="dumpster_total_opened">TOTAL EM ABERTO</label>
-                                                                                                <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" value="0" min="0" max="1000" placeholder="0" />
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="col-md-2">
-                                                                                            <div class="form-group">
-                                                                                                <label for="dumpster_total_opened">Nº CAÇAMBA</label>
-                                                                                                <input type="number" name="dumpster_number" class="form-control" id="dumpster_number" value="0" min="0" max="1000" placeholder="0" />
-                                                                                            </div>
-                                                                                        </div>
-                                    
-                                    
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <label for="landfill">ATERRO</label>
-                                                                                                <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill">
-                                                                                                
-                                                                                                    <option value="">----</option>
-                                                                                                    <?php if(isset($landfills)):?>
-                                                                                                        <?php foreach($landfills as $landfill):?>
-                                                                                                            <option value="<?php echo $landfill->id; ?>" id="<?php echo $landfill->id; ?>"><?php echo $landfill->name; ?></option>
-                                                                                                        <?php endforeach; ?>
-                                                                                                    <?php endif; ?>                                                                
-                                                                                                
-                                                                                                </select>
-                                                
-                                                                                            </div>
-                                                                                        </div>                                                    
-                                    
-
-                                    
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <label for="driver">MOTORISTA</label>
-                                                                                                <select class="select2 form-control form-control-lg" name="id_driver">
-                                                                                                    <option value="">----</option>
-                                                                                                    <?php if(isset($drivers)):?>
-                                                                                                        <?php foreach($drivers as $driver):?>
-                                                                                                            <option value="<?php echo $driver->id; ?>"><?php echo $driver->name.' '.$driver->surname; ?></option>
-                                                                                                        <?php endforeach; ?>
-                                                                                                    <?php endif; ?>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                        </div>
                                     
                                     
                                                                                         <div class="col-md-12">
@@ -197,7 +139,7 @@
                                                                                     <div class="row">
                                                                                         <div class="col-md-2">
                                                                                             <div class="form-group">
-                                                                                                <label for="type_service">Tipo de Serviço</label>
+                                                                                                <label for="type_service">Serviço Desejado</label>
                                                                                                 <select class="select2 form-control form-control-lg" id="type_service" name="type_service">
                                                                                                     <option value="" selected>----</option>
                                                                                                     <option value="COLOCACAO">COLOCAÇÃO</option>
@@ -206,14 +148,7 @@
                                                                                                 </select>            
                                                                                             </div>
                                                                                         </div>                                                    
-{{--                                     
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <span class="title" for="date_begin">DATA DO PEDIDO:</span>
-                                                                                                <input type="text" name="date_begin" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_today" data-column="5"  data-column-index="4"/>
-                                                                                            </div>
-                                                                                        </div>
---}}
+
 
                                                                                         <div class="col-md-2">
                                                                                             <div class="form-group">
@@ -240,22 +175,20 @@
                                                                                             </div>    
                                                                                         </div>
 
-                                                                                        <div class="col-md-2">
+                                                                                        {{-- <div class="col-md-2">
                                                                                             <div class="form-group">
                                                                                                 <span class="title" for="date_effective_removal_dumpster">RETIRADA EFETIVA:</span>
                                                                                                 <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4"/>
                                                                                             </div>    
-                                                                                        </div> 
+                                                                                        </div>  --}}
 
                                                                                         <div class="col-md-2">
                                                                                             <div class="form-group">
                                                                                                 <span class="title">TOTAL DE DIAS</span>
-                                                                                                <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" />
+                                                                                                <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" disabled/>
                                                                                             </div>    
                                                                                         </div> 
                                                                                         
-                                                                                        
-
                                                                                     </div>
                                                                                 </div>
                                                                                 
@@ -375,7 +308,7 @@
         // ZipCode
         $("#zipcode").change(function(){
             let zipcode = $(this).val().trim().replace("-", "");
-            
+
             let settings = {
             "url": "https://viacep.com.br/ws/" + zipcode.trim() + "/json/",
             "method": "GET",
@@ -455,7 +388,7 @@
 
                     $('.date_format_allocation').val(dataResponse.date_allocation_dumpster);
                     $('.date_format_removal').val(dataResponse.date_removal_dumpster);
-                    $('.date_format_effective_removal').val(dataResponse.date_effective_removal_dumpster);
+                    // $('.date_format_effective_removal').val(dataResponse.date_effective_removal_dumpster);
 
                 },
                 error: function(responseError){
@@ -576,12 +509,11 @@
                     url: '/dias_municipio',
                     data: {city : city},
                     success: function(dataResponse) {
-
                         $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
                         $("input[name='date_effective_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
                         $("input[name='total_days']").val(quantidadeDias());
-                        
 
+                        // $('#form').each (function(){ this.reset(); });
                     },
                     error: function(responseError){
                         alert(responseError);
@@ -618,7 +550,8 @@
         let format_date_allocation_dumpster = date_allocation_dumpster.split("/");
         let data_alocacao  = format_date_allocation_dumpster[1] + '/' + format_date_allocation_dumpster[0] + '/'+ format_date_allocation_dumpster[2];
 
-        let date_effective_removal_dumpster = $("input[name='date_effective_removal_dumpster']").val();
+        // let date_effective_removal_dumpster = $("input[name='date_effective_removal_dumpster']").val();
+        let date_effective_removal_dumpster = $("input[name='date_removal_dumpster']").val();
         let format_date_effective_removal_dumpster = date_effective_removal_dumpster.split("/");
         let data_retirada_efetiva  = format_date_effective_removal_dumpster[1] + '/' + format_date_effective_removal_dumpster[0] + '/'+ format_date_effective_removal_dumpster[2];
 
@@ -630,4 +563,24 @@
         return diffDays;
     }
     
+    Trim = (strTexto) =>{
+
+            return strTexto.replace(/^\s+|\s+$/g, '');
+        }
+
+    isCEP = (strCEP) => {
+        var objER = /^[0-9]{5}-[0-9]{3}$/;
+
+        strCEP = Trim(strCEP)
+        if(strCEP.length > 0)
+            {
+                if(objER.test(strCEP))
+                    return true;
+                else
+                    return false;
+            }
+        else
+            return false;
+    }
+
 </script>
