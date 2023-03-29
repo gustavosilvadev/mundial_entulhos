@@ -1,7 +1,6 @@
 
 {{-- @include('partials.header')
 @include('partials.nav') --}}
-
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
@@ -759,8 +758,8 @@
                                                                                                     <div class="form-group">
                                                                                                         <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
                                                                                                         
-                                                                                                        <input type="text"   class="form-control dt-date " data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/>
-    
+                                                                                                        <input type="text"   class="form-control dt-date " id="date_format" data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/>
+                                                                                                        {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/> --}}
                                                                                                     </div>    
                                                                                                 </div>
     
@@ -777,11 +776,11 @@
                                                                                                         <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}"/>
                                                                                                     </div>    
                                                                                                 </div> 
-    
+
                                                                                                 <div class="col-md-2">
                                                                                                     <div class="form-group">
                                                                                                         <span class="title">TOTAL DE DIAS</span>
-                                                                                                        <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" />
+                                                                                                        <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" />
                                                                                                     </div>    
                                                                                                 </div> 
                                                                                                 
@@ -971,7 +970,8 @@
                                                                                                 <div class="col-md-2">
                                                                                                     <div class="form-group">
                                                                                                         <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
-                                                                                                        <input type="text"   class="form-control dt-date " data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/>
+                                                                                                        {{-- <input type="text"   class="form-control dt-date " data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/> --}}
+                                                                                                        <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);" {{ $value->date_allocation_dumpster }}/>
     
                                                                                                     </div>    
                                                                                                 </div>
@@ -1049,7 +1049,7 @@
     $(document).ready(function(){
 
         // let id_demand_client = $(this).val();
-        findDemandClient(id_demand_client);
+        // findDemandClient(id_demand_client);
 
 
         $('.date_effective_removal_dumpster').blur(function(){
