@@ -95,6 +95,29 @@ class UserEmployeeController extends Controller
         }
     }
 
+    public function redirectPagePerfil(){
+
+        if(session()->exists('access_permission')){
+
+            if(session('access_permission') == 1)
+            {
+
+                return redirect('/createcalldemand');
+    
+            }elseif(session('access_permission') == 2)
+            {
+
+                return redirect('/driver_demand');
+            }
+        }else{
+    
+            // return view('main.home');
+            return view('client.form_cad_call_demand_cliente');
+
+        }
+
+    }
+
     public function logoutAccount()
     {
         session::flush();

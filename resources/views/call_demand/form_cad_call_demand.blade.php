@@ -1,6 +1,17 @@
+{{-- 
 @include('partials.header')
-@include('partials.nav')
+@include('partials.nav') 
+--}}
 
+<?php
+// dd($drivers);
+?>
+
+
+@include('partials.header_teste')
+@include('partials.nav_teste');
+
+{{-- 
 <div class="app-content content ">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
@@ -8,7 +19,7 @@
         <div class="content-body">
 
             <div class="row" id="table-responsive ">
-                {{-- <div class="col-12" style="margin-top:120px"> --}}
+
                 <div class="col-12">
                     <div class="card">
                         <div class="todo-app-list">
@@ -206,14 +217,7 @@
                                                                                                 </select>            
                                                                                             </div>
                                                                                         </div>                                                    
-{{--                                     
-                                                                                        <div class="col-md-4">
-                                                                                            <div class="form-group">
-                                                                                                <span class="title" for="date_begin">DATA DO PEDIDO:</span>
-                                                                                                <input type="text" name="date_begin" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_today" data-column="5"  data-column-index="4"/>
-                                                                                            </div>
-                                                                                        </div>
---}}
+
 
                                                                                         <div class="col-md-2">
                                                                                             <div class="form-group">
@@ -336,9 +340,307 @@
 
     </div>
 </div>
+ --}}
 
 
-@include('partials.footer')
+ <div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper container-xxl p-0">
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h3 class="content-header-title float-left mb-0">CADASTRO</h3>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="content-body">
+            <div class="row">
+            <!-- 
+                <div class="col-12">
+                    <div class="alert alert-primary" role="alert">
+                        <div class="alert-body"><strong>Info:</strong> Use this layout to set menu (navigation) default collapsed. Please check the&nbsp;<a class="text-primary" href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/documentation-layout-collapsed-menu.html" target="_blank">Layout collapsed menu documentation</a>&nbsp; for more details.</div>
+                    </div>
+                </div>
+            -->
+
+            </div>
+            {{-- <section class="horizontal-wizard"> --}}
+            <section id="multiple-column-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                {{-- <div class="card-header">
+                                    <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">DEMANDA!</mark></h3>
+                                </div> --}}
+
+                                <div class="card-body">
+                            
+                                    <form action="/save_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
+                                        @csrf
+                                        <div class="row invoice-add">
+                        
+                                            <div class="col-xl-9 col-md-8 col-12">
+                                                <div class="card invoice-preview-card">
+                        
+                                                    <section class="app-user-edit">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="tab-content">
+                        
+                                                                    <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
+                        
+                                                                        <div class="media mb-2"></div>
+
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group">
+                                                                                    <label for="id_client">CLIENTE</label>
+                                                                                    <select class="select2 form-control form-control-lg" name="id_client" id="search_data_client">
+                                                                                        <option value="">----</option>
+                                                                                        <?php if(isset($clients)):?>
+                                                                                            <?php foreach($clients as $client):?>
+                                                                                                <option value="<?php echo $client->id; ?>"><?php echo $client->name; ?></option>
+                                                                                            <?php endforeach; ?>
+                                                                                        <?php endif; ?>
+                                                                                    </select>
+                                    
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group">
+                                                                                    <label for="id_client">CLIENTE NOVO</label>
+                                                                                    <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44"/>
+                                    
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                       
+                                                                        <hr />
+                                                                        
+                                                                        <div class="row">
+                                                                          
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="zipcode">CEP</label>
+                                                                                        <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" />
+                                                                                </div>
+                                                                            </div>                                                                                        
+                                    
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="address">Endereço</label>
+                                                                                    <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" />
+                                                                                </div>
+                                                                            </div>
+                                    
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="number">Número</label>
+                                                                                    <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="district">Bairro</label>
+                                                                                    <input type="text" class="form-control only-text" name="district" id="district" minlength="2" maxlength="44"/>
+                                    
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="city">Cidade</label>
+                                                                                    <input type="text" class="form-control only-text" name="city" id="city" minlength="2" maxlength="50"/>
+                                    
+                                                                                </div>
+                                                                            </div>
+                                    
+                                                                            <div class="col-md-1">
+                                                                                <div class="form-group">
+                                                                                    <label for="state">Estado</label>
+                                                                                    <input type="text" class="form-control only-text" name="state" id="state" maxlength="2" onkeydown="return /[a-z]/i.test(event.key)"/>
+                                    
+                                                                                </div>
+                                                                            </div>
+                                    
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="phone">Telefone</label>
+                                                                                    
+                                                                                    <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" />
+                                                                                </div>
+                                                                            </div>
+                                    
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="price_unit">Preço UNIT.</label>
+                                                                                    <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="0" />
+                                                                                    
+                        
+                                                                                </div>
+                                                                            </div>
+                                    
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="dumpster_total">TOTAL DE CAÇAMBAS</label>
+                                                                                    <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" value="0" min="0" max="1000" placeholder="0" />
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="dumpster_total_opened">TOTAL EM ABERTO</label>
+                                                                                    <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" value="0" min="0" max="1000" placeholder="0" />
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="dumpster_total_opened">Nº CAÇAMBA</label>
+                                                                                    <input type="number" name="dumpster_number" class="form-control" id="dumpster_number" value="0" min="0" max="1000" placeholder="0" />
+                                                                                </div>
+                                                                            </div>
+                        
+                        
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="landfill">ATERRO</label>
+                                                                                    <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill">
+                                                                                    
+                                                                                        <option value="">----</option>
+                                                                                        <?php if(isset($landfills)):?>
+                                                                                            <?php foreach($landfills as $landfill):?>
+                                                                                                <option value="{{ $landfill->id }}" id="{{ $landfill->id }}">{{ $landfill->name }}</option>
+                                                                                            <?php endforeach; ?>
+                                                                                        <?php endif; ?>                                                                
+                                                                                    
+                                                                                    </select>
+                                    
+                                                                                </div>
+                                                                            </div>                                                    
+                        
+
+                        
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="driver">MOTORISTA</label>
+                                                                                    <select class="select2 form-control form-control-lg" name="id_driver">
+                                                                                        <option value="">----</option>
+                                                                                        <?php if(isset($drivers)):?>
+                                                                                            <?php foreach($drivers as $driver):?>
+                                                                                                <option value="<?php echo $driver->id; ?>"><?php echo $driver->name.' '.$driver->surname; ?></option>
+                                                                                            <?php endforeach; ?>
+                                                                                        <?php endif; ?>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                        
+                        
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group mb-2">
+                                                                                    <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
+                                                                                    <textarea class="form-control" rows="2" id="note" name="comments"></textarea>
+                                                                                </div>
+                                                                            </div>
+                        
+                                                                        </div>
+                        
+                                                                        <div class="row">
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="type_service">Tipo de Serviço</label>
+                                                                                    <select class="select2 form-control form-control-lg" id="type_service" name="type_service">
+                                                                                        <option value="" selected>----</option>
+                                                                                        <option value="COLOCACAO">COLOCAÇÃO</option>
+                                                                                        <option value="TROCA">TROCA</option>
+                                                                                        <option value="RETIRADA">RETIRADA</option>
+                                                                                    </select>            
+                                                                                </div>
+                                                                            </div>                                                    
+
+
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="period">PERÍODO DO DIA</label>
+                                                                                    <select class="select2 form-control form-control-lg" id="period" name="period">
+                                                                                        <option value="">----</option>
+                                                                                        <option value="DIURNO">DIURNO</option>
+                                                                                        <option value="NOTURNO">NOTURNO</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
+                                                                                    <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);"/>
+
+                                                                                </div>    
+                                                                            </div>
+
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <span class="title" for="date_removal_dumpster">DATA RETIRADA:</span>
+                                                                                    <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4"/>
+                                                                                </div>    
+                                                                            </div>
+
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <span class="title" for="date_effective_removal_dumpster">RETIRADA EFETIVA:</span>
+                                                                                    <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4"/>
+                                                                                </div>    
+                                                                            </div> 
+
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <span class="title">TOTAL DE DIAS</span>
+                                                                                    <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" />
+                                                                                </div>    
+                                                                            </div> 
+                                                                            
+                                                                            
+
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </section>                            
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-xl-3 col-md-4 col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <button type="submit" class="btn btn-success btn-block mb-75">Salvar</button>
+                                                        <button type="reset" class="btn btn-warning btn-block mb-75">Limpar Formulário</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                        
+                                        </div>
+                                    </form>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+{{-- @include('partials.footer') --}}
+@include('partials.footer_teste') 
 
 <script>
 

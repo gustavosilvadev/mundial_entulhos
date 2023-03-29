@@ -289,7 +289,6 @@ class CallDemandController extends Controller
 
     public function showInfoParamsDemand()
     {
-
         $info_client_demand = DB::table('call_demand')
         ->groupBy('call_demand.name')
         ->orderBy('call_demand.id', 'desc')
@@ -301,12 +300,12 @@ class CallDemandController extends Controller
         })->get(['driver.id','employee.name','employee.surname']);
 
         $landfills = Landfill::select('id','name')->where('flg_status', 1)->get();
+
         return [
             'clients' => $info_client_demand, 
             'drivers' => $drivers,
             'landfills' => $landfills
         ];
-
     }
 
     public function showInfoClientDemand(Request $request)

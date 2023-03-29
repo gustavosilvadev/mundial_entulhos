@@ -206,11 +206,10 @@ class DriverController extends Controller
         return array('data' => $calldemand);
     }
 
-    public function updateStatusDemand(Request $request)
+    public function updateStatusDemand($id)
     {
-        return $request->id;
-        
-        $id_driver_session = 1;
+        dd($id);
+        $id_driver_session = session('id_user');
 
         // if(isset($request->id) && isset($id_driver_session)){
         //     $call_demand = CallDemand::where('id',$request->id)->first();

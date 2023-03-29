@@ -1,23 +1,12 @@
-{{-- 
-</div>
-</div>
-</div> 
-
-</div>
-
-</div>
-</div>
---}}
-
 <div class="sidenav-overlay"></div>
-    <div class="drag-target"></div>
+<div class="drag-target"></div>
 
-    <!-- BEGIN: Footer-->
-    <footer class="footer footer-static footer-light">
-        <p class="col-xs-1 text-center"><span class="d-md-inline-block mt-25">© 2023-<script>document.write(new Date().getFullYear());</script> Mundial Entulhos<span class="d-none d-sm-inline-block">, All Rights Reserved</span></span></p>
-    </footer>
-    <button class="btn btn-dark btn-lg btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
-    <!-- END: Footer-->
+<!-- BEGIN: Footer-->
+<footer class="footer footer-static footer-light">
+    <p class="col-xs-1 text-center"><span class="d-md-inline-block mt-25">© 2023-<script>document.write(new Date().getFullYear());</script> Mundial Entulhos<span class="d-none d-sm-inline-block">, All Rights Reserved</span></span></p>
+</footer>
+<button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
+<!-- END: Footer-->
 
     <!-- BEGIN: Vendor JS-->
     <script src="{{ URL::asset('app-assets/vendors/js/vendors.min.js') }}"></script>
@@ -49,6 +38,19 @@
     <script src="{{ URL::asset('app-assets/vendors/js/forms/cleave/addons/cleave-phone.pt.js') }}"></script>
 
 
+    <!-- BEGIN: Theme JS-->
+    <script src="{{ URL::asset('app-assets/js/core/app-menu.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/js/core/app.js') }}"></script>
+    <!-- END: Theme JS-->
+
+
+    <!-- BEGIN: Page JS-->
+    <script src="{{ URL::asset('app-assets/js/scripts/pages/page-blog-edit.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/js/scripts/pages/app-todo.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/js/scripts/tables/table-datatables-advanced.js') }}"></script>
+    <script src="{{ URL::asset('app-assets/js/scripts/forms/form-input-mask.js') }}"></script>
+    
+
     {{-- <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
     {{-- <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> --}}
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
@@ -57,27 +59,20 @@
     <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
-
-    <!-- END: Page Vendor JS-->
-
-    <!-- BEGIN: Theme JS-->
-    <script src="{{ URL::asset('app-assets/js/core/app-menu.js') }}"></script>
-    <script src="{{ URL::asset('app-assets/js/core/app.js') }}"></script>
-    <!-- END: Theme JS-->
-
-    <!-- BEGIN: Page JS-->
-    <script src="{{ URL::asset('app-assets/js/scripts/pages/page-blog-edit.js') }}"></script>
-    <script src="{{ URL::asset('app-assets/js/scripts/pages/app-todo.js') }}"></script>
-    <script src="{{ URL::asset('app-assets/js/scripts/tables/table-datatables-advanced.js') }}"></script>
-    <script src="{{ URL::asset('app-assets/js/scripts/forms/form-input-mask.js') }}"></script>
-
-
     <!-- END: Page JS-->
 
-    <script>
-        $(window).on('load', function() {
 
-            $('#table_teste_gustavo').DataTable();
+
+<script>
+    $(window).on('load', function() {
+        if (feather) {
+            feather.replace({
+                width: 14,
+                height: 14
+            });
+        }
+
+        $('#table_teste_gustavo').DataTable();
             
             if (feather) {
                 feather.replace({
@@ -104,12 +99,11 @@
             $('.date_format_effective_removal').flatpickr({
                 dateFormat: "d/m/Y",
                 minDate: dataDiaSeguinteFormatada(),
-            });
+            });        
+    });
 
 
-        });
-
-        let dataAtualFormatada = () => {
+    let dataAtualFormatada = () => {
             let data = new Date(),
                 dia  = data.getDate().toString(),
                 diaF = (dia.length == 1) ? '0'+dia : dia,
@@ -135,9 +129,8 @@
             day.padStart('2', '0') : day;
 
             return `${day}/${month}/${year}`;
-        };
-
-    </script>    
+        };    
+</script>
 </body>
 <!-- END: Body-->
 

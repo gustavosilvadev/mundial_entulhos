@@ -1,4 +1,8 @@
-    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+<?php
+// dd(session()->exists('id_user') && session('access_permission') == 2);
+// die();
+?>
+<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
               
         <div class="navbar-header">
         
@@ -41,22 +45,6 @@
                         </ul>
                     </li>
 
-    {{-- 
-                    <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Clientes</span></a>
-
-                        <ul class="menu-content">
-
-                            <li class="nav-item">
-                                <a class="d-flex align-items-center" href="/client">
-
-                                    <span class="menu-title text-truncate" data-i18n="Invoice">Clientes</span>
-                                </a>                            
-                            </li>
-                        </ul>
-                    </li> 
-    --}}
-                    
-                    
                     <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="Invoice">Funcionários</span></a>
 
                         <ul class="menu-content">
@@ -86,18 +74,14 @@
                                     <span class="menu-title text-truncate" data-i18n="Invoice">Novo</span>
                                 </a>
                             </li>
-    {{-- 
-                            <li class="nav-item">
-                                <a class="d-flex align-items-center" href="#">
-
-                                    <span class="menu-title text-truncate" data-i18n="Invoice">Lista de Motoristas</span>
-                                </a>                            
-                            </li>
-    --}}
                         </ul>
                     </li>
 
-                    <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Aterros</span></a>
+                    <li class=" nav-item">
+                        <a class="d-flex align-items-center" href="#">
+                            <i data-feather="file-text"></i>
+                            <span class="menu-title text-truncate" data-i18n="Invoice">Aterros</span>
+                        </a>
 
                         <ul class="menu-content">
                             <li class="nav-item">
@@ -122,18 +106,28 @@
                     </li>
                 <?php } ?>
 
-                <?php if(session()->exists('id_user') && session('access_permission') == 2){ ?>
+                <?php 
+                    if(session()->exists('id_user') && session('access_permission') == 2){ 
+                ?>
                     <li class=" nav-item"><a class="d-flex align-items-center" href="/driver_demand">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
                         <span class="menu-title text-truncate" data-i18n="Todo">Lista de Pedidos</span></a>
                     </li>
-                <?php } ?>
+                <?php
+                    } 
+                 ?>
 
-                <li class=" nav-item"><a class="d-flex align-items-center" href="/new_demand_client">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                    <span class="menu-title text-truncate" data-i18n="Todo">Cadastro Pedido (Cliente)</span></a>
-                </li>
 
+                <?php 
+                if(session()->exists('id_user') == false){ 
+                ?>
+                    <li class=" nav-item"><a class="d-flex align-items-center" href="/new_demand_client">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                        <span class="menu-title text-truncate" data-i18n="Todo">Cadastro Pedido (Cliente)</span></a>
+                    </li>
+                <?php
+                    } 
+                 ?>
 
                 <?php 
                     if(session('id_user') != null

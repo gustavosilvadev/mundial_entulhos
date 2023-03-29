@@ -37,7 +37,10 @@ Route::middleware('usersession')->group(function(){
     Route::get('/driver_demand', [DriverController::class, 'showDemands']);
     
     // resolver problema ao Clicar no botão Inciar Atendimento
-    Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
+    // Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
+    Route::post('/change_status_call_demand', function($id){
+        return 'Passou!';
+    });
     
 
     
@@ -75,12 +78,13 @@ Route::middleware('usersession')->group(function(){
 
 });
 
-//Usuario
+//Usuario/Login
 Route::get('/login', function(){
 
     if(session('id_user') != null
         && session('login') != null
     ){
+
         return redirect('/');
     }
 
@@ -97,12 +101,8 @@ Route::post('login',[UserEmployeeController::class,'conectLogin']);
 Route::get('/logout',[UserEmployeeController::class,'logoutAccount']);
 
 
-// Route::get('/', function () {
-    
-//     return view('main.home');
-// });
-
-Route::get('/', [ClientController::class, 'exibirFormCadastroBasico']);
+Route::get('/', [UserEmployeeController::class,'redirectPagePerfil']);
+// Route::get('/', [ClientController::class, 'exibirFormCadastroBasico']);
 
 // Sessão Cliente (EDITAR)
 Route::get('/new_demand_client', [ClientController::class, 'exibirFormCadastroBasico']);
@@ -119,5 +119,6 @@ Route::get('/dias_municipio', [DumpsterServiceDemandController::class, 'showDays
 // Route::get('/del_client/{id}',[ClientController::class,'destroy']);
 // Route::get('/find_demmand_client',[ClientController::class,'checkDemandOpendClient']);
 
-
-
+Route::get('/teste_layout', function(){
+    return view('user.layout_basico');
+});
