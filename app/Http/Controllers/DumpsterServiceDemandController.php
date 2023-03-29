@@ -100,7 +100,6 @@ class DumpsterServiceDemandController extends Controller
         
         }elseif(isset($request->city) && is_string($request->city)){
   
-            
             $result = CountyDaysDumpster::whereRaw('UPPER(`name_county`) LIKE "%'.strtoupper($request->city.'%"'))->get();
 
             return $result[0]->days;

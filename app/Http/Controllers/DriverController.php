@@ -206,30 +206,33 @@ class DriverController extends Controller
         return array('data' => $calldemand);
     }
 
-    public function updateStatusDemand($id)
+    public function updateStatusDemand(Request $request)
     {
-        dd($id);
         $id_driver_session = session('id_user');
 
-        // if(isset($request->id) && isset($id_driver_session)){
-        //     $call_demand = CallDemand::where('id',$request->id)->first();
+        if(isset($request->id) && isset($id_driver_session)){
+            $call_demand = CallDemand::where('id',$request->id)->first();
             
-        //     if($call_demand){
-                
-        //         $call_demand->id_driver       = $id_driver_session;
-        //         $call_demand->date_end        = date('Y-m-d H:i:s');
-        //         $call_demand->service_status  = 2;
+            if($call_demand){
+                if($call_demand->service_status != 2)
+                {
+                    // $call_demand->id_driver       = $id_driver_session;
+                    // $call_demand->date_end        = date('Y-m-d H:i:s');
+                    $call_demand->service_status  = 2;
+                }else{
 
-                
-        //         if($call_demand->update()){
+                    $call_demand->date_end = date('Y-m-d H:i:s');
+                }
 
-        //             return true;
+                if($call_demand->update()){
+
+                    return true;
                     
-        //         }else{
-        //             return false;
-        //         }
-        //     }
-        // }
+                }else{
+                    return false;
+                }
+            }
+        }
     }
 
     private function returnSuccess($dados)

@@ -37,12 +37,7 @@ Route::middleware('usersession')->group(function(){
     Route::get('/driver_demand', [DriverController::class, 'showDemands']);
     
     // resolver problema ao Clicar no botão Inciar Atendimento
-    // Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
-    Route::post('/change_status_call_demand', function($id){
-        return 'Passou!';
-    });
-    
-
+    Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
     
     Route::post('/atualiza_dias_cacamba_municipio',[DumpsterServiceDemandController::class,'updateDaysDumpsterCounty']);
     

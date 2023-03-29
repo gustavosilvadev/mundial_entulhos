@@ -304,6 +304,13 @@
                                                                         <div class="badge badge-pill badge-light-warning">
                                                                         <div class="badge badge-pill badge-light-warning">ATENDENDO</div>
                                                                         </div>';
+                                                                    }elseif($call_demand->service_status == 2 && !$call_demand->date_end ){
+                
+                                                                        echo '
+                                                                        <div class="badge badge-pill badge-light-success">
+                                                                        <div class="badge badge-pill badge-light-success">RETIRADA: '.$call_demand->date_effective_removal_dumpster.'</div>
+                                                                        </div>';
+
                                                                     }else{
                 
                                                                         echo '
@@ -460,6 +467,7 @@
                                     <ul class="todo-task-list media-list" id="todo-task-list">
 
                                         <?php foreach($call_demands as $call_demand): ?>
+                                        <?php if(empty($call_demand->date_end)): ?>
                                             <input type="hidden" class="id_demand" value="{{ $call_demand->id_demand }}" />
                                             
                                             <li class="todo-item">
@@ -498,20 +506,27 @@
                                                                             <div class="badge badge-pill badge-light-danger">
                                                                             <div class="badge badge-pill badge-light-danger">PENDENTE</div>
                                                                             </div>';
-                                                                            
-                                                                            
+
                                                                         }elseif($call_demand->service_status == 1){
                     
                                                                             echo '
                                                                             <div class="badge badge-pill badge-light-warning">
                                                                             <div class="badge badge-pill badge-light-warning">ATENDENDO</div>
                                                                             </div>';
+                                                                        }elseif($call_demand->service_status == 2 && empty($call_demand->date_end) ){
+                
+                                                                            echo '
+                                                                            <div class="badge badge-pill badge-light-success">
+                                                                            <div class="badge badge-pill badge-light-success">RETIRADA: '.$call_demand->date_effective_removal_dumpster.'</div>
+                                                                            </div>';
+
                                                                         }else{
-                    
+
                                                                             echo '
                                                                             <div class="badge badge-pill badge-light-success">
                                                                             <div class="badge badge-pill badge-light-success">FINALIZADO</div>
                                                                             </div>';
+                                                                            
                                                                         }
                                                                     ?>
 
@@ -523,6 +538,7 @@
                                                     </div>
                                                 </div>
                                             </li>
+                                        <?php endif; ?>
                                         <?php endforeach; ?>
                                         
                                     </ul>
@@ -629,28 +645,25 @@
             let id_demand = this.id_demand.value;
             if(id_demand){
 
-
-
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     method: 'POST',
-                    url: "/change_status_call_demand/" + id_demand,
+                    url: '/change_status_call_demand',
                     data: {
-                        // _token:'{{ csrf_token() }}',
                         id : id_demand
                     },
                     success: function(dataResponse) {
-console.log(dataResponse);
-alert(dataResponse);
-                        // if(dataResponse){
-                        //     location.reload();
-                        // }
+
+                        if(dataResponse){
+                            location.reload();
+                        }
                     },
                     error: function(responseError){
-                        console.log(Object.values(responseError));
                         alert(responseError);
                     }
                 });
+
+
             }
         });
     });
