@@ -74,7 +74,12 @@ Route::middleware('usersession')->group(function(){
 
 });
 
-//Usuario/Login
+
+Route::post('save_call_demand_teste',[CallDemandController::class,'storeTeste']);
+Route::get('call_demand_teste/{id?}',[CallDemandController::class,'showTeste']);
+
+
+// USUÁRIO / LOGIN
 Route::get('/login', function(){
 
     if(session('id_user') != null
@@ -98,7 +103,6 @@ Route::get('/logout',[UserEmployeeController::class,'logoutAccount']);
 
 
 Route::get('/', [UserEmployeeController::class,'redirectPagePerfil']);
-// Route::get('/', [ClientController::class, 'exibirFormCadastroBasico']);
 
 // Sessão Cliente (EDITAR)
 Route::get('/new_demand_client', [ClientController::class, 'exibirFormCadastroBasico']);

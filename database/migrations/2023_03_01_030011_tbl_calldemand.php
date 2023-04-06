@@ -14,32 +14,46 @@ class TblCalldemand extends Migration
     public function up()
     {
         Schema::create('call_demand', function (Blueprint $table) {
-            
+
             $table->id();
-            $table->string('type_service')->comment('COLOCACAO|TROCA|REMOÇÃO');
-            $table->string('name');
+            $table->string('type_service')->comment('COLOCACAO|TROCA');
+            $table->string('period')->nullable(); // PERÍODO DO DIA +++ DIURNO/NOTURNO
+
+            $table->dateTime('date_start')->nullable(); // DATA NO MOMENTO QUE INICIA O SERVIÇO PELO MOTORISTA
+            $table->dateTime('date_allocation_dumpster')->nullable(); // DATA DO PEDIDO SELECIONADO PELO CLIENTE (ALOCAÇÃO/TROCA)
+            $table->dateTime('date_removal_dumpster_forecast')->nullable(); // DATA DE PREVISÃO DE RETIRADA - PARA ADICIONAR A DATA PREVISTA DE ACORDO COM OS DIAS DO MUNICÍPIO
+            $table->dateTime('date_effective_removal_dumpster')->nullable(); // DATA RETIRADA EFETIVA - PARA ADICIONAR DATA QUANDO O MOTORISTA RETIROU A CAÇAMBA
+
+            $table->integer('id_father')->default(0); // ID RELACIONADO AO CHAMADO ANTERIOR - É PREENCHIDO SOMENTE SE O ANTERIOR NÃO ESTIVER FINALIZADO E USUÁRIO RELACIONAR
+            $table->string('name'); // NOME DO CLIENTE
             $table->string('address');
-            $table->string('number')->nullable();
+            $table->string('number');
             $table->string('zipcode');
             $table->string('city');
             $table->string('district');
             $table->string('state', 2);
-            $table->string('comments')->nullable();
+
             $table->string('phone')->nullable();
-            $table->decimal('price_unit', $precision = 8, $scale = 2);
-            $table->integer('dumpster_total')->nullable();
-            $table->integer('dumpster_total_opened')->nullable();
-            $table->integer('dumpster_number')->default(0);
-            $table->integer('id_landfill')->nullable();
-            $table->integer('id_driver');
-            $table->string('period')->nullable(); // Período de retirada, remoção, troca
-            $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - Em andamento | 2 - Finalizado');
-            $table->dateTime('date_end')->nullable(); // Data de finalização do pedido
-            $table->dateTime('date_allocation_dumpster')->nullable(); // Data de alocação da caçamba
-            $table->dateTime('date_removal_dumpster')->nullable(); // Data de retirada da caçamba == Data da Previsão de Retirada
+            $table->decimal('price_unit', $precision = 8, $scale = 2)->nullable();
+            $table->string('comments')->nullable();
+            $table->integer('dumpster_quantity')->nullable(); // QUANTIDADE DE CAÇAMBAS
+            $table->integer('dumpster_number')->default(0); // NÚMERO DA CAÇAMBA
+            $table->integer('days_allocation')->default(0); // QUANTIDADE DE DIAS
+            
+            $table->integer('id_landfill')->nullable(); // ID DO ATERRO ++++ PARA NÃO SER OBRIGATÓRIO, O ADM E MOTORISTA DEVEM PREENCHER ESTE CAMPO || O MOTORISTA DEVE OBRIGATORIAMENTE SELECIONAR O ATERRO NO ATO DA RETIRADA 
+
+            $table->integer('id_driver')->nullable(); // MOTORISTA
+            $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - OK');
+
+            // CRIAR TABELA DE PAGAMENTO FUTURAMENTE 
+            // $table->integer('id_payment')->nullable(); // PAGAMENTO(PAYMENT)
+            // $table->integer('id_dumpster')->nullable(); // CAÇAMBA(Dumspter)
+            // $table->integer('dumpster_total')->nullable();
+            // $table->integer('dumpster_total_opened')->nullable();
             // $table->dateTime('date_change_dumpster')->nullable(); // Data de troca da caçamba
-            $table->dateTime('date_effective_removal_dumpster')->nullable(); // Data de retirada efetiva da caçamba
+
             $table->timestamps(); // create_at - Data do Pedido
+
 
         });
     }

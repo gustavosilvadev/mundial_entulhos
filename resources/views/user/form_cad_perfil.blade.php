@@ -1,5 +1,7 @@
 
-@include('partials.header')
+{{-- @include('partials.header') --}}
+@include('partials.header_teste')
+
 
 <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -18,13 +20,17 @@
                                     <!-- users edit media object start -->
                                     <!-- users edit media object ends -->
                                     <!-- users edit account form start -->
-                                    <form action="/perfil-save" method= "POST" id="form" class="form-validate">
+                                    <form action="/perfil-save" method= "POST" id="form" class="form-validate" autocomplete="off">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="username">Nome</label>
-                                                    <input type="text" class="form-control"  name="name" id="username" autocomplete="off"/>
+                                                    {{-- <input type="text" class="form-control"  name="name" id="username" autocomplete="off"/> --}}
+
+                                                    <input type="text" name="name" id="username_fake" class="hidden" autocomplete="off" style="display: none;" />
+                                                    <input type="text" name="name" id="username" class="form-control" autocomplete="off" />
+
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -298,11 +304,14 @@
     </div>
 
 
-@include('partials.footer')
+{{-- @include('partials.footer') --}}
+@include('partials.footer_teste')
 
 <script>
 
     $(document).ready(function(){
+        $('#form')[0].reset();
+
         $("#form").validate({
             rules: {
                 email: {

@@ -228,11 +228,19 @@ public function saveDataDemandClient(Request $request)
     && isset($request->period)
     && isset($request->date_allocation_dumpster)
     && isset($request->date_removal_dumpster)
-    && isset($request->dumpster_total)
+    && isset($request->dumpster_quantity)
+    && isset($request->total_days)
     ){
+
+        $verificaPedidoRelacionado = CallDemand::where('zipcode', '=', $request->zipcode)
+            ->where('address', '=', $request->address)
+            ->where('number', '=', $request->number)
+            ->where('id_father', '=', 0)
+            ->whereNull('date_effective_removal_dumpster')->first();
 
         $calldemand = new CallDemand();
         $calldemand->name          = $request->client_name_new;
+        $calldemand->id_father     = isset($verificaPedidoRelacionado) ? $verificaPedidoRelacionado->id : 0;
         $calldemand->type_service  = $request->type_service;
         $calldemand->address       = $request->address;
         $calldemand->number        = $request->number;
@@ -245,11 +253,12 @@ public function saveDataDemandClient(Request $request)
         $calldemand->price_unit    = 0.00;
         $calldemand->id_driver     = 0;
         $calldemand->period        = $request->period;
-        $calldemand->dumpster_total = $request->dumpster_total;
+        $calldemand->dumpster_quantity = $request->dumpster_quantity;
         $calldemand->dumpster_number = 0;
+        $calldemand->days_allocation = $request->total_days;
         
-        $calldemand->date_allocation_dumpster  = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
-        $calldemand->date_removal_dumpster   = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
+        $calldemand->date_allocation_dumpster           = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
+        $calldemand->date_removal_dumpster_forecast     = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
 
         if($calldemand->save()){
 

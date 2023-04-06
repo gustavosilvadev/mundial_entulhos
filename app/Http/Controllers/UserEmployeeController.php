@@ -102,7 +102,8 @@ class UserEmployeeController extends Controller
             if(session('access_permission') == 1)
             {
 
-                return redirect('/createcalldemand');
+                // return redirect('/createcalldemand');
+                return redirect('/call_demand');
     
             }elseif(session('access_permission') == 2)
             {
@@ -144,7 +145,9 @@ class UserEmployeeController extends Controller
                    
 
                 if($employee){
+
                     // return $this->returnError('Você já possui um cadastro');    
+                    die("Você já possui um cadastro");
                     return "Você já possui um cadastro";
                 
                 }else{
