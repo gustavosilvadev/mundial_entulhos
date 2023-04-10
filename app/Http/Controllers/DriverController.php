@@ -151,31 +151,34 @@ class DriverController extends Controller
     // public function exibirDemandasAtivas()
     public function showDemands()
     {
-        $id_driver_session = session('id_user');
-        $call_demands = $this->showDemandsClient($id_driver_session);
+        $id_driver_session  = session('id_user');
+        $call_demands       = $this->showDemandsClient($id_driver_session);
 
-        if($call_demands['data']->isEmpty() != true){
-            return view('driver.list_demand_driver',['call_demands'=> $call_demands['data']]);
-        }
 
-            return view('driver.list_demand_driver',['call_demands' => '']);
+
+
+        return view('driver.list_demand_driver',['call_demands'=> $call_demands]);
+
     }
 
     public function showDemandsClient($id_employee)
     {
-        $calldemand = DB::table('call_demand')
-        // ->join('client', 'client.id', '=','call_demand.id_client')
-        ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
-        ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
-        ->join('employee', 'employee.id', '=', 'driver.id_employee')
+
+
+        $get_id_driver = Driver::select()->where("id_employee", $id_employee)->first();
+
+        $calldemands = DB::table('call_demand')
         ->select(
             'call_demand.id as id_demand',
-            DB::raw("CONCAT(call_demand.name) as name_client"),
             'call_demand.type_service  as type_service',
-            DB::raw('DATE_FORMAT(call_demand.date_end, "%d/%m/%Y") as date_end'),
+            'call_demand.period',
+            'call_demand.name as name',
+            DB::raw('DATE_FORMAT(call_demand.date_start, "%d/%m/%Y") as date_start'),
             DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
-            DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster, "%d/%m/%Y") as date_removal_dumpster'),
-            DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),                    
+            DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster_forecast, "%d/%m/%Y") as date_removal_dumpster_forecast'),
+            DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
+            // DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_end'),
+            DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
             'call_demand.address as address_service',
             'call_demand.number as number_address_service',
             'call_demand.zipcode as zipcode_address_service',
@@ -184,26 +187,46 @@ class DriverController extends Controller
             'call_demand.state as state_address_service',
             'call_demand.comments as comments_demand',
             'call_demand.phone as phone_demand',
-            DB::raw('CONCAT("R$","",format(call_demand.price_unit,2,"Pt_BR"))  as price_unit'),
-            'call_demand.dumpster_total',
-            'call_demand.dumpster_total_opened',
+            'call_demand.price_unit',
+            'call_demand.dumpster_quantity',
             'call_demand.dumpster_number',
-            DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
-            'landfill.name as landfill_name',
-            'call_demand.period',
-            DB::raw("CONCAT(employee.name, ' ', employee.surname) as driver_name"),
-            DB::raw('call_demand.service_status as service_status'),
-            DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
-        )->where('employee.id', $id_employee)->get();
-        // )->where('employee.id', 3)->get();
+            'call_demand.id_landfill',
+            'call_demand.id_driver',
+            'call_demand.service_status',
+            DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
+            DB::raw('"" as name_landfill'),
+            DB::raw('"" as name_driver')
 
-        // if(isset($calldemand)){
+        )->where('call_demand.id_driver', $get_id_driver['id'])->get();
 
-        //     $tagNameIndex = array('data' => $calldemand);
-        //     return $tagNameIndex;
-        // }
 
-        return array('data' => $calldemand);
+        foreach($calldemands as $call_demand){
+
+            if($call_demand->id_driver){
+
+                $findDriver = DB::table('driver')
+                ->join('employee', 'employee.id', '=', 'driver.id_employee')
+                ->where('driver.id', '=', $call_demand->id_driver)
+                ->get('employee.name as name_driver');
+                if(isset($findDriver))
+                    $call_demand->name_driver =  $findDriver[0]->name_driver;
+            }
+
+
+            if($call_demand->id_landfill){
+
+                $findLandfill = DB::table('landfill')
+                ->where('landfill.id', '=', $call_demand->id_landfill)
+                ->get('landfill.name as name_landfill');
+                if(isset($findLandfill))
+                    $call_demand->name_landfill =  $findLandfill[0]->name_landfill;
+            }                
+        }
+
+
+        return $calldemands;
+
+
     }
 
     public function updateStatusDemand(Request $request)

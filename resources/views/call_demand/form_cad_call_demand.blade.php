@@ -11,6 +11,28 @@
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
+<style>
+    .input-icon {
+        position: relative;
+    }
+
+    .input-icon > i {
+    position: absolute;
+    display: block;
+    transform: translate(0, -50%);
+    top: 68%;
+    pointer-events: none;
+    width: 25px;
+    text-align: center;
+        font-style: normal;
+    }
+
+    .input-icon > input {
+    padding-left: 25px;
+        padding-right: 0;
+    }
+</style>
+
  <div class="app-content content ">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
@@ -41,9 +63,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                {{-- <div class="card-header">
-                                    <h3 class="brand-logo display-5" href="/" data-toggle="tooltip" data-placement="top"><ins style="text-color:black">CADASTRO</ins> <mark class="bg-dark text-white">DEMANDA!</mark></h3>
-                                </div> --}}
+
 
                                 <div class="card-body">
                             
@@ -61,7 +81,12 @@
                         
                                                                     <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                         
-                                                                        <div class="media mb-2"></div>
+                                                                        <div class="media mb-2">
+                                                                            <?php if($errors->any()){ ?>
+                                                                                <h4 class="text-danger">{{$errors->first()}}</h4>
+                                                                            <?php } ?>
+
+                                                                        </div>
 
                                                                         <div class="row">
                                                                             <div class="col-md-12">
@@ -151,25 +176,24 @@
                                                                             <div class="col-md-4">
                                                                                 <div class="form-group">
                                                                                     <label for="phone">Telefone</label>
-                                                                                    
                                                                                     <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" />
                                                                                 </div>
                                                                             </div>
-
-
-                                                                            <div class="col-md-2">
+                                                                        </div>
+                                                                        
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
                                                                                 <div class="form-group">
                                                                                     <label for="dumpster_quantity">QUANTIDADE DE CAÇAMBAS</label>
-                                                                                    <input type="number" name="dumpster_quantity" class="form-control"  id="dumpster_quantity" value="0" min="0" max="1000" placeholder="0" />
+                                                                                    <input type="number" name="dumpster_quantity" class="form-control"  id="dumpster_quantity" min="0" max="1000" placeholder="" />
                                                                                 </div>
                                                                             </div>                                                                            
                                     
-                                                                            <div class="col-md-2">
-                                                                                <div class="form-group">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group input-icon">
                                                                                     <label for="price_unit">Preço UNIDADE.</label>
-                                                                                    <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="0" />
-                                                                                    
-                        
+                                                                                    <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" />
+                                                                                    <i>R$</i>
                                                                                 </div>
                                                                             </div>
                                     
@@ -187,18 +211,20 @@
                                                                                 </div>
                                                                             </div>
                         
+                                                                        </div>
+                                                                        
+                                                                        <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <div class="form-group mb-2">
                                                                                     <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
                                                                                     <textarea class="form-control" rows="2" id="note" name="comments"></textarea>
                                                                                 </div>
                                                                             </div>
-                        
                                                                         </div>
-                        
+
                                                                         <div class="row">
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="period">PERÍODO DO DIA</label>
                                                                                     <select class="select2 form-control form-control-lg" id="period" name="period">
@@ -208,7 +234,7 @@
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
                                                                                     <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);"/>
@@ -216,22 +242,19 @@
                                                                                 </div>    
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
-                                                                                    <span class="title" for="date_removal_dumpster">DATA RETIRADA:</span>
+                                                                                    <span class="title" for="date_removal_dumpster">DATA PREV RETIRADA:</span>
                                                                                     <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4"/>
                                                                                 </div>    
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <span class="title">TOTAL DE DIAS</span>
-                                                                                    <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" />
+                                                                                    <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0"/>
                                                                                 </div>    
                                                                             </div> 
-                                                                            
-                                                                            
-
                                                                         </div>
                                                                     </div>
                                                                     
@@ -302,13 +325,14 @@
 
         // ZipCode
         $("#zipcode").change(function(){
-            let zipcode = $(this).val().trim().replace("-", "");
-            
+
+            let zipcode  = $(this).val().trim().replace("-", "");
             let settings = {
             "url": "https://viacep.com.br/ws/" + zipcode.trim() + "/json/",
             "method": "GET",
             "timeout": 0,
             };
+
 
             $.ajax(settings).done(function (dataResponse) {
 
@@ -400,6 +424,9 @@
                 date_begin: {
                     required: true
                 },
+                date_allocation_dumpster: {
+                    required: true
+                },
                 date_removal_dumpster: {
                     required: true
                 },
@@ -459,6 +486,7 @@
             messages:{
                 type_service: "Campo <b>Serviço</b> deve ser preenchido!",
                 date_begin: "Campo <b>Data Pedido</b> deve ser preenchido!",
+                date_allocation_dumpster: "Campo <b>Data de Alocação</b> deve ser preenchido!",
                 date_removal_dumpster: "Campo <b>Previsao de Retirada</b> deve ser preenchido!",
                 // date_effective_removal_dumpster: "Campo <b>Previsão de Retirada Efetiva</b> deve ser preenchido!",
                 id_client: "Campo <b>Cliente</b> deve ser preenchido!",
@@ -498,24 +526,30 @@
     validaData = (dataAlocacao) => {
         let city = $('#city').val();
 
-        if(dataAlocacao.value.length > 0 && city.length > 0){
-            $.ajax({
-                    method: 'GET',
-                    url: '/dias_municipio',
-                    data: {city : city},
-                    success: function(dataResponse) {
+        if(city.length > 0){
 
-                        $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
-                        // $("input[name='date_effective_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
-                        // $("input[name='total_days']").val(quantidadeDias());
-                        $("input[name='total_days']").val('');
-                        
+            if(dataAlocacao.value.length > 0){
+                $.ajax({
+                        method: 'GET',
+                        url: '/dias_municipio',
+                        data: {city : city},
+                        success: function(dataResponse) {
 
-                    },
-                    error: function(responseError){
-                        alert(responseError);
-                    }
-            });
+                            $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
+                            // $("input[name='date_effective_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
+                            // $("input[name='total_days']").val(quantidadeDias());
+                            $("input[name='total_days']").val(dataResponse);
+                            
+                        },
+                        error: function(responseError){
+                            alert(responseError);
+                        }
+                });
+            }
+            
+        }else {
+
+            $("#form").submit();
         }
     }
 

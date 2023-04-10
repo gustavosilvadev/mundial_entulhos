@@ -35,9 +35,17 @@ $(function () {
   // Phone Number
   if (phoneMask.length) {
     new Cleave(phoneMask, {
-      delimiter: '-',
-      blocks: [7, 4],
-      uppercase: true      
+      // phone: true,
+      // phoneRegionCode: 'BR',
+      // delimiters: ['(', ') ', '-']
+
+      // delimiter: '-',
+      // blocks: [7, 4],
+      // uppercase: true
+
+      // phoneRegionCode: 'BR',
+      delimiters: ['(',') ', '-'],
+      blocks: [0,2, 5, 4]
     });
   }
 
@@ -45,8 +53,8 @@ $(function () {
   if (dateMask.length) {
     new Cleave(dateMask, {
       date: true,
-      delimiter: '-',
-      datePattern: ['Y', 'm', 'd']
+      delimiter: '/',
+      datePattern: ['d', 'm', 'Y']
     });
   }
 
@@ -115,7 +123,7 @@ $(function () {
       numeralDecimalMark: ',',
       delimiter: '.',      
       blocks: [0, 2],
-      prefix: 'R$',
+      // prefix: 'R$',
       rawValueTrimPrefix: true
     });
   }

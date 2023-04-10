@@ -209,7 +209,7 @@ if(session('id_user') != null && session('login') != null){ ?>
                                                                                 <div class="form-group">
                                                                                     <span class="title">TOTAL DE DIAS</span>
                                                                                     <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" disabled/>
-                                                                                    <input type="hidden" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" />
+                                                                                    {{-- <input type="hidden" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" /> --}}
                                                                                     
                                                                                 </div>    
                                                                             </div> 

@@ -1,5 +1,8 @@
 <?php
 
+// dd($calldemand);
+// dd($driver_name_demands);
+// dd($landfill_name_demands);
 ?>
 {{-- @include('partials.header')
 @include('partials.nav') --}}
@@ -39,7 +42,8 @@
     
                                                 <div class="card-body">
                                             
-                                                    <form action="/save_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
+                                                    {{-- <form action="/save_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off"> --}}
+                                                    <form action="/change_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
                                                         @csrf
                                                         <div class="row invoice-add">
                                         
@@ -52,8 +56,8 @@
                                                                                 <div class="tab-content">
     
                                                                                     <?php
-                                                                                    if(!empty($datanodriver)):
-                                                                                        foreach ($datanodriver as $key => $value):
+                                                                                    if(!empty($calldemand)):
+                                                                                        foreach ($calldemand as $key => $value):
                                                                                     ?>
                                                                                         <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                                             
@@ -127,7 +131,7 @@
                                                                                                     </div>
                                                                                                 </div>
                                                         
-                                                                                                <div class="col-md-2">
+                                                                                                <div class="col-md-3">
                                                                                                     <div class="form-group">
                                                                                                         <label for="price_unit">Preço UNIT.</label>
                                                                                                         <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="{{ $value->price_unit }}"/>
@@ -136,21 +140,21 @@
                                                                                                     </div>
                                                                                                 </div>
                                                         
-                                                                                                <div class="col-md-2">
+                                                                                                <div class="col-md-3">
                                                                                                     <div class="form-group">
                                                                                                         <label for="dumpster_total">QUANTIDADE DE CAÇAMBAS</label>
                                                                                                         <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_quantity }}"/>
                                                                                                     </div>
                                                                                                 </div>
     
-                                                                                                <div class="col-md-2">
+                                                                                                <div class="col-md-3">
                                                                                                     <div class="form-group">
                                                                                                         <label for="dumpster_total_opened">NÚMERO CAÇAMBA</label>
                                                                                                         <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_number }}"/>
                                                                                                     </div>
                                                                                                 </div>
                                             
-                                                                                                <div class="col-md-4">
+                                                                                                <div class="col-md-3">
                                                                                                     <div class="form-group">
                                                                                                         <label for="landfill">ATERRO</label>
                                                                                                         <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill">
@@ -158,7 +162,11 @@
                                                                                                             <option value="">----</option>
                                                                                                             <?php if(isset($landfills)):?>
                                                                                                                 <?php foreach($landfills as $landfill):?>
-                                                                                                                    <option value="<?php echo $landfill->id; ?>" id="<?php echo $landfill->id; ?>"><?php echo $landfill->name; ?></option>
+                                                                                                                    <?php if($landfill->id == $value->id_landfill): ?>
+                                                                                                                        <option value="<?php echo $landfill->id; ?>" selected><?php echo $landfill->name; ?></option>
+                                                                                                                    <?php else: ?>
+                                                                                                                        <option value="<?php echo $landfill->id; ?>"><?php echo $landfill->name; ?></option>
+                                                                                                                    <?php endif; ?>                                                                                                                    
                                                                                                                 <?php endforeach; ?>
                                                                                                             <?php endif; ?>                                                                
                                                                                                         
@@ -170,12 +178,17 @@
                                                                                                 <div class="col-md-4">
                                                                                                     <div class="form-group">
                                                                                                         <label for="driver">MOTORISTA</label>
-                                                                                                        <input type="hidden" id="id_driver_saved" value="{{ (isset($value->id_driver) ? $value->id_driver : 0) }}"/>
+                                                                                                        {{-- <input type="hidden" id="id_driver_saved" value="{{ (isset($value->id_driver) ? $value->id_driver : 0) }}"/> --}}
                                                                                                         <select class="select2 form-control form-control-lg" id="driver" name="id_driver">
                                                                                                             <option value="">----</option>
                                                                                                             <?php if(isset($drivers)):?>
                                                                                                                 <?php foreach($drivers as $driver):?>
-                                                                                                                    <option value="<?php echo $driver->id; ?>"><?php echo $driver->name.' '.$driver->surname; ?></option>
+
+                                                                                                                    <?php if($driver->id == $value->id_driver): ?>
+                                                                                                                        <option value="<?php echo $driver->id; ?>" selected><?php echo $driver->name; ?></option>
+                                                                                                                    <?php else: ?>
+                                                                                                                        <option value="<?php echo $driver->id; ?>"><?php echo $driver->name; ?></option>
+                                                                                                                    <?php endif; ?>
                                                                                                                 <?php endforeach; ?>
                                                                                                             <?php endif; ?>
                                                                                                         </select>
@@ -197,10 +210,18 @@
                                                                                                     <div class="form-group">
                                                                                                         <label for="type_service">Tipo de Serviço</label>
                                                                                                         <select class="select2 form-control form-control-lg" id="type_service" name="type_service">
-                                                                                                            <option value="" selected>----</option>
+                                                                                                            <option value="">----</option>
+                                                                                                            <?php if($value->type_service == 'COLOCACAO'): ?>
+                                                                                                                <option value="COLOCACAO" selected>COLOCAÇÃO</option>
+                                                                                                                <option value="TROCA">TROCA</option>
+                                                                                                            <?php elseif($value->type_service == 'TROCA'): ?>
                                                                                                             <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                                                            <option value="TROCA">TROCA</option>
-                                                                                                            <option value="RETIRADA">RETIRADA</option>
+                                                                                                            <option value="TROCA" selected>TROCA</option>
+                                                                                                            <?php else: ?>
+                                                                                                                <option value="COLOCACAO">COLOCAÇÃO</option>
+                                                                                                                <option value="TROCA">TROCA</option>
+                                                                                                            <?php endif; ?>
+                                                                                                            
                                                                                                         </select>            
                                                                                                     </div>
                                                                                                 </div>                                                    
@@ -210,42 +231,51 @@
                                                                                                         <label for="period">PERÍODO DO DIA</label>
                                                                                                         <select class="select2 form-control form-control-lg" id="period" name="period">
                                                                                                             <option value="">----</option>
-                                                                                                            <option value="DIURNO">DIURNO</option>
-                                                                                                            <option value="NOTURNO">NOTURNO</option>
-                                                                                                        </select>
+                                                                                                            <?php if($value->period == 'DIURNO'): ?>
+                                                                                                                <option value="DIURNO" selected>DIURNO</option>
+                                                                                                                <option value="NOTURNO">NOTURNO</option>
+                                                                                                            <?php elseif($value->period == 'NOTURNO'): ?>
+                                                                                                                <option value="DIURNO">DIURNO</option>
+                                                                                                                <option value="NOTURNO" selected>NOTURNO</option>
+                                                                                                            <?php else: ?>
+                                                                                                                <option value="DIURNO">DIURNO</option>
+                                                                                                                <option value="NOTURNO">NOTURNO</option>
+                                                                                                            <?php endif; ?>
+                                                                                                            
+                                                                                                        </select>   
+
                                                                                                     </div>
                                                                                                 </div>
+
                                                                                                 <div class="col-md-2">
                                                                                                     <div class="form-group">
-                                                                                                        <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
-                                                                                                        
-                                                                                                        <input type="text"   class="form-control dt-date " id="date_format" data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/>
-                                                                                                        {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/> --}}
+
+                                                                                                        <label for="period">DATA ALOCAÇÃO</label>
+                                                                                                        <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/>
                                                                                                     </div>    
                                                                                                 </div>
     
                                                                                                 <div class="col-md-2">
                                                                                                     <div class="form-group">
-                                                                                                        <span class="title" for="date_removal_dumpster">DATA RETIRADA:</span>
-                                                                                                        {{-- <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4" value="{{ $value->date_removal_dumpster }}"/> --}}
+                                                                                                        <label for="period">PREVISÃO RETIRADA</label>
+                                                                                                        {{-- <input type="text" name="date_removal_dumpster_forecast" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4" value="{{ $value->date_removal_dumpster_forecast }}"/> --}}
+                                                                                                        <input type="text" name="date_removal_dumpster_forecast" id="date_format" class="form-control dt-date date-mask" data-column="5"  data-column-index="4"  value="{{ $value->date_removal_dumpster_forecast }}"/>
                                                                                                     </div>    
                                                                                                 </div>
     
                                                                                                 <div class="col-md-2">
                                                                                                     <div class="form-group">
-                                                                                                        <span class="title" for="date_effective_removal_dumpster">RETIRADA EFETIVA:</span>
-                                                                                                        {{-- <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}"/> --}}
+                                                                                                        <label for="period">RETIRADA EFETIVA</label>
+                                                                                                        <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" disabled />
                                                                                                     </div>    
                                                                                                 </div> 
 
                                                                                                 <div class="col-md-2">
                                                                                                     <div class="form-group">
-                                                                                                        <span class="title">TOTAL DE DIAS</span>
-                                                                                                        {{-- <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" /> --}}
+                                                                                                        <label for="period">TOTAL DE DIAS</label>
+                                                                                                        <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" />
                                                                                                     </div>    
                                                                                                 </div> 
-                                                                                                
-                                                                                                
     
                                                                                             </div>
                                                                                         </div>
@@ -254,220 +284,6 @@
                                                                                     endif;
                                                                                     ?>                                                                                
     
-    
-                                                                                    <?php
-                                                                                    if(!empty($datawithdriver)):
-                                                                                        foreach ($datawithdriver as $key => $value):
-                                                                                    ?>
-                                                                                        <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                                            
-                                                                                            <div class="media mb-2"></div>
-    
-                                                                                            <div class="row">
-    
-                                                                                                <div class="col-md-12">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="id_client">CLIENTE NOVO</label>
-                                                                                                        <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}"/>
-                                                        
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        
-                                                                                            <hr />
-                                                                                            
-                                                                                            <div class="row">
-                                                                                            
-                                                                                                <div class="col-md-4">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="zipcode">CEP</label>
-                                                                                                            <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" value="{{ $value->zipcode_address_service }}"/>
-                                                                                                    </div>
-                                                                                                </div>                                                                                        
-                                                        
-                                                                                                <div class="col-md-4">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="address">Endereço</label>
-                                                                                                        <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" value="{{ $value->address_service }}"/>
-                                                                                                    </div>
-                                                                                                </div>
-                                                        
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="number">Número</label>
-                                                                                                        <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6" value="{{ $value->number_address_service }}"/>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                
-                                                                                                <div class="col-md-4">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="district">Bairro</label>
-                                                                                                        <input type="text" class="form-control only-text" name="district" id="district" minlength="2" maxlength="44" value="{{ $value->district_address_service }}"/>
-                                                        
-                                                                                                    </div>
-                                                                                                </div>
-    
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="city">Cidade</label>
-                                                                                                        <input type="text" class="form-control only-text" name="city" id="city" minlength="2" maxlength="50" value="{{ $value->city_address_service }}"/>
-                                                        
-                                                                                                    </div>
-                                                                                                </div>
-                                                        
-                                                                                                <div class="col-md-1">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="state">Estado</label>
-                                                                                                        <input type="text" class="form-control only-text" name="state" id="state" maxlength="2" onkeydown="return /[a-z]/i.test(event.key)" value="{{ $value->state_address_service }}"/>
-                                                        
-                                                                                                    </div>
-                                                                                                </div>
-                                                        
-                                                                                                <div class="col-md-4">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="phone">Telefone</label>
-                                                                                                        
-                                                                                                        <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" value="{{ $value->phone_demand }}"/>
-                                                                                                    </div>
-                                                                                                </div>
-                                                        
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="price_unit">Preço UNIT.</label>
-                                                                                                        <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="{{ $value->price_unit }}"/>
-                                                                                                        
-                                            
-                                                                                                    </div>
-                                                                                                </div>
-                                                        
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="dumpster_total">QUANTIDADE DE CAÇAMBAS</label>
-                                                                                                        <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_quantity }}"/>
-                                                                                                    </div>
-                                                                                                </div>
-    
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="dumpster_total_opened">NÚMERO CAÇAMBA</label>
-                                                                                                        <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_number }}"/>
-                                                                                                    </div>
-                                                                                                </div>
-                                            
-                                                                                                <div class="col-md-4">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="landfill">ATERRO</label>
-                                                                                                        <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill">
-                                                                                                        
-                                                                                                            <option value="">----</option>
-                                                                                                            <?php if(isset($landfills)):?>
-                                                                                                                <?php foreach($landfills as $landfill):?>
-                                                                                                                    <option value="<?php echo $landfill->id; ?>" id="<?php echo $landfill->id; ?>"><?php echo $landfill->name; ?></option>
-                                                                                                                <?php endforeach; ?>
-                                                                                                            <?php endif; ?>                                                                
-                                                                                                        
-                                                                                                        </select>
-                                                        
-                                                                                                    </div>
-                                                                                                </div>                                                    
-                                            
-                                                                                                <div class="col-md-4">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="driver">MOTORISTA:::</label>
-                                                                                                        {{-- <input type="hidden" id="id_driver_saved" value="{{ (isset($value->id_driver) ? $value->id_driver : 0) }}"/> --}}
-                                                                                                        <select class="select2 form-control form-control-lg driver_num_id" id="driver" name="id_driver">
-                                                                                                            <option value="">----</option>
-                                                                                                            <?php if(isset($drivers)): ?>
-                                                                                                                <?php foreach($drivers as $driver): ?>
-                                                                                                                    <?php if(isset($value->id_driver) && $value->id_driver == $driver->id): ?>
-                                                                                                                    
-                                                                                                                        <option value="<?php echo $driver->id; ?>" selected><?php echo $driver->name.' '.$driver->surname; ?></option>
-                                                                                                                    <?php else:?>
-                                                                                                                        <option value="<?php echo $driver->id; ?>"><?php echo $driver->name.' '.$driver->surname; ?></option>
-                                                                                                                    <?php endif;?>
-                                                                                                                <?php endforeach; ?>
-                                                                                                            <?php endif; ?>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                </div>
-                                            
-                                            
-                                                                                                <div class="col-md-12">
-                                                                                                    <div class="form-group mb-2">
-                                                                                                        <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
-                                                                                                        <textarea class="form-control" rows="2" id="note" name="comments" >{{ $value->comments_demand }}</textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                            
-                                                                                            </div>
-                                            
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="type_service">Tipo de Serviço</label>
-                                                                                                        <select class="select2 form-control form-control-lg" id="type_service" name="type_service">
-                                                                                                            <option value="" selected>----</option>
-                                                                                                            <?php if(isset($value->comments_demand)): ?>
-                                                                                                                <option value="COLOCACAO" <?php echo ($value->comments_demand == "COLOCAÇÃO") ? 'selected' : '' ?>>COLOCAÇÃO</option>
-                                                                                                                <option value="TROCA" <?php echo ($value->comments_demand == "TROCA") ? 'selected' : '' ?>>TROCA</option>
-                                                                                                            <?php else: ?>
-                                                                                                                <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                                                                <option value="TROCA">TROCA</option>
-                                                                                                            <?php endif; ?>
-
-                                                                                                            {{-- <option value="RETIRADA">RETIRADA</option> --}}
-                                                                                                        </select>            
-                                                                                                    </div>
-                                                                                                </div>                                                    
-    
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="period">PERÍODO DO DIA</label>
-                                                                                                        <select class="select2 form-control form-control-lg" id="period" name="period">
-                                                                                                            <option value="">----</option>
-                                                                                                            <option value="DIURNO">DIURNO</option>
-                                                                                                            <option value="NOTURNO">NOTURNO</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
-                                                                                                        
-                                                                                                        <input type="text"   class="form-control dt-date " id="date_format" data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/>
-                                                                                                        {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/> --}}
-                                                                                                    </div>    
-                                                                                                </div>
-    
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <span class="title" for="date_removal_dumpster">DATA RETIRADA:</span>
-                                                                                                        {{-- <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4" value="{{ $value->date_removal_dumpster }}"/> --}}
-                                                                                                    </div>    
-                                                                                                </div>
-    
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <span class="title" for="date_effective_removal_dumpster">RETIRADA EFETIVA:</span>
-                                                                                                        {{-- <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}"/> --}}
-                                                                                                    </div>    
-                                                                                                </div> 
-
-                                                                                                <div class="col-md-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <span class="title">TOTAL DE DIAS</span>
-                                                                                                        {{-- <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" /> --}}
-                                                                                                    </div>    
-                                                                                                </div> 
-                                                                                                
-                                                                                                
-    
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    <?php 
-                                                                                        endforeach;
-                                                                                    endif;
-                                                                                    ?>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -486,91 +302,6 @@
                                                         </div>
                                                     </form>
     
-                                                    {{-- LISTA DE HISTÓRICO --}}
-                                                    <div class="card-datatable">
-                                                        <?php if(!empty($show_data_hist)): ?>
-                                                            <table id="tbpedido" class="display nowrap" style="width:100%">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>ID PED</th>
-                                                                        <th>COLOCACAO/TROCA</th>
-                                                                        <th>PERIODO DO DIA</th>
-                                                                        <th>CLIENTE</th>
-                                                                        <th>DATA ABERTURA</th>  
-                                                                        <th>DATA OPERACAO</th>
-                                                                        <th>DATA ALOCAÇÃO</th>
-                                                                        <th>DATA PREV RETIRADA</th>
-                                                                        <th>ENDEREÇO</th>
-                                                                        <th>TELEFONE</th>
-                                                                        <th>PREÇO</th>
-                                                                        <th>COMENTÁRIOS</th>
-                                                                        <th>QUANTIDADE CACAMBAS</th>
-                                                                        <th>NÚMERO CAÇAMBA</th>
-                                                                        <th>DATA RETIRADA EFETIVA</th> 
-                                                                        <th>STATUS</th> 
-                                                                        <th>ATERRO</th>
-                                                                        <th>MOTORISTA</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-
-                                                                        <?php foreach($show_data_hist as $data_hist):?>        
-                                                                    <tr>
-                                                                        <td><a href="/editcalldemand/{{$data_hist->id_demand}}">{{ $data_hist->id_demand }}</a></td>
-                                                                        <td><?php echo $data_hist->type_service; ?></td>
-                                                                        <td><?php echo $data_hist->period; ?></td>
-                                                                        <td><?php echo $data_hist->name; ?></td>
-                                                                        <td><?php echo $data_hist->created_at; ?></td>
-                                                                        <td><?php echo $data_hist->date_start; ?></td>
-                                                                        <td><?php echo $data_hist->date_allocation_dumpster; ?></td>
-                                                                        <td><?php echo $data_hist->date_removal_dumpster_forecast; ?></td>
-                                                                        
-                                                                        <td>
-                                                                            <?php echo $data_hist->address_service.' '.
-                                                                        $data_hist->number_address_service.' '.
-                                                                        $data_hist->district_address_service.' '.
-                                                                        $data_hist->city_address_service.' '.
-                                                                        $data_hist->state_address_service.' '; ?>
-                                                                        </td>
-                                                                        <td><?php echo $data_hist->phone_demand; ?></td>
-                                                                        <td><?php echo $data_hist->price_unit; ?></td>
-                                                                        <td><?php echo $data_hist->comments_demand; ?></td>
-                                                                        <td><?php echo $data_hist->dumpster_quantity; ?></td>
-                                                                        <td><?php echo $data_hist->dumpster_number; ?></td>
-                                                                        <td><?php echo $data_hist->date_end; ?></td>
-                                                                        <td><?php echo $data_hist->service_status; ?></td>
-                                                                        <td> </td>
-                                                                        <td> </td>
-                                                                    </tr>
-                                                                        <?php endforeach;?>
-
-                                                                </tbody>
-                                                                <tfoot>
-                                                                    <tr>
-                                                                        <th>ID PED</th>
-                                                                        <th>COLOCACAO/TROCA</th>
-                                                                        <th>PERIODO DO DIA</th>
-                                                                        <th>CLIENTE</th>
-                                                                        <th>DATA ABERTURA</th>  
-                                                                        <th>DATA OPERACAO</th>
-                                                                        <th>DATA ALOCAÇÃO</th>
-                                                                        <th>DATA PREV RETIRADA</th>
-                                                                        <th>ENDEREÇO</th>
-                                                                        <th>TELEFONE</th>
-                                                                        <th>PREÇO</th>
-                                                                        <th>COMENTÁRIOS</th>
-                                                                        <th>QUANTIDADE CACAMBAS</th>
-                                                                        <th>NÚMERO CAÇAMBA</th>
-                                                                        <th>DATA RETIRADA EFETIVA</th> 
-                                                                        <th>STATUS</th> 
-                                                                        <th>ATERRO</th>
-                                                                        <th>MOTORISTA</th>
-                                                                    </tr>
-                                                                </tfoot>
-                                                            </table>
-                                                        <?php endif; ?>
-                                                        {{-- LISTA DE HISTÓRICO --}}
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

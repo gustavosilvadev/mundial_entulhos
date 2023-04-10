@@ -199,16 +199,6 @@ public function destroy(Request $request)
 
 public function exibirFormCadastroBasico()
 {
-/*
-    echo "001# - EXIBIR: formulário básico"; -- OK
-    echo "002# - Botão direcionamento para whatsapp"; -- OK
-    echo "003# - Consulta se atendemos determinada região"; -- PENDENTE
-    echo "004# - NOTIFICAR TEMPO DE RETORNO"; -- PENDENTE
-    echo "004# - CADASTRO DE LOGIN E SENHA"; -- PENDENTE
-
-*/    
-
-    // return view('client.form_cad_call_demand_cliente', $this->showInfoParamsDemand());
     return view('client.form_cad_call_demand_cliente');
 }
 
