@@ -41,7 +41,8 @@ class CallDemandController extends Controller
                     'call_demand.state as state_address_service',
                     'call_demand.comments as comments_demand',
                     'call_demand.phone as phone_demand',
-                    'call_demand.price_unit',
+                    // 'call_demand.price_unit',
+                    DB::raw('REPLACE(call_demand.price_unit, ".", ",") as price_unit'),
                     'call_demand.dumpster_quantity',
                     'call_demand.dumpster_number',
                     'call_demand.id_landfill',
@@ -163,8 +164,9 @@ class CallDemandController extends Controller
                 DB::raw('"" as name_landfill'),
                 DB::raw('"" as name_driver')
 
-            )->where('call_demand.id_driver','>=',0)->get();
-
+            )->where('call_demand.id_driver','>=',0)
+            ->orderByDesc('call_demand.id')
+            ->get();
 
             foreach($calldemands as $call_demand){
 
@@ -389,61 +391,61 @@ class CallDemandController extends Controller
                     ->whereNull('date_effective_removal_dumpster')->first();
         */
 
-if (isset($request->client_name_new)
-&& isset($request->type_service)
-&& isset($request->zipcode)
-&& isset($request->address)
-&& isset($request->number)
-&& isset($request->district)
-&& isset($request->city)
-&& isset($request->state)
-&& isset($request->phone)
-&& isset($request->dumpster_quantity)
-&& isset($request->price_unit)
-&& isset($request->id_driver)
-&& isset($request->comments)
-&& isset($request->period)
-&& isset($request->date_allocation_dumpster)
-&& isset($request->date_removal_dumpster))
-{
-    $calldemand = new CallDemand();
-   $calldemand->type_service   = $request->type_service;
-    $calldemand->period         = $request->period;
-    // $calldemand->date_start = '';
-    $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
-    $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
-    // $calldemand->date_effective_removal_dumpster = '';
-    // $calldemand->id_father = '';
-    $calldemand->name       = $request->client_name_new;
-    $calldemand->address    = $request->address;
-    $calldemand->number     = $request->number;
-    $calldemand->zipcode    = $request->zipcode;
-    $calldemand->city       = $request->city;
-    $calldemand->district   = $request->district;
-    $calldemand->state      = $request->state;
-    $calldemand->phone      = str_replace([" ","(",")"],"",$request->phone);
-    $calldemand->price_unit = $request->price_unit;
-    $calldemand->comments   = $request->comments;
-    $calldemand->dumpster_quantity  = $request->dumpster_quantity;
-    // $calldemand->dumpster_number = ''; // MOTORISTA IRÁ ADICIONAR
-    $calldemand->days_allocation    = $request->total_days;
-    // $calldemand->id_landfill = ''; // MOTORISTA IRÁ ADICIONAR
-    $calldemand->id_driver  = $request->id_driver;
-    // $calldemand->service_status = ''; // SOMENTE NA ATUALIZAÇÃO
+        if (isset($request->client_name_new)
+        && isset($request->type_service)
+        && isset($request->zipcode)
+        && isset($request->address)
+        && isset($request->number)
+        && isset($request->district)
+        && isset($request->city)
+        && isset($request->state)
+        && isset($request->phone)
+        && isset($request->dumpster_quantity)
+        && isset($request->price_unit)
+        && isset($request->id_driver)
+        && isset($request->comments)
+        && isset($request->period)
+        && isset($request->date_allocation_dumpster)
+        && isset($request->date_removal_dumpster))
+        {
+            $calldemand = new CallDemand();
+        $calldemand->type_service   = $request->type_service;
+            $calldemand->period         = $request->period;
+            // $calldemand->date_start = '';
+            $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
+            $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
+            // $calldemand->date_effective_removal_dumpster = '';
+            // $calldemand->id_father = '';
+            $calldemand->name       = $request->client_name_new;
+            $calldemand->address    = $request->address;
+            $calldemand->number     = $request->number;
+            $calldemand->zipcode    = $request->zipcode;
+            $calldemand->city       = $request->city;
+            $calldemand->district   = $request->district;
+            $calldemand->state      = $request->state;
+            $calldemand->phone      = str_replace([" ","(",")"],"",$request->phone);
+            $calldemand->price_unit = $request->price_unit;
+            $calldemand->comments   = $request->comments;
+            $calldemand->dumpster_quantity  = $request->dumpster_quantity;
+            // $calldemand->dumpster_number = ''; // MOTORISTA IRÁ ADICIONAR
+            $calldemand->days_allocation    = $request->total_days;
+            // $calldemand->id_landfill = ''; // MOTORISTA IRÁ ADICIONAR
+            $calldemand->id_driver  = $request->id_driver;
+            // $calldemand->service_status = ''; // SOMENTE NA ATUALIZAÇÃO
 
 
-    if($calldemand->save()){
+            if($calldemand->save()){
 
-        return redirect('createcalldemand');
-    }
+                return redirect('createcalldemand');
+            }
 
-    // return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);
-    return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
+            // return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);
+            return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
 
 
-}else{
-    return back()->withErrors(['response' => 'Dados incompletos']);
-}
+        }else{
+            return back()->withErrors(['response' => 'Dados incompletos']);
+        }
 
 
 
@@ -510,23 +512,57 @@ if (isset($request->client_name_new)
         return view('call_demand.form_edit_call_demand',  $showdata);
     }
 
-    public function update(Request $request){
-        
+    public function update(Request $request)
+    {
+        if (
+            isset($request->id_demand)
+            && isset($request->client_name_new)
+            && isset($request->zipcode)
+            && isset($request->address)
+            && isset($request->number)
+            && isset($request->district)
+            && isset($request->city)
+            && isset($request->state)
+            && isset($request->phone)
+            && isset($request->price_unit)
+            && isset($request->dumpster_total)
+            // && isset($request->dumpster_total_opened)
+            // && isset($request->id_landfill)
+            // && isset($request->id_driver)
+            && isset($request->comments)
+            && isset($request->type_service)
+            && isset($request->period)
+            && isset($request->date_allocation_dumpster)
+            && isset($request->date_removal_dumpster_forecast)
+            && isset($request->total_days)){
 
+            $call_demand = CallDemand::where('id',$request->id_demand)->update([
 
-dd($request);        
-        // if(isset($request->name)){
+                'name' => $request->client_name_new,
+                'zipcode' => $request->zipcode,
+                'address' => $request->address,
+                'number' => $request->number,
+                'district' => $request->district,
+                'city' => $request->city,
+                'state' => $request->state,
+                'phone' => $request->phone,
+                'price_unit' => preg_replace('/[^0-9]+/','.',str_replace('.','',$request->price_unit)),
+                'dumpster_quantity' => $request->dumpster_total,
+                'dumpster_number' => (empty($request->dumpster_total_opened) ? 0 : $request->dumpster_total_opened),
+                'id_landfill' => (empty($request->id_landfill) ? 0 : $request->id_landfill),
+                'id_driver' => (empty($request->id_driver) ? 0 : $request->id_driver),
+                'comments' => $request->comments,
+                'type_service' => $request->type_service,
+                'period' => $request->period,
+                'date_allocation_dumpster' => (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : ''),
+                'date_removal_dumpster_forecast' => (isset($request->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster_forecast))) : ''),
+                'days_allocation' => $request->total_days
+            ]);
 
-        //     $call_demand = CallDemand::where('id',$request->id)->update([
-        //         'id_driver' => $request->id_driver,
-        //         'service_status' => 1 // ATENDENDO
-        //     ]);
-
-        //     return $call_demand;
-        // }
-
-        // return false;
-
+            if($call_demand){
+                return redirect('/call_demand');
+            }
+        }
         return redirect('/call_demand');
 
     }

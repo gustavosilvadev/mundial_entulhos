@@ -137,10 +137,11 @@
                                                 <td><?php echo $valDemand->date_effective_removal_dumpster; ?></td>
                                                 <td>
                                                     <?php echo $valDemand->address_service.' '.
-                                                $valDemand->number_address_service.' '.
-                                                $valDemand->district_address_service.' '.
-                                                $valDemand->city_address_service.' '.
-                                                $valDemand->state_address_service.' '; ?>
+                                                        $valDemand->number_address_service.' '.
+                                                        $valDemand->district_address_service.' '.
+                                                        $valDemand->city_address_service.' '.
+                                                        $valDemand->state_address_service.' '; 
+                                                    ?>
                                                 </td>
                                                 <td><?php echo $valDemand->phone_demand; ?></td>
                                                 <td><?php echo $valDemand->price_unit; ?></td>

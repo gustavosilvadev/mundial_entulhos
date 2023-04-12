@@ -92,7 +92,7 @@ if(session('access_permission') == 1){
                             </li>
                             <li><a class="d-flex align-items-center" href="/call_demand"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="eCommerce">BASE PEDIDOS</span></a>
                             </li>
-                            <li><a class="d-flex align-items-center" href="#"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="eCommerce">RESUMO PEDIDOS</span></a>
+                            {{-- <li><a class="d-flex align-items-center" href="#"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="eCommerce">RESUMO PEDIDOS</span></a> --}}
                             </li>
                         </ul>
                     </li>

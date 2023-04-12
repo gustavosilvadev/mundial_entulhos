@@ -205,7 +205,6 @@ public function exibirFormCadastroBasico()
 
 public function saveDataDemandClient(Request $request)
 {
-
     if(isset($request->client_name_new)
     && isset($request->type_service)
     && isset($request->address)
@@ -253,20 +252,16 @@ public function saveDataDemandClient(Request $request)
         if($calldemand->save()){
 
             return redirect('/new_demand_client')->with($this->returnSuccess('Salvo com sucesso'));
-            // return view('client.form_cad_call_demand_cliente', $this->returnSuccess('Salvo com sucesso'));
+            
         }
 
-        // return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);        
-
         return redirect('/new_demand_client')->with($this->returnError('Erro ao cadastrar'));
-        // return view('client.form_cad_call_demand_cliente', $this->returnError('Erro ao cadastrar'));
+
     
 
     }else{
 
         return redirect('/new_demand_client')->with($this->returnError('Dados incompletos'));
-
-        // return view('client.form_cad_call_demand_cliente', $this->returnError('Dados incompletos'));
     }
 
 }

@@ -14,8 +14,10 @@ $(function () {
     taskIdDemand,
     taskNameClient,
     taskDateBegin,
+    taskDateStart,
     taskDescription,
     taskPhone,
+    taskDumpsterQuantity,
     flatPickr = $('.task-due-date'),
     newTaskModal = $('.sidebar-todo-modal'),
     newTaskForm = $('#form-modal-todo'),
@@ -360,13 +362,10 @@ $(function () {
     let addressItem  = $title.split('-');
 
     $title = addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6];
-    // newTaskForm.find('.todo-item-title-address').attr("href", "https://www.google.com/maps/dir/" + addressFrom + "/" + $title);
-    // newTaskForm.find('.todo-item-title-address').attr("target", "_blank");;
     newTaskForm.find('.todo-item-title-address').text($title);
 
 // Waze
     let $address_to = addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6];
-    console.log($address_to.replace(/ /g,"%20"));
     newTaskForm.find('.todo-item-address-waze').attr("href", "https://www.waze.com/ul?q=" + $address_to);
     newTaskForm.find('.todo-item-address-waze').attr("target", "_blank");;
     newTaskForm.find('.todo-item-address-waze').text('Abrir Waze');
@@ -379,29 +378,71 @@ $(function () {
 
 // Data de início do atendimento
     taskDateBegin   = $(this).find('.todo-date-begin');
-    var $dateBegin  = $(this).find('.todo-date-begin').html();
+    var $dateBegin  = taskDateBegin.html();
     newTaskForm.find('.todo-item-date-begin').text($dateBegin);
 
+    taskDateStart   = $(this).find('.todo-date-start');
+    var $dateStart  = taskDateStart.text();    
+
+
+    if($dateStart === ""){
+      console.log("VAZIO !!!");
+      newTaskForm.find('.todo-item-date-start').text("");
+      $("#update_active_call_demand").css("display","block");
+      $("#get_dumpster_location").css("display","none");
+
+    }else{
+
+      console.log("CHEIO !!!");
+      console.log($dateStart);
+      newTaskForm.find('.todo-item-date-start').text($dateStart);
+      $("#start_call_demand").css("display","none");
+      $("#get_dumpster_location").css("display","block");
+    }
+
+// Data de início do atendimento
+    newTaskForm.find('.todo-item-date-start').text($dateStart);
+
 //Id Demanda
-taskIdDemand   = $(this).find('.todo-id-demand');
-var $idDemand  = $(this).find('.todo-id-demand').html();
-// newTaskForm.find('.todo-id-demand').text($idDemand);
-newTaskForm.find('.todo-id-demand').val($idDemand);
+    taskIdDemand   = $(this).find('.todo-id-demand');
+    var $idDemand  = taskIdDemand.html();
+    newTaskForm.find('.todo-id-demand').val($idDemand);
 
 //Descrição / Observação    
     taskDescription   = $(this).find('.todo-description');
-    var $description  = $(this).find('.todo-description').html();
+    var $description  = taskDescription.html();
     newTaskForm.find('.todo-item-description').text($description);
 
  // Nome
     taskNameClient   = $(this).find('.todo-name-client');
-    var $nameClient  = $(this).find('.todo-name-client').html();
+    var $nameClient  = taskNameClient.html();
     newTaskForm.find('.todo-name-client').text($nameClient);
  
 // Telefone
     taskPhone   = $(this).find('.todo-phone');
-    var $phone  = $(this).find('.todo-phone').html();
+    var $phone  = taskPhone.html();
     newTaskForm.find('.todo-phone').text($phone);
+
+// Quantidade de caçambas
+    taskDumpsterQuantity  = $(this).find('.todo-dumpster-quantity');
+    var $dumpsterQuantity  = taskDumpsterQuantity.html();
+    newTaskForm.find('.todo-item-dumpster-quantity').text($dumpsterQuantity);
+
+
+// Carregando lista de aterros
+    newTaskForm.find(".edit-landfill-list").empty();
+
+    $.get("/listlandfill/" + $idDemand)
+    .done(function ( dataResponse ){
+
+      newTaskForm.find(".edit-landfill-list").append('<option value="0">----</option>');
+
+      $.each(dataResponse, function(key, dataItem){
+        let selectedStatus  = (dataItem.selected == true) ? 'selected' : '';
+        newTaskForm.find(".edit-landfill-list").append('<option value="' + dataItem.id + '"' + selectedStatus + '>' + dataItem.name + '</option>');
+
+      });      
+    });
 
   });
 
@@ -414,11 +455,12 @@ newTaskForm.find('.todo-id-demand').val($idDemand);
         var $edit_title = newTaskForm.find('.todo-item-title-address').val();
         $(taskTitle).text($edit_title);
         
-        // var $edit_name_client = newTaskForm.find('.todo-item-name-client').val();
-        // $(taskNameClient).val($edit_name_client);
-        
         var $edit_date_begin = newTaskForm.find('.todo-item-date-begin').val();
         $(taskDateBegin).text($edit_date_begin);
+
+
+        var $edit_date_start = newTaskForm.find('.todo-item-date-start').val();
+        $(taskDateStart).text($edit_date_start);        
 
         var $id_demand = newTaskForm.find('.todo-id-demand').val();
         $(taskIdDemand).text($id_demand);
@@ -432,6 +474,9 @@ newTaskForm.find('.todo-id-demand').val($idDemand);
         var $edit_phone = newTaskForm.find('.todo-phone').val();
         $(taskPhone).text($edit_phone);
 
+        var $edit_dumpster_quantity = newTaskForm.find('.todo-dumpster-quantity').val();
+        $(taskDumpsterQuantity).text($edit_dumpster_quantity);
+                
         toastr['success']('Data Saved', '💾 Task Action!', {
           closeButton: true,
           tapToDismiss: false,

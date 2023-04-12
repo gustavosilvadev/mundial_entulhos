@@ -39,6 +39,11 @@ Route::middleware('usersession')->group(function(){
     // resolver problema ao Clicar no botão Inciar Atendimento
     Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
     
+    Route::post('/start_demand',[DriverController::class,'startDemand']);
+    Route::post('/get_dumpster_location',[DriverController::class,'getDumpsterLocation']);
+
+    // Route::get('/listlandfill', [DriverController::class,'getLandFill']);
+    
     Route::post('/atualiza_dias_cacamba_municipio',[DumpsterServiceDemandController::class,'updateDaysDumpsterCounty']);
     
     // Landfill
@@ -74,6 +79,8 @@ Route::middleware('usersession')->group(function(){
 
 });
 
+
+Route::get('listlandfill/{id?}', [DriverController::class,'getLandFill']);
 
 Route::post('save_call_demand_teste',[CallDemandController::class,'storeTeste']);
 Route::get('call_demand_teste/{id?}',[CallDemandController::class,'showTeste']);

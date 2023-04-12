@@ -156,7 +156,7 @@ if(session('id_user') != null && session('login') != null){ ?>
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <label for="dumpster_quantity">QUANTIDADE DE CAÇAMBAS</label>
-                                                                                    <input type="number" name="dumpster_quantity" class="form-control"  id="dumpster_quantity" value="0" min="0" max="1000" placeholder="0" />
+                                                                                    <input type="number" class="form-control" name="dumpster_quantity"   id="dumpster_quantity" value="0" min="0" max="1000" placeholder="0" required/>
                                                                                 </div>
                                                                             </div>
 
@@ -198,20 +198,11 @@ if(session('id_user') != null && session('login') != null){ ?>
                                                                                 </div>    
                                                                             </div>
 
-                                                                            <!-- <div class="col-md-2">
-                                                                                <div class="form-group">
-                                                                                    <span class="title" for="date_effective_removal_dumpster">RETIRADA EFETIVA:</span>
-                                                                                    <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4"/>
-                                                                                </div>    
-                                                                            </div>  -->
-
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <span class="title">TOTAL DE DIAS</span>
-                                                                                    <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" disabled/>
-                                                                                    {{-- <input type="hidden" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" /> --}}
-                                                                                    
-                                                                                </div>    
+                                                                                    <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0" readonly="readonly"/>
+                                                                                </div>
                                                                             </div> 
                                                                             
                                                                         </div>
@@ -423,6 +414,9 @@ if(session('id_user') != null && session('login') != null){ ?>
                     required: true
                 },
                 dumpster_quantity: {
+                    required: true
+                },
+                total_days: {
                     required: true
                 },
                 dumpster_total_opened: {
