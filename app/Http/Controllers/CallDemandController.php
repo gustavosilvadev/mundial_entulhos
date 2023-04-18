@@ -191,13 +191,12 @@ class CallDemandController extends Controller
                 }                
             }
             $driver_name_demands = DB::table('driver')
-                                    ->select('employee.name as name')
                                     ->join('employee', 'employee.id', '=', 'driver.id_employee')
                                     ->where('driver.flg_status','=', 1)
-                                    ->get();
+                                    // ->get(["driver.id", "employee.name"]);
+                                    ->get(["employee.name"]);
 
             if($calldemands->isEmpty() != true){
-
                 return view('call_demand.list_call_demand',[
                     'driver_name_demands'=> $driver_name_demands,
                     'calldemands'=> $calldemands
@@ -382,15 +381,6 @@ class CallDemandController extends Controller
 
         // CÓDIGO DE REFERÊNCIA LOGO ABAIXO:
         
-        /*
-        
-                $verificaPedidoRelacionado = CallDemand::where('zipcode', '=', $request->zipcode)
-                    ->where('address', '=', $request->address)
-                    ->where('number', '=', $request->number)
-                    ->where('id_father', '=', 0)
-                    ->whereNull('date_effective_removal_dumpster')->first();
-        */
-
         if (isset($request->client_name_new)
         && isset($request->type_service)
         && isset($request->zipcode)
@@ -408,8 +398,45 @@ class CallDemandController extends Controller
         && isset($request->date_allocation_dumpster)
         && isset($request->date_removal_dumpster))
         {
+
+            for($repeatInfo = 0; $repeatInfo < $request->dumpster_quantity; $repeatInfo ++){
+
+                $calldemand = new CallDemand();
+                $calldemand->type_service   = $request->type_service;
+                $calldemand->period         = $request->period;
+                // $calldemand->date_start = '';
+                $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
+                $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
+                // $calldemand->date_effective_removal_dumpster = '';
+                // $calldemand->id_father = '';
+                $calldemand->name       = $request->client_name_new;
+                $calldemand->address    = $request->address;
+                $calldemand->number     = $request->number;
+                $calldemand->zipcode    = $request->zipcode;
+                $calldemand->city       = $request->city;
+                $calldemand->district   = $request->district;
+                $calldemand->state      = $request->state;
+                $calldemand->phone      = str_replace([" ","(",")"],"",$request->phone);
+                $calldemand->price_unit = $request->price_unit;
+                $calldemand->comments   = $request->comments;
+                $calldemand->dumpster_sequence_demand = $repeatInfo + 1;
+                $calldemand->dumpster_quantity  = $request->dumpster_quantity;
+                // $calldemand->dumpster_number = ''; // MOTORISTA IRÁ ADICIONAR
+                $calldemand->days_allocation    = $request->total_days;
+                // $calldemand->id_landfill = ''; // MOTORISTA IRÁ ADICIONAR
+                $calldemand->id_driver  = $request->id_driver;
+                // $calldemand->service_status = ''; // SOMENTE NA ATUALIZAÇÃO
+                $calldemand->save();
+
+                if(!$calldemand->save())
+                    return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
+
+            }
+            return redirect('createcalldemand');
+
+/*
             $calldemand = new CallDemand();
-        $calldemand->type_service   = $request->type_service;
+            $calldemand->type_service   = $request->type_service;
             $calldemand->period         = $request->period;
             // $calldemand->date_start = '';
             $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
@@ -441,7 +468,7 @@ class CallDemandController extends Controller
 
             // return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);
             return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
-
+*/
 
         }else{
             return back()->withErrors(['response' => 'Dados incompletos']);

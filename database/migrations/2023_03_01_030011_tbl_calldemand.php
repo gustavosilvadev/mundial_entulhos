@@ -36,6 +36,7 @@ class TblCalldemand extends Migration
             $table->string('phone')->nullable();
             $table->decimal('price_unit', $precision = 8, $scale = 2)->nullable();
             $table->string('comments')->nullable();
+            $table->integer('dumpster_sequence_demand')->default(0); // Sequencia de pedido de acordo com a quantidade de caçambas
             $table->integer('dumpster_quantity')->nullable(); // QUANTIDADE DE CAÇAMBAS
             $table->integer('dumpster_number')->default(0); // NÚMERO DA CAÇAMBA
             $table->integer('days_allocation')->default(0); // QUANTIDADE DE DIAS

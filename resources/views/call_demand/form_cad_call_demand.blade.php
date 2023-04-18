@@ -201,7 +201,7 @@
                                                                                 <div class="form-group">
                                                                                     <label for="driver">MOTORISTA</label>
                                                                                     <select class="select2 form-control form-control-lg" name="id_driver">
-                                                                                        <option value="">----</option>
+                                                                                        <option value="0" selected>----</option>
                                                                                         <?php if(isset($drivers)):?>
                                                                                             <?php foreach($drivers as $driver):?>
                                                                                                 <option value="<?php echo $driver->id; ?>"><?php echo $driver->name.' '.$driver->surname; ?></option>

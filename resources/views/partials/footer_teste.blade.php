@@ -85,10 +85,14 @@
                 dateFormat: "d/m/Y",
             });
 
-
             $('.date_format_allocation').flatpickr({
                 dateFormat: "d/m/Y",
                 minDate: dataDiaSeguinteFormatada(),
+            });
+
+            $('.date_format_allocation_search').flatpickr({
+                mode: "multiple",
+                dateFormat: "d/m/Y"
             });
             
             $('.date_format_removal').flatpickr({

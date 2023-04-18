@@ -76,16 +76,13 @@
                                                             <?php endforeach;?>
 
                                                             <?php endif;?>
-                                                            <option value="Teste">Teste</option>
                                                         </select>
                                                     </div>
 
                                                     <div class="col-lg-4">
-                                                        <label></label>
+                                                        <label>DATA DE ABERTURA</label>
                                                         <div class="form-group mb-0">
-                                                            <input type="text" class="form-control dt-date flatpickr-range dt-input flatpickr-input" data-column="5" placeholder="StartDate to EndDate" data-column-index="4" name="dt_date" readonly="readonly">
-                                                            <input type="hidden" class="form-control dt-date start_date dt-input" data-column="5" data-column-index="4" name="value_from_start_date">
-                                                            <input type="hidden" class="form-control dt-date end_date dt-input" name="value_from_end_date" data-column="5" data-column-index="4">
+                                                            <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,7 +101,7 @@
                                                 <th>COLOCACAO/TROCA</th>
                                                 <th>PERIODO DO DIA</th>
                                                 <th>CLIENTE</th>
-                                                <th>DATA ABERTURA</th>  
+                                                <th>DATA PEDIDO</th>
                                                 <th>DATA OPERACAO</th>
                                                 <th>DATA ALOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
@@ -125,7 +122,10 @@
                                             <?php if(!empty($calldemands)): ?>
                                                 <?php foreach($calldemands as $valDemand):?>        
                                             <tr>
-                                                <td><a href="/editcalldemand/{{$valDemand->id_demand}}" class="btn btn-info">Editar</a></td>
+                                                
+                                                {{-- <td><a href="/editcalldemand/{{$valDemand->id_demand}}" class="btn btn-info">Editar</a></td> --}}
+                                                <td></td>
+                                                
                                                 <td>{{ $valDemand->id_demand }}</td>
                                                 <td><?php echo $valDemand->type_service; ?></td>
                                                 <td><?php echo $valDemand->period; ?></td>
@@ -151,62 +151,34 @@
                                                 {{-- <td><?php echo $valDemand->date_end; ?></td> --}}
                                                 <td><?php echo $valDemand->service_status; ?></td>
                                                 <td><?php echo $valDemand->name_landfill; ?></td>
-                                                {{-- <td><?php echo $valDemand->name_driver; ?></td> --}}
-                                                
-                                                <td>
-                                                    <?php 
-                                                    if($valDemand->name_driver != ""){
-
-                                                        echo $valDemand->name_driver; 
-                                                    }else
-                                                        echo "Teste";
-                                                    ?>
-                                                </td>
-{{--                                                 
-                                                <td>
-
-                                                    <select class="select2 form-control" id="name_driver_selected">
-                                                        <option>---</option>
-                                                        <?php if($driver_name_demands):?>
-
-                                                            <?php foreach($driver_name_demands as $driver_name):?>
-                                                                <?php if($driver_name->name == $valDemand->name_driver): ?>
-                                                                    <option selected>{{ $driver_name->name }}</option>
-                                                                <?php else: ?>
-                                                                <option>{{ $driver_name->name }}</option>
-                                                                <?php endif; ?>
-                                                            <?php endforeach;?>
-
-                                                        <?php endif;?>
-                                                    </select>                                                    
-                                                </td> 
---}}
-
+                                                <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
                                             </tr>
                                                 <?php endforeach;?>
                                             <?php endif; ?>      
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>ID PED</th>
+                                                <th></th>
+                                                <th>Nº FICHA</th>
                                                 <th>COLOCACAO/TROCA</th>
                                                 <th>PERIODO DO DIA</th>
                                                 <th>CLIENTE</th>
-                                                <th>DATA ABERTURA</th>  
+                                                <th>DATA PEDIDO</th>  
                                                 <th>DATA OPERACAO</th>
                                                 <th>DATA ALOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
+                                                <th>DATA RETIRADA EFETIVA</th>
                                                 <th>ENDEREÇO</th>
                                                 <th>TELEFONE</th>
                                                 <th>PREÇO</th>
                                                 <th>COMENTÁRIOS</th>
                                                 <th>QUANTIDADE CACAMBAS</th>
                                                 <th>NÚMERO CAÇAMBA</th>
-                                                <th>DATA RETIRADA EFETIVA</th> 
+                                                {{-- <th>DATA RETIRADA EFETIVA</th>  --}}
                                                 <th>STATUS</th> 
                                                 <th>ATERRO</th>
                                                 <th>MOTORISTA</th>
-                                            </tr>
+                                            </tr>                                            
                                         </tfoot>
                                     </table>
                                 </div>
@@ -219,7 +191,43 @@
     </div>
     <!-- END: Content-->
 
+    <div class="modal text-left" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel6" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel6">EDITAR</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>MOTORISTAS</p>
+                    {{-- <select class="select2 form-control" id="name_driver_selected"> --}}
+                    <select class="form-control" id="name_driver_selected">
+                        <option value=""></option>
+                        <?php if($driver_name_demands):?>
 
+                            <?php foreach($driver_name_demands as $driver_name):?>
+                                    <option value="{{ $driver_name->name }}">{{ $driver_name->name }}</option>
+                            <?php endforeach;?>
+
+                        <?php endif;?>
+                    </select>
+                    <input type="hidden" id="iddemand" value="" />
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id= "btn_driver_update" data-dismiss="modal">ATUALIZAR MOTORISTA</button>
+                    <a class="btn btn-warning" id="btn_edit">EDITAR</a>
+                </div> 
+               
+            </div> 
+
+
+        
+        </div>
+    </div>
 
 {{-- @include('partials.footer')  --}}
 @include('partials.footer_teste') 
@@ -227,36 +235,89 @@
 <script>
 $(document).ready(function() {
 
-    $(document).ready(function() {
-
-        var tbpedido = $('#tbpedido').DataTable( {
-                scrollX: true,
-                dom: 'Bfrtip',
-                buttons: [
-                    // 'copy', 'csv', 'excel', 'pdf', 'print'
-                    'copy', 'csv', 'excel'
-                ]
-            } );
+        let tbpedido = $('#tbpedido').DataTable( {
+            scrollX: true,
+            dom: 'Bfrtip',
+            buttons: [
+                // 'copy', 'csv', 'excel', 'pdf', 'print'
+                'copy', 'csv', 'excel'
+            ]
+        } );
 
         $('#tbpedido tbody').on('click', 'tr', function () {
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
-            } else {
-                tbpedido.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
+
+
+            let selectedRows = tbpedido.rows({ selected: true });
+            let selectedData = selectedRows.data();
+
+            let id_demand  = selectedData[tbpedido.row( this ).index()][1];
+            let nameDriver = "";
+            
+            nameDriver = selectedData[tbpedido.row( this ).index()][18];
+            
+            $("#modal-edit").modal('toggle');
+            if(nameDriver != "")
+            {
+                $("#name_driver_selected").val( $('option:contains("' + nameDriver + '")').val());
+            }else {
+
+                $("#name_driver_selected").val( $('option:contains("----")').val());
             }
 
+            $("#iddemand").val(id_demand);
+            $("#btn_edit").attr("href","/editcalldemand/" + id_demand);
+            // if ($(this).hasClass('selected')) {
+            //     $(this).removeClass('selected');
+            // } else {
+            //     tbpedido.$('tr.selected').removeClass('selected');
+            //     $(this).addClass('selected');
+            // }
         });
 
+        $("#btn_driver_update").click(function(){
 
-        $("#name_search").on('change', function(a, b, c){
-            // console.log(this.value + " ++ \n");
+            let idDemand = $("#iddemand").val();
+            let nameDriverSelected = $("#name_driver_selected").val();
+            
+            console.log("idDemand: " + idDemand);
+            console.log("nameDriverSelected: " + nameDriverSelected);
+            
+            console.log("********************************************");
+            // tbpedido.columns(18).search(nameDriverSelected, true,false);
+            console.log(tbpedido.columns(2));
+            console.log("++++++++++++++++++++++++++++++++++++++++++++");
+
+        })
+
+        $("#name_search").on('change', function(a){
+
+            let namesList = String($("#name_search").val());
+
             tbpedido
                 .columns(18)
-                .search( this.value )
+                .search(namesList.replace(/,/g, "|"), true,false)
                 .draw();
         });
-    });
+
+        $("#date_format_allocation_search").on('change', function(a){
+
+            let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
+            
+            tbpedido
+                .columns(5)
+                .search(dateDemandFilter.replace(/,/g,"|"), true,false)
+                .draw();            
+
+        });
+
+        $("btn-driver-option").click(function(){
+            
+            console.log("++++++++++");
+            console.log(this.text());
+            console.log("**********");
+        });
+
+        
 
 });
 
