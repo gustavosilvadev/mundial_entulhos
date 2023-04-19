@@ -3,11 +3,6 @@
 @include('partials.nav') 
 --}}
 
-<?php
-// dd($drivers);
-?>
-
-
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
@@ -96,7 +91,7 @@
                                                                                         <option value="">----</option>
                                                                                         <?php if(isset($clients)):?>
                                                                                             <?php foreach($clients as $client):?>
-                                                                                                <option value="<?php echo $client->id; ?>"><?php echo $client->name; ?></option>
+                                                                                                <option value="<?php echo $client->id_demand; ?>"><?php echo $client->name; ?></option>
                                                                                             <?php endforeach; ?>
                                                                                         <?php endif; ?>
                                                                                     </select>
@@ -182,22 +177,30 @@
                                                                         </div>
                                                                         
                                                                         <div class="row">
-                                                                            <div class="col-md-4">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="dumpster_quantity">QUANTIDADE DE CAÇAMBAS</label>
                                                                                     <input type="number" name="dumpster_quantity" class="form-control"  id="dumpster_quantity" min="0" max="1000" placeholder="" />
                                                                                 </div>
                                                                             </div>                                                                            
                                     
-                                                                            <div class="col-md-4">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group input-icon">
                                                                                     <label for="price_unit">Preço UNIDADE.</label>
                                                                                     <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" />
                                                                                     <i>R$</i>
                                                                                 </div>
                                                                             </div>
+
+                                                                            <div class="col-md-1">
+                                                                                <div class="form-group input-icon">
+                                                                                    <label for="price_unit">Desconto(%).</label>
+                                                                                    <input type="text" name="discount_value" class="form-control discount_value" id="discount_value" />
+                                                                                    <i>R$</i>
+                                                                                </div>
+                                                                            </div>
                                     
-                                                                            <div class="col-md-4">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="driver">MOTORISTA</label>
                                                                                     <select class="select2 form-control form-control-lg" name="id_driver">

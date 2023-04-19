@@ -362,7 +362,7 @@ $(function () {
     let addressItem  = $title.split('-');
 
     $title = addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6];
-    newTaskForm.find('.todo-item-title-address').text($title);
+    // newTaskForm.find('.todo-item-title-address').text($title);
 
 // Waze
     let $address_to = addressItem[0] + ' ' + addressItem[1].trim('') + ' ' + addressItem[4].trim('') + ' ' + addressItem[5].trim('') + ' ' + addressItem[6];
@@ -379,29 +379,30 @@ $(function () {
 // Data de início do atendimento
     taskDateBegin   = $(this).find('.todo-date-begin');
     var $dateBegin  = taskDateBegin.html();
-    newTaskForm.find('.todo-item-date-begin').text($dateBegin);
+    // newTaskForm.find('.todo-item-date-begin').text($dateBegin);
 
     taskDateStart   = $(this).find('.todo-date-start');
     var $dateStart  = taskDateStart.text();    
 
+    if($dateStart.trim() === ""){
 
-    if($dateStart === ""){
-      console.log("VAZIO !!!");
-      newTaskForm.find('.todo-item-date-start').text("");
+      $("#btn_start_call_demand").css("display","block");
+      $("#btn_allocated_dumpster").css("display","none");
+
       $("#update_active_call_demand").css("display","block");
-      $("#get_dumpster_location").css("display","none");
+
 
     }else{
 
-      console.log("CHEIO !!!");
-      console.log($dateStart);
-      newTaskForm.find('.todo-item-date-start').text($dateStart);
+      $("#btn_start_call_demand").css("display","none");
+      $("#btn_allocated_dumpster").css("display","block");
+
       $("#start_call_demand").css("display","none");
-      $("#get_dumpster_location").css("display","block");
+
     }
 
 // Data de início do atendimento
-    newTaskForm.find('.todo-item-date-start').text($dateStart);
+    // newTaskForm.find('.todo-item-date-start').text($dateStart);
 
 //Id Demanda
     taskIdDemand   = $(this).find('.todo-id-demand');
@@ -426,7 +427,37 @@ $(function () {
 // Quantidade de caçambas
     taskDumpsterQuantity  = $(this).find('.todo-dumpster-quantity');
     var $dumpsterQuantity  = taskDumpsterQuantity.html();
+    
     newTaskForm.find('.todo-item-dumpster-quantity').text($dumpsterQuantity);
+    
+    $('#number-dumpster-repeat').empty();
+    
+    $.get("/show_dumpster_demand/" + $idDemand)
+    .done(function ( dataResponse ){
+      
+      $.each(dataResponse, function(kItem, item){
+        let count = kItem + 1;
+        newTaskForm.find('#number-dumpster-repeat').append("<div class='row d-flex align-items-end'><div class='col-6'><div class='form-group'><label for='itemname'>Nº " + count + "</label><input type='text' class='form-control dumpster_number' id='"+count+"' value='" + item.dumpster_number + "'/></div></div></div>");
+      });
+
+
+    });
+    
+/*
+    for(let numberId = 0; numberId < $dumpsterQuantity; numberId++){
+      newTaskForm.find('#number-dumpster-repeat').append("<div class='row d-flex align-items-end'><div class='col-6'><div class='form-group'><label for='itemname'>Nº " + numberId + "</label><input type='text' class='form-control dumpster_number' id='"+numberId+"'></div></div></div>");
+    }
+*/
+
+    /*
+    let numberDumspterDiv = "";
+    for(let i=0; i < $dumpsterQuantity; i++){
+      numberDumspterDiv = $('<div class="row d-flex align-items-end"></div>').append();
+    }
+    newTaskForm.find('.number-dumpster-repeat').append();
+    // $('.numeber-dumpster-repeat').
+    console.log("Quantidade de caçamba" + $dumpsterQuantity);
+    */
 
 
 // Carregando lista de aterros
@@ -459,7 +490,8 @@ $(function () {
         $(taskDateBegin).text($edit_date_begin);
 
 
-        var $edit_date_start = newTaskForm.find('.todo-item-date-start').val();
+        // var $edit_date_start = newTaskForm.find('.todo-item-date-start').val();
+        var $edit_date_start = "";
         $(taskDateStart).text($edit_date_start);        
 
         var $id_demand = newTaskForm.find('.todo-id-demand').val();

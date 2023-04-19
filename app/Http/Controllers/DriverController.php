@@ -191,7 +191,6 @@ class DriverController extends Controller
         $call_demands       = $this->showDemandsClient($id_driver_session);
 
         return view('driver.list_demand_driver',['call_demands'=> $call_demands]);
-
     }
 
     public function showDemandsClient($id_employee)
@@ -201,8 +200,11 @@ class DriverController extends Controller
         $get_id_driver = Driver::select()->where("id_employee", $id_employee)->first();
 
         $calldemands = DB::table('call_demand')
+        ->groupBy('call_demand.id_demand')
+        // ->orderBy('call_demand.id_demand', 'desc')        
+        ->orderBy('call_demand.type_service', 'desc')        
         ->select(
-            'call_demand.id as id_demand',
+            'call_demand.id_demand as id_demand',
             'call_demand.type_service  as type_service',
             'call_demand.period',
             'call_demand.name as name',
@@ -234,73 +236,113 @@ class DriverController extends Controller
             DB::raw('"" as datetime_finish_demand'),
             DB::raw('"" as dumpsters')
 
-        )->where('call_demand.id_driver', $get_id_driver['id'])->get();
+        )
+        ->where('call_demand.id_driver', $get_id_driver['id'])
+        ->whereNull('date_effective_removal_dumpster')->get();
 
 
-        foreach($calldemands as $call_demand){
+        // foreach($calldemands as $call_demand){
 
-            if($call_demand->id_driver){
+        //     if($call_demand->id_driver){
 
-                $findDriver = DB::table('driver')
-                ->join('employee', 'employee.id', '=', 'driver.id_employee')
-                ->where('driver.id', '=', $call_demand->id_driver)
-                ->get('employee.name as name_driver');
-                if(isset($findDriver))
-                    $call_demand->name_driver =  $findDriver[0]->name_driver;
+        //         $findDriver = DB::table('driver')
+        //         ->join('employee', 'employee.id', '=', 'driver.id_employee')
+        //         ->where('driver.id', '=', $call_demand->id_driver)
+        //         ->get('employee.name as name_driver');
+        //         if(isset($findDriver))
+        //             $call_demand->name_driver =  $findDriver[0]->name_driver;
             
-                    $findActivitiesDriverDemandDumpster = DB::table('activity_driver_demand_dumpster')
-                    ->select('type_service as type_service_driver, 
-                        datetime_start_demand as datetime_start_demand, 
-                        datetime_finish_demand as datetime_finish_demand, 
-                        dumpsters as dumpsters')
-                    ->where('id_driver', '=', $call_demand->id_driver)
-                    ->where('id_call_demand', '=', $call_demand->id_demand)
-                    ->orderByDesc('id')
-                    ->first();
+        //             $findActivitiesDriverDemandDumpster = DB::table('activity_driver_demand_dumpster')
+        //             ->select('type_service as type_service_driver, 
+        //                 dumpsters as dumpsters')
+        //             ->where('id_driver', '=', $call_demand->id_driver)
+        //             ->where('id_call_demand', '=', $call_demand->id_demand)
+        //             ->orderByDesc('id')
+        //             ->first();
 
-                    if(isset($findActivitiesDriverDemandDumpster)){
+        //             if(isset($findActivitiesDriverDemandDumpster)){
 
-                        $call_demand->type_service_driver       =  $findActivitiesDriverDemandDumpster->type_service_driver;
-                        $call_demand->datetime_start_demand     =  $findActivitiesDriverDemandDumpster->datetime_start_demand;
-                        $call_demand->datetime_finish_demand    =  $findActivitiesDriverDemandDumpster->datetime_finish_demand;
-                        $call_demand->dumpsters                 =  $findActivitiesDriverDemandDumpster->dumpsters;
-                    }
-            }
+        //                 $call_demand->type_service_driver       =  $findActivitiesDriverDemandDumpster->type_service_driver;
+        //                 $call_demand->datetime_start_demand     =  $findActivitiesDriverDemandDumpster->datetime_start_demand;
+        //                 $call_demand->datetime_finish_demand    =  $findActivitiesDriverDemandDumpster->datetime_finish_demand;
+        //                 $call_demand->dumpsters                 =  $findActivitiesDriverDemandDumpster->dumpsters;
+        //             }
+        //     }
 
-            if($call_demand->id_landfill){
+        //     if($call_demand->id_landfill){
 
-                $findLandfill = DB::table('landfill')
-                ->where('landfill.id', '=', $call_demand->id_landfill)
-                ->get('landfill.name as name_landfill');
-                if(isset($findLandfill))
-                    $call_demand->name_landfill =  $findLandfill[0]->name_landfill;
-            }                
-        }
+        //         $findLandfill = DB::table('landfill')
+        //         ->where('landfill.id', '=', $call_demand->id_landfill)
+        //         ->get('landfill.name as name_landfill');
+        //         if(isset($findLandfill))
+        //             $call_demand->name_landfill =  $findLandfill[0]->name_landfill;
+        //     }                
+        // }
 
         return $calldemands;
     }
-    
+
     /**
      * Iniciar operação do motorista
      */
     public function startDemand(Request $request)
     {
-        $id_user = session('id_user');   
-        
-        if(isset($id_user) && isset($request->id_demand)){
-            $call_demand = CallDemand::where('id',$request->id_demand)->first();
 
-            if($call_demand->date_start == null && $call_demand->service_status == 0){
-                $call_demand->service_status = 1;
-                $call_demand->date_start = date('Y-m-d H:i:s');
-            
-                if($call_demand->update()){
-                    return true;
-                }
-                    return false;
+        for($number = 0; $number < count($request->dumpster_numbers); $number++)
+        {
+            $call_demands = CallDemand::where('id_demand','<>',$request->id_demand)
+            ->where('dumpster_number','<>', 0)
+            ->where('dumpster_number',$request->dumpster_numbers[$number])
+            ->where('date_effective_removal_dumpster','=', null)
+            ->get();
+
+            if($call_demands->count()){
+                return false;
+                break;
             }
+
         }
-        return false;
+
+        $call_demands = CallDemand::where('id_demand',$request->id_demand)->get();
+
+        foreach($call_demands as $key => $value){
+
+            CallDemand::where('id_demand', $request->id_demand)
+            ->where('dumpster_sequence_demand', ($key + 1))
+            ->update([
+                'service_status' => 1,
+                'date_start' => date('Y-m-d H:i:s'),
+                'dumpster_number' => $request->dumpster_numbers[$key],
+                'id_landfill' => $request->id_landfill
+            ]);
+        }
+
+        return true;
+
+
+        
+        // if(isset($id_user) && isset($request->id_demand)){
+        //     $call_demand = CallDemand::where('id_demand',$request->id_demand)->first();
+
+        //     if($call_demand->date_start == null && $call_demand->service_status == 0){
+        //         $call_demand->service_status = 1;
+        //         $call_demand->date_start = date('Y-m-d H:i:s');
+            
+        //         if($call_demand->update()){
+        //             return true;
+        //         }
+        //             return false;
+        //     }
+        // }
+        // return false;
+
+    }
+
+    public function getDumpsterDemand(Request $request)
+    {
+        $callDemand = CallDemand::where('id_demand', $request->id)->get("dumpster_number");
+        return $callDemand;
+
     }
 
     /**
@@ -311,7 +353,7 @@ class DriverController extends Controller
         $id_user = session('id_user');   
         
         if(isset($id_user) && isset($request->id_demand)){
-            $call_demand = CallDemand::where('id',$request->id_demand)->first();
+            $call_demand = CallDemand::where('id_demand',$request->id_demand)->first();
 
             if($call_demand->date_start == null && $call_demand->service_status == 0){
                 $call_demand->service_status = 3; //  Status 3 -. Recolhimento da caçamba
@@ -333,7 +375,7 @@ class DriverController extends Controller
         return 'id_driver_session: '.$id_driver_session. "\n id_demand: ".$request->id_demand;
 
         if(isset($request->id) && isset($id_driver_session)){
-            $call_demand = CallDemand::where('id',$request->id)->first();
+            $call_demand = CallDemand::where('id_demand',$request->id)->first();
             
             if($call_demand){
                 if($call_demand->service_status != 2)

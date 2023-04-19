@@ -16,6 +16,7 @@ class TblCalldemand extends Migration
         Schema::create('call_demand', function (Blueprint $table) {
 
             $table->id();
+            $table->integer('id_demand');
             $table->string('type_service')->comment('COLOCACAO|TROCA');
             $table->string('period')->nullable(); // PERÍODO DO DIA +++ DIURNO/NOTURNO
 

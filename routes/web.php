@@ -40,6 +40,7 @@ Route::middleware('usersession')->group(function(){
     Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
     
     Route::post('/start_demand',[DriverController::class,'startDemand']);
+    Route::get('/show_dumpster_demand/{id?}',[DriverController::class,'getDumpsterDemand']);
     Route::post('/get_dumpster_location',[DriverController::class,'getDumpsterLocation']);
 
     // Route::get('/listlandfill', [DriverController::class,'getLandFill']);
@@ -78,7 +79,6 @@ Route::middleware('usersession')->group(function(){
     
 
 });
-
 
 Route::get('listlandfill/{id?}', [DriverController::class,'getLandFill']);
 

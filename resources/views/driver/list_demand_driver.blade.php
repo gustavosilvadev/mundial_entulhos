@@ -1,10 +1,3 @@
-<?php 
-
-// echo '<pre>';
-// print_r($call_demands);
-// echo '</pre>';
-// die();
-?>
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
@@ -58,27 +51,32 @@
                                 <?php if(is_object($call_demands)): ?>
 
                                     <ul class="todo-task-list media-list" id="todo-task-list">
-
                                         <?php foreach($call_demands as $call_demand): ?>
-
-
 
                                             <li class="todo-item">
 
                                                 <div class="">
 
-                                                    <h2 class="<?php echo ($call_demand->type_service == "COLOCACAO" ? "text-info" : "text-danger")?>"><?php echo $call_demand->type_service; ?></h2>
+                                                    <h1 class="<?php echo ($call_demand->type_service == "COLOCACAO" ? "text-info" : "text-danger")?>"><?php echo $call_demand->type_service; ?></h1>
+                                                    <h2 class="text-dark todo-title-address">
+                                                        {{
+                                                            $call_demand->address_service.
+                                                            ' - '.$call_demand->number_address_service.
+                                                            ' - '.$call_demand->zipcode_address_service.
+                                                            ' - ' . $call_demand->city_address_service.
+                                                            ' - '.$call_demand->district_address_service.
+                                                            ' - '.$call_demand->state_address_service; 
+                                                        }}
+                                                    </h2>
 
                                                     <div class="todo-title-area">
 
                                                         <div class="title-wrapper">
 
-                                                            <p>Data de abertura: <span class="text-success todo-date-begin">{{ $call_demand->created_at }}</span></p> 
+                                                            <p>DATA: <span class="text-white bg-success todo-date-begin">{{ $call_demand->date_allocation_dumpster }}</span></p> 
                                                             
                                                             
-                                                            
-
-                                                            <span class="todo-title-address" style="display:none;">
+                                                            {{-- <span class="todo-title-address" style="display:none;">
                                                                 {{
                                                                     $call_demand->address_service.
                                                                     ' - '.$call_demand->number_address_service.
@@ -87,7 +85,7 @@
                                                                     ' - '.$call_demand->district_address_service.
                                                                     ' - '.$call_demand->state_address_service; 
                                                                 }}
-                                                            </span>
+                                                            </span> --}}
 
                                                             <span class="todo-name-client d-none">{{ $call_demand->name; }}</span>
                                                             <span class="todo-phone d-none">{{ $call_demand->phone_demand; }}</span>
@@ -95,12 +93,13 @@
 
                                                         </div>
                                                     </div>
-
+{{-- 
                                                     <?php if($call_demand->date_start): ?>
-                                                        <p>Data da operação: <span class="badge badge-pill badge-light-info">{{ $call_demand->date_start }}</span></p> 
+                                                        <p>Data da operação: <span class="badge badge-pill badge-light-info">{{ $call_demand->date_start }}</span></p>
                                                     <?php endif; ?>
 
-                                                    <p>Previsão de retirada:<span class="text-danger"> {{ $call_demand->date_removal_dumpster_forecast }}</span></p>                                                    
+                                                    <p>Previsão de retirada:<span class="text-danger"> {{ $call_demand->date_removal_dumpster_forecast }}</span></p>
+--}}
                                                     <div class="todo-item-action">
                                                         
                                                         <div class="badge-wrapper mr-1">
@@ -117,14 +116,8 @@
 
                                                                         }elseif($call_demand->service_status == 1){
                     
-                                                                            // echo '
-                                                                            // <div class="badge badge-pill badge-light-danger">DATA RETIRADA PREVISTA: '.$call_demand->date_removal_dumpster_forecast.'</div>
-                                                                            // <div class="badge badge-pill badge-light-warning">ATENDENDO</div>';
-
                                                                             echo '<div class="badge badge-pill badge-light-warning">ATENDENDO</div>';
 
-                                                                            
-                                                                            
                                                                         }elseif($call_demand->service_status == 2 && empty($call_demand->date_end) ){
                 
                                                                             echo '
@@ -186,17 +179,18 @@
                                             </div>
                                         </div>
                                         <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
-                                            <div class="action-tags">
-    
+                                            {{-- <div class="action-tags"> --}}
+                                            <div class="form-group my-1">
                                                 <div class="form-group">
-                                                    <h3 class="form-label">Nome do cliente</h3>
-                                                    <p class="todo-name-client"></p>
+                                                    <h3 class="form-label todo-name-client">Nome do cliente</h3>
+                                                    {{-- <p class="todo-name-client"></p> --}}
                                                 </div>
-    
+{{--     
                                                 <div class="form-group">
                                                     <h3 for="task-due-date" class="form-label">Endereço</h3>
                                                     <p class="todo-item-title-address"></p>
-                                                </div>
+                                                </div> 
+--}}
     
                                                 <div class="form-group">
                                                     <p><a class="todo-item-address-waze" href="#"></a></p>
@@ -207,18 +201,15 @@
                                                     <h3 class="form-label">Telefone</h3>
                                                     <p class="todo-phone"></p>
                                                 </div>                                            
-    
+{{--     
                                                 <div class="form-group">
                                                     <h3 for="task-due-date" class="form-label">Data do chamado</h3>
                                                     <p class="todo-item-date-begin" ></p>
                                                     <input type="hidden" name="todo-item-date-begin" class="todo-item-date-begin"/>
-                                                </div>
+                                                </div> 
+--}}
 
-                                                <div class="form-group">
-                                                    <h3 for="task-due-date" class="form-label">Data da operação</h3>
-                                                    <p class="todo-item-date-start"></p>
-                                                </div>                                                
-    
+
                                                 <div class="form-group">
                                                     <h3 class="form-label">Descrição</h3>
                                                     <p class="todo-item-description"></p>
@@ -235,48 +226,32 @@
 
                                                 <div class="form-group">
                                                     <h3 class="form-label">Caçambas Registradas: </h3>
-                                                    <form action="#" class="">
-                                                        <?php for($iCount=0; $iCount < 4; $iCount++):?>
-                                                                <div data-repeater-item>
-                                                                    <div class="row d-flex align-items-end">
-                                                                        <div class="col-6">
-                                                                            <div class="form-group">
-                                                                                <label for="itemname">#{{ $iCount }}</label>
-                                                                                <input type="text" class="form-control" id="itemname{{ $iCount }}" aria-describedby="itemname" />
-                                                                            </div>
-                                                                        </div>
-                                                                        
-                                                                        <div class="col-6">
-                                                                            <div class="form-group">
-                                                                                <label for="itemcost">Troca</label>
-                                                                                <input type="text" class="form-control" id="itemname-{{ $iCount }}" aria-describedby="itemname" />
-                                                                            </div>
-                                                                        </div>
-                    
-                                                                    </div>
-                                                                    <hr />
-                                                                </div>
-                                                        <?php endfor;?>
-                                                    </form>
+                                                    <div data-repeater-item id="number-dumpster-repeat">
+
+                                                    </div>                                                  
+                                                    <hr />                                                    
+
                                                 </div>                                                
 
                                                 <input type="hidden" name= "id_demand" class="todo-id-demand" />
+<!--                                             
                                             </div>
     
                                             <div class="form-group my-1">
+-->
                                                     {{-- <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#open_new_modal">ABRIR MODAL </button> --}}
                                                     <label for="type_service">Aterro</label>
                                                     <select class="select2 form-control form-control-lg edit-landfill-list" id="type_service" name="landfill">
                                                     </select>  
                                                     <hr />
                                                     {{-- <button type="button" class="btn btn-success" id="start_call_demand">INICIAR ATENDIMENTO</button> --}}
-                                                    <button type="button" class="btn btn-success">INICIAR ATENDIMENTO</button>
-                                                    <button type="button" class="btn btn-warning update-btn d-none my-2" id="set_finish_demand" style="" data-dismiss="modal">CAÇAMBA ALOCADA</button>
-                                                    <button type="button" class="btn btn-info update-btn d-none my-2" id="get_dumpster_location" style="" data-dismiss="modal">RECOLHER CAÇAMBA</button>
-                                                    <button type="button" class="btn btn-primary update-btn d-none my-2" id="set_done_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
-
+                                                    <button type="button" class="btn btn-success" id="btn_start_call_demand">INICIAR ATENDIMENTO</button>
                                                     {{-- <button type="button" class="btn btn-outline-danger update-btn d-none my-2" data-dismiss="modal">Cancelar</button> --}}
-                                                    <button type="button" class="btn btn-outline-danger" style="" data-dismiss="modal">CANCELAR</button>
+                                                    <button type="button" class="btn btn-secondary my-2" data-dismiss="modal">CANCELAR</button>
+
+                                                    <button type="button" class="btn btn-warning update-btn d-none my-2" id="btn_allocated_dumpster" style="" data-dismiss="modal">CAÇAMBA ALOCADA</button>
+                                                    <button type="button" class="btn btn-info update-btn d-none my-2" id="btn_collect_dumpster" style="" data-dismiss="modal">RECOLHER CAÇAMBA</button>
+                                                    <button type="button" class="btn btn-primary update-btn d-none my-2" id="set_done_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
                                             </div>
                                         </div>
                                     </form>
@@ -390,35 +365,81 @@
         });
 
 
-        $("#start_call_demand").click(function(){
+        $("#btn_start_call_demand").click(function(){
             let dataForm = $('#form-modal-todo');
-            let x = dataForm.serializeArray();
-            let id_demand = 0;
+            let dataInfo = dataForm.serializeArray();
+            let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
+            let idDemand   = 0;
+            let idLandfill = 0;
 
-            $.each(x, function(i, field) {
-                if(field.name == "id_demand")
-                {
-                    id_demand = field.value;
+            if(dumpsterNumbers.length > 0){
 
-                }
-            });
+                $.each(dataInfo, function(i, field) {
 
-            $.ajax({
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                method: 'POST',
-                url: '/start_demand',
-                data: { id_demand: id_demand },
-                success: function(dataResponse) {
-                    if(dataResponse == true)
-                        location.reload();
-                },
-                error: function(responseError){
-                    console.log(responseError);
-                }
-            });            
+                    if(field.name.trim() == "id_demand")
+                        idDemand = field.value;
+                    
+                    if(field.name.trim() == "landfill")
+                        idLandfill = field.value;
+                });
+
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    method: 'POST',
+                    url: '/start_demand',
+                    data: { 
+                        id_demand: idDemand,
+                        id_landfill: idLandfill,
+                        dumpster_numbers: dumpsterNumbers
+                    },
+                    success: function(dataResponse) {
+                        if(dataResponse == true)
+                            location.reload();
+                        else
+                            alert("Caçamba em uso!");
+                    },
+                    error: function(responseError){
+                        console.log(responseError);
+                    }
+                });
+            }else{
+                alert('Insira todas as caçambas!')
+            }
         })
 
+        $("#btn_collect_dumpster").click(function(){
+            
+            let dataForm = $('#form-modal-todo');
+            let dataInfo = dataForm.serializeArray();
+            let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
+            let idDemand   = 0;
+            let idLandfill = 0;
 
+            $.each(dataInfo, function(i, field) {
+
+                if(field.name.trim() == "id_demand")
+                    idDemand = field.value;
+
+                if(field.name.trim() == "landfill")
+                    idLandfill = field.value;
+            });
+
+            if(idLandfill > 0){
+
+                console.log("ID do chamado : " + idDemand);
+                console.log("ID do aterro : " + idLandfill);
+                console.log("DAdos caçamba : " + dumpsterNumbers);
+
+            }else{
+                alert("Selecione o Aterro!");
+
+
+            }
+
+
+        });
+
+/*
         $("#get_dumpster_location").click(function(){
 
             let dataForm = $('#form-modal-todo');
@@ -449,6 +470,7 @@
 
 
         });
+*/        
 
     });
 </script>

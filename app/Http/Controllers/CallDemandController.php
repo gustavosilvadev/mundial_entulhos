@@ -22,7 +22,7 @@ class CallDemandController extends Controller
 
                 $calldemand = DB::table('call_demand')
                 ->select(
-                    'call_demand.id as id_demand',
+                    'call_demand.id_demand as id_demand',
                     'call_demand.type_service  as type_service',
                     'call_demand.period',
                     'call_demand.name as name',
@@ -51,7 +51,7 @@ class CallDemandController extends Controller
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
                     DB::raw('"" as name_landfill'),
                     DB::raw('"" as name_driver')
-                )->where('call_demand.id', '=', $id_demand)->where('call_demand.id_driver','>=',0)->get();
+                )->where('call_demand.id_demand', '=', $id_demand)->where('call_demand.id_driver','>=',0)->get();
 
 
                 foreach($calldemand as $demand){
@@ -119,7 +119,7 @@ class CallDemandController extends Controller
             
             $id_demand = $request->id;
 
-            $calldemand = CallDemand::where('id',$id_demand)->orderBy('id','DESC')->first();
+            $calldemand = CallDemand::where('id_demand',$id_demand)->orderBy('id_demand','DESC')->first();
 
             if(isset($calldemand)){
                 
@@ -136,7 +136,7 @@ class CallDemandController extends Controller
 
             $calldemands = DB::table('call_demand')
             ->select(
-                'call_demand.id as id_demand',
+                'call_demand.id_demand as id_demand',
                 'call_demand.type_service  as type_service',
                 'call_demand.period',
                 'call_demand.name as name',
@@ -165,7 +165,7 @@ class CallDemandController extends Controller
                 DB::raw('"" as name_driver')
 
             )->where('call_demand.id_driver','>=',0)
-            ->orderByDesc('call_demand.id')
+            ->orderByDesc('call_demand.id_demand')
             ->get();
 
             foreach($calldemands as $call_demand){
@@ -227,7 +227,7 @@ class CallDemandController extends Controller
 
                 $showDataHist = DB::table('call_demand')
                 ->select(
-                    'call_demand.id as id_demand',
+                    'call_demand.id_demand as id_demand',
                     'call_demand.type_service  as type_service',
                     'call_demand.period',
                     'call_demand.name as name',
@@ -251,14 +251,14 @@ class CallDemandController extends Controller
                     'call_demand.service_status',
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
                 )            
-                ->where('call_demand.id', '=' ,$getIdFather['id_father'])->get();
+                ->where('call_demand.id_demand', '=' ,$getIdFather['id_father'])->get();
 
                 return (isset($showDataHist)) ? $showDataHist : '';
             
             }else{
                 $showDataHist = DB::table('call_demand')
                 ->select(
-                    'call_demand.id as id_demand',
+                    'call_demand.id_demand as id_demand',
                     'call_demand.type_service  as type_service',
                     'call_demand.period',
                     'call_demand.name as name',
@@ -305,8 +305,8 @@ class CallDemandController extends Controller
     {
         $info_client_demand = DB::table('call_demand')
         ->groupBy('call_demand.name')
-        ->orderBy('call_demand.id', 'desc')
-        ->select('call_demand.id','call_demand.name')
+        ->orderBy('call_demand.id_demand', 'desc')
+        ->select('call_demand.id_demand','call_demand.name')
         ->get();
 
         $drivers = Driver::join('employee', function($join){
@@ -339,7 +339,7 @@ class CallDemandController extends Controller
                             ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
                             ->join('employee', 'employee.id', '=', 'driver.id_employee')
                             ->select(
-                                'call_demand.id as id_demand',
+                                'call_demand.id_demand as id_demand',
                                 DB::raw("CONCAT(client.name, ' ', client.surname) as name_client"),
                                 'call_demand.type_service  as type_service',
                                 DB::raw('DATE_FORMAT(call_demand.date_begin, "%d/%m/%Y") as date_begin'),
@@ -399,9 +399,12 @@ class CallDemandController extends Controller
         && isset($request->date_removal_dumpster))
         {
 
+            $lastIdDemand = isset(CallDemand::orderBy('id', 'desc')->first()->id) ? (CallDemand::orderBy('id', 'desc')->first()->id + 1) : 1 ;
+            
             for($repeatInfo = 0; $repeatInfo < $request->dumpster_quantity; $repeatInfo ++){
 
                 $calldemand = new CallDemand();
+                $calldemand->id_demand      = $lastIdDemand;
                 $calldemand->type_service   = $request->type_service;
                 $calldemand->period         = $request->period;
                 // $calldemand->date_start = '';
@@ -563,7 +566,7 @@ class CallDemandController extends Controller
             && isset($request->date_removal_dumpster_forecast)
             && isset($request->total_days)){
 
-            $call_demand = CallDemand::where('id',$request->id_demand)->update([
+            $call_demand = CallDemand::where('id_demand',$request->id_demand)->update([
 
                 'name' => $request->client_name_new,
                 'zipcode' => $request->zipcode,
@@ -634,18 +637,18 @@ class CallDemandController extends Controller
     public function updateStatusDemandDriver(Request $request)
     {
 
-        $call_demand = CallDemand::where('id',$request->id)->first();
+        $call_demand = CallDemand::where('id_demand',$request->id)->first();
 
         if($call_demand->service_status == 0){
 
-            $call_demand = CallDemand::where('id',$request->id)->update([
+            $call_demand = CallDemand::where('id_demand',$request->id)->update([
                 'id_driver' => $request->id_driver,
                 'service_status' => 1 // ATENDENDO
             ]);
 
         }elseif($call_demand->service_status == 1){
 
-            $call_demand = CallDemand::where('id',$request->id)->update([
+            $call_demand = CallDemand::where('id_demand',$request->id)->update([
                 'id_driver' => $request->id_driver,
                 'date_end' => date('Y-m-d H:i:s'),
                 'service_status' => 2 // FINALIZADO

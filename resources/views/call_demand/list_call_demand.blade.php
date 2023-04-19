@@ -279,12 +279,16 @@ $(document).ready(function() {
             let idDemand = $("#iddemand").val();
             let nameDriverSelected = $("#name_driver_selected").val();
             
-            console.log("idDemand: " + idDemand);
-            console.log("nameDriverSelected: " + nameDriverSelected);
             
             console.log("********************************************");
             // tbpedido.columns(18).search(nameDriverSelected, true,false);
-            console.log(tbpedido.columns(2));
+            
+            // console.log(Object.values(tbpedido.columns(2)));
+            
+            // data = tbpedido.columns(1).data();
+            data = tbpedido.columns(1).search('24').data();
+            console.log(data);
+            
             console.log("++++++++++++++++++++++++++++++++++++++++++++");
 
         })
