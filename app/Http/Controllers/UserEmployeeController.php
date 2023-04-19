@@ -129,7 +129,7 @@ class UserEmployeeController extends Controller
     {
 
         if(isset($request->name) 
-            && isset($request->surname) 
+
             && isset($request->login) 
             && isset($request->email) 
             && isset($request->password)
@@ -139,9 +139,8 @@ class UserEmployeeController extends Controller
             if($request->password == $request->repeat_password)
             {
                 $employee = Employee::where("name","=",$request->name)
-                            ->where("surname","=",$request->surname)
                             ->where("login","=", $request->login)
-                            ->where("email","=", $request->email)->first();
+                            ->orWhere("email","=", $request->email)->first();
                    
 
                 if($employee){
@@ -154,7 +153,7 @@ class UserEmployeeController extends Controller
 
                     $employee = new Employee();
                     $employee->name = $request->name;
-                    $employee->surname = $request->surname;
+                    $employee->surname = (isset($request->surname) ? $request->surname : "");
                     $employee->email = $request->email;
                     $employee->login = $request->login;
                     $employee->access_permission = $request->access_permission;
@@ -170,7 +169,8 @@ class UserEmployeeController extends Controller
                 }
             }
         }else{
-            return view('user.form_cad_perfil',["response" => "Dados incompletos!"]);
+            // return view('user.form_cad_perfil',["response" => "Dados incompletos!"]);
+            return redirect('perfil-create');
         }
  
     }
