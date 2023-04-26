@@ -13,15 +13,14 @@ use App\Models\Landfill;
 class CallDemandController extends Controller
 {
 
-    public function showAPI($id_demand)
+    public function showAPI($id_register)
     {
 
-        $dataresult = array();
-
-        if(isset($id_demand)){
+        if(isset($id_register)){
 
                 $calldemand = DB::table('call_demand')
                 ->select(
+                    'call_demand.id as id',
                     'call_demand.id_demand as id_demand',
                     'call_demand.type_service  as type_service',
                     'call_demand.period',
@@ -51,7 +50,9 @@ class CallDemandController extends Controller
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
                     DB::raw('"" as name_landfill'),
                     DB::raw('"" as name_driver')
-                )->where('call_demand.id_demand', '=', $id_demand)->where('call_demand.id_driver','>=',0)->get();
+                // )->where('call_demand.id_demand', '=', $id_demand)->where('call_demand.id_driver','>=',0)->first();
+                // )->where('call_demand.id_demand', '=', $id_demand)->where('call_demand.id_driver','>=',0)->get();
+                )->where('call_demand.id', '=', $id_register)->where('call_demand.id_driver','>=',0)->get();
 
 
                 foreach($calldemand as $demand){
@@ -136,6 +137,7 @@ class CallDemandController extends Controller
 
             $calldemands = DB::table('call_demand')
             ->select(
+                'call_demand.id as id',
                 'call_demand.id_demand as id_demand',
                 'call_demand.type_service  as type_service',
                 'call_demand.period',
@@ -165,7 +167,8 @@ class CallDemandController extends Controller
                 DB::raw('"" as name_driver')
 
             )->where('call_demand.id_driver','>=',0)
-            ->orderByDesc('call_demand.id_demand')
+            // ->orderByDesc('call_demand.id_demand')
+            ->orderByDesc('call_demand.id')
             ->get();
 
             foreach($calldemands as $call_demand){
@@ -539,6 +542,10 @@ class CallDemandController extends Controller
     public function showUpdateForm($id_demand)
     {
         $showdata   = $this->showAPI($id_demand);
+        
+        // dd($showdata);
+        // die();
+
         return view('call_demand.form_edit_call_demand',  $showdata);
     }
 
@@ -597,11 +604,12 @@ class CallDemandController extends Controller
 
     }
 
+/*
     public function showInfoToForm($id_demand)
     {
-        // return 'Funcionando!! id: '.$id;
         return $this->showAPI($id_demand)['data'][0];
     }
+*/    
 
 
 /*

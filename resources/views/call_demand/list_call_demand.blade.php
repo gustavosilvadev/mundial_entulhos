@@ -26,10 +26,11 @@
  @include('partials.nav_teste')
 
     <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper container-xxl p-0">
+    {{-- <div class="app-content content "> --}}
+    <div class="app-content content-designed">
+        {{-- <div class="content-overlay"></div> --}}
+        {{-- <div class="header-navbar-shadow"></div> --}}
+        {{-- <div class="content-wrapper container-xxl p-0"> --}}
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
@@ -124,7 +125,7 @@
                                             <tr>
                                                 
                                                 {{-- <td><a href="/editcalldemand/{{$valDemand->id_demand}}" class="btn btn-info">Editar</a></td> --}}
-                                                <td></td>
+                                                <td>{{ $valDemand->id }}</td>
                                                 
                                                 <td>{{ $valDemand->id_demand }}</td>
                                                 <td><?php echo $valDemand->type_service; ?></td>
@@ -187,7 +188,8 @@
                     </div>
                 </section>
             </div>
-        </div>
+        
+        {{-- </div> --}}
     </div>
     <!-- END: Content-->
 
@@ -214,7 +216,13 @@
 
                         <?php endif;?>
                     </select>
+                    <div class="form-check form-check-info">
+                        <input type="checkbox" class="form-check-input" id="all_drivers" checked="">
+                        <label class="form-check-label" for="colorCheck6">Atualizar para todos</label>
+                    </div>
+
                     <input type="hidden" id="iddemand" value="" />
+                    <input type="hidden" id="idreg" value="" />
                 </div>
                 
                 <div class="modal-footer">
@@ -236,6 +244,10 @@
 $(document).ready(function() {
 
         let tbpedido = $('#tbpedido').DataTable( {
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+            },
+            order: [[0, 'desc']],
             scrollX: true,
             dom: 'Bfrtip',
             buttons: [
@@ -249,13 +261,15 @@ $(document).ready(function() {
 
             let selectedRows = tbpedido.rows({ selected: true });
             let selectedData = selectedRows.data();
+            let id_reg       = selectedData[tbpedido.row( this ).index()][0];
+            let id_demand    = selectedData[tbpedido.row( this ).index()][1];
+            let nameDriver   = "";
 
-            let id_demand  = selectedData[tbpedido.row( this ).index()][1];
-            let nameDriver = "";
-            
             nameDriver = selectedData[tbpedido.row( this ).index()][18];
             
+            $("#all_drivers").prop("checked", true);
             $("#modal-edit").modal('toggle');
+
             if(nameDriver != "")
             {
                 $("#name_driver_selected").val( $('option:contains("' + nameDriver + '")').val());
@@ -264,32 +278,65 @@ $(document).ready(function() {
                 $("#name_driver_selected").val( $('option:contains("----")').val());
             }
 
+            $("#idreg").val(id_reg);
             $("#iddemand").val(id_demand);
-            $("#btn_edit").attr("href","/editcalldemand/" + id_demand);
-            // if ($(this).hasClass('selected')) {
-            //     $(this).removeClass('selected');
-            // } else {
-            //     tbpedido.$('tr.selected').removeClass('selected');
-            //     $(this).addClass('selected');
-            // }
+            $("#btn_edit").attr("href","/editcalldemand/" + id_reg);
+
         });
 
         $("#btn_driver_update").click(function(){
 
-            let idDemand = $("#iddemand").val();
-            let nameDriverSelected = $("#name_driver_selected").val();
+            let idDemand            = $("#iddemand").val();
+            let idReg               = $("#idreg").val();
+            let nameDriverSelected  = $("#name_driver_selected").val();
+            let all_drivers_checked = $("#all_drivers")[0].checked;
+
+
+            if(all_drivers_checked === true){
+                console.log("Atualizará todos os pedidos");
+                console.log("ID do pedido: " + idDemand);
+            }else{
+                console.log("Atualizará somente 1 pedido");
+                console.log("ID do registro: " + idReg);
+
+            }
+
+
+
+
+            let selectedRows = tbpedido.rows({ selected: true });
+            let selectedData = selectedRows.data();
+            let nameDriver   = selectedData[tbpedido.row( $('tr td:contains(' + idReg + ')') ).index()][18];
+            console.log("********************************************");
             
             
+            // console.log(selectedData[tbpedido.row( $('tr td:contains(' + idReg + ')') ).index()]);
+            // selectedData;
+            console.log("+++++++++++++++++++++++++++++++++++++++++++++");
+            console.log("Nome: " + selectedData[tbpedido.row( $('tr td:contains(' + idReg + ')') ).index()][18]);
+
+            console.log("Nome selecionado: " + nameDriverSelected);
+            console.log("Id registro: " + idReg + "\n" + "Nome: " + nameDriver);
+            console.log("#############################################");
+
+            // $.post('editcalldemand',{drivers_checked : all_drivers_checked,  id_reg: idReg, id_demand : idDemand}).done(function(dataResponse){
+
+            //     console.log(dataResponse);
+
+            // }).fail(function(errorMessage){
+            //     console.log(errorMessage);
+            // })
+
+            
+            /*
             console.log("********************************************");
             // tbpedido.columns(18).search(nameDriverSelected, true,false);
-            
             // console.log(Object.values(tbpedido.columns(2)));
-            
-            // data = tbpedido.columns(1).data();
+
             data = tbpedido.columns(1).search('24').data();
             console.log(data);
-            
             console.log("++++++++++++++++++++++++++++++++++++++++++++");
+            */
 
         })
 

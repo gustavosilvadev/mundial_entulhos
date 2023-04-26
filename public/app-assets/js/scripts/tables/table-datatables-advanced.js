@@ -167,22 +167,12 @@ $(function () {
   // --------------------------------------------------------------------
 
   // Advanced Filter table
+  /*
   if (dt_adv_filter_table.length) {
     var dt_adv_filter = dt_adv_filter_table.DataTable({
       // ajax: assetPath + 'data/table-datatable.json',
       ajax: 'http://127.0.0.1:8000/teste_lista_items',
       columns: [
-        /*
-        { data: 'responsive_id' },
-        { data: 'avatar' },
-        { data: 'full_name' },
-        { data: 'email' },
-        { data: 'post' },
-        { data: 'city' },
-        { data: 'start_date' },
-        { data: 'salary' }
-        */
-
 
         { data: 'id_demand' },
         { data: 'type_service' },
@@ -238,6 +228,8 @@ $(function () {
       }
     });
   }
+  
+  */
 
   // on key up from input field
   $('input.dt-input').on('keyup', function () {

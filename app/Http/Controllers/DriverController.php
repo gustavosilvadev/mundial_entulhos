@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Driver;
 use App\Models\Employee;
 use App\Models\CallDemand;
-use App\Models\ActivityDriverDemandDumpster;
+use App\Models\ActivityUserDemandDumpster;
 use App\Models\Landfill;
 class DriverController extends Controller
 {
@@ -300,7 +300,6 @@ class DriverController extends Controller
                 return false;
                 break;
             }
-
         }
 
         $call_demands = CallDemand::where('id_demand',$request->id_demand)->get();
@@ -319,8 +318,6 @@ class DriverController extends Controller
 
         return true;
 
-
-        
         // if(isset($id_user) && isset($request->id_demand)){
         //     $call_demand = CallDemand::where('id_demand',$request->id_demand)->first();
 
@@ -338,11 +335,89 @@ class DriverController extends Controller
 
     }
 
+    public function finishDemand(Request $request)
+    {
+        $id_employee    = session('id_user');
+        $service_status = 5;
+        $is_all_demand  = (trim($request->is_all_demand) === "true") ? True : False;
+
+        if($is_all_demand){
+            $is_updated = CallDemand::where('id_demand',$request->id_call_demand)->where('date_effective_removal_dumpster', null)->where('service_status','<>', 5)->update([
+                'service_status' => $service_status,
+                'date_effective_removal_dumpster' => date('Y-m-d H:i:s')
+            ]);
+
+            if($is_updated)
+            {
+                $call_demands = CallDemand::where('id_demand', $request->id_call_demand)->get();
+
+                if($call_demands->count()){
+
+                    foreach ($call_demands as $call_demand) {
+
+                        $activityUserDemandDumpster = new ActivityUserDemandDumpster();
+                        $activityUserDemandDumpster->id_call_demand_reg = $call_demand->id;
+                        $activityUserDemandDumpster->id_call_demand     = $call_demand->id_demand;
+                        $activityUserDemandDumpster->id_employee        = $id_employee;
+                        $activityUserDemandDumpster->type_service       = $call_demand->type_service;
+                        $activityUserDemandDumpster->service_status     = $service_status; // ENCERRAR CHAMADO
+                    
+                        if($activityUserDemandDumpster->save()){
+                            continue;
+
+                        }else{
+                            return false;
+                        }
+                    }
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+    
+                return false;
+            }
+
+        }else{
+            $updateDemand   = CallDemand::where('id', $request->id_call_demand_reg)->where('date_effective_removal_dumpster', null)->where('service_status','<>', 5)->first();
+            $updateDemand->service_status = $service_status;
+            $updateDemand->date_effective_removal_dumpster = date('Y-m-d H:i:s');
+
+            if($updateDemand->update())
+            {
+                $call_demand = CallDemand::where('id', $request->id_call_demand_reg)->first();
+    
+                if($call_demand->count()){
+                    $activityUserDemandDumpster = new ActivityUserDemandDumpster();
+                    $activityUserDemandDumpster->id_call_demand_reg = $request->id_call_demand_reg;
+                    $activityUserDemandDumpster->id_call_demand     = $request->id_call_demand;
+                    $activityUserDemandDumpster->id_employee        = $id_employee;
+                    $activityUserDemandDumpster->type_service       = $call_demand->type_service;
+                    $activityUserDemandDumpster->service_status     = $service_status; // ENCERRAR CHAMADO
+                
+                    if($activityUserDemandDumpster->save()){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }else{
+    
+                }
+            }else{
+    
+                return false;
+            }            
+        }
+        
+
+    }
+
     public function getDumpsterDemand(Request $request)
     {
-        $callDemand = CallDemand::where('id_demand', $request->id)->get("dumpster_number");
+        $id_employee  = session('id_user');
+        $id_driver    = Driver::select()->where("id_employee", $id_employee)->first();
+        $callDemand   = CallDemand::where('id_demand', $request->id)->where('id_driver', $id_driver['id'])->get("dumpster_number");
         return $callDemand;
-
     }
 
     /**

@@ -40,6 +40,7 @@ Route::middleware('usersession')->group(function(){
     Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
     
     Route::post('/start_demand',[DriverController::class,'startDemand']);
+    Route::post('/finish_demand',[DriverController::class,'finishDemand']);
     Route::get('/show_dumpster_demand/{id?}',[DriverController::class,'getDumpsterDemand']);
     Route::post('/get_dumpster_location',[DriverController::class,'getDumpsterLocation']);
 
@@ -65,9 +66,9 @@ Route::middleware('usersession')->group(function(){
     Route::get('editcalldemand/{id}',[CallDemandController::class,'showUpdateForm']);
     Route::post('change_call_demand',[CallDemandController::class,'update']);
     
-    Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);
+    // Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);
     
-    Route::get('getInfoDemand/{id}',[CallDemandController::class,'showInfoToForm']);
+    // Route::get('getInfoDemand/{id}',[CallDemandController::class,'showInfoToForm']);
     
     Route::get('createdumpsterservicedemand', [DumpsterServiceDemandController::class,'showNameDriverDemand']);
     Route::post('save_dumpster_service_demand',[DumpsterServiceDemandController::class,'store']);

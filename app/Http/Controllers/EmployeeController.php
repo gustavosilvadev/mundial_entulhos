@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Employee;
+use App\Models\Driver;
 
 class EmployeeController extends Controller
 {
@@ -49,6 +50,8 @@ class EmployeeController extends Controller
             && isset($request->password)
         ){
 
+
+
             $employee = new Employee();
                 $employee->name     = $request->name;
                 $employee->surname  = $request->surname;
@@ -67,13 +70,24 @@ class EmployeeController extends Controller
 
                 if($employee->save()){
 
-                    return view('employee.form_cad_employee',["response" => "Dados cadastrados com sucesso"]);
+                    if($request->access_permission == 2 ){
+                        $driver = new Driver();
+                        $driver->id_employee = $employee->id;
+                        $driver->flg_status = 1;
+                        $driver->save();
+                    }
+
+
+                    // return view('employee.form_cad_employee',["response" => "Dados cadastrados com sucesso"]);
+                    return redirect("createemployee");
                 }
 
-                return view('employee.form_cad_employee',["response" => "Erro ao cadastrar o funcionário"]);
+                // return view('employee.form_cad_employee');
+                return redirect("createemployee");
 
         }else{
-            return view('employee.form_cad_employee',["response" => "Dados incompletos!"]);
+            // return view('employee.form_cad_employee',["response" => "Dados incompletos!"]);
+            return redirect("createemployee");
         }
     }
 
