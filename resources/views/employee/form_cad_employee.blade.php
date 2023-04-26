@@ -5,10 +5,11 @@
 
 
     <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-overlay"></div>
+    {{-- <div class="app-content content "> --}}
+        <div class="app-content content-designed">
+        {{-- <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper container-xxl p-0">
+        <div class="content-wrapper container-xxl p-0"> --}}
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
@@ -137,7 +138,7 @@
                     </form>
                 </section>
             </div>
-        </div>
+        {{-- </div> --}}
     </div>
     <!-- END: Content-->
 

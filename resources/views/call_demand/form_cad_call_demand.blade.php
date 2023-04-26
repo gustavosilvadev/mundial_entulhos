@@ -1,8 +1,3 @@
-{{-- 
-@include('partials.header')
-@include('partials.nav') 
---}}
-
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
@@ -28,10 +23,11 @@
     }
 </style>
 
- <div class="app-content content ">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
-    <div class="content-wrapper container-xxl p-0">
+{{-- <div class="app-content content "> --}}
+<div class="app-content content-designed">
+    {{-- <div class="content-overlay"></div> --}}
+    {{-- <div class="header-navbar-shadow"></div> --}}
+    {{-- <div class="content-wrapper container-xxl p-0"> --}}
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
@@ -187,16 +183,17 @@
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group input-icon">
                                                                                     <label for="price_unit">Preço UNIDADE.</label>
-                                                                                    <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" />
+                                                                                    <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="330,00"/>
                                                                                     <i>R$</i>
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="col-md-1">
+                                                                            <div class="col-md-2">
                                                                                 <div class="form-group input-icon">
                                                                                     <label for="price_unit">Desconto(%).</label>
-                                                                                    <input type="text" name="discount_value" class="form-control discount_value" id="discount_value" />
-                                                                                    <i>R$</i>
+                                                                                    <input type="number" name="discount_value" class="form-control discount_value" id="discount_value" maxlength="5"/>
+                                                                                    <i style="float: right;position: relative;bottom: 19px;">%</i>
+                                                                                    
                                                                                 </div>
                                                                             </div>
                                     
@@ -213,7 +210,6 @@
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
-                        
                                                                         </div>
                                                                         
                                                                         <div class="row">
@@ -288,7 +284,7 @@
             </section>
 
         </div>
-    </div>
+    {{-- </div> --}}
 </div>
 
 {{-- @include('partials.footer') --}}
@@ -297,7 +293,7 @@
 <script>
 
     $(document).ready(function(){
-
+        const price_unit_origin = $("#price_unit").val();
 
 
         // $('.date_effective_removal_dumpster').blur(function(){
@@ -349,6 +345,22 @@
         });
         // ZipCode
 
+        $("#discount_value").on( "keyup", function() {
+            
+            let price_unit = $("#price_unit").val().replace(/,/g, '.');
+            if($("#discount_value").val() === 0 || $("#discount_value").val() === "")
+            {
+                $("#price_unit").val(price_unit_origin);
+
+            }else{
+                let discount_value = Number($("#discount_value").val()) / 100;
+                let totalValue = price_unit - (price_unit * discount_value)
+                totalValue = totalValue.toFixed(2).toString().replace(".", ",");
+                $("#price_unit").val(totalValue);
+            }
+
+        } );
+
         let today = new Date();
         $('#date_begin').val(((today.getDate() )) + "/" + ((today.getMonth() + 1)) + "/" + today.getFullYear());
 
@@ -364,17 +376,6 @@
             let id_demand_client = $(this).val();
             findDemandClient(id_demand_client);
         });
-
-        // $('#redirect_list_demand_client').click(function(){
-        //     let id_client = $("#search_data_client option:selected").val();
-        //     window.location.replace("demand_list_client/" + id_client);
-        // });
-
-
-        // $('#no_redirect_list_demand_client').click(function(){
-        //     $("#alert_demand_opened").modal('hide');
-        //     findDemandClient(id_client);
-        // });
 
 
         function findDemandClient(id_demand){
@@ -396,21 +397,7 @@
                     $('#dumpster_total').val(dataResponse.dumpster_total);
                     $('#dumpster_total_opened').val(dataResponse.dumpster_total_opened);
                     $('#dumpster_number').val(dataResponse.dumpster_number);
-                    
-                    // $('#note').val(dataResponse.comments);
-
-                    // let date_format_allocation_data = new Date(dataResponse.date_allocation_dumpster);
-                    // let date_format_allocation = ((date_format_allocation_data.getDate() )) + "/" + ((("00" + date_format_allocation_data.getMonth()).slice(-2)  + 1)) + "/" + date_format_allocation_data.getFullYear(); 
-
-                    // let date_format_removal_data = new Date(dataResponse.date_removal_dumpster);
-                    // let date_format_removal = ((date_format_removal_data.getDate() )) + "/" + ((("00" + date_format_removal_data.getMonth()).slice(-2)  + 1)) + "/" + date_format_removal_data.getFullYear(); 
-                    
-                    // let date_format_effective_removal_data = new Date(dataResponse.date_effective_removal_dumpster);
-                    // let date_format_effective_removal = ((date_format_effective_removal_data.getDate() )) + "/" + ((("00" + date_format_effective_removal_data.getMonth()).slice(-2)  + 1)) + "/" + date_format_effective_removal_data.getFullYear(); 
-
-                    // $('.date_format_allocation').val(dataResponse.date_allocation_dumpster);
                     $('.date_format_removal').val(dataResponse.date_removal_dumpster);
-                    // $('.date_format_effective_removal').val(dataResponse.date_effective_removal_dumpster);
 
                 },
                 error: function(responseError){

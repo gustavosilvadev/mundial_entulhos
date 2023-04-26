@@ -273,38 +273,38 @@ if(session('access_permission') == 1){
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PEDIDOS</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="#">BASE PEDIDOS</a>
+                        <a class="dropdown-item" href="/call_demand">BASE PEDIDOS</a>
                         <a class="dropdown-item" href="#">RESUMO PEDIDOS</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">NOVO</a>
+                        <a class="dropdown-item" href="/createcalldemand">NOVO</a>
 
                     </div>
                 </div><!-- /btn-group -->
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">FUNCIONÁRIOS</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="#">LISTA</a>
+                        <a class="dropdown-item" href="/employee">LISTA</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">NOVO</a>
+                        <a class="dropdown-item" href="/createemployee">NOVO</a>
 
                     </div>
                 </div><!-- /btn-group -->
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">MOTORISTAS</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="#">NOVO</a>
+                        <a class="dropdown-item" href="/createdriver">NOVO</a>
                     </div>
                 </div><!-- /btn-group -->
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">ATERROS</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -164px, 0px);">
-                        <a class="dropdown-item" href="#">NOVO</a>
+                        <a class="dropdown-item" href="createlandfill">NOVO</a>
                     </div>
                 </div><!-- /btn-group -->
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">DIAS MUNICÍPIOS</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="#">NOVO</a>
+                        <a class="dropdown-item" href="/cacamba_dias_municipio">NOVO</a>
                     </div>
                 </div><!-- /btn-group -->
             </div>

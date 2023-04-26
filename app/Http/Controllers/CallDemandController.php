@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use App\Models\CallDemand;
-// use App\Models\Client;
+use App\Models\PaymentCallDemand;
 use App\Models\Driver;
 use App\Models\Landfill;
 
@@ -437,106 +437,21 @@ class CallDemandController extends Controller
                 if(!$calldemand->save())
                     return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
 
+
+                $paymentCallDemand = new PaymentCallDemand();
+                $paymentCallDemand->id_call_demand_reg = $calldemand->id;
+                $paymentCallDemand->id_call_demand = $lastIdDemand;
+
+                if(!$paymentCallDemand->save())
+                    return back()->withErrors(['response' => "Erro ao registrar tela de pagamento"]);
+
             }
             return redirect('createcalldemand');
 
-/*
-            $calldemand = new CallDemand();
-            $calldemand->type_service   = $request->type_service;
-            $calldemand->period         = $request->period;
-            // $calldemand->date_start = '';
-            $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
-            $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
-            // $calldemand->date_effective_removal_dumpster = '';
-            // $calldemand->id_father = '';
-            $calldemand->name       = $request->client_name_new;
-            $calldemand->address    = $request->address;
-            $calldemand->number     = $request->number;
-            $calldemand->zipcode    = $request->zipcode;
-            $calldemand->city       = $request->city;
-            $calldemand->district   = $request->district;
-            $calldemand->state      = $request->state;
-            $calldemand->phone      = str_replace([" ","(",")"],"",$request->phone);
-            $calldemand->price_unit = $request->price_unit;
-            $calldemand->comments   = $request->comments;
-            $calldemand->dumpster_quantity  = $request->dumpster_quantity;
-            // $calldemand->dumpster_number = ''; // MOTORISTA IRÁ ADICIONAR
-            $calldemand->days_allocation    = $request->total_days;
-            // $calldemand->id_landfill = ''; // MOTORISTA IRÁ ADICIONAR
-            $calldemand->id_driver  = $request->id_driver;
-            // $calldemand->service_status = ''; // SOMENTE NA ATUALIZAÇÃO
-
-
-            if($calldemand->save()){
-
-                return redirect('createcalldemand');
-            }
-
-            // return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);
-            return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
-*/
-
         }else{
             return back()->withErrors(['response' => 'Dados incompletos']);
         }
 
-
-
-        
-        /*
-        if(isset($request->client_name_new)
-        && isset($request->type_service)
-        && isset($request->address)
-        && isset($request->number)
-        && isset($request->zipcode)
-        && isset($request->city)
-        && isset($request->district)
-        && isset($request->state)
-        && isset($request->phone)
-        && isset($price_unit)
-        && isset($request->id_landfill)
-        && isset($request->id_driver)
-        && isset($request->period)
-        && isset($request->date_removal_dumpster)
-        && isset($request->date_effective_removal_dumpster)
-        && isset($request->dumpster_number)
-        ){
-
-            $calldemand = new CallDemand();
-            $calldemand->name          = $request->client_name_new;
-            $calldemand->type_service  = $request->type_service;
-            $calldemand->address       = $request->address;
-            $calldemand->number        = $request->number;
-            $calldemand->zipcode       = $request->zipcode;
-            $calldemand->city          = $request->city;
-            $calldemand->district      = $request->district;
-            $calldemand->state         = $request->state;
-            $calldemand->comments      = $request->comments;
-            $calldemand->phone         = $request->phone;
-            $calldemand->price_unit    = preg_replace('/[^0-9]+/','.',str_replace('.','',$price_unit));
-            $calldemand->id_landfill   = $request->id_landfill;
-            $calldemand->id_driver     = $request->id_driver;
-            $calldemand->period        = $request->period;
-            $calldemand->dumpster_total = $request->dumpster_total;
-            $calldemand->dumpster_total_opened = $request->dumpster_total_opened;
-            $calldemand->dumpster_number = $request->dumpster_number;
-            $calldemand->date_allocation_dumpster  = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
-            $calldemand->date_removal_dumpster   = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
-            $calldemand->date_effective_removal_dumpster = (isset($request->date_effective_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_effective_removal_dumpster))) : '');
-        
-            if($calldemand->save()){
-
-                return redirect('createcalldemand');
-            }
-
-            return view('call_demand.form_cad_call_demand',["response" => "Erro ao cadastrar demanda"]);
-        
-
-        }else{
-
-            return back()->withErrors(['response' => 'Dados incompletos']);
-        }
-        */
     }
 
     public function showUpdateForm($id_demand)
@@ -604,44 +519,6 @@ class CallDemandController extends Controller
 
     }
 
-/*
-    public function showInfoToForm($id_demand)
-    {
-        return $this->showAPI($id_demand)['data'][0];
-    }
-*/    
-
-
-/*
-    public function destroy(Request $request)
-    {
-
-        if(isset($request->id) && isset($request->email) && isset($request->cpf_cnpj)){
-            
-            $employee = Employee::where("id",$request->id)->first();
-            
-            if($employee){
-
-                $employee = Employee::where('id',$request->id)->where('email',$request->email)->update(['flg_status' => false]);
-
-                if($employee){
-
-                    return $this->returnSuccess("Cliente removido com sucesso");
-                
-                }else{
-                    return $this->returnError('Erro ao remover cliente',500); 
-                }
-
-            }else{
-                return $this->returnError('Cliente não encontrado',404); 
-
-            }
-
-        }else{
-            return $this->returnError('Cliente não encontrado',404); 
-        }
-    }
-*/
     public function updateStatusDemandDriver(Request $request)
     {
 

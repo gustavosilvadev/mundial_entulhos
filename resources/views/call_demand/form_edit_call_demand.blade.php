@@ -1,11 +1,4 @@
-<?php
 
-// dd($calldemand);
-// dd($driver_name_demands);
-// dd($landfill_name_demands);
-?>
-{{-- @include('partials.header')
-@include('partials.nav') --}}
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
@@ -28,6 +21,12 @@
     .input-icon > input {
     padding-left: 25px;
         padding-right: 0;
+    }
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 </style>
 
@@ -221,10 +220,10 @@
                                                                                                         </div>
                                                                                                     </div>                                                    
                                                 
+                                                                                                
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <label for="driver">MOTORISTA</label>
-                                                                                                            {{-- <input type="hidden" id="id_driver_saved" value="{{ (isset($value->id_driver) ? $value->id_driver : 0) }}"/> --}}
                                                                                                             <select class="select2 form-control form-control-lg" id="driver" name="id_driver">
                                                                                                                 <option value="">----</option>
                                                                                                                 <?php if(isset($drivers)):?>
@@ -240,8 +239,7 @@
                                                                                                             </select>
                                                                                                         </div>
                                                                                                     </div>
-                                                
-                                                
+
                                                                                                     <div class="col-md-12">
                                                                                                         <div class="form-group mb-2">
                                                                                                             <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
@@ -305,6 +303,42 @@
                                                                                                             <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" />
                                                                                                         </div>    
                                                                                                     </div> 
+
+                                                                                                    <div class="col-md-12" style="border: 2px solid rgb(149, 145, 145); margin:10px 0 10px 0"></div>
+                                                                                                    <div class="col-md-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="driver">PAGO</label>
+                                                                                                            <select class="select2 form-control form-control-lg" id="driver" name="is_payed">
+                                                                                                                <option value="">----</option>
+                                                                                                                <option value="1">SIM</option>
+                                                                                                                <option value="0">NÃO</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    </div>                                                                                                    
+                                                                                                    <div class="col-md-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="driver">Nº NOTA</label>
+                                                                                                            <input type="number" class="form-control" min="0" max="1000" placeholder="0">
+                                                                                                        </div>
+                                                                                                    </div>                      
+                                                                                                    <div class="col-md-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="driver">DATA EMISSÃO</label>
+                                                                                                            <input type="number" class="form-control" min="0" max="1000" placeholder="0">
+                                                                                                        </div>
+                                                                                                    </div>                      
+                                                                                                    <div class="col-md-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="driver">PRAZO PAGAMENTO</label>
+                                                                                                            <input type="number" class="form-control" min="0" max="1000" placeholder="0">
+                                                                                                        </div>
+                                                                                                    </div>                      
+                                                                                                    <div class="col-md-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="driver">PREVISÃO PAGAMENTO</label>
+                                                                                                            <input type="number" class="form-control" min="0" max="1000" placeholder="0">
+                                                                                                        </div>
+                                                                                                    </div>               
 
                                                                                                 </div>
                                                                                             </div>
