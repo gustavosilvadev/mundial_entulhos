@@ -4,10 +4,11 @@
 
     <!-- BEGIN: Content-->
     
-    <div class="app-content content todo-application">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-area-wrapper container-xxl p-0">
+    {{-- <div class="app-content content todo-application"> --}}
+    <div class="app-content content-designed">
+        {{-- <div class="content-overlay"></div> --}}
+        {{-- <div class="header-navbar-shadow"></div> --}}
+        {{-- <div class="content-area-wrapper container-xxl p-0"> --}}
             <div class="sidebar-left">
                 <div class="sidebar">
                     <div class="sidebar-content todo-sidebar">
@@ -75,31 +76,13 @@
 
                                                             <p>DATA: <span class="text-white bg-success todo-date-begin">{{ $call_demand->date_allocation_dumpster }}</span></p> 
                                                             
-                                                            
-                                                            {{-- <span class="todo-title-address" style="display:none;">
-                                                                {{
-                                                                    $call_demand->address_service.
-                                                                    ' - '.$call_demand->number_address_service.
-                                                                    ' - '.$call_demand->zipcode_address_service.
-                                                                    ' - ' . $call_demand->city_address_service.
-                                                                    ' - '.$call_demand->district_address_service.
-                                                                    ' - '.$call_demand->state_address_service; 
-                                                                }}
-                                                            </span> --}}
-
                                                             <span class="todo-name-client d-none">{{ $call_demand->name; }}</span>
                                                             <span class="todo-phone d-none">{{ $call_demand->phone_demand; }}</span>
                                                             
 
                                                         </div>
                                                     </div>
-{{-- 
-                                                    <?php if($call_demand->date_start): ?>
-                                                        <p>Data da operação: <span class="badge badge-pill badge-light-info">{{ $call_demand->date_start }}</span></p>
-                                                    <?php endif; ?>
 
-                                                    <p>Previsão de retirada:<span class="text-danger"> {{ $call_demand->date_removal_dumpster_forecast }}</span></p>
---}}
                                                     <div class="todo-item-action">
                                                         
                                                         <div class="badge-wrapper mr-1">
@@ -179,18 +162,13 @@
                                             </div>
                                         </div>
                                         <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
-                                            {{-- <div class="action-tags"> --}}
+                                            
                                             <div class="form-group my-1">
                                                 <div class="form-group">
                                                     <h3 class="form-label todo-name-client">Nome do cliente</h3>
-                                                    {{-- <p class="todo-name-client"></p> --}}
+
                                                 </div>
-{{--     
-                                                <div class="form-group">
-                                                    <h3 for="task-due-date" class="form-label">Endereço</h3>
-                                                    <p class="todo-item-title-address"></p>
-                                                </div> 
---}}
+
     
                                                 <div class="form-group">
                                                     <p><a class="todo-item-address-waze" href="#"></a></p>
@@ -201,13 +179,7 @@
                                                     <h3 class="form-label">Telefone</h3>
                                                     <p class="todo-phone"></p>
                                                 </div>                                            
-{{--     
-                                                <div class="form-group">
-                                                    <h3 for="task-due-date" class="form-label">Data do chamado</h3>
-                                                    <p class="todo-item-date-begin" ></p>
-                                                    <input type="hidden" name="todo-item-date-begin" class="todo-item-date-begin"/>
-                                                </div> 
---}}
+
 
 
                                                 <div class="form-group">
@@ -234,11 +206,7 @@
                                                 </div>                                                
 
                                                 <input type="hidden" name= "id_demand" class="todo-id-demand" />
-<!--                                             
-                                            </div>
-    
-                                            <div class="form-group my-1">
--->
+
                                                     {{-- <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#open_new_modal">ABRIR MODAL </button> --}}
                                                     <label for="type_service">Aterro</label>
                                                     <select class="select2 form-control form-control-lg edit-landfill-list" id="type_service" name="landfill">
@@ -322,7 +290,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        {{-- </div> --}}
     </div>
     
     <!-- END: Content-->

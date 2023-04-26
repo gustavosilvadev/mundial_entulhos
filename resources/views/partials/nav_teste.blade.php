@@ -269,6 +269,7 @@ if(session('access_permission') == 1){
             </ul> 
 --}}
 
+        <?php if(session('access_permission') == 1){ ?>
             <div class="bd-example">
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PEDIDOS</button>
@@ -308,7 +309,7 @@ if(session('access_permission') == 1){
                     </div>
                 </div><!-- /btn-group -->
             </div>
-
+        <?php } ?>
         </div>            
             
 
