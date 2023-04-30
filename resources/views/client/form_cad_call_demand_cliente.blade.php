@@ -7,11 +7,9 @@ if(session('id_user') != null && session('login') != null){ ?>
 <?php } ?>
 
     <!-- BEGIN: Content-->
-    {{-- <div class="app-content content "> --}}
+
         <div class="app-content content-designed">
-        {{-- <div class="content-overlay"></div> --}}
-        {{-- <div class="header-navbar-shadow"></div> --}}
-        {{-- <div class="content-wrapper container-xxl p-0"> --}}
+
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
@@ -24,16 +22,6 @@ if(session('id_user') != null && session('login') != null){ ?>
 
             </div>
             <div class="content-body">
-                <div class="row">
-                <!-- 
-                    <div class="col-12">
-                        <div class="alert alert-primary" role="alert">
-                            <div class="alert-body"><strong>Info:</strong> Use this layout to set menu (navigation) default collapsed. Please check the&nbsp;<a class="text-primary" href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/documentation-layout-collapsed-menu.html" target="_blank">Layout collapsed menu documentation</a>&nbsp; for more details.</div>
-                        </div>
-                    </div>
-                -->
- 
-                </div>
 
                 <section id="multiple-column-form">
                     <div class="row">
@@ -195,7 +183,7 @@ if(session('id_user') != null && session('login') != null){ ?>
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <span class="title" for="date_removal_dumpster">DATA RETIRADA:</span>
-                                                                                    <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4"/>
+                                                                                    <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4" readonly="readonly" />
                                                                                 </div>    
                                                                             </div>
 
@@ -234,14 +222,9 @@ if(session('id_user') != null && session('login') != null){ ?>
                         </div>
                     </div>
                 </section>
-
-
-
             </div>
-        {{-- </div> --}}
     </div>
     <!-- END: Content-->
-
 
 {{-- @include('partials.footer') --}}
 
@@ -281,22 +264,36 @@ if(session('id_user') != null && session('login') != null){ ?>
 
         // ZipCode
         $("#zipcode").change(function(){
-            let zipcode = $(this).val().trim().replace("-", "");
+            
+            let zipcodeStr = $(this).val().replace(/[\s,-]/g,"");
+            let zipcode     = parseInt($(this).val().replace(/[\s,-]/g,""));
 
-            let settings = {
-            "url": "https://viacep.com.br/ws/" + zipcode.trim() + "/json/",
-            "method": "GET",
-            "timeout": 0,
-            };
+            if(zipcodeStr.length == 8 && typeof zipcode == "number"){
 
-            $.ajax(settings).done(function (dataResponse) {
+                let settings = {
+                "url": "https://viacep.com.br/ws/" + zipcodeStr + "/json/",
+                "method": "GET",
+                "timeout": 0,
+                };
 
-                $("#address").val(dataResponse.logradouro);
-                $("#district").val(dataResponse.bairro);
-                $("#city").val(dataResponse.localidade);
-                $("#state").val(dataResponse.uf);
+                $.ajax(settings).done(function (dataResponse) {
 
-            });
+                    $("#address").val(dataResponse.logradouro);
+                    $("#district").val(dataResponse.bairro);
+                    $("#city").val(dataResponse.localidade);
+                    $("#state").val(dataResponse.uf);
+
+                });
+            
+            }else{
+                alert("CEP inválido!");
+                $(this).val("");
+                $("#address").val("");
+                $("#district").val("");
+                $("#city").val("");
+                $("#state").val("");
+                return false;
+            }
 
         });
         // ZipCode

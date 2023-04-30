@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
-
 use App\Models\Client;
 use App\Models\CallDemand;
+use App\Models\PaymentCallDemand;
 
 
 class ClientController extends Controller
@@ -220,7 +220,7 @@ public function saveDataDemandClient(Request $request)
     && isset($request->dumpster_quantity)
     && isset($request->total_days)
     ){
-
+/*
         $verificaPedidoRelacionado = CallDemand::where('zipcode', '=', $request->zipcode)
             ->where('address', '=', $request->address)
             ->where('number', '=', $request->number)
@@ -256,8 +256,54 @@ public function saveDataDemandClient(Request $request)
         }
 
         return redirect('/new_demand_client')->with($this->returnError('Erro ao cadastrar'));
+*/
 
-    
+        $verificaPedidoRelacionado = CallDemand::where('zipcode', '=', $request->zipcode)
+        ->where('address', '=', $request->address)
+        ->where('number', '=', $request->number)
+        ->where('id_father', '=', 0)
+        ->whereNull('date_effective_removal_dumpster')->first();
+
+        $lastIdDemand = isset(CallDemand::orderBy('id', 'desc')->first()->id) ? (CallDemand::orderBy('id', 'desc')->first()->id + 1) : 1 ;
+                    
+        for($repeatInfo = 0; $repeatInfo < $request->dumpster_quantity; $repeatInfo ++){
+
+            $calldemand = new CallDemand();
+            $calldemand->id_demand      = $lastIdDemand;
+            $calldemand->type_service   = $request->type_service;
+            $calldemand->period         = $request->period;
+            $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
+            $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
+            $calldemand->id_father  = isset($verificaPedidoRelacionado) ? $verificaPedidoRelacionado->id : 0;
+            $calldemand->name       = $request->client_name_new;
+            $calldemand->address    = $request->address;
+            $calldemand->number     = $request->number;
+            $calldemand->zipcode    = $request->zipcode;
+            $calldemand->city       = $request->city;
+            $calldemand->district   = $request->district;
+            $calldemand->state      = $request->state;
+            $calldemand->phone      = str_replace([" ","(",")"],"",$request->phone);
+            $calldemand->price_unit = 0.00;
+            $calldemand->comments   = $request->comments;
+            $calldemand->dumpster_sequence_demand = $repeatInfo + 1;
+            $calldemand->dumpster_quantity  = $request->dumpster_quantity;
+            $calldemand->days_allocation    = $request->total_days;
+            $calldemand->id_driver  = 0;
+            $calldemand->save();
+
+            if(!$calldemand->save())
+                return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
+
+
+            $paymentCallDemand = new PaymentCallDemand();
+            $paymentCallDemand->id_call_demand_reg = $calldemand->id;
+            $paymentCallDemand->id_call_demand = $lastIdDemand;
+
+            if(!$paymentCallDemand->save())
+                return back()->withErrors(['response' => "Erro ao registrar ids de pagamento"]);            
+        }
+
+        return redirect('/new_demand_client')->with($this->returnSuccess('Salvo com sucesso'));
 
     }else{
 

@@ -332,7 +332,7 @@ if(session('access_permission') == 1){
                         <i class="mr-50" data-feather="user"></i> Perfil</a><a class="dropdown-item" href="#">
                         
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#"><i class="mr-50" data-feather="settings"></i> Configurações</a>
+                        <a class="dropdown-item" href="employee/{{session('id_user')}}"><i class="mr-50" data-feather="settings"></i> Configurações</a>
                         <a class="dropdown-item" href="/logout"><i class="mr-50" data-feather="power"></i> SAIR</a>
                     </div>
                 </li>

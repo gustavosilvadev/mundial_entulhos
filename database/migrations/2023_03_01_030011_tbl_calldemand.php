@@ -46,16 +46,7 @@ class TblCalldemand extends Migration
 
             $table->integer('id_driver')->nullable(); // MOTORISTA
             $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - OK');
-
-            // CRIAR TABELA DE PAGAMENTO FUTURAMENTE 
-            // $table->integer('id_payment')->nullable(); // PAGAMENTO(PAYMENT)
-            // $table->integer('id_dumpster')->nullable(); // CAÇAMBA(Dumspter)
-            // $table->integer('dumpster_total')->nullable();
-            // $table->integer('dumpster_total_opened')->nullable();
-            // $table->dateTime('date_change_dumpster')->nullable(); // Data de troca da caçamba
-
             $table->timestamps(); // create_at - Data do Pedido
-
 
         });
     }

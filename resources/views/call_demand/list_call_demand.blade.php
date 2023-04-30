@@ -1,195 +1,169 @@
-
-<?php
-
-/** 
- * COLOCACAO/TROCA
- * DATA PEDIDO
- * CLIENTE (NOME/SOBRENOME)
- * ENDEREÇO DA OBRA
- * BAIRRO
- * TELEFONE
- * PREÇO
- * COMENTÁRIOS
- * TOTAL CACAMBAS
- * PREVISAO DE RETIRADA
- * DATA RETIRADA EFETIVA
- * STATUS
- * ATERRO
- * PERIODO DO DIA
- * MOTORISTA
- * 
- * **/
-
-?>
- 
  @include('partials.header_teste')
  @include('partials.nav_teste')
 
+ <style>
+    thead input {
+        width: 100%;
+    }
+ </style>
     <!-- BEGIN: Content-->
-    {{-- <div class="app-content content "> --}}
-    <div class="app-content content-designed">
-        {{-- <div class="content-overlay"></div> --}}
-        {{-- <div class="header-navbar-shadow"></div> --}}
-        {{-- <div class="content-wrapper container-xxl p-0"> --}}
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-2">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">Lista de Pedidos</h2>
 
-                        </div>
+    <div class="app-content content-designed">
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h2 class="content-header-title float-left mb-0">Lista de Pedidos</h2>
+
                     </div>
                 </div>
+            </div>
+
+        </div>
+        <div class="content-body">
+            <div class="row">
+            <!-- 
+                <div class="col-12">
+                    <div class="alert alert-primary" role="alert">
+                        <div class="alert-body"><strong>Info:</strong> Use this layout to set menu (navigation) default collapsed. Please check the&nbsp;<a class="text-primary" href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/documentation-layout-collapsed-menu.html" target="_blank">Layout collapsed menu documentation</a>&nbsp; for more details.</div>
+                    </div>
+                </div>
+            -->
 
             </div>
-            <div class="content-body">
+
+
+            <section id="ajax-datatable">
                 <div class="row">
-                <!-- 
                     <div class="col-12">
-                        <div class="alert alert-primary" role="alert">
-                            <div class="alert-body"><strong>Info:</strong> Use this layout to set menu (navigation) default collapsed. Please check the&nbsp;<a class="text-primary" href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/documentation-layout-collapsed-menu.html" target="_blank">Layout collapsed menu documentation</a>&nbsp; for more details.</div>
-                        </div>
-                    </div>
-                -->
- 
-                </div>
+                        <div class="card">
+                            <div class="card-header border-bottom">
+                                <h4 class="card-title">PESQUISA</h4>
+                            </div>
 
+                            <div class="card-body mt-2">
+                                <form class="dt_adv_search" method="POST">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-row mb-1">
+                                                <div class="col-lg-4 mb-1">
+                                                    <label>MOTORISTA</label>
+                                                    <select class="select2 form-control" id="name_search" multiple>
+                                                        <?php if($driver_name_demands):?>
+                                                        <?php foreach($driver_name_demands as $driver_name):?>
+                                                            <option value="{{ $driver_name->name }}">{{ $driver_name->name }}</option>
+                                                        <?php endforeach;?>
 
-                <section id="ajax-datatable">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header border-bottom">
-                                    <h4 class="card-title">PESQUISA</h4>
-                                </div>
+                                                        <?php endif;?>
+                                                    </select>
+                                                </div>
 
-                                <div class="card-body mt-2">
-                                    <form class="dt_adv_search" method="POST">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-row mb-1">
-                                                    <div class="col-lg-4 mb-1">
-                                                        <label>MOTORISTA</label>
-                                                        <select class="select2 form-control" id="name_search" multiple>
-                                                            <?php if($driver_name_demands):?>
-                                                            <?php foreach($driver_name_demands as $driver_name):?>
-                                                                <option value="{{ $driver_name->name }}">{{ $driver_name->name }}</option>
-                                                            <?php endforeach;?>
-
-                                                            <?php endif;?>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-lg-4">
-                                                        <label>DATA DE ABERTURA</label>
-                                                        <div class="form-group mb-0">
-                                                            <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
-                                                        </div>
+                                                <div class="col-lg-4">
+                                                    <label>DATA DE ABERTURA</label>
+                                                    <div class="form-group mb-0">
+                                                        <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <input type="reset" class="btn btn-warning" value="Limpar">
-                                    </form>
-                                </div>                              
-                                <div class="card-datatable">
+                                    </div>
+                                    <input type="reset" class="btn btn-warning" value="Limpar">
+                                </form>
+                            </div>                              
+                            <div class="card-datatable">
 
-                                    <table id="tbpedido" class="display nowrap" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Nº FICHA</th>
-                                                <th>COLOCACAO/TROCA</th>
-                                                <th>PERIODO DO DIA</th>
-                                                <th>CLIENTE</th>
-                                                <th>DATA PEDIDO</th>
-                                                <th>DATA OPERACAO</th>
-                                                <th>DATA ALOCAÇÃO</th>
-                                                <th>DATA PREV RETIRADA</th>
-                                                <th>DATA RETIRADA EFETIVA</th>
-                                                <th>ENDEREÇO</th>
-                                                <th>TELEFONE</th>
-                                                <th>PREÇO</th>
-                                                <th>COMENTÁRIOS</th>
-                                                <th>QUANTIDADE CACAMBAS</th>
-                                                <th>NÚMERO CAÇAMBA</th>
-                                                {{-- <th>DATA RETIRADA EFETIVA</th>  --}}
-                                                <th>STATUS</th> 
-                                                <th>ATERRO</th>
-                                                <th>MOTORISTA</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php if(!empty($calldemands)): ?>
-                                                <?php foreach($calldemands as $valDemand):?>        
-                                            <tr>
-                                                
-                                                {{-- <td><a href="/editcalldemand/{{$valDemand->id_demand}}" class="btn btn-info">Editar</a></td> --}}
-                                                <td>{{ $valDemand->id }}</td>
-                                                
-                                                <td>{{ $valDemand->id_demand }}</td>
-                                                <td><?php echo $valDemand->type_service; ?></td>
-                                                <td><?php echo $valDemand->period; ?></td>
-                                                <td><?php echo $valDemand->name; ?></td>
-                                                <td><?php echo $valDemand->created_at; ?></td>
-                                                <td><?php echo $valDemand->date_start; ?></td>
-                                                <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
-                                                <td><?php echo $valDemand->date_removal_dumpster_forecast; ?></td>
-                                                <td><?php echo $valDemand->date_effective_removal_dumpster; ?></td>
-                                                <td>
-                                                    <?php echo $valDemand->address_service.' '.
-                                                        $valDemand->number_address_service.' '.
-                                                        $valDemand->district_address_service.' '.
-                                                        $valDemand->city_address_service.' '.
-                                                        $valDemand->state_address_service.' '; 
-                                                    ?>
-                                                </td>
-                                                <td><?php echo $valDemand->phone_demand; ?></td>
-                                                <td><?php echo $valDemand->price_unit; ?></td>
-                                                <td><?php echo $valDemand->comments_demand; ?></td>
-                                                <td><?php echo $valDemand->dumpster_quantity; ?></td>
-                                                <td><?php echo $valDemand->dumpster_number; ?></td>
-                                                {{-- <td><?php echo $valDemand->date_end; ?></td> --}}
-                                                <td><?php echo $valDemand->service_status; ?></td>
-                                                <td><?php echo $valDemand->name_landfill; ?></td>
-                                                <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
-                                            </tr>
-                                                <?php endforeach;?>
-                                            <?php endif; ?>      
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th></th>
-                                                <th>Nº FICHA</th>
-                                                <th>COLOCACAO/TROCA</th>
-                                                <th>PERIODO DO DIA</th>
-                                                <th>CLIENTE</th>
-                                                <th>DATA PEDIDO</th>  
-                                                <th>DATA OPERACAO</th>
-                                                <th>DATA ALOCAÇÃO</th>
-                                                <th>DATA PREV RETIRADA</th>
-                                                <th>DATA RETIRADA EFETIVA</th>
-                                                <th>ENDEREÇO</th>
-                                                <th>TELEFONE</th>
-                                                <th>PREÇO</th>
-                                                <th>COMENTÁRIOS</th>
-                                                <th>QUANTIDADE CACAMBAS</th>
-                                                <th>NÚMERO CAÇAMBA</th>
-                                                {{-- <th>DATA RETIRADA EFETIVA</th>  --}}
-                                                <th>STATUS</th> 
-                                                <th>ATERRO</th>
-                                                <th>MOTORISTA</th>
-                                            </tr>                                            
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                <table id="tbpedido" class="display nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Nº FICHA</th>
+                                            <th>Nº PEDIDO</th>
+                                            <th>COLOCACAO/TROCA</th>
+                                            <th>PERIODO DO DIA</th>
+                                            <th>CLIENTE</th>
+                                            <th>DATA PEDIDO</th>
+                                            <th>DATA OPERACAO</th>
+                                            <th>DATA ALOCAÇÃO</th>
+                                            <th>DATA PREV RETIRADA</th>
+                                            <th>DATA RETIRADA EFETIVA</th>
+                                            <th>ENDEREÇO</th>
+                                            <th>TELEFONE</th>
+                                            <th>PREÇO</th>
+                                            <th>COMENTÁRIOS</th>
+                                            <th>QUANTIDADE CACAMBAS</th>
+                                            <th>NÚMERO CAÇAMBA</th>
+                                            <th>STATUS</th> 
+                                            <th>ATERRO</th>
+                                            <th>MOTORISTA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if(!empty($calldemands)): ?>
+                                            <?php foreach($calldemands as $valDemand):?>        
+                                        <tr>
+                                            
+                                            {{-- <td><a href="/editcalldemand/{{$valDemand->id_demand}}" class="btn btn-info">Editar</a></td> --}}
+                                            <td>{{ $valDemand->id }}</td>
+                                            
+                                            <td>{{ $valDemand->id_demand }}</td>
+                                            <td><?php echo $valDemand->type_service; ?></td>
+                                            <td><?php echo $valDemand->period; ?></td>
+                                            <td><?php echo $valDemand->name; ?></td>
+                                            <td><?php echo $valDemand->created_at; ?></td>
+                                            <td><?php echo $valDemand->date_start; ?></td>
+                                            <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
+                                            <td><?php echo $valDemand->date_removal_dumpster_forecast; ?></td>
+                                            <td><?php echo $valDemand->date_effective_removal_dumpster; ?></td>
+                                            <td>
+                                                <?php echo $valDemand->address_service.' '.
+                                                    $valDemand->number_address_service.' '.
+                                                    $valDemand->district_address_service.' '.
+                                                    $valDemand->city_address_service.' '.
+                                                    $valDemand->state_address_service.' '; 
+                                                ?>
+                                            </td>
+                                            <td><?php echo $valDemand->phone_demand; ?></td>
+                                            <td><?php echo $valDemand->price_unit; ?></td>
+                                            <td><?php echo $valDemand->comments_demand; ?></td>
+                                            <td><?php echo $valDemand->dumpster_quantity; ?></td>
+                                            <td><?php echo $valDemand->dumpster_number; ?></td>
+                                            <td><?php echo $valDemand->service_status; ?></td>
+                                            <td><?php echo $valDemand->name_landfill; ?></td>
+                                            <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
+                                        </tr>
+                                            <?php endforeach;?>
+                                        <?php endif; ?>      
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Nº FICHA</th>
+                                            <th>Nº PEDIDO</th>
+                                            <th>COLOCACAO/TROCA</th>
+                                            <th>PERIODO DO DIA</th>
+                                            <th>CLIENTE</th>
+                                            <th>DATA PEDIDO</th>  
+                                            <th>DATA OPERACAO</th>
+                                            <th>DATA ALOCAÇÃO</th>
+                                            <th>DATA PREV RETIRADA</th>
+                                            <th>DATA RETIRADA EFETIVA</th>
+                                            <th>ENDEREÇO</th>
+                                            <th>TELEFONE</th>
+                                            <th>PREÇO</th>
+                                            <th>COMENTÁRIOS</th>
+                                            <th>QUANTIDADE CACAMBAS</th>
+                                            <th>NÚMERO CAÇAMBA</th>
+                                            {{-- <th>DATA RETIRADA EFETIVA</th>  --}}
+                                            <th>STATUS</th> 
+                                            <th>ATERRO</th>
+                                            <th>MOTORISTA</th>
+                                        </tr>                                            
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
-        
-        {{-- </div> --}}
+                </div>
+            </section>
+        </div>
     </div>
     <!-- END: Content-->
 
@@ -243,6 +217,11 @@
 <script>
 $(document).ready(function() {
 
+        $('#tbpedido thead tr')
+            .clone(true)
+            .addClass('filters')
+            .appendTo('#tbpedido thead');
+
         let tbpedido = $('#tbpedido').DataTable( {
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
@@ -251,9 +230,85 @@ $(document).ready(function() {
             scrollX: true,
             dom: 'Bfrtip',
             buttons: [
-                // 'copy', 'csv', 'excel', 'pdf', 'print'
                 'copy', 'csv', 'excel'
-            ]
+            ],
+            // Adicionando filtros em todas as colunass
+
+            orderCellsTop: true,
+            fixedHeader: true,
+            initComplete: function () {
+                var api = this.api();
+
+                // For each column
+                api
+                    .columns()
+                    //Teste 
+                    .every(function () {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+    
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+    
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                            });
+                    })
+                    //Teste
+                    .eq(0)
+                    .each(function (colIdx) {
+
+                        // Set the header cell to contain the input element
+                        var cell = $('.filters th').eq(
+                            $(api.column(colIdx).header()).index()
+                        );
+                        var title = $(cell).text();
+                        // $(cell).html('<input type="text" placeholder="' + title + '" />');
+                        $(cell).html('<input type="text" />');
+
+                        // On every keypress in this input
+                        $(
+                            'input',
+                            $('.filters th').eq($(api.column(colIdx).header()).index())
+                        )
+                            .off('keyup change')
+                            .on('change', function (e) {
+                                // Get the search value
+                                $(this).attr('title', $(this).val());
+                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                var cursorPosition = this.selectionStart;
+                                // Search the column for that value
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != ''
+                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                            : '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+                            })
+                            .on('keyup', function (e) {
+                                e.stopPropagation();
+
+                                $(this).trigger('change');
+                                $(this)
+                                    .focus()[0]
+                                    .setSelectionRange(cursorPosition, cursorPosition);
+                            });
+
+                    });
+            },
+
         } );
 
         $('#tbpedido tbody').on('click', 'tr', function () {
@@ -300,9 +355,6 @@ $(document).ready(function() {
                 console.log("ID do registro: " + idReg);
 
             }
-
-
-
 
             let selectedRows = tbpedido.rows({ selected: true });
             let selectedData = selectedRows.data();

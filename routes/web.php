@@ -24,7 +24,7 @@ Route::middleware('usersession')->group(function(){
     Route::get('createemployee', function(){
         return view('employee.form_cad_employee');
     });
-    
+   
     Route::post('save_employee',[EmployeeController::class,'store']);
     Route::get('employee/{id?}',[EmployeeController::class,'show']);
     Route::post('/update_employee',[EmployeeController::class,'update']);

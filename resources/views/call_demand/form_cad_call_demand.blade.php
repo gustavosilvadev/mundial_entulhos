@@ -23,11 +23,7 @@
     }
 </style>
 
-{{-- <div class="app-content content "> --}}
 <div class="app-content content-designed">
-    {{-- <div class="content-overlay"></div> --}}
-    {{-- <div class="header-navbar-shadow"></div> --}}
-    {{-- <div class="content-wrapper container-xxl p-0"> --}}
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
@@ -54,8 +50,6 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-
-
                                 <div class="card-body">
                             
                                     <form action="/save_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
@@ -236,7 +230,7 @@
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
-                                                                                    <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);"/>
+                                                                                    <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
 
                                                                                 </div>    
                                                                             </div>
@@ -244,14 +238,16 @@
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <span class="title" for="date_removal_dumpster">DATA PREV RETIRADA:</span>
-                                                                                    <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4"/>
+                                                                                    <input type="text" name="date_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4" onchange="validaDateRemovalDumpster();" />
+                                                                                    <div class="loadingMask text-primary" style="display:none;">Loading...</div>
                                                                                 </div>    
                                                                             </div>
 
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <span class="title">TOTAL DE DIAS</span>
-                                                                                    <input type="number" name="total_days" class="form-control total_days" value="0" min="0" max="1000" placeholder="0"/>
+                                                                                    <input type="number" name="total_days" class="form-control total_days" value="0" min="1" max="1000" placeholder="0" onkeyup="validaTotalDays(this);"/>
+                                                                                    <div class="loadingMask text-primary" style="display:none;">Loading...</div>
                                                                                 </div>    
                                                                             </div> 
                                                                         </div>
@@ -282,9 +278,7 @@
                         </div>
                     </div>
             </section>
-
         </div>
-    {{-- </div> --}}
 </div>
 
 {{-- @include('partials.footer') --}}
@@ -325,22 +319,35 @@
         // ZipCode
         $("#zipcode").change(function(){
 
-            let zipcode  = $(this).val().trim().replace("-", "");
-            let settings = {
-            "url": "https://viacep.com.br/ws/" + zipcode.trim() + "/json/",
-            "method": "GET",
-            "timeout": 0,
-            };
+            let zipcodeStr = $(this).val().replace(/[\s,-]/g,"");
+            let zipcode     = parseInt($(this).val().replace(/[\s,-]/g,""));
 
+            if(zipcodeStr.length == 8 && typeof zipcode == "number"){
 
-            $.ajax(settings).done(function (dataResponse) {
+                let settings = {
+                "url": "https://viacep.com.br/ws/" + zipcodeStr + "/json/",
+                "method": "GET",
+                "timeout": 0,
+                };
 
-                $("#address").val(dataResponse.logradouro);
-                $("#district").val(dataResponse.bairro);
-                $("#city").val(dataResponse.localidade);
-                $("#state").val(dataResponse.uf);
+                $.ajax(settings).done(function (dataResponse) {
 
-            });
+                    $("#address").val(dataResponse.logradouro);
+                    $("#district").val(dataResponse.bairro);
+                    $("#city").val(dataResponse.localidade);
+                    $("#state").val(dataResponse.uf);
+
+                });
+            
+            }else{
+                alert("CEP inválido!");
+                $(this).val("");
+                $("#address").val("");
+                $("#district").val("");
+                $("#city").val("");
+                $("#state").val("");
+                return false;
+            }            
 
         });
         // ZipCode
@@ -420,6 +427,9 @@
                 date_removal_dumpster: {
                     required: true
                 },
+                total_days: {
+                    required: true
+                },
                 // date_effective_removal_dumpster: {
                 //     required: true
                 // },
@@ -478,6 +488,7 @@
                 date_begin: "Campo <b>Data Pedido</b> deve ser preenchido!",
                 date_allocation_dumpster: "Campo <b>Data de Alocação</b> deve ser preenchido!",
                 date_removal_dumpster: "Campo <b>Previsao de Retirada</b> deve ser preenchido!",
+                total_days: "Campo <b>Total de Dias</b> deve ser maior que que 0!",
                 // date_effective_removal_dumpster: "Campo <b>Previsão de Retirada Efetiva</b> deve ser preenchido!",
                 id_client: "Campo <b>Cliente</b> deve ser preenchido!",
                 address: "Campo <b>Endereço</b> deve ser preenchido!",
@@ -513,18 +524,22 @@
     }          
 
 
-    validaData = (dataAlocacao) => {
+    let validaData = (dataAlocacao) => {
+
         let city = $('#city').val();
 
         if(city.length > 0){
 
             if(dataAlocacao.value.length > 0){
+                $('.loadingMask').show();
+                
                 $.ajax({
                         method: 'GET',
                         url: '/dias_municipio',
                         data: {city : city},
                         success: function(dataResponse) {
 
+                            $('.loadingMask').hide();
                             $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
                             // $("input[name='date_effective_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
                             // $("input[name='total_days']").val(quantidadeDias());
@@ -532,6 +547,7 @@
                             
                         },
                         error: function(responseError){
+                            $('.loadingMask').hide();
                             alert(responseError);
                         }
                 });
@@ -541,7 +557,34 @@
 
             $("#form").submit();
         }
-    }
+    };
+
+    let validaDateRemovalDumpster = _ => {
+        $("input[name=total_days]").val("");
+        let dateAllocationDumpster  = $("input[name=date_allocation_dumpster]").val();
+        let dateRemovalDumpster     = $("input[name=date_removal_dumpster]").val();
+        dateAllocationDumpsterEdit  = dateAllocationDumpster.split("/");
+        dateAllocationDumpster      = new Date(dateAllocationDumpsterEdit[2] + "-" + dateAllocationDumpsterEdit[1] + "-" + dateAllocationDumpsterEdit[0]);
+
+        dateRemovalDumpsterEdit     = dateRemovalDumpster.split("/");
+        dateRemovalDumpster         = new Date(dateRemovalDumpsterEdit[2] + "-" + dateRemovalDumpsterEdit[1] + "-" + dateRemovalDumpsterEdit[0]);
+
+        diffInDays = (dateRemovalDumpster - dateAllocationDumpster) / (1000 * 60 * 60 * 24);
+
+        $("input[name=total_days]").val(diffInDays);
+
+    };
+
+    let validaTotalDays = (days) => {
+
+        let dateAllocationDumpster  = $("input[name=date_allocation_dumpster]").val();
+
+        if(dateAllocationDumpster !== '' && days.value > 0)
+            $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(days.value));
+
+        else
+            $("input[name='date_removal_dumpster']").val("");
+    };
 
     let adicionaDiasEmData = (days) => {
 

@@ -1,15 +1,12 @@
-{{-- @include('partials.header')
-@include('partials.nav') --}}
+
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
 
     <!-- BEGIN: Content-->
-    {{-- <div class="app-content content "> --}}
+
         <div class="app-content content-designed">
-        {{-- <div class="content-overlay"></div> --}}
-        {{-- <div class="header-navbar-shadow"></div> --}}
-        {{-- <div class="content-wrapper container-xxl p-0"> --}}
+
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
@@ -373,16 +370,17 @@
                                         <?php if(isset($employees)): ?>
                                             
                                             <?php foreach($employees as $employee): ?>
-    
-                                            <tbody>
-                                                <td>
-                                                    <a href="employee/{{$employee->id}}" class="href">
-                                                        <span class="todo-title"><?php echo $employee->name.' '.$employee->surname; ?></span>
-                                                    </a>
-                                                </td>
-                                                <td><a href="/employee/<?php echo $employee->id; ?>">Editar</a></td>
-                                                
-                                            </tbody>
+                                                <?php if($employee->id != session('id_user')){ ?>
+                                                    <tbody>
+                                                        <td>
+                                                            <a href="employee/{{$employee->id}}" class="href">
+                                                                <span class="todo-title"><?php echo $employee->name.' '.$employee->surname; ?></span>
+                                                            </a>
+                                                        </td>
+                                                        <td><a href="/employee/<?php echo $employee->id; ?>">Editar</a></td>
+                                                        
+                                                    </tbody>
+                                                <?php } ?>
     
                                         <?php endforeach; ?>
                                         <?php else: ?>

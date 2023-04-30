@@ -117,9 +117,8 @@ class CallDemandController extends Controller
     public function show(Request $request)
     {
         if(isset($request->id)){
-            
-            $id_demand = $request->id;
 
+            $id_demand = $request->id;
             $calldemand = CallDemand::where('id_demand',$id_demand)->orderBy('id_demand','DESC')->first();
 
             if(isset($calldemand)){
@@ -443,7 +442,7 @@ class CallDemandController extends Controller
                 $paymentCallDemand->id_call_demand = $lastIdDemand;
 
                 if(!$paymentCallDemand->save())
-                    return back()->withErrors(['response' => "Erro ao registrar tela de pagamento"]);
+                    return back()->withErrors(['response' => "Erro ao registrar ids de pagamento"]);
 
             }
             return redirect('createcalldemand');

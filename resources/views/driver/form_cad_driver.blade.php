@@ -57,7 +57,9 @@
                                                         <select class="select2 form-control form-control-lg" name="employee">
                                                             <option value="">----</option>
                                                             <?php foreach($employees as $employee):?>
-                                                                <option value="<?php echo $employee->id; ?>"><?php echo $employee->name; ?></option>
+                                                                <?php if($employee->id != session('id_user')){ ?>
+                                                                    <option value="<?php echo $employee->id; ?>"><?php echo $employee->name; ?></option>
+                                                                <?php } ?>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>
