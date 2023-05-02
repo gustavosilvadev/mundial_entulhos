@@ -11,7 +11,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">LISTA DE FUNCIONÁRIOS</h2>
+                            <h2 class="content-header-title float-left mb-0">LISTA DE ATIVIDADES</h2>
 
                         </div>
                     </div>
@@ -23,11 +23,7 @@
                 <section id="ajax-datatable">
                     <div class="row">
                         <div class="col-12">
-
                             <div class="card">
-                                <div class="card-header">
-                                    <a href="/createemployee" class="btn btn-success">NOVO</a>
-                                </div>
                                 <div style="display: block;overflow-x: auto;white-space: nowrap;" >
                                     <table class="table">
                                         <thead>
@@ -70,6 +66,7 @@
                     </div>
                 </section>
             </div>
+        {{-- </div> --}}
     </div>
     <!-- END: Content-->
 

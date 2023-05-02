@@ -13,7 +13,7 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Lista de Pedidos</h2>
+                        <h2 class="content-header-title float-left mb-0 text-info" style="text-decoration: underline">BASE PEDIDOS</h2>
 
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header border-bottom">
-                                <h4 class="card-title">PESQUISA</h4>
+                                {{-- <h4 class="card-title">PESQUISA</h4> --}}
                             </div>
 
                             <div class="card-body mt-2">

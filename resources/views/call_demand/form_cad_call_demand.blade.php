@@ -81,7 +81,7 @@
                                                                                         <option value="">----</option>
                                                                                         <?php if(isset($clients)):?>
                                                                                             <?php foreach($clients as $client):?>
-                                                                                                <option value="<?php echo $client->id_demand; ?>"><?php echo $client->name; ?></option>
+                                                                                                <option value="<?php echo $client->id; ?>"><?php echo $client->name; ?></option>
                                                                                             <?php endforeach; ?>
                                                                                         <?php endif; ?>
                                                                                     </select>
@@ -181,7 +181,7 @@
                                                                                     <i>R$</i>
                                                                                 </div>
                                                                             </div>
-
+{{-- 
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group input-icon">
                                                                                     <label for="price_unit">Desconto(%).</label>
@@ -190,7 +190,7 @@
                                                                                     
                                                                                 </div>
                                                                             </div>
-                                    
+--}}
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="driver">MOTORISTA</label>
@@ -391,6 +391,7 @@
                 url: '/show_info_client',
                 data: {id : id_demand},
                 success: function(dataResponse) {
+
                     $("#client_name_new").val(dataResponse.name);
                     $("#address").val(dataResponse.address);
                     $("#number").val(dataResponse.number);

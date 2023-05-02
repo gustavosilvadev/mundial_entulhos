@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Employee;
 use App\Models\Driver;
-
+use App\Models\ActivityUserDemandDumpster;
 class EmployeeController extends Controller
 {
 
@@ -174,6 +174,18 @@ class EmployeeController extends Controller
         }else{
             return $this->returnError('Cliente não encontrado',404); 
         }
+    }
+
+
+    public function showInfoEmployeActivities()
+    {
+
+        $activities = ActivityUserDemandDumpster::join('call_demand', 'call_demand.id', '=', 'activity_user_demand_dumpster.id_call_demand_reg')
+        ->join('employee', 'employee.id', '=', 'activity_user_demand_dumpster.id_employee')
+        ->orderBy('activity_user_demand_dumpster.id','desc')
+        ->get();
+
+        return view('employee.form_list_activities_employees',['activities' => $activities]);
     }
 
     private function returnSuccess($dados)

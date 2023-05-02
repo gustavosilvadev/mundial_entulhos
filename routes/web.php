@@ -69,15 +69,24 @@ Route::middleware('usersession')->group(function(){
     // Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);
     
     // Route::get('getInfoDemand/{id}',[CallDemandController::class,'showInfoToForm']);
-    
+
     Route::get('createdumpsterservicedemand', [DumpsterServiceDemandController::class,'showNameDriverDemand']);
     Route::post('save_dumpster_service_demand',[DumpsterServiceDemandController::class,'store']);
     
+    //Atividades de cada operação
+    Route::get('activities', [EmployeeController::class, 'showInfoEmployeActivities']);
     
+    //Resumo Pedidos
+    Route::get('call_demand_resume', [CallDemandController::class, 'showCallDemandResume']);
+    
+
+
     // Client Info Payment
     Route::get('clientinfopayment', [ClientInfoPaymentController::class,'showInfoClientInfoPayment']);
     Route::post('save_client_info_payment',[ClientInfoPaymentController::class,'store']);
     
+
+
 
 });
 

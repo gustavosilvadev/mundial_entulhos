@@ -275,7 +275,7 @@ if(session('access_permission') == 1){
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PEDIDOS</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
                         <a class="dropdown-item" href="/call_demand">BASE PEDIDOS</a>
-                        <a class="dropdown-item" href="#">RESUMO PEDIDOS</a>
+                        <a class="dropdown-item" href="/call_demand_resume">RESUMO PEDIDOS</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/createcalldemand">NOVO</a>
 
@@ -307,6 +307,10 @@ if(session('access_permission') == 1){
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
                         <a class="dropdown-item" href="/cacamba_dias_municipio">NOVO</a>
                     </div>
+                </div><!-- /btn-group -->
+
+                <div class="btn-group">
+                    <a type="button" href="/activities" class="btn dropdown-toggle">ATIVIDADES</a>
                 </div><!-- /btn-group -->
             </div>
         <?php } ?>
