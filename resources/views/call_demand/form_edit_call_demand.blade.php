@@ -675,12 +675,19 @@
 
     $("#btn_finish_demand").on('click', function(e){
         e.preventDefault();
-        finishDemand(false);
+
+        if($("#landfill").val() !== '')
+            finishDemand(false);
+        else
+            alert("Selecione o aterro!");
     });
 
     $("#btn_finish_all_demands").on('click', function(e){
         e.preventDefault();
-        finishDemand(true);
+        if($("#landfill").val() !== '')        
+            finishDemand(true);
+        else
+            alert("Selecione o aterro!");
     });
     
     function finishDemand(isAllDemand){

@@ -303,7 +303,7 @@ class CallDemandController extends Controller
 
             $getIdFather = CallDemand::find($id_demand);
 
-            if($getIdFather['id_father'] > 0){
+            if($getIdFather['id_parent'] > 0){
 
                 $showDataHist = DB::table('call_demand')
                 ->select(
@@ -331,7 +331,7 @@ class CallDemandController extends Controller
                     'call_demand.service_status',
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
                 )            
-                ->where('call_demand.id_demand', '=' ,$getIdFather['id_father'])->get();
+                ->where('call_demand.id_demand', '=' ,$getIdFather['id_parent'])->get();
 
                 return (isset($showDataHist)) ? $showDataHist : '';
             
@@ -362,7 +362,7 @@ class CallDemandController extends Controller
                     'call_demand.service_status',
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at')
                 )            
-                ->where('call_demand.id_father', '=' ,$id_demand)->get();
+                ->where('call_demand.id_parent', '=' ,$id_demand)->get();
 
                 return (isset($showDataHist)) ? $showDataHist : '';
             }
@@ -491,7 +491,7 @@ class CallDemandController extends Controller
                 $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
                 $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
                 // $calldemand->date_effective_removal_dumpster = '';
-                // $calldemand->id_father = '';
+                // $calldemand->id_parent = '';
                 $calldemand->name       = $request->client_name_new;
                 $calldemand->address    = $request->address;
                 $calldemand->number     = $request->number;

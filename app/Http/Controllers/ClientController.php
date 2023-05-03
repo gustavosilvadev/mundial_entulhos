@@ -224,12 +224,12 @@ public function saveDataDemandClient(Request $request)
         $verificaPedidoRelacionado = CallDemand::where('zipcode', '=', $request->zipcode)
             ->where('address', '=', $request->address)
             ->where('number', '=', $request->number)
-            ->where('id_father', '=', 0)
+            ->where('id_parent', '=', 0)
             ->whereNull('date_effective_removal_dumpster')->first();
 
         $calldemand = new CallDemand();
         $calldemand->name          = $request->client_name_new;
-        $calldemand->id_father     = isset($verificaPedidoRelacionado) ? $verificaPedidoRelacionado->id : 0;
+        $calldemand->id_parent     = isset($verificaPedidoRelacionado) ? $verificaPedidoRelacionado->id : 0;
         $calldemand->type_service  = $request->type_service;
         $calldemand->address       = $request->address;
         $calldemand->number        = $request->number;
@@ -261,7 +261,7 @@ public function saveDataDemandClient(Request $request)
         $verificaPedidoRelacionado = CallDemand::where('zipcode', '=', $request->zipcode)
         ->where('address', '=', $request->address)
         ->where('number', '=', $request->number)
-        ->where('id_father', '=', 0)
+        ->where('id_parent', '=', 0)
         ->whereNull('date_effective_removal_dumpster')->first();
 
         $lastIdDemand = isset(CallDemand::orderBy('id', 'desc')->first()->id) ? (CallDemand::orderBy('id', 'desc')->first()->id + 1) : 1 ;
@@ -274,7 +274,7 @@ public function saveDataDemandClient(Request $request)
             $calldemand->period         = $request->period;
             $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
             $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
-            $calldemand->id_father  = isset($verificaPedidoRelacionado) ? $verificaPedidoRelacionado->id : 0;
+            $calldemand->id_parent  = isset($verificaPedidoRelacionado) ? $verificaPedidoRelacionado->id : 0;
             $calldemand->name       = $request->client_name_new;
             $calldemand->address    = $request->address;
             $calldemand->number     = $request->number;
