@@ -37,7 +37,16 @@
 
                                                 <div class="">
 
-                                                    <h1 class="<?php echo ($call_demand->type_service == "COLOCACAO" ? "text-info" : "text-danger")?>"><?php echo $call_demand->type_service; ?></h1>
+                                                    <h1 class="<?php 
+                                                        if($call_demand->type_service == "COLOCACAO"){
+                                                            echo "text-info";
+                                                        }elseif($call_demand->type_service == "TROCA"){
+
+                                                            echo "text-warning";
+                                                        }else{
+                                                            echo "text-danger";
+                                                        }
+                                                    ?>"><?php echo $call_demand->type_service; ?></h1>
                                                     <h2 class="text-dark todo-title-address">
                                                         {{
                                                             $call_demand->address_service.
@@ -185,18 +194,17 @@
 
                                                 <input type="hidden" name= "id_demand" class="todo-id-demand" />
 
-                                                {{-- <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#open_new_modal">ABRIR MODAL </button> --}}
                                                 <label for="type_service">Aterro</label>
                                                 <select class="select2 form-control form-control-lg edit-landfill-list" id="type_service" name="landfill">
                                                 </select>  
                                                 <hr />
-                                                {{-- <button type="button" class="btn btn-success" id="start_call_demand">INICIAR ATENDIMENTO</button> --}}
+
                                                 <button type="button" class="btn btn-success" id="btn_start_call_demand">INICIAR ATENDIMENTO</button>
-                                                {{-- <button type="button" class="btn btn-outline-danger update-btn d-none my-2" data-dismiss="modal">Cancelar</button> --}}
+
                                                 <button type="button" class="btn btn-secondary my-2" data-dismiss="modal">CANCELAR</button>
 
-                                                <button type="button" class="btn btn-warning update-btn d-none my-2" id="btn_allocated_dumpster" style="" data-dismiss="modal">CAÇAMBA ALOCADA</button>
-                                                <button type="button" class="btn btn-info update-btn d-none my-2" id="btn_collect_dumpster" style="" data-dismiss="modal">RECOLHER CAÇAMBA</button>
+                                                {{-- <button type="button" class="btn btn-warning update-btn d-none my-2" id="btn_allocated_dumpster" style="" data-dismiss="modal">CAÇAMBA ALOCADA</button> --}}
+                                                {{-- <button type="button" class="btn btn-info update-btn d-none my-2" id="btn_collect_dumpster" style="" data-dismiss="modal">RECOLHER CAÇAMBA</button> --}}
                                                 <button type="button" class="btn btn-primary update-btn d-none my-2" id="set_done_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
                                             </div>
                                         </div>
@@ -305,8 +313,6 @@
                         alert(responseError);
                     }
                 });
-
-
             }
         });
 
@@ -318,6 +324,12 @@
             let idDemand   = 0;
             let idLandfill = 0;
 
+            
+            if(dumpsterNumbers.includes('0')){
+                alert("Preencha o número da caçamba!");
+                return false;
+            }
+
             if(dumpsterNumbers.length > 0){
 
                 $.each(dataInfo, function(i, field) {
@@ -328,6 +340,7 @@
                     if(field.name.trim() == "landfill")
                         idLandfill = field.value;
                 });
+
 
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -352,6 +365,69 @@
                 alert('Insira todas as caçambas!')
             }
         })
+
+        $("#set_done_demand").click(function(){
+            
+
+
+            let dataForm = $('#form-modal-todo');
+            let dataInfo = dataForm.serializeArray();
+            let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
+            let idDemand   = 0;
+            let idLandfill = 0;
+
+            
+            if(dumpsterNumbers.includes('0')){
+                alert("Preencha o número da caçamba!");
+                return false;
+            }
+
+            if(dumpsterNumbers.length > 0){
+
+                $.each(dataInfo, function(i, field) {
+
+                    if(field.name.trim() == "id_demand")
+                        idDemand = field.value;
+                    
+                    if(field.name.trim() == "landfill")
+                        idLandfill = field.value;
+                });
+
+/*
+$request->
+$request->
+$request->id_call_demand
+$request->id_call_demand_reg
+$request->id_call_demand_reg
+$request->id_call_demand_reg
+$request->id_call_demand
+*/
+
+
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    method: 'POST',
+                    url: '/finish_demand',
+                    data: { 
+                        id_demand: idDemand,
+                        id_landfill: idLandfill,
+                        dumpster_numbers: dumpsterNumbers
+                    },
+                    success: function(dataResponse) {
+                        if(dataResponse == true)
+                            location.reload();
+                        else
+                            alert("Caçamba em uso!");
+                    },
+                    error: function(responseError){
+                        console.log(responseError);
+                    }
+                });
+            }else{
+                alert('Insira todas as caçambas!')
+            }            
+
+        });
 
         $("#btn_collect_dumpster").click(function(){
             
