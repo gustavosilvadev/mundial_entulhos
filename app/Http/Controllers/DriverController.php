@@ -199,7 +199,7 @@ class DriverController extends Controller
         $get_id_driver = Driver::select()->where("id_employee", $id_employee)->first();
 
         $calldemands = DB::table('call_demand')
-        ->groupBy('call_demand.id_demand')
+        ->groupBy('call_demand.id_demand','call_demand.type_service')
         // ->orderBy('call_demand.id_demand', 'desc')        
         ->orderBy('call_demand.type_service', 'desc')        
         ->select(
@@ -237,7 +237,9 @@ class DriverController extends Controller
 
         )
         ->where('call_demand.id_driver', $get_id_driver['id'])
-        ->whereNull('date_effective_removal_dumpster')->get();
+        ->whereNull('date_effective_removal_dumpster')
+        ->groupBy('id_demand')
+        ->get();
 
 
         // foreach($calldemands as $call_demand){
@@ -407,15 +409,13 @@ class DriverController extends Controller
                 return false;
             }            
         }
-        
-
     }
 
     public function getDumpsterDemand(Request $request)
     {
         $id_employee  = session('id_user');
         $id_driver    = Driver::select()->where("id_employee", $id_employee)->first();
-        $callDemand   = CallDemand::where('id_demand', $request->id)->where('id_driver', $id_driver['id'])->get("dumpster_number");
+        $callDemand   = CallDemand::where('id_demand', $request->id)->where('id_driver', $id_driver['id'])->groupBy('type_service')->get("dumpster_number");
         return $callDemand;
     }
 

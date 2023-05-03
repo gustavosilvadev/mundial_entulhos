@@ -3,28 +3,7 @@
 
 
     <!-- BEGIN: Content-->
-    
-    {{-- <div class="app-content content todo-application"> --}}
     <div class="app-content content-designed">
-        {{-- <div class="content-overlay"></div> --}}
-        {{-- <div class="header-navbar-shadow"></div> --}}
-        {{-- <div class="content-area-wrapper container-xxl p-0"> --}}
-            <div class="sidebar-left">
-                <div class="sidebar">
-                    <div class="sidebar-content todo-sidebar">
-                        <div class="todo-app-menu">
-                        <!--
-                            <div class="add-task">
-                                <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#new-task-modal">
-                                    CALL
-                                </button>
-                            </div>
-                        -->
-                        </div>
-                    </div>
-
-                </div>
-            </div>
             <div class="content-right">
                 <div class="content-wrapper container-xxl p-0">
                     <div class="content-header row">
@@ -54,7 +33,7 @@
                                     <ul class="todo-task-list media-list" id="todo-task-list">
                                         <?php foreach($call_demands as $call_demand): ?>
 
-                                            <li class="todo-item">
+                                            <li class="todo-item my-3">
 
                                                 <div class="">
 
@@ -74,8 +53,7 @@
 
                                                         <div class="title-wrapper">
 
-                                                            <p>DATA: <span class="text-white bg-success todo-date-begin">{{ $call_demand->date_allocation_dumpster }}</span></p> 
-                                                            
+                                                            {{-- <p>DATA: <span class="text-white bg-success todo-date-begin">{{ $call_demand->date_allocation_dumpster }}</span></p>  --}}
                                                             <span class="todo-name-client d-none">{{ $call_demand->name; }}</span>
                                                             <span class="todo-phone d-none">{{ $call_demand->phone_demand; }}</span>
                                                             
@@ -207,19 +185,19 @@
 
                                                 <input type="hidden" name= "id_demand" class="todo-id-demand" />
 
-                                                    {{-- <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#open_new_modal">ABRIR MODAL </button> --}}
-                                                    <label for="type_service">Aterro</label>
-                                                    <select class="select2 form-control form-control-lg edit-landfill-list" id="type_service" name="landfill">
-                                                    </select>  
-                                                    <hr />
-                                                    {{-- <button type="button" class="btn btn-success" id="start_call_demand">INICIAR ATENDIMENTO</button> --}}
-                                                    <button type="button" class="btn btn-success" id="btn_start_call_demand">INICIAR ATENDIMENTO</button>
-                                                    {{-- <button type="button" class="btn btn-outline-danger update-btn d-none my-2" data-dismiss="modal">Cancelar</button> --}}
-                                                    <button type="button" class="btn btn-secondary my-2" data-dismiss="modal">CANCELAR</button>
+                                                {{-- <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#open_new_modal">ABRIR MODAL </button> --}}
+                                                <label for="type_service">Aterro</label>
+                                                <select class="select2 form-control form-control-lg edit-landfill-list" id="type_service" name="landfill">
+                                                </select>  
+                                                <hr />
+                                                {{-- <button type="button" class="btn btn-success" id="start_call_demand">INICIAR ATENDIMENTO</button> --}}
+                                                <button type="button" class="btn btn-success" id="btn_start_call_demand">INICIAR ATENDIMENTO</button>
+                                                {{-- <button type="button" class="btn btn-outline-danger update-btn d-none my-2" data-dismiss="modal">Cancelar</button> --}}
+                                                <button type="button" class="btn btn-secondary my-2" data-dismiss="modal">CANCELAR</button>
 
-                                                    <button type="button" class="btn btn-warning update-btn d-none my-2" id="btn_allocated_dumpster" style="" data-dismiss="modal">CAÇAMBA ALOCADA</button>
-                                                    <button type="button" class="btn btn-info update-btn d-none my-2" id="btn_collect_dumpster" style="" data-dismiss="modal">RECOLHER CAÇAMBA</button>
-                                                    <button type="button" class="btn btn-primary update-btn d-none my-2" id="set_done_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
+                                                <button type="button" class="btn btn-warning update-btn d-none my-2" id="btn_allocated_dumpster" style="" data-dismiss="modal">CAÇAMBA ALOCADA</button>
+                                                <button type="button" class="btn btn-info update-btn d-none my-2" id="btn_collect_dumpster" style="" data-dismiss="modal">RECOLHER CAÇAMBA</button>
+                                                <button type="button" class="btn btn-primary update-btn d-none my-2" id="set_done_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
                                             </div>
                                         </div>
                                     </form>

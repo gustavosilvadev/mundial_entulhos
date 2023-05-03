@@ -432,10 +432,12 @@ $(function () {
     
     $('#number-dumpster-repeat').empty();
     
+    console.log("ZZz idDemand: "+ $idDemand);
     $.get("/show_dumpster_demand/" + $idDemand)
     .done(function ( dataResponse ){
       
       $.each(dataResponse, function(kItem, item){
+        console.log("kItem: ===> "+  kItem);
         let count = kItem + 1;
         newTaskForm.find('#number-dumpster-repeat').append("<div class='row d-flex align-items-end'><div class='col-6'><div class='form-group'><label for='itemname'>Nº " + count + "</label><input type='text' class='form-control dumpster_number' id='"+count+"' value='" + item.dumpster_number + "'/></div></div></div>");
       });

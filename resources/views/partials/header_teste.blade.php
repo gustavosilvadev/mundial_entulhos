@@ -122,10 +122,10 @@
     
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('app-assets/css/pages/app-todo.css') }}">
         
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('app-assets/css/datatables/jquery.dataTables.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('app-assets/css/datatables/buttons.dataTables.min.css') }}">
         <!-- END: Page CSS-->
-    
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+
     
     
     </head>

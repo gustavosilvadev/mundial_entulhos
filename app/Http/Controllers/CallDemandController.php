@@ -164,6 +164,7 @@ class CallDemandController extends Controller
                 DB::raw('"" as name_driver')
 
             )->where('call_demand.id_driver','>=',0)
+            ->where('call_demand.service_status','<>',5)
             ->orderByDesc('call_demand.id')
             ->get();
 
@@ -509,12 +510,41 @@ class CallDemandController extends Controller
                 // $calldemand->id_landfill = ''; // MOTORISTA IRÁ ADICIONAR
                 $calldemand->id_driver  = $request->id_driver;
                 // $calldemand->service_status = ''; // SOMENTE NA ATUALIZAÇÃO
-                $calldemand->save();
+                
+                // $calldemand->save();
 
                 if(!$calldemand->save())
                     return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
 
 
+                // Gravando Registro para Futura Retirada da caçamba
+                $calldemandDumpsterRemoval = new CallDemand();
+                $calldemandDumpsterRemoval->id_demand      = $lastIdDemand;
+                $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
+                $calldemandDumpsterRemoval->id_parent      = $calldemand->id;
+                $calldemandDumpsterRemoval->period         = $request->period;
+                // $calldemandDumpsterRemoval->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
+                $calldemandDumpsterRemoval->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
+                $calldemandDumpsterRemoval->name           = $request->client_name_new;
+                $calldemandDumpsterRemoval->address        = $request->address;
+                $calldemandDumpsterRemoval->number         = $request->number;
+                $calldemandDumpsterRemoval->zipcode        = $request->zipcode;
+                $calldemandDumpsterRemoval->city           = $request->city;
+                $calldemandDumpsterRemoval->district       = $request->district;
+                $calldemandDumpsterRemoval->state          = $request->state;
+                $calldemandDumpsterRemoval->phone          = str_replace([" ","(",")"],"",$request->phone);
+                $calldemandDumpsterRemoval->dumpster_sequence_demand = $repeatInfo + 1;
+                $calldemandDumpsterRemoval->dumpster_quantity  = $request->dumpster_quantity;
+                $calldemandDumpsterRemoval->days_allocation    = $request->total_days;
+                $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
+                // $calldemandDumpsterRemoval->save();
+
+                if(!$calldemandDumpsterRemoval->save())
+                    return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
+
+
+
+                // Gravando na tabela de pagamentos
                 $paymentCallDemand = new PaymentCallDemand();
                 $paymentCallDemand->id_call_demand_reg = $calldemand->id;
                 $paymentCallDemand->id_call_demand = $lastIdDemand;

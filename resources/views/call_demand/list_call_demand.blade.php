@@ -224,9 +224,11 @@ $(document).ready(function() {
 
         let tbpedido = $('#tbpedido').DataTable( {
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+                // "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+                "url": "/assets/json/Portuguese-Brasil.json"
             },
-            order: [[0, 'desc']],
+            // order: [[0, 'desc']],
+            order: [[2, 'asc']],
             scrollX: true,
             dom: 'Bfrtip',
             buttons: [
