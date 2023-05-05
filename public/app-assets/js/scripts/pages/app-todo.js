@@ -12,6 +12,7 @@
 $(function () {
   var taskTitle,
     taskIdDemand,
+    taskTypeService,
     taskNameClient,
     taskDateBegin,
     taskDateStart,
@@ -384,7 +385,7 @@ $(function () {
     taskDateStart   = $(this).find('.todo-date-start');
     var $dateStart  = taskDateStart.text();    
 
-    if($dateStart.trim() === ""){
+    if($dateStart.trim() === "" || $dateStart.trim() === "00/00/0000"){
 
       $("#btn_start_call_demand").css("display","block");
       $("#btn_allocated_dumpster").css("display","none");
@@ -409,6 +410,11 @@ $(function () {
     var $idDemand  = taskIdDemand.html();
     newTaskForm.find('.todo-id-demand').val($idDemand);
 
+//Tipo de Serviço
+    taskTypeService   = $(this).find('.todo-type-service');
+    var $typeService  = taskTypeService.html();
+    newTaskForm.find('.todo-type-service').val($typeService);
+
 //Descrição / Observação    
     taskDescription   = $(this).find('.todo-description');
     var $description  = taskDescription.html();
@@ -432,17 +438,13 @@ $(function () {
     
     $('#number-dumpster-repeat').empty();
     
-    console.log("ZZz idDemand: "+ $idDemand);
-    $.get("/show_dumpster_demand/" + $idDemand)
+    $.get("/show_dumpster_demand",{ id_demand: $idDemand, type_service: $typeService } )
     .done(function ( dataResponse ){
       
       $.each(dataResponse, function(kItem, item){
-        console.log("kItem: ===> "+  kItem);
         let count = kItem + 1;
         newTaskForm.find('#number-dumpster-repeat').append("<div class='row d-flex align-items-end'><div class='col-6'><div class='form-group'><label for='itemname'>Nº " + count + "</label><input type='text' class='form-control dumpster_number' id='"+count+"' value='" + item.dumpster_number + "'/></div></div></div>");
       });
-
-
     });
     
 /*
@@ -498,6 +500,9 @@ $(function () {
 
         var $id_demand = newTaskForm.find('.todo-id-demand').val();
         $(taskIdDemand).text($id_demand);
+
+        var $type_service = newTaskForm.find('.todo-type-service').val();
+        $(taskTypeService).text($type_service);
 
         var $edit_description = newTaskForm.find('.todo-item-description').val();
         $(taskDescription).text($edit_description);

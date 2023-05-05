@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\CallDemand;
 use App\Models\ActivityUserDemandDumpster;
 use App\Models\Landfill;
+use \Session as Session;
 class DriverController extends Controller
 {
     public function show(Request $request)
@@ -186,16 +187,14 @@ class DriverController extends Controller
     // public function exibirDemandasAtivas()
     public function showDemands()
     {
-        $id_driver_session  = session('id_user');
-        $call_demands       = $this->showDemandsClient($id_driver_session);
+        $id_user_employee  = session('id_user');
+        $call_demands       = $this->showDemandsClient($id_user_employee);
 
         return view('driver.list_demand_driver',['call_demands'=> $call_demands]);
     }
 
     public function showDemandsClient($id_employee)
     {
-
-
         $get_id_driver = Driver::select()->where("id_employee", $id_employee)->first();
 
         $calldemands = DB::table('call_demand')
@@ -288,6 +287,8 @@ class DriverController extends Controller
      */
     public function startDemand(Request $request)
     {
+        $id_user_employee = session('id_user');
+        $driver_data = Driver::where('id_employee',$id_user_employee)->first();
 
         for($number = 0; $number < count($request->dumpster_numbers); $number++)
         {
@@ -295,6 +296,7 @@ class DriverController extends Controller
             ->where('dumpster_number','<>', 0)
             ->where('dumpster_number',$request->dumpster_numbers[$number])
             ->where('date_effective_removal_dumpster','=', null)
+            ->where('id_driver','=', $driver_data->id)
             ->get();
 
             if($call_demands->count()){
@@ -303,37 +305,60 @@ class DriverController extends Controller
             }
         }
 
-        $call_demands = CallDemand::where('id_demand',$request->id_demand)->get();
+        $call_demands = CallDemand::where('id_demand',$request->id_demand)->where('type_service', $request->type_service)->get();
 
         foreach($call_demands as $key => $value){
 
             CallDemand::where('id_demand', $request->id_demand)
+            ->where('type_service', 'RETIRADA')
             ->where('dumpster_sequence_demand', ($key + 1))
+            ->where('dumpster_number','=', 0)
+            ->update([
+                'dumpster_number' => $request->dumpster_numbers[$key],
+                'id_landfill' => $request->id_landfill
+            ]);
+
+            CallDemand::where('id_demand', $request->id_demand)
+            ->where('type_service', $request->type_service)
+            ->where('dumpster_sequence_demand', ($key + 1))
+            ->where('id_driver','=', $driver_data->id)
             ->update([
                 'service_status' => 1,
                 'date_start' => date('Y-m-d H:i:s'),
                 'dumpster_number' => $request->dumpster_numbers[$key],
                 'id_landfill' => $request->id_landfill
             ]);
+
+            $call_demand_updated_data = CallDemand::where('id_demand', $request->id_demand)
+            ->where('type_service', $request->type_service)
+            ->where('id_driver','=', $driver_data->id)
+            ->first();
+
+
+            $activityUserDemandDumpster = ActivityUserDemandDumpster::where('id_demand', $request->id_demand)
+            ->where('id_call_demand_reg', $call_demand_updated_data->id)
+            ->where('id_call_demand', $call_demand_updated_data->id_demand)
+            ->first();
+
+            if(!$activityUserDemandDumpster)
+            {
+                $activityUserDemandDumpster = new ActivityUserDemandDumpster();
+                $activityUserDemandDumpster->id_call_demand_reg = $call_demand_updated_data->id;
+                $activityUserDemandDumpster->id_call_demand     = $call_demand_updated_data->id_demand;
+                $activityUserDemandDumpster->id_employee        = $id_user_employee;
+                $activityUserDemandDumpster->type_service       = $call_demand_updated_data->type_service;
+                $activityUserDemandDumpster->service_status     = 1; // INICIAR CHAMADO
+            
+                if($activityUserDemandDumpster->save()){
+                    continue;
+
+                }else{
+                    return false;
+                }
+            }
         }
 
         return true;
-
-        // if(isset($id_user) && isset($request->id_demand)){
-        //     $call_demand = CallDemand::where('id_demand',$request->id_demand)->first();
-
-        //     if($call_demand->date_start == null && $call_demand->service_status == 0){
-        //         $call_demand->service_status = 1;
-        //         $call_demand->date_start = date('Y-m-d H:i:s');
-            
-        //         if($call_demand->update()){
-        //             return true;
-        //         }
-        //             return false;
-        //     }
-        // }
-        // return false;
-
     }
 
     public function finishDemand(Request $request)
@@ -420,10 +445,15 @@ class DriverController extends Controller
 
     public function getDumpsterDemand(Request $request)
     {
-        $id_employee  = session('id_user');
-        $id_driver    = Driver::select()->where("id_employee", $id_employee)->first();
-        $callDemand   = CallDemand::where('id_demand', $request->id)->where('id_driver', $id_driver['id'])->groupBy('type_service')->get("dumpster_number");
+        $id_user_employee  = session('id_user');
+        $driver       = Driver::select()->where("id_employee", $id_user_employee)->first();
+        $callDemand   = CallDemand::where('id_demand', $request->id_demand)
+        ->where('id_driver', $driver->id)
+        ->where('type_service', trim($request->type_service))
+        ->get("dumpster_number");
+        
         return $callDemand;
+        // $callDemand   = CallDemand::where('id_demand', $request->id_demand)->where('id_driver', $id_driver->id)->where('type_service', $request->type_service)->groupBy('type_service')->get("dumpster_number");
     }
 
     /**
@@ -431,9 +461,9 @@ class DriverController extends Controller
      */
     public function getDumpsterLocation(Request $request)
     {
-        $id_user = session('id_user');   
+        $id_user_employee = session('id_user');   
         
-        if(isset($id_user) && isset($request->id_demand)){
+        if(isset($id_user_employee) && isset($request->id_demand)){
             $call_demand = CallDemand::where('id_demand',$request->id_demand)->first();
 
             if($call_demand->date_start == null && $call_demand->service_status == 0){
@@ -451,17 +481,17 @@ class DriverController extends Controller
 
     public function updateStatusDemand(Request $request)
     {
-        $id_driver_session = session('id_user');
+        $id_user_employee = session('id_user');
 
-        return 'id_driver_session: '.$id_driver_session. "\n id_demand: ".$request->id_demand;
+        return 'id_user: '.$id_user_employee. "\n id_demand: ".$request->id_demand;
 
-        if(isset($request->id) && isset($id_driver_session)){
+        if(isset($request->id) && isset($id_user_employee)){
             $call_demand = CallDemand::where('id_demand',$request->id)->first();
             
             if($call_demand){
                 if($call_demand->service_status != 2)
                 {
-                    // $call_demand->id_driver       = $id_driver_session;
+                    // $call_demand->id_driver       = $id_user_employee;
                     // $call_demand->date_end        = date('Y-m-d H:i:s');
                     $call_demand->service_status  = 2;
                 }else{

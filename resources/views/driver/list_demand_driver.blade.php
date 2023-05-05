@@ -105,6 +105,7 @@
 
                                                         </div>
                                                         <label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">{{ $call_demand->id_demand }}</label>
+                                                        <label class="text-nowrap text-muted mr-1 todo-type-service" style="display: none;">{{ $call_demand->type_service }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">{{ $call_demand->comments_demand }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-name-client" style="display: none;">{{ $call_demand->phone_demand }}</label>
 
@@ -193,6 +194,7 @@
                                                 </div>                                                
 
                                                 <input type="hidden" name= "id_demand" class="todo-id-demand" />
+                                                <input type="hidden" name= "type_service" class="todo-type-service" />
 
                                                 <label for="type_service">Aterro</label>
                                                 <select class="select2 form-control form-control-lg edit-landfill-list" id="type_service" name="landfill">
@@ -203,8 +205,6 @@
 
                                                 <button type="button" class="btn btn-secondary my-2" data-dismiss="modal">CANCELAR</button>
 
-                                                {{-- <button type="button" class="btn btn-warning update-btn d-none my-2" id="btn_allocated_dumpster" style="" data-dismiss="modal">CAÇAMBA ALOCADA</button> --}}
-                                                {{-- <button type="button" class="btn btn-info update-btn d-none my-2" id="btn_collect_dumpster" style="" data-dismiss="modal">RECOLHER CAÇAMBA</button> --}}
                                                 <button type="button" class="btn btn-primary update-btn d-none my-2" id="set_done_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
                                             </div>
                                         </div>
@@ -321,6 +321,7 @@
             let dataForm = $('#form-modal-todo');
             let dataInfo = dataForm.serializeArray();
             let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
+            let typeService = "";
             let idDemand   = 0;
             let idLandfill = 0;
 
@@ -336,17 +337,20 @@
 
                     if(field.name.trim() == "id_demand")
                         idDemand = field.value;
+
+                    if(field.name.trim() == "type_service")
+                        typeService = field.value;
                     
                     if(field.name.trim() == "landfill")
                         idLandfill = field.value;
                 });
 
-
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     method: 'POST',
                     url: '/start_demand',
-                    data: { 
+                    data: {
+                        type_service: typeService, 
                         id_demand: idDemand,
                         id_landfill: idLandfill,
                         dumpster_numbers: dumpsterNumbers
@@ -368,8 +372,6 @@
 
         $("#set_done_demand").click(function(){
             
-
-
             let dataForm = $('#form-modal-todo');
             let dataInfo = dataForm.serializeArray();
             let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
@@ -392,17 +394,6 @@
                     if(field.name.trim() == "landfill")
                         idLandfill = field.value;
                 });
-
-/*
-$request->
-$request->
-$request->id_call_demand
-$request->id_call_demand_reg
-$request->id_call_demand_reg
-$request->id_call_demand_reg
-$request->id_call_demand
-*/
-
 
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

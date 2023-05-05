@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controllers;
 use \Session as Session;
 use App\Models\Employee;
+use App\Models\Driver;
 
 class UserEmployeeController extends Controller
 {
@@ -46,23 +47,20 @@ class UserEmployeeController extends Controller
     public function conectLogin(Request $request)
     {
 
-        $removedUser = null;
+
+        $isRemovedUser = null;
 
         if(filter_var($request->login, FILTER_VALIDATE_EMAIL)){
 
-            $removedUser = Employee::where("login","=",$request->login)
-                                ->where("flg_status","=",0)->first();
-        }else{
+            $isRemovedUser = Employee::where("email","=",$request->login)->where("flg_status","=",0)->first();
+        }else
+            $isRemovedUser = Employee::where("login","=",$request->login)->where("flg_status","=",0)->first();
 
-            $removedUser = Employee::where("login","=",$request->login)
-                                ->where("flg_status","=",0)->first();
-        }
-
-        if($removedUser){
+        if($isRemovedUser){
 
             return view('user.login',["response" => "Usuário se encontra inativo"]);
         }
-
+   
         $login   = $request->login;
         $password   = Hash::make($request->password);
         
@@ -71,6 +69,16 @@ class UserEmployeeController extends Controller
                     ->first();
 
         if($LoginUser){
+
+            // Verifica se ele é motorista e se está ativo
+            if($LoginUser->access_permission == 2 ){
+
+                $isDriverExists = Driver::where('id_employee',$LoginUser->id)->where('flg_status', true)->orderBy('id','DESC')->first();
+
+                if(!$isDriverExists){
+                    return view('user.login',["response" => "Usuário se encontra inativo"]);
+                }
+            }
 
             if(Hash::check($request->password,$LoginUser->password) == true){
                 

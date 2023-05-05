@@ -41,7 +41,7 @@ Route::middleware('usersession')->group(function(){
     
     Route::post('/start_demand',[DriverController::class,'startDemand']);
     Route::post('/finish_demand',[DriverController::class,'finishDemand']);
-    Route::get('/show_dumpster_demand/{id?}',[DriverController::class,'getDumpsterDemand']);
+    Route::get('/show_dumpster_demand',[DriverController::class,'getDumpsterDemand']);
     Route::post('/get_dumpster_location',[DriverController::class,'getDumpsterLocation']);
 
     // Route::get('/listlandfill', [DriverController::class,'getLandFill']);
