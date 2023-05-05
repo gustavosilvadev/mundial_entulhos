@@ -343,9 +343,12 @@ class DriverController extends Controller
         $is_all_demand  = (trim($request->is_all_demand) === "true") ? True : False;
 
         if($is_all_demand){
-            $is_updated = CallDemand::where('id_demand',$request->id_call_demand)->where('date_effective_removal_dumpster', null)->where('service_status','<>', 5)->update([
-                'service_status' => $service_status,
-                'date_effective_removal_dumpster' => date('Y-m-d H:i:s')
+            $is_updated = CallDemand::where('id_demand',$request->id_call_demand)
+            ->where('type_service',$request->type_service)
+            ->where('date_effective_removal_dumpster', null)
+            ->where('service_status','<>', 5)
+            ->update([
+                'service_status' => $service_status
             ]);
 
             if($is_updated)
@@ -380,7 +383,11 @@ class DriverController extends Controller
             }
 
         }else{
-            $updateDemand   = CallDemand::where('id', $request->id_call_demand_reg)->where('date_effective_removal_dumpster', null)->where('service_status','<>', 5)->first();
+            $updateDemand   = CallDemand::where('id', $request->id_call_demand_reg)
+            ->where('date_effective_removal_dumpster', null)
+            ->where('service_status','<>', 5)
+            ->first();
+
             $updateDemand->service_status = $service_status;
             $updateDemand->date_effective_removal_dumpster = date('Y-m-d H:i:s');
 

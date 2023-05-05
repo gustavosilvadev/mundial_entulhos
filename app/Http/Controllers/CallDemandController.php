@@ -194,7 +194,7 @@ class CallDemandController extends Controller
                                     ->join('employee', 'employee.id', '=', 'driver.id_employee')
                                     ->where('driver.flg_status','=', 1)
                                     // ->get(["driver.id", "employee.name"]);
-                                    ->get(["employee.name"]);
+                                    ->get(["employee.name","driver.id"]);
 
             if($calldemands->isEmpty() != true){
                 return view('call_demand.list_call_demand',[
@@ -565,16 +565,15 @@ class CallDemandController extends Controller
     {
         $showdata   = $this->showAPI($id_demand);
         
-        // dd($showdata);
-        // die();
-
         return view('call_demand.form_edit_call_demand',  $showdata);
     }
 
     public function update(Request $request)
     {
+
         if (
             isset($request->id_demand)
+            && isset($request->id_demand_reg)
             && isset($request->client_name_new)
             && isset($request->zipcode)
             && isset($request->address)
@@ -595,7 +594,9 @@ class CallDemandController extends Controller
             && isset($request->date_removal_dumpster_forecast)
             && isset($request->total_days)){
 
-            $call_demand = CallDemand::where('id_demand',$request->id_demand)->update([
+            $call_demand = CallDemand::where('id',$request->id_demand_reg)
+            ->where('id_demand',$request->id_demand)
+            ->update([
 
                 'name' => $request->client_name_new,
                 'zipcode' => $request->zipcode,
@@ -649,6 +650,40 @@ class CallDemandController extends Controller
         }
 
         return $call_demand;
+    }
+
+    public function changeDriverDemand(Request $request)
+    {
+
+        $calldemandFirst = CallDemand::where('id',$request->id_reg)->where('id_demand',$request->id_demand)->first();
+
+        if(isset($calldemandFirst))
+        {
+
+            if($request->drivers_checked == true)
+            {
+                $call_demand = CallDemand::where('id_demand',$request->id_demand)->where('type_service',$calldemandFirst->type_service)->update([
+                    'id_driver' => $request->id_driver,
+                ]);
+
+            }else{
+                $call_demand = CallDemand::where('id',$request->id_reg)
+                ->where('id_demand',$request->id_demand)
+                ->where('type_service',$calldemandFirst->type_service)
+                ->update([
+                    'id_driver' => $request->id_driver,
+                ]);
+            }
+
+            if($call_demand)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
     }
 
     private function returnSuccess($dados)

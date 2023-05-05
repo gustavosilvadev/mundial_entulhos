@@ -1,4 +1,3 @@
-
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
@@ -303,7 +302,7 @@
                                                                                                             <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" />
                                                                                                         </div>    
                                                                                                     </div> 
-
+{{-- 
                                                                                                     <div class="col-md-12" style="border: 2px solid rgb(149, 145, 145); margin:10px 0 10px 0"></div>
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
@@ -339,7 +338,7 @@
                                                                                                             <input type="number" class="form-control" min="0" max="1000" placeholder="0">
                                                                                                         </div>
                                                                                                     </div>               
-
+ --}}
                                                                                                 </div>
                                                                                             </div>
 
@@ -693,6 +692,7 @@
     function finishDemand(isAllDemand){
         let idDemandReg = $('input[name=id_demand_reg]').val();
         let idDemand    = $('input[name=id_demand]').val();
+        let typeService = $('#type_service').val();
 
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -701,6 +701,7 @@
             data: { 
                 id_call_demand_reg: idDemandReg,
                 id_call_demand: idDemand,
+                type_service: typeService,
                 is_all_demand: isAllDemand
             },
             success: function(dataResponse) {

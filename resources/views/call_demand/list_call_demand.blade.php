@@ -72,7 +72,7 @@
                             </div>                              
                             <div class="card-datatable">
 
-                                <table id="tbpedido" class="display nowrap" style="width:100%">
+                                <table id="tbpedido" class="table table-striped display nowrap" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Nº FICHA</th>
@@ -179,13 +179,13 @@
                 </div>
                 <div class="modal-body">
                     <p>MOTORISTAS</p>
-                    {{-- <select class="select2 form-control" id="name_driver_selected"> --}}
+
                     <select class="form-control" id="name_driver_selected">
                         <option value=""></option>
                         <?php if($driver_name_demands):?>
 
                             <?php foreach($driver_name_demands as $driver_name):?>
-                                    <option value="{{ $driver_name->name }}">{{ $driver_name->name }}</option>
+                                    <option value="{{ $driver_name->id }}">{{ $driver_name->name }}</option>
                             <?php endforeach;?>
 
                         <?php endif;?>
@@ -200,7 +200,7 @@
                 </div>
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id= "btn_driver_update" data-dismiss="modal">ATUALIZAR MOTORISTA</button>
+                    <button type="button" class="btn btn-success" id="btn_driver_update" data-dismiss="modal">ATUALIZAR MOTORISTA</button>
                     <a class="btn btn-warning" id="btn_edit">EDITAR</a>
                 </div> 
                
@@ -315,82 +315,61 @@ $(document).ready(function() {
 
         $('#tbpedido tbody').on('click', 'tr', function () {
 
-
             let selectedRows = tbpedido.rows({ selected: true });
             let selectedData = selectedRows.data();
-            let id_reg       = selectedData[tbpedido.row( this ).index()][0];
-            let id_demand    = selectedData[tbpedido.row( this ).index()][1];
-            let nameDriver   = "";
+            let id_reg       = $(this).find("td:eq(0)").text();
+            let id_demand    = $(this).find("td:eq(1)").text();
+            let nameDriver   = $(this).find("td:eq(18)").text();
 
-            nameDriver = selectedData[tbpedido.row( this ).index()][18];
-            
             $("#all_drivers").prop("checked", true);
             $("#modal-edit").modal('toggle');
 
             if(nameDriver != "")
             {
-                $("#name_driver_selected").val( $('option:contains("' + nameDriver + '")').val());
+                $("#name_driver_selected  option:contains("+ nameDriver +")").attr("selected", "selected");
+
             }else {
 
-                $("#name_driver_selected").val( $('option:contains("----")').val());
+                $("#name_driver_selected  option:contains()").attr("selected", false);
             }
 
             $("#idreg").val(id_reg);
             $("#iddemand").val(id_demand);
             $("#btn_edit").attr("href","/editcalldemand/" + id_reg);
-
+  
         });
 
         $("#btn_driver_update").click(function(){
 
             let idDemand            = $("#iddemand").val();
             let idReg               = $("#idreg").val();
-            let nameDriverSelected  = $("#name_driver_selected").val();
+            let idDriverSelected    = $("#name_driver_selected").val();
+            let nameDriverSelected  = $("#name_driver_selected").find('option:selected').text()
             let all_drivers_checked = $("#all_drivers")[0].checked;
 
-
-            if(all_drivers_checked === true){
-                console.log("Atualizará todos os pedidos");
-                console.log("ID do pedido: " + idDemand);
-            }else{
-                console.log("Atualizará somente 1 pedido");
-                console.log("ID do registro: " + idReg);
-
+            $.ajax({
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            method: 'POST',
+            url: '/changedriverdemand',
+            data: { 
+                drivers_checked : all_drivers_checked, 
+                id_driver : idDriverSelected, 
+                id_reg: idReg, 
+                id_demand : idDemand
+            },
+            success: function(dataResponse) {
+                
+                if(dataResponse){
+                    rowIndex = tbpedido.row().column(0).data().indexOf(idReg);
+                    tbpedido.cell(":eq("+rowIndex+")", 18).data(nameDriverSelected);
+                }else
+                    alert("Erro na atualização do nomes!");
+            },
+            error: function(responseError){
+                alert("Erro interno: " + responseError);
+                console.log(responseError);
             }
-
-            let selectedRows = tbpedido.rows({ selected: true });
-            let selectedData = selectedRows.data();
-            let nameDriver   = selectedData[tbpedido.row( $('tr td:contains(' + idReg + ')') ).index()][18];
-            console.log("********************************************");
-            
-            
-            // console.log(selectedData[tbpedido.row( $('tr td:contains(' + idReg + ')') ).index()]);
-            // selectedData;
-            console.log("+++++++++++++++++++++++++++++++++++++++++++++");
-            console.log("Nome: " + selectedData[tbpedido.row( $('tr td:contains(' + idReg + ')') ).index()][18]);
-
-            console.log("Nome selecionado: " + nameDriverSelected);
-            console.log("Id registro: " + idReg + "\n" + "Nome: " + nameDriver);
-            console.log("#############################################");
-
-            // $.post('editcalldemand',{drivers_checked : all_drivers_checked,  id_reg: idReg, id_demand : idDemand}).done(function(dataResponse){
-
-            //     console.log(dataResponse);
-
-            // }).fail(function(errorMessage){
-            //     console.log(errorMessage);
-            // })
-
-            
-            /*
-            console.log("********************************************");
-            // tbpedido.columns(18).search(nameDriverSelected, true,false);
-            // console.log(Object.values(tbpedido.columns(2)));
-
-            data = tbpedido.columns(1).search('24').data();
-            console.log(data);
-            console.log("++++++++++++++++++++++++++++++++++++++++++++");
-            */
+        });              
 
         })
 
