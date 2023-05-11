@@ -16,6 +16,7 @@ $(function () {
     taskNameClient,
     taskDateBegin,
     taskDateStart,
+    taskServiceStatus,
     taskDescription,
     taskPhone,
     taskDumpsterQuantity,
@@ -380,25 +381,23 @@ $(function () {
 // Data de início do atendimento
     taskDateBegin   = $(this).find('.todo-date-begin');
     var $dateBegin  = taskDateBegin.html();
-    // newTaskForm.find('.todo-item-date-begin').text($dateBegin);
 
     taskDateStart   = $(this).find('.todo-date-start');
-    var $dateStart  = taskDateStart.text();    
+    var $dateStart  = taskDateStart.text();
 
-    if($dateStart.trim() === "" || $dateStart.trim() === "00/00/0000"){
+    taskServiceStatus   = $(this).find('.todo-service-status');
+    var $serviceStatus  = taskServiceStatus.val();
+
+    if($serviceStatus == 0){
 
       $("#btn_start_call_demand").css("display","block");
-      $("#btn_allocated_dumpster").css("display","none");
-
-      $("#update_active_call_demand").css("display","block");
-
+      $("#btn_finish_call_demand").css("display","none");
 
     }else{
 
       $("#btn_start_call_demand").css("display","none");
-      $("#btn_allocated_dumpster").css("display","block");
+      $("#btn_finish_call_demand").css("display","block");
 
-      $("#start_call_demand").css("display","none");
 
     }
 
@@ -464,10 +463,14 @@ $(function () {
     */
 
 
+    var $type_service = newTaskForm.find('.todo-type-service').val();
+    $(taskTypeService).text($type_service);
+
+    
 // Carregando lista de aterros
     newTaskForm.find(".edit-landfill-list").empty();
 
-    $.get("/listlandfill/" + $idDemand)
+    $.get("/listlandfill",{ id_demand: $idDemand, type_service: $type_service })
     .done(function ( dataResponse ){
 
       newTaskForm.find(".edit-landfill-list").append('<option value="0">----</option>');
@@ -501,8 +504,8 @@ $(function () {
         var $id_demand = newTaskForm.find('.todo-id-demand').val();
         $(taskIdDemand).text($id_demand);
 
-        var $type_service = newTaskForm.find('.todo-type-service').val();
-        $(taskTypeService).text($type_service);
+        // var $type_service = newTaskForm.find('.todo-type-service').val();
+        // $(taskTypeService).text($type_service);
 
         var $edit_description = newTaskForm.find('.todo-item-description').val();
         $(taskDescription).text($edit_description);

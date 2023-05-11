@@ -54,6 +54,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    {{-- 
                                                     <tr>
                                                         <td>JUSSEIR</td>
                                                         <td>97</td>
@@ -67,8 +68,8 @@
                                                         <td>1</td>
                                                         <td>680</td>
                                                         <td>733</td>                                                           
-                                                    </tr>
-
+                                                    </tr> 
+                                                    --}}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -137,55 +138,93 @@
         </div>
     </div>
     <!-- END: Content-->
-{{-- 
-    <div class="modal text-left" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel6" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel6">EDITAR</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>MOTORISTAS</p>
-                    <select class="form-control" id="name_driver_selected">
-                        <option value=""></option>
-                        <?php if($driver_name_demands):?>
 
-                            <?php foreach($driver_name_demands as $driver_name):?>
-                                    <option value="{{ $driver_name->name }}">{{ $driver_name->name }}</option>
-                            <?php endforeach;?>
-
-                        <?php endif;?>
-                    </select>
-                    <div class="form-check form-check-info">
-                        <input type="checkbox" class="form-check-input" id="all_drivers" checked="">
-                        <label class="form-check-label" for="colorCheck6">Atualizar para todos</label>
-                    </div>
-
-                    <input type="hidden" id="iddemand" value="" />
-                    <input type="hidden" id="idreg" value="" />
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id= "btn_driver_update" data-dismiss="modal">ATUALIZAR MOTORISTA</button>
-                    <a class="btn btn-warning" id="btn_edit">EDITAR</a>
-                </div> 
-               
-            </div> 
-
-
-        
-        </div>
-    </div>
- --}}
 
 @include('partials.footer_teste') 
 
 <script>
 $(document).ready(function() {
+    
+    $.ajax({
+        method: 'GET',
+        url: '/show_activities_driver',
+        // data: {id : id_demand},
+        success: function(dataResponse) {
+            let nameTemp = "";
+            let newRowContent = "";
+            let qtdColocacao = 0;
+            let qtdTroca     = 0;
+            let qtdRetirada  = 0;
+
+            let activitiesDriver  = [];
+            $.each(dataResponse, function(i, field){
+                
+                if(field.name != nameTemp){
+
+
+                    newRowContent += "<td>" + activitiesDriver[0] + "</td><td>" + activitiesDriver[1] + "</td><td>" + activitiesDriver[2] + "</td>";
+                    newRowContent += "</tr>";
+                    newRowContent += "<tr>";
+
+                    newRowContent += "<td>" + field.name + "</td>";
+
+                    switch (field.type_service) {
+                        case "COLOCACAO":
+                            // newRowContent += "<td>" + field.type_service + "</td><td>" + field.type_service + "</td><td>" + "</td>";
+                            // qtdColocacao = field.total;
+                            // newRowContent += "<td>" + field.total + "</td>";
+                            activitiesDriver[0] = field.total;
+                        break;
+                        case "TROCA":
+                            // qtdTroca = field.total;
+                            // newRowContent += "<td>" + field.total + "</td>";
+                            activitiesDriver[1] = field.total;
+                        break;
+                        case "RETIRADA":
+                            // qtdRetirada = field.total;
+                            // newRowContent += "<td>" + field.total + "</td>";
+                            activitiesDriver[2] = field.total;
+                        break;
+                    }
+
+                    // newRowContent += "<td>" + qtdColocacao + "</td><td>" + qtdTroca + "</td><td>" + qtdRetirada + "</td>";
+                    
+                }else{
+
+                    switch (field.type_service) {
+                        case "COLOCACAO":
+                            // qtdColocacao = field.total;
+                            // newRowContent += "<td>" + field.total + "</td>";
+                            activitiesDriver[0] = field.total;
+                        break;
+                        case "TROCA":
+                            // qtdTroca = field.total;
+                            // newRowContent += "<td>" + field.total + "</td>";
+                            activitiesDriver[1] = field.total;
+                        break;
+                        case "RETIRADA":
+                            // qtdRetirada = field.total;
+                            // newRowContent += "<td>" + field.total + "</td>";
+                            activitiesDriver[2] = field.total;
+                            break;
+                        }
+                    }
+                    
+                    nameTemp = field.name;
+
+            });
+
+            console.log(newRowContent);
+
+            $("#tbmotoristaservicos tbody").append(newRowContent);
+
+        },
+        error: function(responseError){
+            alert(responseError);
+        }
+    });
+
+
 
     // Formating Call Demand Table
     $('#tbpedido thead tr')

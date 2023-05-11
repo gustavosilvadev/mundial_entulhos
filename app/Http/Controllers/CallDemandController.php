@@ -9,6 +9,7 @@ use App\Models\CallDemand;
 use App\Models\PaymentCallDemand;
 use App\Models\Driver;
 use App\Models\Landfill;
+use App\Models\ActivityUserDemandDumpster;
 
 class CallDemandController extends Controller
 {
@@ -253,47 +254,62 @@ class CallDemandController extends Controller
         ->orderByDesc('call_demand.id')
         ->get();
 
-        foreach($calldemands as $call_demand){
-
-            if($call_demand->id_driver){
-
-                $findDriver = DB::table('driver')
-                ->join('employee', 'employee.id', '=', 'driver.id_employee')
-                ->where('driver.id', '=', $call_demand->id_driver)
-                ->get('employee.name as name_driver');
-                if(isset($findDriver))
-                    $call_demand->name_driver =  $findDriver[0]->name_driver;
-            }
-
-
-            if($call_demand->id_landfill){
-
-                $findLandfill = DB::table('landfill')
-                ->where('landfill.id', '=', $call_demand->id_landfill)
-                ->get('landfill.name as name_landfill');
-                if(isset($findLandfill))
-                    $call_demand->name_landfill =  $findLandfill[0]->name_landfill;
-            }                
-        }
-        $driver_name_demands = DB::table('driver')
-                                ->join('employee', 'employee.id', '=', 'driver.id_employee')
-                                ->where('driver.flg_status','=', 1)
-                                // ->get(["driver.id", "employee.name"]);
-                                ->get(["employee.name"]);
-
         if($calldemands->isEmpty() != true){
             return view('call_demand.list_resume_call_demand',[
-                'driver_name_demands'=> $driver_name_demands,
                 'calldemands'=> $calldemands
             ]);
 
         }else{
             
             return view('call_demand.list_resume_call_demand',[
-                'driver_name_demands'=> '',
+                'employee_activities' => '',
                 'calldemands'=> ''
             ]);
         }
+    }
+
+    public function showActivitiesEmployee()
+    {
+
+        $employee_activities = DB::table('activity_user_demand_dumpster')
+        ->join('employee','employee.id', '=', 'activity_user_demand_dumpster.id_employee')
+        ->select(
+            'employee.name', 
+            'activity_user_demand_dumpster.type_service'
+        )
+        ->selectRaw('count(*) as total')
+        ->whereMonth('activity_user_demand_dumpster.created_at','=', date('m'))
+        ->where('activity_user_demand_dumpster.service_status','=', 5)
+        ->groupBy('activity_user_demand_dumpster.created_at')
+        ->orderBy('employee.name')
+        ->get();
+
+        // $nameTemp = '';
+        // $typServiceTemp = '';
+        // $arrActivities = array();
+        // foreach ($employee_activities as $activitie) {
+            
+        //     if($activitie->name != $nameTemp){
+                
+        //         $arrActivities[] = array(
+        //             "name" => $activitie->name,
+        //             "type_service" => $activitie->type_service,
+        //             "total" => $activitie->total
+        //         );
+
+        //         $nameTemp = $activitie->name;
+        //     }else{
+
+        //         $arrActivities[] = array(
+        //             "type_service" => $activitie->type_service,
+        //             "total" => $activitie->total
+        //         );        
+        //     }
+        // }
+
+        return $employee_activities;
+
+
     }
 
 

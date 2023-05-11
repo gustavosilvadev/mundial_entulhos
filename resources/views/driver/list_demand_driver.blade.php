@@ -202,10 +202,10 @@
                                                 <hr />
 
                                                 <button type="button" class="btn btn-success" id="btn_start_call_demand">INICIAR ATENDIMENTO</button>
+                                                <button type="button" class="btn btn-primary update-btn d-none my-2" id="btn_finish_call_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
 
                                                 <button type="button" class="btn btn-secondary my-2" data-dismiss="modal">CANCELAR</button>
 
-                                                <button type="button" class="btn btn-primary update-btn d-none my-2" id="set_done_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
                                             </div>
                                         </div>
                                     </form>
@@ -318,32 +318,52 @@
 
 
         $("#btn_start_call_demand").click(function(){
+
             let dataForm = $('#form-modal-todo');
             let dataInfo = dataForm.serializeArray();
             let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
             let typeService = "";
             let idDemand   = 0;
             let idLandfill = 0;
+            let stopExec   = false; 
 
-            
-            if(dumpsterNumbers.includes('0')){
-                alert("Preencha o número da caçamba!");
+            $.each(dataInfo, function(i, field) {
+
+                if(field.name.trim() == "id_demand")
+                    idDemand = field.value;
+
+                if(field.name.trim() == "type_service")
+                    typeService = field.value;
+
+                if(field.name.trim() == "landfill")
+                    idLandfill = field.value;
+            });
+
+            if(dumpsterNumbers.length > 0){
+                $.each(dumpsterNumbers, function(i, field) {
+                
+                    if(field == '' || field == 0){
+                        alert("Preencha o número da caçamba!");
+                        stopExec = true;
+                        return false;
+                    }
+                });
+
+            }else{
+                alert("Preencha todas as caçambas!");
+                stopExec = true;
                 return false;
             }
 
-            if(dumpsterNumbers.length > 0){
+            if(typeService == 'RETIRADA' || typeService == 'TROCA' && idLandfill == 0)
+            {
+                alert('Selecione o aterro!');
+                stopExec = true;
+            }
 
-                $.each(dataInfo, function(i, field) {
 
-                    if(field.name.trim() == "id_demand")
-                        idDemand = field.value;
 
-                    if(field.name.trim() == "type_service")
-                        typeService = field.value;
-                    
-                    if(field.name.trim() == "landfill")
-                        idLandfill = field.value;
-                });
+            if(stopExec == false){
 
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -366,35 +386,59 @@
                     }
                 });
             }else{
-                alert('Insira todas as caçambas!')
+                alert('Preencha todos os campos!');
             }
         })
 
-        $("#set_done_demand").click(function(){
+        $("#btn_finish_call_demand").click(function(){
             
             let dataForm = $('#form-modal-todo');
             let dataInfo = dataForm.serializeArray();
             let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
             let idDemand   = 0;
             let idLandfill = 0;
+            let typeService = '';
+            let stopExec    = false; 
 
             
-            if(dumpsterNumbers.includes('0')){
-                alert("Preencha o número da caçamba!");
+            $.each(dataInfo, function(i, field) {
+
+                if(field.name.trim() == "id_demand")
+                    idDemand = field.value;
+                    
+                    if(field.name.trim() == "landfill")
+                    idLandfill = field.value;
+                    
+                    if(field.name.trim() == "type_service")
+                    typeService = field.value;
+            });
+
+            if(dumpsterNumbers.length > 0){
+                $.each(dumpsterNumbers, function(i, field) {
+                    
+                    if(field == '' || field == 0){
+                        alert("Preencha o número da caçamba!");
+                        stopExec = true;
+                        return false;
+                    }
+                });
+
+            }else{
+
+                alert("Preencha todas as caçambas!");
+                stopExec = true;
                 return false;
             }
 
-            if(dumpsterNumbers.length > 0){
-
-                $.each(dataInfo, function(i, field) {
-
-                    if(field.name.trim() == "id_demand")
-                        idDemand = field.value;
+            if(typeService == 'RETIRADA' || typeService == 'TROCA' && idLandfill == 0)
+            {
+                alert('Selecione o aterro!');
+                stopExec = true
+                // return false;
+            }
                     
-                    if(field.name.trim() == "landfill")
-                        idLandfill = field.value;
-                });
-
+            if(stopExec == false){
+                
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     method: 'POST',
@@ -402,20 +446,22 @@
                     data: { 
                         id_demand: idDemand,
                         id_landfill: idLandfill,
-                        dumpster_numbers: dumpsterNumbers
+                        type_service: typeService,
+                        dumpster_numbers: dumpsterNumbers,
                     },
                     success: function(dataResponse) {
+
                         if(dataResponse == true)
                             location.reload();
                         else
-                            alert("Caçamba em uso!");
+                            alert("Erro ao atualizar pedido!!!");
                     },
                     error: function(responseError){
                         console.log(responseError);
                     }
                 });
             }else{
-                alert('Insira todas as caçambas!')
+                alert('Preencha todos os campos!')
             }            
 
         });

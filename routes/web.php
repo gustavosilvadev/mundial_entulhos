@@ -79,19 +79,17 @@ Route::middleware('usersession')->group(function(){
     
     //Resumo Pedidos
     Route::get('call_demand_resume', [CallDemandController::class, 'showCallDemandResume']);
-    
+    Route::get('show_activities_driver', [CallDemandController::class,'showActivitiesEmployee']);    
 
 
     // Client Info Payment
     Route::get('clientinfopayment', [ClientInfoPaymentController::class,'showInfoClientInfoPayment']);
     Route::post('save_client_info_payment',[ClientInfoPaymentController::class,'store']);
     
-
-
-
+    
 });
 
-Route::get('listlandfill/{id?}', [DriverController::class,'getLandFill']);
+Route::get('listlandfill', [DriverController::class,'getLandFill']);
 
 Route::post('save_call_demand_teste',[CallDemandController::class,'storeTeste']);
 Route::get('call_demand_teste/{id?}',[CallDemandController::class,'showTeste']);
