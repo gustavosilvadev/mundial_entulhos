@@ -271,45 +271,43 @@ class CallDemandController extends Controller
     public function showActivitiesEmployee()
     {
 
-        $employee_activities = DB::table('activity_user_demand_dumpster')
-        ->join('employee','employee.id', '=', 'activity_user_demand_dumpster.id_employee')
+        $calldemands = DB::table('call_demand')
         ->select(
-            'employee.name', 
-            'activity_user_demand_dumpster.type_service'
+            'employee.name as name',
+            'call_demand.id_driver as id_driver',
+            'call_demand.type_service  as type_service',
+            DB::raw('COUNT(*) as total')
         )
-        ->selectRaw('count(*) as total')
-        ->whereMonth('activity_user_demand_dumpster.created_at','=', date('m'))
-        ->where('activity_user_demand_dumpster.service_status','=', 5)
-        ->groupBy('activity_user_demand_dumpster.created_at')
-        ->orderBy('employee.name')
+        ->join('driver','driver.id', '=', 'call_demand.id_driver')
+        ->join('employee','employee.id', '=', 'driver.id_employee')
+        ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
+        ->where('call_demand.id_driver','>=',0)
         ->get();
 
-        // $nameTemp = '';
-        // $typServiceTemp = '';
-        // $arrActivities = array();
-        // foreach ($employee_activities as $activitie) {
+        $activitiesDriverGroup = array();
+        foreach ($calldemands as $demand) { 
+
+            $activitiesDriverGroup[$demand->name][$demand->type_service] = $demand->total;
+        }
+
+
+
+        foreach($activitiesDriverGroup as $keyActName=>$activity)
+        {
+            if(!array_key_exists("COLOCACAO",$activitiesDriverGroup[$keyActName])){
+                $activitiesDriverGroup[$keyActName]["COLOCACAO"] = 0;
+            }
             
-        //     if($activitie->name != $nameTemp){
-                
-        //         $arrActivities[] = array(
-        //             "name" => $activitie->name,
-        //             "type_service" => $activitie->type_service,
-        //             "total" => $activitie->total
-        //         );
+            if(!array_key_exists("TROCA",$activitiesDriverGroup[$keyActName])){
+                $activitiesDriverGroup[$keyActName]["TROCA"] = 0;
+            }
 
-        //         $nameTemp = $activitie->name;
-        //     }else{
+            if(!array_key_exists('RETIRADA',$activitiesDriverGroup[$keyActName])){
+                $activitiesDriverGroup[$keyActName]['RETIRADA'] = 0;
+            }
+        }
 
-        //         $arrActivities[] = array(
-        //             "type_service" => $activitie->type_service,
-        //             "total" => $activitie->total
-        //         );        
-        //     }
-        // }
-
-        return $employee_activities;
-
-
+        return $activitiesDriverGroup;
     }
 
 
@@ -475,7 +473,6 @@ class CallDemandController extends Controller
     public function store(Request $request)
     {
 
-
         // CÓDIGO DE REFERÊNCIA LOGO ABAIXO:
         
         if (isset($request->client_name_new)
@@ -552,7 +549,8 @@ class CallDemandController extends Controller
                 $calldemandDumpsterRemoval->dumpster_sequence_demand = $repeatInfo + 1;
                 $calldemandDumpsterRemoval->dumpster_quantity  = $request->dumpster_quantity;
                 $calldemandDumpsterRemoval->days_allocation    = $request->total_days;
-                $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
+                // $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
+                $calldemandDumpsterRemoval->id_driver      = 0;
                 // $calldemandDumpsterRemoval->save();
 
                 if(!$calldemandDumpsterRemoval->save())

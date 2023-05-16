@@ -83,6 +83,7 @@
                                     <thead>
                                         <tr>
                                             <th>COLOCACAO/TROCA</th>
+                                            <th>DATA</th>
                                             <th>CLIENTE</th>
                                             <th>ENDEREÇO</th>
                                             <th>BAIRRO</th>
@@ -100,6 +101,7 @@
                                             <?php foreach($calldemands as $valDemand):?>        
                                         <tr>
                                             <td><?php echo $valDemand->type_service; ?></td>
+                                            <td><?php echo $valDemand->created_at; ?></td>
                                             <td><?php echo $valDemand->name; ?></td>
                                             <td>
                                                 <?php echo $valDemand->address_service.' '.
@@ -119,6 +121,7 @@
                                     <tfoot>
                                         <tr>
                                             <th>COLOCACAO/TROCA</th>
+                                            <th>DATA</th>
                                             <th>CLIENTE</th>
                                             <th>ENDEREÇO</th>
                                             <th>BAIRRO</th>
@@ -148,83 +151,34 @@ $(document).ready(function() {
     $.ajax({
         method: 'GET',
         url: '/show_activities_driver',
-        // data: {id : id_demand},
+        // data: {date_search : dateSearch},
         success: function(dataResponse) {
-            let nameTemp = "";
+
             let newRowContent = "";
-            let qtdColocacao = 0;
-            let qtdTroca     = 0;
-            let qtdRetirada  = 0;
+            $.each(dataResponse, function(iName, infoService){
 
-            let activitiesDriver  = [];
-            $.each(dataResponse, function(i, field){
+                totalService = 0
+
+                newRowContent += "<tr>";
+                newRowContent += "<td>" + iName + "</td>";
                 
-                if(field.name != nameTemp){
+                $.each(infoService, function(iTypeService, valService){
 
-
-                    newRowContent += "<td>" + activitiesDriver[0] + "</td><td>" + activitiesDriver[1] + "</td><td>" + activitiesDriver[2] + "</td>";
-                    newRowContent += "</tr>";
-                    newRowContent += "<tr>";
-
-                    newRowContent += "<td>" + field.name + "</td>";
-
-                    switch (field.type_service) {
-                        case "COLOCACAO":
-                            // newRowContent += "<td>" + field.type_service + "</td><td>" + field.type_service + "</td><td>" + "</td>";
-                            // qtdColocacao = field.total;
-                            // newRowContent += "<td>" + field.total + "</td>";
-                            activitiesDriver[0] = field.total;
-                        break;
-                        case "TROCA":
-                            // qtdTroca = field.total;
-                            // newRowContent += "<td>" + field.total + "</td>";
-                            activitiesDriver[1] = field.total;
-                        break;
-                        case "RETIRADA":
-                            // qtdRetirada = field.total;
-                            // newRowContent += "<td>" + field.total + "</td>";
-                            activitiesDriver[2] = field.total;
-                        break;
-                    }
-
-                    // newRowContent += "<td>" + qtdColocacao + "</td><td>" + qtdTroca + "</td><td>" + qtdRetirada + "</td>";
-                    
-                }else{
-
-                    switch (field.type_service) {
-                        case "COLOCACAO":
-                            // qtdColocacao = field.total;
-                            // newRowContent += "<td>" + field.total + "</td>";
-                            activitiesDriver[0] = field.total;
-                        break;
-                        case "TROCA":
-                            // qtdTroca = field.total;
-                            // newRowContent += "<td>" + field.total + "</td>";
-                            activitiesDriver[1] = field.total;
-                        break;
-                        case "RETIRADA":
-                            // qtdRetirada = field.total;
-                            // newRowContent += "<td>" + field.total + "</td>";
-                            activitiesDriver[2] = field.total;
-                            break;
-                        }
-                    }
-                    
-                    nameTemp = field.name;
+                    newRowContent += "<td>" + valService + "</td>";
+                    totalService  += valService;
+                });
+                newRowContent += "<td>" + totalService + "</td>";
+                newRowContent += "</tr>";
 
             });
 
-            console.log(newRowContent);
-
-            $("#tbmotoristaservicos tbody").append(newRowContent);
+           $("#tbmotoristaservicos tbody").append(newRowContent);
 
         },
         error: function(responseError){
             alert(responseError);
         }
     });
-
-
 
     // Formating Call Demand Table
     $('#tbpedido thead tr')
@@ -408,7 +362,7 @@ $(document).ready(function() {
         let namesList = String($("#name_search").val());
 
         tbpedido
-            .columns(18)
+            .columns(9)
             .search(namesList.replace(/,/g, "|"), true,false)
             .draw();
     });
@@ -418,7 +372,7 @@ $(document).ready(function() {
         let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
         
         tbpedido
-            .columns(5)
+            .columns(1)
             .search(dateDemandFilter.replace(/,/g,"|"), true,false)
             .draw();            
 
