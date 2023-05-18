@@ -234,7 +234,7 @@ $(document).ready(function() {
             buttons: [
                 'copy', 'csv', 'excel'
             ],
-            // Adicionando filtros em todas as colunass
+            // Adicionando filtros em todas as colunas
 
             orderCellsTop: true,
             fixedHeader: true,
@@ -244,7 +244,6 @@ $(document).ready(function() {
                 // For each column
                 api
                     .columns()
-                    //Teste 
                     .every(function () {
                         var column = this;
                         var select = $('<select><option value=""></option></select>')
@@ -263,7 +262,6 @@ $(document).ready(function() {
                                 select.append('<option value="' + d + '">' + d + '</option>');
                             });
                     })
-                    //Teste
                     .eq(0)
                     .each(function (colIdx) {
 
@@ -387,6 +385,7 @@ $(document).ready(function() {
 
             let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
             
+            alert(dateDemandFilter);
             tbpedido
                 .columns(5)
                 .search(dateDemandFilter.replace(/,/g,"|"), true,false)

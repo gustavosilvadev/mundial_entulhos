@@ -9,7 +9,6 @@ use App\Models\CallDemand;
 use App\Models\PaymentCallDemand;
 use App\Models\Driver;
 use App\Models\Landfill;
-use App\Models\ActivityUserDemandDumpster;
 
 class CallDemandController extends Controller
 {
@@ -30,7 +29,6 @@ class CallDemandController extends Controller
                     DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
                     DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster_forecast, "%d/%m/%Y") as date_removal_dumpster_forecast'),
                     DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
-                    // DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_end'),
                     DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
                     'call_demand.days_allocation AS days_allocation',
                     'call_demand.address as address_service',
@@ -41,7 +39,6 @@ class CallDemandController extends Controller
                     'call_demand.state as state_address_service',
                     'call_demand.comments as comments_demand',
                     'call_demand.phone as phone_demand',
-                    // 'call_demand.price_unit',
                     DB::raw('REPLACE(call_demand.price_unit, ".", ",") as price_unit'),
                     'call_demand.dumpster_quantity',
                     'call_demand.dumpster_number',
@@ -51,8 +48,6 @@ class CallDemandController extends Controller
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
                     DB::raw('"" as name_landfill'),
                     DB::raw('"" as name_driver')
-                // )->where('call_demand.id_demand', '=', $id_demand)->where('call_demand.id_driver','>=',0)->first();
-                // )->where('call_demand.id_demand', '=', $id_demand)->where('call_demand.id_driver','>=',0)->get();
                 )->where('call_demand.id', '=', $id_register)->where('call_demand.id_driver','>=',0)->get();
 
 
@@ -144,7 +139,6 @@ class CallDemandController extends Controller
                 DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
                 DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster_forecast, "%d/%m/%Y") as date_removal_dumpster_forecast'),
                 DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
-                // DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_end'),
                 DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
                 'call_demand.address as address_service',
                 'call_demand.number as number_address_service',
@@ -268,21 +262,42 @@ class CallDemandController extends Controller
         }
     }
 
-    public function showActivitiesEmployee()
+    public function showActivitiesEmployee(Request $request)
     {
 
-        $calldemands = DB::table('call_demand')
-        ->select(
-            'employee.name as name',
-            'call_demand.id_driver as id_driver',
-            'call_demand.type_service  as type_service',
-            DB::raw('COUNT(*) as total')
-        )
-        ->join('driver','driver.id', '=', 'call_demand.id_driver')
-        ->join('employee','employee.id', '=', 'driver.id_employee')
-        ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
-        ->where('call_demand.id_driver','>=',0)
-        ->get();
+        if(!empty(trim($request->date_demand_filter))){
+            
+            $date_demand_filter = explode(',', str_replace("|", ",",$request->date_demand_filter));
+
+            $calldemands = DB::table('call_demand')
+            ->select(
+                'employee.name as name',
+                'call_demand.id_driver as id_driver',
+                'call_demand.type_service  as type_service',
+                DB::raw('COUNT(*) as total')
+            )
+            ->join('driver','driver.id', '=', 'call_demand.id_driver')
+            ->join('employee','employee.id', '=', 'driver.id_employee')
+            ->where('call_demand.id_driver','>=',0)
+            ->whereIn(DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y")'), $date_demand_filter)
+            ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
+            ->get();
+            
+
+        }else{
+            $calldemands = DB::table('call_demand')
+            ->select(
+                'employee.name as name',
+                'call_demand.id_driver as id_driver',
+                'call_demand.type_service  as type_service',
+                DB::raw('COUNT(*) as total')
+            )
+            ->join('driver','driver.id', '=', 'call_demand.id_driver')
+            ->join('employee','employee.id', '=', 'driver.id_employee')
+            ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
+            ->where('call_demand.id_driver','>=',0)
+            ->get();
+        }
 
         $activitiesDriverGroup = array();
         foreach ($calldemands as $demand) { 
@@ -429,7 +444,6 @@ class CallDemandController extends Controller
         if(isset($id_client)){
         
             $calldemands = CallDemand::where('id_client',$id_client)
-                            // ->join('client', 'client.id', '=','call_demand.id_client')
                             ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
                             ->join('landfill', 'landfill.id', '=', 'call_demand.id_landfill')
                             ->join('employee', 'employee.id', '=', 'driver.id_employee')
@@ -464,7 +478,6 @@ class CallDemandController extends Controller
                             ->orderBy('call_demand.service_status')
                             ->get();
             
-            // $infoClient  = Client::where('id',$id_client)->first();
             return array('calldemands' => $calldemands);
 
         }
@@ -501,11 +514,8 @@ class CallDemandController extends Controller
                 $calldemand->id_demand      = $lastIdDemand;
                 $calldemand->type_service   = $request->type_service;
                 $calldemand->period         = $request->period;
-                // $calldemand->date_start = '';
                 $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
                 $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
-                // $calldemand->date_effective_removal_dumpster = '';
-                // $calldemand->id_parent = '';
                 $calldemand->name       = $request->client_name_new;
                 $calldemand->address    = $request->address;
                 $calldemand->number     = $request->number;
@@ -518,13 +528,8 @@ class CallDemandController extends Controller
                 $calldemand->comments   = $request->comments;
                 $calldemand->dumpster_sequence_demand = $repeatInfo + 1;
                 $calldemand->dumpster_quantity  = $request->dumpster_quantity;
-                // $calldemand->dumpster_number = ''; // MOTORISTA IRÁ ADICIONAR
                 $calldemand->days_allocation    = $request->total_days;
-                // $calldemand->id_landfill = ''; // MOTORISTA IRÁ ADICIONAR
                 $calldemand->id_driver  = $request->id_driver;
-                // $calldemand->service_status = ''; // SOMENTE NA ATUALIZAÇÃO
-                
-                // $calldemand->save();
 
                 if(!$calldemand->save())
                     return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
@@ -536,7 +541,6 @@ class CallDemandController extends Controller
                 $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
                 $calldemandDumpsterRemoval->id_parent      = $calldemand->id;
                 $calldemandDumpsterRemoval->period         = $request->period;
-                // $calldemandDumpsterRemoval->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
                 $calldemandDumpsterRemoval->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
                 $calldemandDumpsterRemoval->name           = $request->client_name_new;
                 $calldemandDumpsterRemoval->address        = $request->address;
@@ -549,13 +553,11 @@ class CallDemandController extends Controller
                 $calldemandDumpsterRemoval->dumpster_sequence_demand = $repeatInfo + 1;
                 $calldemandDumpsterRemoval->dumpster_quantity  = $request->dumpster_quantity;
                 $calldemandDumpsterRemoval->days_allocation    = $request->total_days;
-                // $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
                 $calldemandDumpsterRemoval->id_driver      = 0;
-                // $calldemandDumpsterRemoval->save();
+
 
                 if(!$calldemandDumpsterRemoval->save())
                     return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
-
 
 
                 // Gravando na tabela de pagamentos
@@ -598,9 +600,6 @@ class CallDemandController extends Controller
             && isset($request->phone)
             && isset($request->price_unit)
             && isset($request->dumpster_total)
-            // && isset($request->dumpster_total_opened)
-            // && isset($request->id_landfill)
-            // && isset($request->id_driver)
             && isset($request->comments)
             && isset($request->type_service)
             && isset($request->period)
