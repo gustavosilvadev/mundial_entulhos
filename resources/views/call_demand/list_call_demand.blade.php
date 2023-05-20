@@ -384,8 +384,7 @@ $(document).ready(function() {
         $("#date_format_allocation_search").on('change', function(a){
 
             let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
-            
-            alert(dateDemandFilter);
+
             tbpedido
                 .columns(5)
                 .search(dateDemandFilter.replace(/,/g,"|"), true,false)
