@@ -137,7 +137,7 @@ $(document).ready(function() {
         $("#tbmotoristaservicos tr td").remove();
         $.ajax({
             method: 'GET',
-            url: '/show_activities_driver',
+            url: 'show_activities_driver',
             data: {date_demand_filter : dateDemandFilter},
             success: function(dataResponse) {
 
@@ -180,7 +180,7 @@ $(document).ready(function() {
 
         let tbpedido = $('#tbpedido').DataTable( {
             "language": {
-                "url": "/assets/json/Portuguese-Brasil.json"
+                "url": "public/assets/json/Portuguese-Brasil.json"
             },
 
             order: [[0, 'desc']],
@@ -225,7 +225,6 @@ $(document).ready(function() {
                             $(api.column(colIdx).header()).index()
                         );
                         var title = $(cell).text();
-                        // $(cell).html('<input type="text" placeholder="' + title + '" />');
                         $(cell).html('<input type="text" />');
 
                         // On every keypress in this input
@@ -237,7 +236,7 @@ $(document).ready(function() {
                             .on('change', function (e) {
                                 // Get the search value
                                 $(this).attr('title', $(this).val());
-                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                                var regexr = '({search})'; 
 
                                 var cursorPosition = this.selectionStart;
                                 // Search the column for that value

@@ -5,11 +5,7 @@
 
 
     <!-- BEGIN: Content-->
-    {{-- <div class="app-content content "> --}}
         <div class="app-content content-designed">
-        {{-- <div class="content-overlay"></div> --}}
-        {{-- <div class="header-navbar-shadow"></div> --}}
-        {{-- <div class="content-wrapper container-xxl p-0"> --}}
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
@@ -92,7 +88,7 @@
 
             $.ajax({
                 method: 'GET',
-                url: '/dias_municipio',
+                url: 'dias_municipio',
                 data: {id : id_county},
                 success: function(dataResponse) {
                     $('#days_dumpster_county').val(dataResponse);
@@ -113,7 +109,7 @@
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: 'POST',
-                url: '/atualiza_dias_cacamba_municipio',
+                url: 'atualiza_dias_cacamba_municipio',
                 data: {
                     id : id_county,
                     days : days_county

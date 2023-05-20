@@ -8,11 +8,7 @@
 @include('partials.nav_teste');
  
     <!-- BEGIN: Content-->
-    {{-- <div class="app-content content "> --}}
         <div class="app-content content-designed">
-        {{-- <div class="content-overlay"></div> --}}
-        {{-- <div class="header-navbar-shadow"></div> --}}
-        {{-- <div class="content-wrapper container-xxl p-0"> --}}
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
@@ -26,13 +22,13 @@
             </div>
             <div class="content-body">
                 <div class="row">
-                <!-- 
-                    <div class="col-12">
-                        <div class="alert alert-primary" role="alert">
-                            <div class="alert-body"><strong>Info:</strong> Use this layout to set menu (navigation) default collapsed. Please check the&nbsp;<a class="text-primary" href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/documentation-layout-collapsed-menu.html" target="_blank">Layout collapsed menu documentation</a>&nbsp; for more details.</div>
+                    <!-- 
+                        <div class="col-12">
+                            <div class="alert alert-primary" role="alert">
+                                <div class="alert-body"><strong>Info:</strong> Use this layout to set menu (navigation) default collapsed. Please check the&nbsp;<a class="text-primary" href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/documentation-layout-collapsed-menu.html" target="_blank">Layout collapsed menu documentation</a>&nbsp; for more details.</div>
+                            </div>
                         </div>
-                    </div>
-                -->
+                    -->
  
                 </div>
                 {{-- <section class="horizontal-wizard"> --}}
@@ -48,7 +44,7 @@
                                         </div>
                                         <!-- users edit media object ends -->
                                         <!-- users edit account form start -->
-                                        <form action="/save_driver" method= "POST" id="form" class="form-validate">
+                                        <form action="save_driver" method= "POST" id="form" class="form-validate">
                                             @csrf
                                             <div class="row">
                                                 <div class="col-md-4">

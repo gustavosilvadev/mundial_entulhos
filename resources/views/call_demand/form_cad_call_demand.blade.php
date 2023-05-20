@@ -52,7 +52,7 @@
                             <div class="card">
                                 <div class="card-body">
                             
-                                    <form action="/save_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
+                                    <form action="save_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
                                         @csrf
                                         <div class="row invoice-add">
                         
@@ -536,7 +536,7 @@
                 
                 $.ajax({
                         method: 'GET',
-                        url: '/dias_municipio',
+                        url: 'dias_municipio',
                         data: {city : city},
                         success: function(dataResponse) {
 

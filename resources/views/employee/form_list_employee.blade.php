@@ -26,7 +26,7 @@
 
                             <div class="card">
                                 <div class="card-header">
-                                    <a href="/createemployee" class="btn btn-success">NOVO</a>
+                                    <a href="createemployee" class="btn btn-success">NOVO</a>
                                 </div>
                                 <div style="display: block;overflow-x: auto;white-space: nowrap;" >
                                     <table class="table">

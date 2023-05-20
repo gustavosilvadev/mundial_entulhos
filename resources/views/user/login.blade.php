@@ -39,12 +39,15 @@
                                     </div>
 
                                     <div class="form-group">
+{{--                                         
                                         <div class="d-flex justify-content-between">
                                             <label for="login-password">Senha</label>
                                             <a href="page-auth-forgot-password-v1.html">
                                                 <small>Esqueci a senha</small>
                                             </a>
-                                        </div>
+                                        </div> 
+--}}
+
                                         <div class="input-group input-group-merge form-password-toggle">
                                             <input type="password" class="form-control form-control-merge" id="login-password" name="password" tabindex="2" aria-describedby="login-password" />
                                             <div class="input-group-append">

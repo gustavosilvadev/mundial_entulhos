@@ -13,6 +13,8 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
+
+                        {{-- <h1>{{ $parse['host'] }}</h1> --}}
                         <h2 class="content-header-title float-left mb-0 text-info" style="text-decoration: underline">BASE PEDIDOS</h2>
 
                     </div>
@@ -101,7 +103,6 @@
                                             <?php foreach($calldemands as $valDemand):?>        
                                         <tr>
                                             
-                                            {{-- <td><a href="/editcalldemand/{{$valDemand->id_demand}}" class="btn btn-info">Editar</a></td> --}}
                                             <td>{{ $valDemand->id }}</td>
                                             
                                             <td>{{ $valDemand->id_demand }}</td>
@@ -151,7 +152,6 @@
                                             <th>COMENTÁRIOS</th>
                                             <th>QUANTIDADE CACAMBAS</th>
                                             <th>NÚMERO CAÇAMBA</th>
-                                            {{-- <th>DATA RETIRADA EFETIVA</th>  --}}
                                             <th>STATUS</th> 
                                             <th>ATERRO</th>
                                             <th>MOTORISTA</th>
@@ -211,7 +211,6 @@
         </div>
     </div>
 
-{{-- @include('partials.footer')  --}}
 @include('partials.footer_teste') 
 
 <script>
@@ -225,7 +224,7 @@ $(document).ready(function() {
         let tbpedido = $('#tbpedido').DataTable( {
             "language": {
                 // "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
-                "url": "/assets/json/Portuguese-Brasil.json"
+                "url": "public/assets/json/Portuguese-Brasil.json"
             },
             // order: [[0, 'desc']],
             order: [[2, 'asc']],
@@ -269,8 +268,8 @@ $(document).ready(function() {
                         var cell = $('.filters th').eq(
                             $(api.column(colIdx).header()).index()
                         );
+
                         var title = $(cell).text();
-                        // $(cell).html('<input type="text" placeholder="' + title + '" />');
                         $(cell).html('<input type="text" />');
 
                         // On every keypress in this input
@@ -282,7 +281,7 @@ $(document).ready(function() {
                             .on('change', function (e) {
                                 // Get the search value
                                 $(this).attr('title', $(this).val());
-                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                                var regexr = '({search})';
 
                                 var cursorPosition = this.selectionStart;
                                 // Search the column for that value
@@ -333,7 +332,7 @@ $(document).ready(function() {
 
             $("#idreg").val(id_reg);
             $("#iddemand").val(id_demand);
-            $("#btn_edit").attr("href","/editcalldemand/" + id_reg);
+            $("#btn_edit").attr("href","editcalldemand/" + id_reg);
   
         });
 
@@ -384,8 +383,7 @@ $(document).ready(function() {
         $("#date_format_allocation_search").on('change', function(a){
 
             let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
-            
-            alert(dateDemandFilter);
+
             tbpedido
                 .columns(5)
                 .search(dateDemandFilter.replace(/,/g,"|"), true,false)
@@ -393,14 +391,6 @@ $(document).ready(function() {
 
         });
 
-        $("btn-driver-option").click(function(){
-            
-            console.log("++++++++++");
-            console.log(this.text());
-            console.log("**********");
-        });
-
-        
 
 });
 

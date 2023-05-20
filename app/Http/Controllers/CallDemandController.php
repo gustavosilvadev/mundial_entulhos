@@ -242,9 +242,12 @@ class CallDemandController extends Controller
             'call_demand.service_status',
             DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
             DB::raw('"" as name_landfill'),
-            DB::raw('"" as name_driver')
+            DB::raw('employee.name as name_driver')
 
-        )->where('call_demand.id_driver','>=',0)
+        )
+        ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+        ->join('employee', 'employee.id', '=', 'driver.id_employee')
+        ->where('call_demand.id_driver','>=',0)
         ->orderByDesc('call_demand.id')
         ->get();
 

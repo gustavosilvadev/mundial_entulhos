@@ -1,14 +1,8 @@
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
-
-
     <!-- BEGIN: Content-->
-    {{-- <div class="app-content content "> --}}
         <div class="app-content content-designed">
-        {{-- <div class="content-overlay"></div> --}}
-        {{-- <div class="header-navbar-shadow"></div> --}}
-        {{-- <div class="content-wrapper container-xxl p-0"> --}}
             <div class="content-header row">
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
@@ -44,7 +38,7 @@
                                         </div>
                                         <!-- users edit media object ends -->
                                         <!-- users edit account form start -->
-                                        <form action="/save_landfill" method= "POST" id="form" class="form-validate">
+                                        <form action="save_landfill" method= "POST" id="form" class="form-validate">
                                             @csrf
                                             <div class="row">
                                                 <div class="col-md-4">

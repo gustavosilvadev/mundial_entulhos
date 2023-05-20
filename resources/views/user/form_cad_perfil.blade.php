@@ -21,7 +21,7 @@
                                     <!-- users edit media object start -->
                                     <!-- users edit media object ends -->
                                     <!-- users edit account form start -->
-                                    <form action="/perfil-save" method= "POST" id="form" class="form-validate" autocomplete="off">
+                                    <form action="perfil-save" method= "POST" id="form" class="form-validate" autocomplete="off">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-4">
