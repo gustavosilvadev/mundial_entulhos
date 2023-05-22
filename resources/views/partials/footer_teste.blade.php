@@ -94,6 +94,13 @@
                 mode: "multiple",
                 dateFormat: "d/m/Y"
             });
+
+            $('.date_format_allocation_drive_search').flatpickr({
+                // mode: "range",
+                // dateFormat: "d/m/Y"
+                dateFormat: "d/m/Y",
+                minDate: dataDiaSeguinteFormatada(),
+            });
             
             $('.date_format_removal').flatpickr({
                 dateFormat: "d/m/Y",

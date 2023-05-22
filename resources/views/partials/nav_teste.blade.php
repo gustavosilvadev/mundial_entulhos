@@ -1,48 +1,13 @@
 <?php
+// echo env('APP_URL');
+// echo env('APP_URL').'/'.env('APP_NAME');
+// die();
 
 // echo "<pre>";
     // print_r(url());
     // echo request()->getHttpHost();    
 // echo "</pre>";
 
-// $host = request()->getHttpHost();
-// echo $host ."<br/>";
-// $getHost = request()->getHost();
-// echo $getHost ."<br/>";
-// $hostwithHttp = request()->getSchemeAndHttpHost();
-// echo $hostwithHttp ."<br/>";
-// Path to the project's root folder  
-/*  
-echo base_path();
-
-echo "<BR />";
-// Path to the 'app' folder    
-echo app_path();        
-
-echo "<BR />";
-// Path to the 'public' folder    
-echo public_path();
-
-echo "<BR />";
-// Path to the 'storage' folder    
-echo storage_path();
-
-echo "<BR />";
-// Path to the 'storage/app' folder    
-echo storage_path('app');
-echo "<BR />";
-
-
-
-die();
-echo url()->current();
-echo "<BR />";
-echo url()->full();
-echo "<BR />";
-echo url()->previous();
-echo "<BR />";
-die();
-*/
 $name_perfil = '';
 
 if(session('access_permission') == 1){
@@ -64,19 +29,19 @@ if(session('access_permission') == 1){
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PEDIDOS</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="call_demand">BASE PEDIDOS</a>
-                        <a class="dropdown-item" href="call_demand_resume">RESUMO PEDIDOS</a>
+                        <a class="dropdown-item" href="{{ url('call_demand') }}">BASE PEDIDOS</a>
+                        <a class="dropdown-item" href="{{ url('call_demand_resume') }}">RESUMO PEDIDOS</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="createcalldemand">NOVO</a>
+                        <a class="dropdown-item" href="{{ url('createcalldemand') }}">NOVO</a>
 
                     </div>
                 </div><!-- /btn-group -->
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">FUNCIONÁRIOS</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="employee">LISTA</a>
+                        <a class="dropdown-item" href="{{ url('employee') }}">LISTA</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="createemployee">NOVO</a>
+                        <a class="dropdown-item" href="{{ url('createemployee') }}">NOVO</a>
 
                     </div>
                 </div><!-- /btn-group -->
@@ -96,7 +61,9 @@ if(session('access_permission') == 1){
  --}}
 
                 <div class="btn-group">
-                    <a class="btn dropdown-toggle" href="createlandfill">ATERROS</a>
+                    {{-- <a class="btn dropdown-toggle" href="createlandfill">ATERROS</a> --}}
+                    {{-- <a class="btn dropdown-toggle" href="{{ route('createlandfill') }}">ATERROS</a> --}}
+                    <a class="btn dropdown-toggle" href="{{ url('createlandfill') }}">ATERROS</a>
 
                 </div><!-- /btn-group -->
 
@@ -110,7 +77,7 @@ if(session('access_permission') == 1){
 --}}
 
                 <div class="btn-group">
-                    <a class="btn dropdown-toggle" href="cacamba_dias_municipio">MUNICÍPIOS</a>
+                    <a class="btn dropdown-toggle" href="{{ url('cacamba_dias_municipio') }}">MUNICÍPIOS</a>
                 </div><!-- /btn-group -->
 
 
@@ -142,7 +109,7 @@ if(session('access_permission') == 1){
                         
                         <div class="dropdown-divider"></div>
                         {{-- <a class="dropdown-item" href="employee/{{session('id_user')}}"><i class="mr-50" data-feather="settings"></i> Configurações</a> --}}
-                        <a class="dropdown-item" href="logout"><i class="mr-50" data-feather="power"></i> SAIR</a>
+                        <a class="dropdown-item" href="{{ url('logout') }}"><i class="mr-50" data-feather="power"></i> SAIR</a>
                     </div>
                 </li>
             </ul>

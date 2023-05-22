@@ -61,7 +61,7 @@
                                                 </div>
 
                                                 <div class="col-lg-4">
-                                                    <label>DATA DE ABERTURA</label>
+                                                    <label>DATA DE ALOCAÇÃO</label>
                                                     <div class="form-group mb-0">
                                                         <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                                     </div>
@@ -70,6 +70,7 @@
                                         </div>
                                     </div>
                                     <input type="reset" class="btn btn-warning" value="Limpar">
+                                    <input type="button" class="btn btn-danger" value="Deletar" id="btn_delete_demand">
                                 </form>
                             </div>                              
                             <div class="card-datatable">
@@ -77,13 +78,14 @@
                                 <table id="tbpedido" class="table table-striped display nowrap" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Nº FICHA</th>
                                             <th>Nº PEDIDO</th>
-                                            <th>COLOCACAO/TROCA</th>
-                                            <th>PERIODO DO DIA</th>
+                                            <th>COLOCAÇÃO/TROCA</th>
+                                            <th>PERÍODO DO DIA</th>
                                             <th>CLIENTE</th>
                                             <th>DATA PEDIDO</th>
-                                            <th>DATA OPERACAO</th>
+                                            <th>DATA OPERAÇÃO</th>
                                             <th>DATA ALOCAÇÃO</th>
                                             <th>DATA PREV RETIRADA</th>
                                             <th>DATA RETIRADA EFETIVA</th>
@@ -102,7 +104,8 @@
                                         <?php if(!empty($calldemands)): ?>
                                             <?php foreach($calldemands as $valDemand):?>        
                                         <tr>
-                                            
+
+                                            <td><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
                                             <td>{{ $valDemand->id }}</td>
                                             
                                             <td>{{ $valDemand->id_demand }}</td>
@@ -136,13 +139,14 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
+                                            <th></th>
                                             <th>Nº FICHA</th>
                                             <th>Nº PEDIDO</th>
-                                            <th>COLOCACAO/TROCA</th>
-                                            <th>PERIODO DO DIA</th>
+                                            <th>COLOCAÇÃO/TROCA</th>
+                                            <th>PERÍODO DO DIA</th>
                                             <th>CLIENTE</th>
                                             <th>DATA PEDIDO</th>  
-                                            <th>DATA OPERACAO</th>
+                                            <th>DATA OPERAÇÃO</th>
                                             <th>DATA ALOCAÇÃO</th>
                                             <th>DATA PREV RETIRADA</th>
                                             <th>DATA RETIRADA EFETIVA</th>
@@ -216,6 +220,36 @@
 <script>
 $(document).ready(function() {
 
+        $("#btn_delete_demand").click(function(){
+            
+            let idDemands = [];
+            $(':checkbox:checked').each(function(i){
+                idDemands[i] = $(this).val();
+            });
+
+            idDemands.splice(-1);
+
+            $.ajax({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                method: 'POST',
+                url: 'delete_demand',
+                data: { 
+                    id_demands : idDemands
+                    
+                },
+                success: function(dataResponse) {
+                    
+                    location.reload();
+
+                },
+                error: function(responseError){
+                    alert("Erro ao deletar registros: " + responseError);
+                    console.log(responseError);
+                }
+            });
+        });
+
+
         $('#tbpedido thead tr')
             .clone(true)
             .addClass('filters')
@@ -226,7 +260,6 @@ $(document).ready(function() {
                 // "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
                 "url": "public/assets/json/Portuguese-Brasil.json"
             },
-            // order: [[0, 'desc']],
             order: [[2, 'asc']],
             scrollX: true,
             dom: 'Bfrtip',
@@ -309,14 +342,14 @@ $(document).ready(function() {
             },
 
         } );
-
+/*
         $('#tbpedido tbody').on('click', 'tr', function () {
 
             let selectedRows = tbpedido.rows({ selected: true });
             let selectedData = selectedRows.data();
-            let id_reg       = $(this).find("td:eq(0)").text();
-            let id_demand    = $(this).find("td:eq(1)").text();
-            let nameDriver   = $(this).find("td:eq(18)").text();
+            let id_reg       = $(this).find("td:eq(1)").text();
+            let id_demand    = $(this).find("td:eq(2)").text();
+            let nameDriver   = $(this).find("td:eq(19)").text();
 
             $("#all_drivers").prop("checked", true);
             $("#modal-edit").modal('toggle');
@@ -335,6 +368,38 @@ $(document).ready(function() {
             $("#btn_edit").attr("href","editcalldemand/" + id_reg);
   
         });
+*/
+        $('#tbpedido tbody tr').on('click', function (evt) {
+            
+            let $cell=$(evt.target).closest('td');
+            
+            if( $cell.index()>0){
+
+                let selectedRows = tbpedido.rows({ selected: true });
+                let selectedData = selectedRows.data();
+                let id_reg       = $(this).find("td:eq(1)").text();
+                let id_demand    = $(this).find("td:eq(2)").text();
+                let nameDriver   = $(this).find("td:eq(19)").text();
+
+                $("#all_drivers").prop("checked", true);
+                $("#modal-edit").modal('toggle');
+
+                if(nameDriver != "")
+                {
+                    $("#name_driver_selected  option:contains("+ nameDriver +")").attr("selected", "selected");
+
+                }else {
+
+                    $("#name_driver_selected  option:contains()").attr("selected", false);
+                }
+
+                $("#idreg").val(id_reg);
+                $("#iddemand").val(id_demand);
+                $("#btn_edit").attr("href","editcalldemand/" + id_reg);
+
+
+            }
+        });
 
         $("#btn_driver_update").click(function(){
 
@@ -345,28 +410,28 @@ $(document).ready(function() {
             let all_drivers_checked = $("#all_drivers")[0].checked;
 
             $.ajax({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            method: 'POST',
-            url: '/changedriverdemand',
-            data: { 
-                drivers_checked : all_drivers_checked, 
-                id_driver : idDriverSelected, 
-                id_reg: idReg, 
-                id_demand : idDemand
-            },
-            success: function(dataResponse) {
-                
-                if(dataResponse){
-                    rowIndex = tbpedido.row().column(0).data().indexOf(idReg);
-                    tbpedido.cell(":eq("+rowIndex+")", 18).data(nameDriverSelected);
-                }else
-                    alert("Erro na atualização do nomes!");
-            },
-            error: function(responseError){
-                alert("Erro interno: " + responseError);
-                console.log(responseError);
-            }
-        });              
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                method: 'POST',
+                url: 'changedriverdemand',
+                data: { 
+                    drivers_checked : all_drivers_checked, 
+                    id_driver : idDriverSelected, 
+                    id_reg: idReg, 
+                    id_demand : idDemand
+                },
+                success: function(dataResponse) {
+                    
+                    if(dataResponse){
+                        rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
+                        tbpedido.cell(":eq("+rowIndex+")", 19).data(nameDriverSelected);
+                    }else
+                        alert("Erro na atualização do nomes!");
+                },
+                error: function(responseError){
+                    alert("Erro interno: " + responseError);
+                    console.log(responseError);
+                }
+            });              
 
         })
 
@@ -375,7 +440,7 @@ $(document).ready(function() {
             let namesList = String($("#name_search").val());
 
             tbpedido
-                .columns(18)
+                .columns(19)
                 .search(namesList.replace(/,/g, "|"), true,false)
                 .draw();
         });
@@ -385,7 +450,7 @@ $(document).ready(function() {
             let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
 
             tbpedido
-                .columns(5)
+                .columns(8)
                 .search(dateDemandFilter.replace(/,/g,"|"), true,false)
                 .draw();            
 

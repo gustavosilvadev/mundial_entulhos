@@ -15,9 +15,7 @@ class CallDemandController extends Controller
 
     public function showAPI($id_register)
     {
-
         if(isset($id_register)){
-
                 $calldemand = DB::table('call_demand')
                 ->select(
                     'call_demand.id as id',
@@ -282,7 +280,8 @@ class CallDemandController extends Controller
             ->join('driver','driver.id', '=', 'call_demand.id_driver')
             ->join('employee','employee.id', '=', 'driver.id_employee')
             ->where('call_demand.id_driver','>=',0)
-            ->whereIn(DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y")'), $date_demand_filter)
+            // ->whereIn(DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y")'), $date_demand_filter)
+            ->whereIn(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $date_demand_filter)
             ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
             ->get();
             
@@ -327,7 +326,6 @@ class CallDemandController extends Controller
 
         return $activitiesDriverGroup;
     }
-
 
     public function showHistoryDemand($id_demand)
     {
@@ -535,7 +533,7 @@ class CallDemandController extends Controller
                 $calldemand->id_driver  = $request->id_driver;
 
                 if(!$calldemand->save())
-                    return back()->withErrors(['response' => "Erro ao cadastrar demanda"]);
+                    return back()->withErrors(['response' => "Erro ao cadastrar o chamado"]);
 
 
                 // Gravando Registro para Futura Retirada da caçamba
@@ -544,6 +542,7 @@ class CallDemandController extends Controller
                 $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
                 $calldemandDumpsterRemoval->id_parent      = $calldemand->id;
                 $calldemandDumpsterRemoval->period         = $request->period;
+                $calldemand->date_allocation_dumpster      = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
                 $calldemandDumpsterRemoval->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
                 $calldemandDumpsterRemoval->name           = $request->client_name_new;
                 $calldemandDumpsterRemoval->address        = $request->address;
@@ -700,6 +699,46 @@ class CallDemandController extends Controller
         }
 
         return false;
+    }
+
+    public function destroy(Request $request){
+
+        foreach ($request->id_demands as  $idDemand) {
+            
+            $dataQueryPayment  = DB::table('payment_call_demand')->where('id_call_demand_reg', $idDemand)->first();
+            
+            if($dataQueryPayment){
+
+                $dataDeletePayment = DB::table('payment_call_demand')->where('id_call_demand_reg', $idDemand)->delete();
+
+                if(!$dataDeletePayment){
+                    return false;
+                }
+            }
+            
+            $dataQueryActivity = DB::table('activity_user_demand_dumpster')->where('id_call_demand_reg', $idDemand)->first();
+
+            if($dataQueryActivity){
+                $dataDeleteActivity = DB::table('activity_user_demand_dumpster')->where('id_call_demand_reg', $idDemand)->delete();
+
+                if(!$dataDeleteActivity){
+                    return false;
+                }
+            }
+
+
+            $dataDelete = DB::table('call_demand')->where('id', $idDemand)->delete();
+            if($dataDelete){
+                continue;
+            }else{
+                return false;
+            }
+
+
+        }
+
+        return false;
+
     }
 
     private function returnSuccess($dados)

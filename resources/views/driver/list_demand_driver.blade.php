@@ -16,6 +16,19 @@
 
                                 <div class="d-flex align-content-center justify-content-between w-100">
                                     <div class="input-group input-group-merge">
+
+                                        <div class="form-group mb-0">
+                                            {{-- <span>Data: </span> --}}
+                                            <input type="text" name="date_allocation_dumpster" id="data_filter_demand" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" />
+                                        </div>                                        
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="app-fixed-search d-flex align-items-center">
+
+                                <div class="d-flex align-content-center justify-content-between w-100">
+                                    <div class="input-group input-group-merge">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i data-feather="search" class="text-muted"></i></span>
                                         </div>
@@ -28,9 +41,10 @@
 
                             <!-- Todo List starts -->
                             <div class="todo-task-list-wrapper list-group">
-                                <?php if(is_object($call_demands)): ?>
+                                <ul class="todo-task-list media-list" id="todo-task-list">
+                                    <h1 class="loadingMask text-success text-center" style="display:none;">Loading...</div>
+                                    <?php if(is_object($call_demands)): ?>
 
-                                    <ul class="todo-task-list media-list" id="todo-task-list">
                                         <?php foreach($call_demands as $call_demand): ?>
 
                                             <li class="todo-item my-3">
@@ -99,11 +113,14 @@
                                                                             echo '
                                                                             <div class="badge badge-pill badge-light-success">RETIRADA: '.$call_demand->date_effective_removal_dumpster.'</div>
                                                                             <div class="badge badge-pill badge-light-success">ENCERRADO</div>';
-                          
+                        
                                                                         }
                                                                     ?>
 
                                                         </div>
+                                                        <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
+                                                        <label class="text-nowrap text-muted mr-1 todo-url-show-dumpster-demand" style="display: none;">{{ url('show_dumpster_demand') }}</label>
+
                                                         <label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">{{ $call_demand->id_demand }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-type-service" style="display: none;">{{ $call_demand->type_service }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">{{ $call_demand->comments_demand }}</label>
@@ -119,16 +136,14 @@
                                                 </div>
                                             </li>
                                         <?php endforeach; ?>
-                                        
-                                    </ul>
-                                <?php else: ?>
-                                                        
-                                    <div class="no-results" style="display: block; text-align:center">
-                                        <h5>Sem pedido disponível</h5>
-                                    </div>
+                                    
+                                    <?php else: ?>
+                                </ul>
+                                                    
+                                <div class="no-results" style="display: block; text-align:center">
+                                    <h5>Sem pedido disponível</h5>
+                                </div>
                                 <?php endif; ?>
-                                
-
                             </div>
                             <!-- Todo List ends -->
                         </div>
@@ -281,8 +296,8 @@
     
     <!-- END: Content-->
 
-
-
+    <label id="todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
+    <label id="todo-url-show-dumpster-demand" style="display: none;">{{ url('show_dumpster_demand') }}</label>
 
  {{-- @include('partials.footer') --}}
 @include('partials.footer_teste') 
@@ -299,7 +314,7 @@
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     method: 'POST',
-                    url: '/change_status_call_demand',
+                    url: 'change_status_call_demand',
                     data: {
                         id : id_demand
                     },
@@ -368,7 +383,7 @@
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     method: 'POST',
-                    url: '/start_demand',
+                    url: 'start_demand',
                     data: {
                         type_service: typeService, 
                         id_demand: idDemand,
@@ -442,7 +457,7 @@
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     method: 'POST',
-                    url: '/finish_demand',
+                    url: 'finish_demand',
                     data: { 
                         id_demand: idDemand,
                         id_landfill: idLandfill,
@@ -498,38 +513,99 @@
 
         });
 
-/*
-        $("#get_dumpster_location").click(function(){
+        $("#data_filter_demand").on('change',function(){
+            
+            let dataAlocacao = $(this).val();
 
-            let dataForm = $('#form-modal-todo');
-            let x = dataForm.serializeArray();
-            let id_demand = 0;
+            if(dataAlocacao.length > 0){
+                $('.loadingMask').show();
 
-            $.each(x, function(i, field) {
-                if(field.name == "id_demand")
-                {
-                    id_demand = field.value;
+                $("#todo-task-list li").remove();
 
-                }
-            });
+                $.ajax({
+                        method: 'GET',
+                        url: 'search_demand',
+                        data: {data_alocacao : dataAlocacao},
+                        success: function(dataResponse) {
 
-            $.ajax({
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                method: 'POST',
-                url: '/get_dumpster_location',
-                data: { id_demand: id_demand },
-                success: function(dataResponse) {
-                    if(dataResponse == true)
-                        location.reload();
-                },
-                error: function(responseError){
-                    console.log(responseError);
-                }
-            });    
 
+                            $.each(dataResponse, function(i, field) {
+
+                                let className = "";
+                                if(field.type_service == "COLOCACAO"){
+                                    className = "text-info";
+                                }else if(field.type_service == "TROCA"){
+                                    className = "text-warning";
+                                }else{
+                                    className = "text-danger";
+
+                                }
+
+                                let h1 = '<h1 class="' + className + '">'+ field.type_service + '</h1>';
+                                let h2 = '<h2 class="text-dark todo-title-address">' + field.address_service +
+                                ' - ' + field.number_address_service +
+                                ' - ' + field.zipcode_address_service +
+                                ' - ' + field.city_address_service +
+                                ' - ' + field.district_address_service +
+                                ' - ' + field.state_address_service + '</h2>'; 
+
+                                let contentOne = '<div class="todo-title-area"><div class="title-wrapper"><span class="todo-name-client d-none">' 
+                                    + field.name 
+                                    + '</span><span class="todo-phone d-none">'
+                                    + field.phone_demand + '</span></div></div>';
+
+                                let showStatusDemand = "";
+                                if(field.service_status == 0){
+                                    
+                                    showStatusDemand =  '<div class="badge badge-pill badge-light-danger"><div class="badge badge-pill badge-light-danger">PENDENTE</div></div>';
+
+
+                                }else if(field.service_status == 1){
+
+                                    showStatusDemand =  '<div class="badge badge-pill badge-light-warning">ATENDENDO</div>';
+
+                                }else if(field.service_status == 2 && empty(field.date_end) ){
+
+                                    showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-info">ALOCADO</div>';
+
+                                }else{
+
+                                    showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-success">ENCERRADO</div>';
+
+                                }
+                                
+                                let contentTwo = '<div class="todo-item-action"><div class="badge-wrapper mr-1">' + showStatusDemand + '</div>';
+                                contentTwo += '<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">' + $('#todo-url-list-landfill').text() + '</label>';
+                                contentTwo += '<label class="text-nowrap text-muted mr-1 todo-url-show-dumpster-demand" style="display: none;">' + $('#todo-url-show-dumpster-demand').text() + '</label>';
+                                contentTwo += '<label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">' + field.id_demand + '</label>';
+                                contentTwo += '<label class="text-nowrap text-muted mr-1 todo-type-service" style="display: none;">' + field.type_service + '</label>';
+                                contentTwo += '<label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">' + field.comments_demand + '</label>';
+                                contentTwo += '<label class="text-nowrap text-muted mr-1 todo-name-client" style="display: none;">' + field.phone_demand + '</label>';
+                                contentTwo += '<input type="hidden" class="id_demand" value="' + field.id_demand + '" />';
+                                contentTwo += '<input type="hidden" name="service_status" class="todo-service-status" value="' + field.service_status + '" />';
+                                contentTwo += '<span class="todo-date-start d-none">' + field.date_start + ' </span>';
+                                contentTwo += '<span class="todo-dumpster-quantity d-none">' + field.dumpster_quantity + '</span>';
+                                contentTwo += '</div>';
+
+                                $("#todo-task-list").append('<li class="todo-item my-3">' + h1 + h2 + contentOne + contentTwo + '</li>');
+
+                            });                            
+                            
+                            
+                            $('.loadingMask').hide();
+                            // $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
+                            // $("input[name='total_days']").val(dataResponse);
+                            
+                        },
+                        error: function(responseError){
+                            $('.loadingMask').hide();
+                            alert(responseError);
+                        }
+                });
+            }
 
         });
-*/        
+
 
     });
 </script>

@@ -196,18 +196,29 @@ class DriverController extends Controller
     public function showDemands()
     {
         $id_user_employee  = session('id_user');
-        $call_demands       = $this->showDemandsClient($id_user_employee);
+        $call_demands       = $this->showDemandsClient($id_user_employee, '');
 
         return view('driver.list_demand_driver',['call_demands'=> $call_demands]);
     }
 
-    public function showDemandsClient($id_employee)
+
+    public function showDemandFilter(Request $request)
     {
+        $id_user_employee  = session('id_user');
+        $call_demands      = $this->showDemandsClient($id_user_employee, $request->data_alocacao);
+
+        return $call_demands;
+    }    
+
+    public function showDemandsClient($id_employee, $date_demand_filter)
+    {
+        $dateAllocationFilter = (isset($date_demand_filter) ? $date_demand_filter : date('d/m/Y'));
+
         $get_id_driver  = Driver::select()->where("id_employee", $id_employee)->first();
         $service_status = 5;
+
         $calldemands = DB::table('call_demand')
         ->groupBy('call_demand.id_demand','call_demand.type_service')
-        // ->orderBy('call_demand.id_demand', 'desc')        
         ->orderBy('call_demand.type_service', 'desc')        
         ->select(
             'call_demand.id_demand as id_demand',
@@ -218,7 +229,6 @@ class DriverController extends Controller
             DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
             DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster_forecast, "%d/%m/%Y") as date_removal_dumpster_forecast'),
             DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
-            // DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_end'),
             DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
             'call_demand.address as address_service',
             'call_demand.number as number_address_service',
@@ -245,9 +255,9 @@ class DriverController extends Controller
         )
         ->where('call_demand.id_driver', $get_id_driver['id'])
         ->where('call_demand.service_status','<>', $service_status)
+        ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
         ->groupBy('id_demand')
         ->get();
-
 
         return $calldemands;
     }

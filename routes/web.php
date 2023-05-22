@@ -35,6 +35,7 @@ Route::middleware('usersession')->group(function(){
     Route::post('/save_driver',[DriverController::class,'store']);
     Route::get('driver/{id?}',[DriverController::class,'show']);
     Route::get('/driver_demand', [DriverController::class, 'showDemands']);
+    Route::get('search_demand',[DriverController::class,'showDemandFilter']);
     
     // resolver problema ao Clicar no botão Inciar Atendimento
     Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
@@ -60,6 +61,7 @@ Route::middleware('usersession')->group(function(){
     Route::post('save_call_demand',[CallDemandController::class,'store']);
     Route::get('call_demand/{id?}',[CallDemandController::class,'show']);
     Route::post('update_call_demand',[CallDemandController::class,'update']);
+    Route::post('delete_demand',[CallDemandController::class,'destroy']);
     
     Route::get('demand_list_client/{id?}',[CallDemandController::class,'showInfoClientDemand']);
     
@@ -79,7 +81,8 @@ Route::middleware('usersession')->group(function(){
     
     //Resumo Pedidos
     Route::get('call_demand_resume', [CallDemandController::class, 'showCallDemandResume']);
-    Route::get('show_activities_driver', [CallDemandController::class,'showActivitiesEmployee']);    
+    Route::get('show_activities_driver', [CallDemandController::class,'showActivitiesEmployee']);
+    
 
 
     // Client Info Payment

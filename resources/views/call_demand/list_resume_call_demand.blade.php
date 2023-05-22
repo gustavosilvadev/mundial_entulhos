@@ -1,5 +1,5 @@
- @include('partials.header_teste')
- @include('partials.nav_teste')
+@include('partials.header_teste')
+@include('partials.nav_teste')
 
  <style>
     thead input {
@@ -34,7 +34,7 @@
                                 <form class="dt_adv_search" method="POST">
                                     <div class="row">
                                         <div class="col-sm">
-                                            <label>DATA DE ABERTURA</label>
+                                            <label>DATA DE ALOCAÇÃO</label>
                                             <div class="form-group mb-0">
                                                 <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                             </div>
@@ -66,8 +66,8 @@
                                 <table id="tbpedido" class="display nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>COLOCACAO/TROCA</th>
-                                            <th>DATA</th>
+                                            <th>COLOCAÇÃO/TROCA</th>
+                                            <th>DATA DE ALOCAÇÃO</th>
                                             <th>CLIENTE</th>
                                             <th>ENDEREÇO</th>
                                             <th>BAIRRO</th>
@@ -85,7 +85,7 @@
                                             <?php foreach($calldemands as $valDemand):?>        
                                         <tr>
                                             <td><?php echo $valDemand->type_service; ?></td>
-                                            <td><?php echo $valDemand->created_at; ?></td>
+                                            <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
                                             <td><?php echo $valDemand->name; ?></td>
                                             <td>
                                                 <?php echo $valDemand->address_service.' '.
@@ -104,7 +104,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>COLOCACAO/TROCA</th>
+                                            <th>COLOCAÇÃO/TROCA</th>
                                             <th>DATA</th>
                                             <th>CLIENTE</th>
                                             <th>ENDEREÇO</th>

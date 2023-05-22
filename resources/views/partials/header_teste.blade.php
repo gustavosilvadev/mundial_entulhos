@@ -122,7 +122,7 @@
     
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/pages/app-todo.css') }}">
         
-        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/datatables/jquery.dataTables.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/datatables/dataTables.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/datatables/buttons.dataTables.min.css') }}">
         <!-- END: Page CSS-->
 

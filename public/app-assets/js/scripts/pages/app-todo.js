@@ -436,8 +436,12 @@ $(function () {
     newTaskForm.find('.todo-item-dumpster-quantity').text($dumpsterQuantity);
     
     $('#number-dumpster-repeat').empty();
-    
-    $.get("/show_dumpster_demand",{ id_demand: $idDemand, type_service: $typeService } )
+
+    let listlandfill           = $(this).find('.todo-url-list-landfill');
+    let show_dumpster_demand   = $(this).find('.todo-url-show-dumpster-demand');
+
+    // $.get("show_dumpster_demand",{ id_demand: $idDemand, type_service: $typeService } )
+    $.get(show_dumpster_demand.text(),{ id_demand: $idDemand, type_service: $typeService } )
     .done(function ( dataResponse ){
       
       $.each(dataResponse, function(kItem, item){
@@ -470,7 +474,8 @@ $(function () {
 // Carregando lista de aterros
     newTaskForm.find(".edit-landfill-list").empty();
 
-    $.get("/listlandfill",{ id_demand: $idDemand, type_service: $type_service })
+    // $.get("listlandfill",{ id_demand: $idDemand, type_service: $type_service })
+    $.get(listlandfill.text(),{ id_demand: $idDemand, type_service: $type_service })
     .done(function ( dataResponse ){
 
       newTaskForm.find(".edit-landfill-list").append('<option value="0">----</option>');
