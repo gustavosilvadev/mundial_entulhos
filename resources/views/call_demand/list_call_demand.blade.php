@@ -1,5 +1,5 @@
- @include('partials.header_teste')
- @include('partials.nav_teste')
+@include('partials.header_teste')
+@include('partials.nav_teste')
 
  <style>
     thead input {
@@ -69,7 +69,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="reset" class="btn btn-warning" value="Limpar">
+                                    <input type="button" class="btn btn-warning" value="Limpar" id="btn_reset_input">
                                     <input type="button" class="btn btn-danger" value="Deletar" id="btn_delete_demand">
                                 </form>
                             </div>                              
@@ -198,13 +198,15 @@
                         <input type="checkbox" class="form-check-input" id="all_drivers" checked="">
                         <label class="form-check-label" for="colorCheck6">Atualizar para todos</label>
                     </div>
+                    <label for="">Data de Retirada Efetiva</label>
+                    <input type="text" name="effective_date_removal_dumpster" id="effective_date_removal_dumpster" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4"/>
 
                     <input type="hidden" id="iddemand" value="" />
                     <input type="hidden" id="idreg" value="" />
                 </div>
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="btn_driver_update" data-dismiss="modal">ATUALIZAR MOTORISTA</button>
+                    <button type="button" class="btn btn-success" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>
                     <a class="btn btn-warning" id="btn_edit">EDITAR</a>
                 </div> 
                
@@ -249,6 +251,37 @@ $(document).ready(function() {
             });
         });
 
+        $("#btn_reset_input").click(function(){
+
+            optionsRecover = "";
+            $("#name_search option").each(function(a ,b){
+
+                optionsRecover += b.outerHTML;
+            });
+
+            $("#name_search").val('');
+            $("#name_search").text('');
+
+            $("#name_search").append(optionsRecover);
+            
+            flatpickr(".date_format_allocation_search",{ dateFormat: "d/m/Y", allowInput: true });
+
+            $(".flatpickr").on('input', function(e) {
+                if(!this.shouldClear && !this.value.length && this._flatpickr.currentYear ) {
+                this.shouldClear = true;
+                this._flatpickr.clear();
+                this.shouldClear = false;
+                }
+            });
+
+            $('.date_format_allocation_search').flatpickr({
+                mode: "multiple",
+                dateFormat: "d/m/Y"
+            });
+            
+            $('#date_format_allocation_search').val('');
+
+        });
 
         $('#tbpedido thead tr')
             .clone(true)
@@ -342,33 +375,7 @@ $(document).ready(function() {
             },
 
         } );
-/*
-        $('#tbpedido tbody').on('click', 'tr', function () {
 
-            let selectedRows = tbpedido.rows({ selected: true });
-            let selectedData = selectedRows.data();
-            let id_reg       = $(this).find("td:eq(1)").text();
-            let id_demand    = $(this).find("td:eq(2)").text();
-            let nameDriver   = $(this).find("td:eq(19)").text();
-
-            $("#all_drivers").prop("checked", true);
-            $("#modal-edit").modal('toggle');
-
-            if(nameDriver != "")
-            {
-                $("#name_driver_selected  option:contains("+ nameDriver +")").attr("selected", "selected");
-
-            }else {
-
-                $("#name_driver_selected  option:contains()").attr("selected", false);
-            }
-
-            $("#idreg").val(id_reg);
-            $("#iddemand").val(id_demand);
-            $("#btn_edit").attr("href","editcalldemand/" + id_reg);
-  
-        });
-*/
         $('#tbpedido tbody tr').on('click', function (evt) {
             
             let $cell=$(evt.target).closest('td');
@@ -408,6 +415,7 @@ $(document).ready(function() {
             let idDriverSelected    = $("#name_driver_selected").val();
             let nameDriverSelected  = $("#name_driver_selected").find('option:selected').text()
             let all_drivers_checked = $("#all_drivers")[0].checked;
+            let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -415,15 +423,21 @@ $(document).ready(function() {
                 url: 'changedriverdemand',
                 data: { 
                     drivers_checked : all_drivers_checked, 
-                    id_driver : idDriverSelected, 
+                    id_driver : idDriverSelected,
+                    effective_date_removal : effectiveDateRemoval,
                     id_reg: idReg, 
                     id_demand : idDemand
                 },
                 success: function(dataResponse) {
                     
                     if(dataResponse){
+                        /*
                         rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
                         tbpedido.cell(":eq("+rowIndex+")", 19).data(nameDriverSelected);
+                        tbpedido.cell(":eq("+rowIndex+")", 10).data(effectiveDateRemoval);
+                        */
+                       location.reload();
+
                     }else
                         alert("Erro na atualização do nomes!");
                 },

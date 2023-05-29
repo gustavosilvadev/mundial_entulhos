@@ -13,18 +13,26 @@
                         <div class="todo-app-list">
                             <!-- Todo search starts -->
                             <div class="app-fixed-search d-flex align-items-center">
-
+{{-- 
                                 <div class="d-flex align-content-center justify-content-between w-100">
                                     <div class="input-group input-group-merge">
 
-                                        <div class="form-group mb-0">
-                                            {{-- <span>Data: </span> --}}
+                                        <div class="input-group-prepend">
+                                            <span>Data: </span>
                                             <input type="text" name="date_allocation_dumpster" id="data_filter_demand" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" />
                                         </div>                                        
                                     </div>
                                 </div>
-
+                                 --}}
+                                 <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text" id="inputGroup-sizing-lg">Data:</span>
+                                    </div>
+                                    {{-- <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm"> --}}
+                                    <input type="text" name="date_allocation_dumpster" id="data_filter_demand" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                                  </div>
                             </div>
+{{--                             
                             <div class="app-fixed-search d-flex align-items-center">
 
                                 <div class="d-flex align-content-center justify-content-between w-100">
@@ -37,6 +45,7 @@
                                 </div>
 
                             </div>
+ --}}
                             <!-- Todo search ends -->
 
                             <!-- Todo List starts -->
@@ -150,7 +159,8 @@
 
                         <!-- Right Sidebar starts -->
                         <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
-                            <div class="modal-dialog sidebar-lg" style="width: 28rem !important;">
+                            {{-- <div class="modal-dialog sidebar-lg" style="width: 28rem !important;"> --}}
+                            <div class="modal-dialog sidebar-lg" style="">
                                 <div class="modal-content p-0">
     
                                     <form id="form-modal-todo" class="todo-modal needs-validation" >
@@ -527,8 +537,6 @@
                         url: 'search_demand',
                         data: {data_alocacao : dataAlocacao},
                         success: function(dataResponse) {
-
-
                             $.each(dataResponse, function(i, field) {
 
                                 let className = "";

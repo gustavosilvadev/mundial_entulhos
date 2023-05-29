@@ -276,7 +276,8 @@
                                                                                                         <div class="form-group">
 
                                                                                                             <label for="period">DATA ALOCAÇÃO</label>
-                                                                                                            <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onblur="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/>
+                                                                                                            <input type="hidden" id="date_allocation_dumpster" value="{{ $value->date_allocation_dumpster }}" />
+                                                                                                            <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
                                                                                                         </div>    
                                                                                                     </div>
 
@@ -389,6 +390,11 @@
 
     $(document).ready(function(){
 
+        $('.date_format_allocation_edit').flatpickr({
+                mode: "multiple",
+                dateFormat: "d/m/Y"
+            }).setDate($('#date_allocation_dumpster').val());
+
         // let id_demand_client = $(this).val();
         // findDemandClient(id_demand_client);
 
@@ -472,7 +478,7 @@
                     
                     $('#note').val(dataResponse.comments);
 
-                    $('.date_format_allocation').val(dataResponse.date_allocation_dumpster);
+                    $('.date_format_allocation_edit').val(dataResponse.date_allocation_dumpster);
                     $('.date_format_removal').val(dataResponse.date_removal_dumpster);
                     $('.date_format_effective_removal').val(dataResponse.date_effective_removal_dumpster);
 
@@ -588,14 +594,12 @@
 
     validaData = (dataAlocacao) => {
         let city = $('#city').val();
-
         if(dataAlocacao.value.length > 0 && city.length > 0){
             $.ajax({
                     method: 'GET',
-                    url: '/dias_municipio',
+                    url: 'dias_municipio',
                     data: {city : city},
                     success: function(dataResponse) {
-
                         $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
                         // $("input[name='date_effective_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
                         $("input[name='date_removal_dumpster_forecast']").val(adicionaDiasEmData(dataResponse));
@@ -612,7 +616,7 @@
 
     let adicionaDiasEmData = (days) => {
 
-        let format_data_alocacao = $('.date_format_allocation').val().split('/');
+        let format_data_alocacao = $('.date_format_allocation_edit').val().split('/');
         format_data_alocacao = format_data_alocacao[1] + '/' + format_data_alocacao[0] + '/' + format_data_alocacao[2];
 
         let d = new Date(format_data_alocacao);

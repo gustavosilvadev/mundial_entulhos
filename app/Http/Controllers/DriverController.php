@@ -256,6 +256,7 @@ class DriverController extends Controller
         ->where('call_demand.id_driver', $get_id_driver['id'])
         ->where('call_demand.service_status','<>', $service_status)
         ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
+        ->orWhere(DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
         ->groupBy('id_demand')
         ->get();
 
@@ -352,8 +353,7 @@ class DriverController extends Controller
             ->where('service_status','<>', 5)
             ->update([
                 'service_status' => $service_status,
-                'id_landfill' => $request->id_landfill,
-                'date_effective_removal_dumpster' => date("Y-m-d H:i:s")
+                'id_landfill' => $request->id_landfill
             ]);
 
             if($is_updated)

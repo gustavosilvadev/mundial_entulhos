@@ -158,6 +158,7 @@ class CallDemandController extends Controller
 
             )->where('call_demand.id_driver','>=',0)
             ->where('call_demand.service_status','<>',5)
+            ->where('call_demand.type_service','<>','RETIRADA')
             ->orderByDesc('call_demand.id')
             ->get();
 
@@ -198,7 +199,7 @@ class CallDemandController extends Controller
             }else{
                 
                 return view('call_demand.list_call_demand',[
-                    'driver_name_demands'=> '',
+                    'driver_name_demands'=> $driver_name_demands,
                     'calldemands'=> ''
                 ]);
             }
@@ -535,14 +536,14 @@ class CallDemandController extends Controller
                 if(!$calldemand->save())
                     return back()->withErrors(['response' => "Erro ao cadastrar o chamado"]);
 
-
+/*
                 // Gravando Registro para Futura Retirada da caçamba
                 $calldemandDumpsterRemoval = new CallDemand();
                 $calldemandDumpsterRemoval->id_demand      = $lastIdDemand;
                 $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
                 $calldemandDumpsterRemoval->id_parent      = $calldemand->id;
                 $calldemandDumpsterRemoval->period         = $request->period;
-                $calldemand->date_allocation_dumpster      = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
+                $calldemandDumpsterRemoval->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
                 $calldemandDumpsterRemoval->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
                 $calldemandDumpsterRemoval->name           = $request->client_name_new;
                 $calldemandDumpsterRemoval->address        = $request->address;
@@ -560,7 +561,7 @@ class CallDemandController extends Controller
 
                 if(!$calldemandDumpsterRemoval->save())
                     return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
-
+*/
 
                 // Gravando na tabela de pagamentos
                 $paymentCallDemand = new PaymentCallDemand();
@@ -670,15 +671,52 @@ class CallDemandController extends Controller
     public function changeDriverDemand(Request $request)
     {
 
-        $calldemandFirst = CallDemand::where('id',$request->id_reg)->where('id_demand',$request->id_demand)->first();
-
+        $calldemandFirst         = CallDemand::where('id',$request->id_reg)->where('id_demand',$request->id_demand)->first();
+        $calldemandRemovalFirst  = CallDemand::where('type_service', 'RETIRADA')->where('id',$request->id_reg)->where('id_demand',$request->id_demand)->first();
+        // $effectiveDateRemoval    = isset($request->effective_date_removal) ? $request->effective_date_removal : null;
+        $effectiveDateRemoval    = isset($request->effective_date_removal) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->effective_date_removal))) : null;
+        
         if(isset($calldemandFirst))
         {
 
+            // CRIAR UM CHAMADO DE RETIRADA SE O USUÁRIO ADICIONAR "DATA DE RETIRADA EFETIVA"
+            if($effectiveDateRemoval != null && !$calldemandRemovalFirst){
+
+                // Gravando Registro para Futura Retirada da caçamba
+                $calldemandDumpsterRemoval = new CallDemand();
+                $calldemandDumpsterRemoval->id_demand      = $calldemandFirst->id_demand;
+                $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
+                $calldemandDumpsterRemoval->id_parent      = $calldemandFirst->id_parent;
+                $calldemandDumpsterRemoval->period         = $calldemandFirst->period;
+                $calldemandDumpsterRemoval->date_allocation_dumpster = $calldemandFirst->date_allocation_dumpster;
+                $calldemandDumpsterRemoval->date_removal_dumpster_forecast = $calldemandFirst->date_removal_dumpster_forecast;
+                $calldemandDumpsterRemoval->date_effective_removal_dumpster = $effectiveDateRemoval;
+                $calldemandDumpsterRemoval->name           = $calldemandFirst->name;
+                $calldemandDumpsterRemoval->address        = $calldemandFirst->address;
+                $calldemandDumpsterRemoval->number         = $calldemandFirst->number;
+                $calldemandDumpsterRemoval->zipcode        = $calldemandFirst->zipcode;
+                $calldemandDumpsterRemoval->city           = $calldemandFirst->city;
+                $calldemandDumpsterRemoval->district       = $calldemandFirst->district;
+                $calldemandDumpsterRemoval->state          = $calldemandFirst->state;
+                $calldemandDumpsterRemoval->phone          = $calldemandFirst->phone;
+                $calldemandDumpsterRemoval->dumpster_sequence_demand = $calldemandFirst->dumpster_sequence_demand;
+                $calldemandDumpsterRemoval->dumpster_quantity  = $calldemandFirst->dumpster_quantity;
+                $calldemandDumpsterRemoval->days_allocation    = $calldemandFirst->days_allocation;
+                $calldemandDumpsterRemoval->id_driver      = $calldemandFirst->id_driver;
+
+                if(!$calldemandDumpsterRemoval->save())
+                    return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
+                
+            }
+
+            // INSERE ID DO MOTORISTA NO CHAMADO E DATA DE REMOÇÃO EFETIVA SE EXISTIR
             if($request->drivers_checked == true)
             {
-                $call_demand = CallDemand::where('id_demand',$request->id_demand)->where('type_service',$calldemandFirst->type_service)->update([
+                $call_demand = CallDemand::where('id_demand',$request->id_demand)
+                ->where('type_service',$calldemandFirst->type_service)
+                ->update([
                     'id_driver' => $request->id_driver,
+                    'date_effective_removal_dumpster' => $effectiveDateRemoval
                 ]);
 
             }else{
@@ -687,6 +725,7 @@ class CallDemandController extends Controller
                 ->where('type_service',$calldemandFirst->type_service)
                 ->update([
                     'id_driver' => $request->id_driver,
+                    'date_effective_removal_dumpster' => $effectiveDateRemoval
                 ]);
             }
 

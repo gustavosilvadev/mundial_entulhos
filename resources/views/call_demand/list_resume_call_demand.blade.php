@@ -153,7 +153,7 @@ $(document).ready(function() {
                     newRowContent += "<td>" + infoService.COLOCACAO + "</td>";
                     newRowContent += "<td>" + infoService.TROCA + "</td>";
                     newRowContent += "<td>" + infoService.RETIRADA + "</td>";
-                    totalService  = infoService.COLOCACAO + infoService.TROCA + infoService.RETIRADA;
+                    totalService  = parseInt(infoService.COLOCACAO) + parseInt(infoService.TROCA) + parseInt(infoService.RETIRADA);
 
                     newRowContent += "<td>" + totalService + "</td>";
                     newRowContent += "</tr>";
