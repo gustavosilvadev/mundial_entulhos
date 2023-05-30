@@ -81,7 +81,8 @@ class UserEmployeeController extends Controller
             }
 
             if(Hash::check($request->password,$LoginUser->password) == true){
-                
+
+                //Salva Session
                 session(['id_user' => $LoginUser->id,
                         'access_permission' => $LoginUser->access_permission,
                         'name' => $LoginUser->name,
@@ -89,7 +90,9 @@ class UserEmployeeController extends Controller
                         'login' => $LoginUser->login,
                         'email' => $LoginUser->email]);
                 
-                // return redirect('/lista_todas_categorias_edit');
+                //Salva Cookie
+                // $this->setCookie($LoginUser->login, $LoginUser->password);
+
                 return redirect('/');
 
             }else
@@ -101,6 +104,25 @@ class UserEmployeeController extends Controller
 
             return view('user.login',["response" => "Login inválido, verifique login e senha"]);
         }
+    }
+
+    public function setCookie($login, $password)
+    {
+        $response = new \Illuminate\Http\Response('Set Cookie Login');
+        // $response->withCookie(cookie()->forever('login', $login));
+        // $response->withCookie(cookie()->forever('password', $password));
+        $response->withCookies([
+            'login' => $login,
+            'password' => $password,
+        ]);
+        return $response;
+    }
+
+    public function getCookie()
+    {
+        $response = new \Illuminate\Http\Response('Set Cookie Login');
+        $value = $request->cookie('name');
+        echo $value;
     }
 
     public function redirectPagePerfil(){

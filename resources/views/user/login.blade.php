@@ -23,7 +23,7 @@
  
                                 <h4 class="card-title mb-1">Acesse o portal!</h4>
 
-                                <form class="auth-login-form mt-2" action="login" method="POST">
+                                <form class="auth-login-form mt-2" action="login" method="POST" autocomplete='on'>
                                     @csrf
 
                                     <?php if(isset($response)): ?>
@@ -55,6 +55,14 @@
                                             </div>
                                         </div>
                                     </div>
+{{-- 
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" id="remember-me" type="checkbox" tabindex="3" />
+                                            <label class="custom-control-label" for="remember-me"> Lembrar Senha</label>
+                                        </div>
+                                    </div> 
+--}}
 
                                     <div class="form-group">
                                         <a class="" href="perfil-create">Criar conta </a>

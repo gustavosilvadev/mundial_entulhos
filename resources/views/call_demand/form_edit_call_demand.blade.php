@@ -135,7 +135,14 @@
                                                                                                             <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" value="{{ $value->address_service }}"/>
                                                                                                         </div>
                                                                                                     </div>
-                                                            
+
+                                                                                                    <div class="col-md-3">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="address">Complemento</label>
+                                                                                                            <input type="text" class="form-control only-text" name="address_complement" id="address_complement" minlength="2" maxlength="44" value="{{ $value->address_complement }}"/>
+                                                                                                        </div>
+                                                                                                    </div>
+
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="number">Número</label>
@@ -243,6 +250,13 @@
                                                                                                         <div class="form-group mb-2">
                                                                                                             <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
                                                                                                             <textarea class="form-control" rows="2" id="note" name="comments" >{{ $value->comments_demand }}</textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-md-12">
+                                                                                                        <div class="form-group mb-2">
+                                                                                                            <label for="note" class="form-label font-weight-bold">COMENTÁRIOS (CONTRATUAL):</label>
+                                                                                                            <textarea class="form-control" rows="2" id="note" name="comments" >{{ $value->comments_contract }}</textarea>
                                                                                                         </div>
                                                                                                     </div>
                                                 

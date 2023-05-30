@@ -113,7 +113,7 @@
                                                                         <hr />                                                                        
                                                                         <div class="row">
                                                                           
-                                                                            <div class="col-md-4">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="zipcode">CEP</label>
                                                                                         <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" />
@@ -124,6 +124,13 @@
                                                                                 <div class="form-group">
                                                                                     <label for="address">Endereço</label>
                                                                                     <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" />
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label for="address">Complemento</label>
+                                                                                    <input type="text" class="form-control only-text" name="address_complement" id="address_complement" minlength="2" maxlength="44" />
                                                                                 </div>
                                                                             </div>
                                     
@@ -209,8 +216,17 @@
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <div class="form-group mb-2">
-                                                                                    <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
+                                                                                    <label for="note" class="form-label font-weight-bold">COMENTÁRIOS (OPERACIONAL):</label>
                                                                                     <textarea class="form-control" rows="2" id="note" name="comments"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group mb-2">
+                                                                                    <label for="note" class="form-label font-weight-bold">COMENTÁRIOS (CONTRATUAL):</label>
+                                                                                    <textarea class="form-control" rows="2" id="note" name="comments_contract"></textarea>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -388,13 +404,14 @@
         function findDemandClient(id_demand){
             $.ajax({
                 method: 'GET',
-                url: '/show_info_client',
+                url: 'show_info_client',
                 data: {id : id_demand},
                 success: function(dataResponse) {
 
                     $("#client_name_new").val(dataResponse.name);
                     $("#address").val(dataResponse.address);
                     $("#number").val(dataResponse.number);
+                    $("#address_complement").val(dataResponse.address_complement);
                     $("#zipcode").val(dataResponse.zipcode);
                     $("#district").val(dataResponse.district);
                     $("#state").val(dataResponse.state);
@@ -416,7 +433,13 @@
         
         $("#form").validate({
             rules: {
+                client_name_new: {
+                    required: true
+                },
                 type_service: {
+                    required: true
+                },
+                dumpster_quantity: {
                     required: true
                 },
                 date_begin: {
@@ -431,12 +454,6 @@
                 total_days: {
                     required: true
                 },
-                // date_effective_removal_dumpster: {
-                //     required: true
-                // },
-                // id_client: {
-                //     required: true
-                // },
                 address: {
                     required: true
                 },
@@ -485,7 +502,9 @@
             },
 
             messages:{
+                client_name_new: "Campo <b>Nome</b> deve ser preenchido!",
                 type_service: "Campo <b>Serviço</b> deve ser preenchido!",
+                dumpster_quantity: "Campo <b>Quantidade de caçambas</b> deve ser preenchido!",
                 date_begin: "Campo <b>Data Pedido</b> deve ser preenchido!",
                 date_allocation_dumpster: "Campo <b>Data de Alocação</b> deve ser preenchido!",
                 date_removal_dumpster: "Campo <b>Previsao de Retirada</b> deve ser preenchido!",
@@ -509,6 +528,11 @@
 
             }            
         });
+
+
+        $("#form input").focusin(function() {
+            $(this).siblings(".form-group__bar").hide()
+        });        
 
     });
     

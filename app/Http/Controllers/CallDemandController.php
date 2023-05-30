@@ -30,12 +30,14 @@ class CallDemandController extends Controller
                     DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
                     'call_demand.days_allocation AS days_allocation',
                     'call_demand.address as address_service',
+                    'call_demand.address_complement as address_complement',
                     'call_demand.number as number_address_service',
                     'call_demand.zipcode as zipcode_address_service',
                     'call_demand.city as city_address_service',
                     'call_demand.district as district_address_service',
                     'call_demand.state as state_address_service',
                     'call_demand.comments as comments_demand',
+                    'call_demand.comments_contract as comments_contract',
                     'call_demand.phone as phone_demand',
                     DB::raw('REPLACE(call_demand.price_unit, ".", ",") as price_unit'),
                     'call_demand.dumpster_quantity',
@@ -487,9 +489,7 @@ class CallDemandController extends Controller
 
     public function store(Request $request)
     {
-
         // CÓDIGO DE REFERÊNCIA LOGO ABAIXO:
-        
         if (isset($request->client_name_new)
         && isset($request->type_service)
         && isset($request->zipcode)
@@ -502,7 +502,7 @@ class CallDemandController extends Controller
         && isset($request->dumpster_quantity)
         && isset($request->price_unit)
         && isset($request->id_driver)
-        && isset($request->comments)
+        // && isset($request->comments)
         && isset($request->period)
         && isset($request->date_allocation_dumpster)
         && isset($request->date_removal_dumpster))
@@ -520,6 +520,7 @@ class CallDemandController extends Controller
                 $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
                 $calldemand->name       = $request->client_name_new;
                 $calldemand->address    = $request->address;
+                $calldemand->address_complement    = $request->address_complement;
                 $calldemand->number     = $request->number;
                 $calldemand->zipcode    = $request->zipcode;
                 $calldemand->city       = $request->city;
@@ -528,6 +529,7 @@ class CallDemandController extends Controller
                 $calldemand->phone      = str_replace([" ","(",")"],"",$request->phone);
                 $calldemand->price_unit = $request->price_unit;
                 $calldemand->comments   = $request->comments;
+                $calldemand->comments_contract   = $request->comments_contract;
                 $calldemand->dumpster_sequence_demand = $repeatInfo + 1;
                 $calldemand->dumpster_quantity  = $request->dumpster_quantity;
                 $calldemand->days_allocation    = $request->total_days;
@@ -572,7 +574,8 @@ class CallDemandController extends Controller
                     return back()->withErrors(['response' => "Erro ao registrar ids de pagamento"]);
 
             }
-            return redirect('createcalldemand');
+            // return redirect('createcalldemand');
+            return redirect()->back()->with(['response' => 'Dados cadastrados com sucesso!']);
 
         }else{
             return back()->withErrors(['response' => 'Dados incompletos']);
@@ -583,7 +586,6 @@ class CallDemandController extends Controller
     public function showUpdateForm($id_demand)
     {
         $showdata   = $this->showAPI($id_demand);
-        
         return view('call_demand.form_edit_call_demand',  $showdata);
     }
 
