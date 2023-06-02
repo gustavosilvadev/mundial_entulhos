@@ -38,16 +38,16 @@ Route::middleware('usersession')->group(function(){
     Route::get('search_demand',[DriverController::class,'showDemandFilter']);
     
     // resolver problema ao Clicar no botão Inciar Atendimento
-    Route::post('/change_status_call_demand',[DriverController::class,'updateStatusDemand']);
+    Route::post('change_status_call_demand',[DriverController::class,'updateStatusDemand']);
     
-    Route::post('/start_demand',[DriverController::class,'startDemand']);
-    Route::post('/finish_demand',[DriverController::class,'finishDemand']);
-    Route::get('/show_dumpster_demand',[DriverController::class,'getDumpsterDemand']);
-    Route::post('/get_dumpster_location',[DriverController::class,'getDumpsterLocation']);
+    Route::post('start_demand',[DriverController::class,'startDemand']);
+    Route::post('finish_demand',[DriverController::class,'finishDemand'])->name('finish.demand');
+    Route::get('show_dumpster_demand',[DriverController::class,'getDumpsterDemand']);
+    Route::post('get_dumpster_location',[DriverController::class,'getDumpsterLocation']);
 
     // Route::get('/listlandfill', [DriverController::class,'getLandFill']);
     
-    Route::post('/atualiza_dias_cacamba_municipio',[DumpsterServiceDemandController::class,'updateDaysDumpsterCounty']);
+    Route::post('atualiza_dias_cacamba_municipio',[DumpsterServiceDemandController::class,'updateDaysDumpsterCounty']);
     
     // Landfill
     Route::get('createlandfill', function(){
@@ -66,11 +66,10 @@ Route::middleware('usersession')->group(function(){
     Route::get('demand_list_client/{id?}',[CallDemandController::class,'showInfoClientDemand']);
     
     Route::get('editcalldemand/{id}',[CallDemandController::class,'showUpdateForm']);
-    Route::post('change_call_demand',[CallDemandController::class,'update']);
-    Route::post('changedriverdemand',[CallDemandController::class,'changeDriverDemand']);
+    Route::post('change_call_demand',[CallDemandController::class,'update'])->name('change.demand');
+    Route::post('changedriverdemand',[CallDemandController::class,'changeDriverDemand'])->name('changedriver.demand');
     
     // Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);
-    
     // Route::get('getInfoDemand/{id}',[CallDemandController::class,'showInfoToForm']);
 
     Route::get('createdumpsterservicedemand', [DumpsterServiceDemandController::class,'showNameDriverDemand']);
@@ -130,7 +129,7 @@ Route::post('/save_call_demand_cliente', [ClientController::class, 'saveDataDema
 
 // Sessão Endereços que a empresa atende e não atende (EDITAR)
 Route::get('/cacamba_dias_municipio', [DumpsterServiceDemandController::class, 'showCounties']);
-Route::get('/dias_municipio', [DumpsterServiceDemandController::class, 'showDaysDumpsterCounty']);
+Route::get('dias_municipio', [DumpsterServiceDemandController::class, 'showDaysDumpsterCounty'])->name('dias.municipio');;
 
 // Route::post('/save_client',[ClientController::class,'store']);
 // Route::get('/client/{id?}',[ClientController::class,'show']);

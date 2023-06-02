@@ -25,7 +25,7 @@
 
                                                     <div class="card-body">
                                                 
-                                                        <form action="/save_client" method= "POST" id="form" class="form-validate">
+                                                        <form action="save_client" method= "POST" id="form" class="form-validate">
                                                             @csrf
                                                             <input type="hidden" name="id" />
                                                             <div class="row">

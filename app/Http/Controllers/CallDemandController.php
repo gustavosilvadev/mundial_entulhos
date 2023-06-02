@@ -160,7 +160,7 @@ class CallDemandController extends Controller
 
             )->where('call_demand.id_driver','>=',0)
             ->where('call_demand.service_status','<>',5)
-            ->where('call_demand.type_service','<>','RETIRADA')
+            // ->where('call_demand.type_service','<>','RETIRADA')
             ->orderByDesc('call_demand.id')
             ->get();
 
@@ -591,7 +591,6 @@ class CallDemandController extends Controller
 
     public function update(Request $request)
     {
-
         if (
             isset($request->id_demand)
             && isset($request->id_demand_reg)
@@ -605,7 +604,6 @@ class CallDemandController extends Controller
             && isset($request->phone)
             && isset($request->price_unit)
             && isset($request->dumpster_total)
-            && isset($request->comments)
             && isset($request->type_service)
             && isset($request->period)
             && isset($request->date_allocation_dumpster)
@@ -615,10 +613,10 @@ class CallDemandController extends Controller
             $call_demand = CallDemand::where('id',$request->id_demand_reg)
             ->where('id_demand',$request->id_demand)
             ->update([
-
                 'name' => $request->client_name_new,
                 'zipcode' => $request->zipcode,
                 'address' => $request->address,
+                'address_complement' => $request->address_complement,
                 'number' => $request->number,
                 'district' => $request->district,
                 'city' => $request->city,
@@ -638,10 +636,14 @@ class CallDemandController extends Controller
             ]);
 
             if($call_demand){
-                return redirect('/call_demand');
+                // return redirect('/call_demand');
+                return true;
+            }else{
+                return false;
             }
-        }
-        return redirect('/call_demand');
+        }else
+            // return redirect('/call_demand');
+            return false;
 
     }
 
@@ -712,7 +714,9 @@ class CallDemandController extends Controller
             }
 
             // INSERE ID DO MOTORISTA NO CHAMADO E DATA DE REMOÇÃO EFETIVA SE EXISTIR
-            if($request->drivers_checked == true)
+            $drivers_checked = $request->drivers_checked === 'true' ? true: false;
+            
+            if($drivers_checked)
             {
                 $call_demand = CallDemand::where('id_demand',$request->id_demand)
                 ->where('type_service',$calldemandFirst->type_service)
@@ -745,7 +749,7 @@ class CallDemandController extends Controller
     public function destroy(Request $request){
 
         foreach ($request->id_demands as  $idDemand) {
-            
+
             $dataQueryPayment  = DB::table('payment_call_demand')->where('id_call_demand_reg', $idDemand)->first();
             
             if($dataQueryPayment){

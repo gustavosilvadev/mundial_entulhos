@@ -346,9 +346,26 @@ class DriverController extends Controller
     {
         $id_employee    = session('id_user');
         $service_status = 5;
+        $is_all_demand  = $request->is_all_demand === 'true' ? true: false;
+        $is_updated     = (object)[];
 
+        if($is_all_demand){
 
-            $is_updated = CallDemand::where('id_demand',$request->id_demand)
+            $is_updated = CallDemand::where('id_demand',$request->id_call_demand)
+            ->where('service_status','<>', 5)
+            ->update([
+                'service_status' => $service_status,
+                'id_landfill' => $request->id_landfill
+            ]);
+
+            $call_demands = CallDemand::where('id_demand',$request->id_call_demand)
+            ->where('service_status', $service_status)
+            ->get();            
+
+        }else{
+
+            $is_updated = CallDemand::where('id',$request->id_call_demand_reg)
+            ->where('id_demand',$request->id_call_demand)
             ->where('type_service', trim($request->type_service))
             ->where('service_status','<>', 5)
             ->update([
@@ -356,39 +373,42 @@ class DriverController extends Controller
                 'id_landfill' => $request->id_landfill
             ]);
 
-            if($is_updated)
-            {
-                $call_demands = CallDemand::where('id_demand', $request->id_demand)
-                ->where('type_service', trim($request->type_service))
-                ->where('service_status', $service_status)
-                ->get();
+            $call_demands = CallDemand::where('id',$request->id_call_demand_reg)
+            ->where('id_demand',$request->id_call_demand)
+            ->where('type_service', trim($request->type_service))
+            ->where('service_status', $service_status)
+            ->get();
+        }
 
-                if($call_demands->count()){
+        if($is_updated)
+        {
+            if($call_demands->count()){
 
-                    foreach ($call_demands as $call_demand) {
+                foreach ($call_demands as $call_demand) {
 
-                        $activityUserDemandDumpster = new ActivityUserDemandDumpster();
-                        $activityUserDemandDumpster->id_call_demand_reg = $call_demand->id;
-                        $activityUserDemandDumpster->id_call_demand     = $call_demand->id_demand;
-                        $activityUserDemandDumpster->id_employee        = $id_employee;
-                        $activityUserDemandDumpster->type_service       = $call_demand->type_service;
-                        $activityUserDemandDumpster->service_status     = $service_status; // ENCERRAR CHAMADO
-                    
-                        if($activityUserDemandDumpster->save()){
-                            continue;
+                    $activityUserDemandDumpster = new ActivityUserDemandDumpster();
+                    $activityUserDemandDumpster->id_call_demand_reg = $call_demand->id;
+                    $activityUserDemandDumpster->id_call_demand     = $call_demand->id_demand;
+                    $activityUserDemandDumpster->id_employee        = $id_employee;
+                    $activityUserDemandDumpster->type_service       = $call_demand->type_service;
+                    $activityUserDemandDumpster->service_status     = $service_status; // ENCERRAR CHAMADO
+                
+                    if($activityUserDemandDumpster->save()){
+                        continue;
 
-                        }else{
-                            return false;
-                        }
+                    }else{
+                        return false;
                     }
-                    return true;
-                }else{
-                    return false;
                 }
+                return true;
+
             }else{
-    
                 return false;
             }
+        }else{
+
+            return false;
+        }        
     }
 
     public function getDumpsterDemand(Request $request)

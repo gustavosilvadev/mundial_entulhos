@@ -92,7 +92,7 @@
                                                                             <div class="col-md-12">
                                                                                 <div class="form-group">
                                                                                     <label for="id_client">CLIENTE NOVO</label>
-                                                                                    <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44"/>
+                                                                                    <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" autocomplete="off"/>
                                     
                                                                                 </div>
                                                                             </div>
@@ -116,35 +116,35 @@
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="zipcode">CEP</label>
-                                                                                        <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" />
+                                                                                        <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>                                                                                        
                                     
                                                                             <div class="col-md-4">
                                                                                 <div class="form-group">
                                                                                     <label for="address">Endereço</label>
-                                                                                    <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" />
+                                                                                    <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
 
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="address">Complemento</label>
-                                                                                    <input type="text" class="form-control only-text" name="address_complement" id="address_complement" minlength="2" maxlength="44" />
+                                                                                    <input type="text" class="form-control only-text" name="address_complement" id="address_complement" minlength="2" maxlength="44" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
                                     
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <label for="number">Número</label>
-                                                                                    <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6"/>
+                                                                                    <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
                                                                             
                                                                             <div class="col-md-4">
                                                                                 <div class="form-group">
                                                                                     <label for="district">Bairro</label>
-                                                                                    <input type="text" class="form-control only-text" name="district" id="district" minlength="2" maxlength="44"/>
+                                                                                    <input type="text" class="form-control only-text" name="district" id="district" minlength="2" maxlength="44" autocomplete="off"/>
                                     
                                                                                 </div>
                                                                             </div>
@@ -152,7 +152,7 @@
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <label for="city">Cidade</label>
-                                                                                    <input type="text" class="form-control only-text" name="city" id="city" minlength="2" maxlength="50"/>
+                                                                                    <input type="text" class="form-control only-text" name="city" id="city" minlength="2" maxlength="50" autocomplete="off"/>
                                     
                                                                                 </div>
                                                                             </div>
@@ -160,7 +160,7 @@
                                                                             <div class="col-md-1">
                                                                                 <div class="form-group">
                                                                                     <label for="state">Estado</label>
-                                                                                    <input type="text" class="form-control only-text" name="state" id="state" maxlength="2" onkeydown="return /[a-z]/i.test(event.key)"/>
+                                                                                    <input type="text" class="form-control only-text" name="state" id="state" maxlength="2" onkeydown="return /[a-z]/i.test(event.key)" autocomplete="off"/>
                                     
                                                                                 </div>
                                                                             </div>
@@ -168,7 +168,7 @@
                                                                             <div class="col-md-4">
                                                                                 <div class="form-group">
                                                                                     <label for="phone">Telefone</label>
-                                                                                    <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" />
+                                                                                    <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -177,14 +177,14 @@
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="dumpster_quantity">QUANTIDADE DE CAÇAMBAS</label>
-                                                                                    <input type="number" name="dumpster_quantity" class="form-control"  id="dumpster_quantity" min="0" max="1000" placeholder="" />
+                                                                                    <input type="number" name="dumpster_quantity" class="form-control"  id="dumpster_quantity" min="0" max="1000" placeholder="" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>                                                                            
                                     
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group input-icon">
                                                                                     <label for="price_unit">Preço UNIDADE.</label>
-                                                                                    <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="330,00"/>
+                                                                                    <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="330,00" />
                                                                                     <i>R$</i>
                                                                                 </div>
                                                                             </div>
@@ -246,7 +246,7 @@
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <span class="title" for="date_allocation_dumpster">DATA ALOCAÇÃO:</span>
-                                                                                    <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
+                                                                                    <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4" onchange="validaData(this);" autocomplete="off"/>
 
                                                                                 </div>    
                                                                             </div>
@@ -528,7 +528,6 @@
 
             }            
         });
-
 
         $("#form input").focusin(function() {
             $(this).siblings(".form-group__bar").hide()

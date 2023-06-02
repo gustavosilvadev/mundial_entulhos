@@ -35,7 +35,7 @@
                                     
                                     <div class="form-group">
                                         <label for="login-email" class="form-label">Email/Login</label>
-                                        <input type="text" class="form-control" id="login-email" name="login"  aria-describedby="login-email" tabindex="1" autofocus autocomplete="off"/>
+                                        <input type="text" class="form-control" id="login-email" name="login"  aria-describedby="login-email" tabindex="1" autofocus autocomplete="on"/>
                                     </div>
 
                                     <div class="form-group">

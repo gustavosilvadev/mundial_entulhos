@@ -79,7 +79,8 @@ Route::middleware('usersession')->group(function(){
     Route::get('demand_list_client/{id?}',[CallDemandController::class,'showInfoClientDemand']);
     
     Route::get('editcalldemand/{id}',[CallDemandController::class,'showUpdateForm']);
-    Route::post('change_call_demand',[CallDemandController::class,'update']);
+    // Route::post('change_call_demand',[CallDemandController::class,'update']);
+    // Route::post('change_call_demand', 'CallDemandController@update')->name('change.demand');
     Route::post('changedriverdemand',[CallDemandController::class,'changeDriverDemand']);
     
     // Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);

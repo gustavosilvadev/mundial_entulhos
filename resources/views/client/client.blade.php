@@ -38,7 +38,7 @@
                                                             @endif
                                                         @endif
                                                 
-                                                        <form action="/update_client" method= "POST" id="form" class="form-validate">
+                                                        <form action="update_client" method= "POST" id="form" class="form-validate">
                                                             @csrf
                                                             <input type="hidden" name="id" value="<?php echo $client->id; ?>"/>
                                                             <div class="row">

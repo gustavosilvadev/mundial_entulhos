@@ -240,7 +240,7 @@ $(document).ready(function() {
                     
                 },
                 success: function(dataResponse) {
-                    
+
                     location.reload();
 
                 },
@@ -348,8 +348,8 @@ $(document).ready(function() {
                                 // Get the search value
                                 $(this).attr('title', $(this).val());
                                 var regexr = '({search})';
-
                                 var cursorPosition = this.selectionStart;
+                                
                                 // Search the column for that value
                                 api
                                     .column(colIdx)
@@ -420,7 +420,7 @@ $(document).ready(function() {
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: 'POST',
-                url: 'changedriverdemand',
+                url: '{{ route('changedriver.demand') }}',
                 data: { 
                     drivers_checked : all_drivers_checked, 
                     id_driver : idDriverSelected,

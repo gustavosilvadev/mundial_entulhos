@@ -91,7 +91,6 @@ class DumpsterServiceDemandController extends Controller
 
     public function showDaysDumpsterCounty(Request $request)
     {
-
         if(isset($request->id) && is_numeric($request->id))
         {
 

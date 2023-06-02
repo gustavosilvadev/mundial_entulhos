@@ -47,7 +47,7 @@ die();
                                             @endif
                                     
 
-                                            <form action="/update_employee" method= "POST" id="form" class="form-validate">
+                                            <form action="update_employee" method= "POST" id="form" class="form-validate">
                                                 @csrf
                                                 <input type="hidden" name="id" value="<?php echo $employee->id; ?>"/>
                                                 <div class="row">

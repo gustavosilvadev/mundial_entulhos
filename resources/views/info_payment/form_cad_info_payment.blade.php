@@ -8,7 +8,7 @@
         </div>
         <div class="content-body">
             <section class="invoice-add-wrapper">
-                <form action="/save_call_demand" method= "POST" id="form" class="form-validate">
+                <form action="save_call_demand" method= "POST" id="form" class="form-validate">
                 @csrf
                 <div class="row invoice-add">
                     <!-- Invoice Add Left starts -->

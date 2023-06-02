@@ -68,7 +68,7 @@
                                                 if(!empty($calldemand)):
                                                     foreach ($calldemand as $key => $value):
                                                 ?>                                                
-                                                        <form action="/change_call_demand" method= "POST" id="form" class="form-validate" autocomplete="off">
+                                                        <form id="form" class="form-validate" autocomplete="off" onsubmit="return false;">
                                                             @csrf
                                                             <div class="row invoice-add">
                                                                 <div class="col-xl-9 col-md-8 col-12">
@@ -90,7 +90,7 @@
                                                                                                     <div class="col-md-12">
                                                                                                         <div class="form-group">
                                                                                                             <label for="id_client">CLIENTE NOVO</label>
-                                                                                                            <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}"/>
+                                                                                                            <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}" required />
                                                             
                                                                                                         </div>
                                                                                                     </div>
@@ -100,7 +100,7 @@
                                                                                                     <div class="col-md-12">
                                                                                                         <div class="form-group">
                                                                                                             <label for="type_service">Tipo de Serviço</label>
-                                                                                                            <select class="select2 form-control form-control-lg" id="type_service" name="type_service">
+                                                                                                            <select class="select2 form-control form-control-lg" id="type_service" name="type_service" required>
                                                                                                                 <option value="">----</option>
                                                                                                                 <?php if($value->type_service == 'COLOCACAO'): ?>
                                                                                                                     <option value="COLOCACAO" selected>COLOCAÇÃO</option>
@@ -125,7 +125,7 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <label for="zipcode">CEP</label>
-                                                                                                                <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" value="{{ $value->zipcode_address_service }}"/>
+                                                                                                                <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" value="{{ $value->zipcode_address_service }}" required/>
                                                                                                         </div>
                                                                                                     </div>                                                                                        
                                                             
@@ -308,13 +308,15 @@
                                                                                                             <label for="period">RETIRADA EFETIVA</label>
                                                                                                             {{-- <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" disabled /> --}}
                                                                                                             <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date  date_format" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" disabled />
+                                                                                                            <div class="loadingMask text-primary" style="display:none;">Loading...</div>
                                                                                                         </div>    
                                                                                                     </div> 
 
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">TOTAL DE DIAS</label>
-                                                                                                            <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" />
+                                                                                                            <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" onkeyup="validaTotalDays(this);" />
+                                                                                                            <div class="loadingMask text-primary" style="display:none;">Loading...</div>
                                                                                                         </div>    
                                                                                                     </div> 
 {{-- 
@@ -367,11 +369,21 @@
                                                                 <div class="col-xl-3 col-md-4 col-12">
                                                                     <div class="card">
                                                                         <div class="card-body">
-                                                                            <button type="submit" class="btn btn-success btn-block mb-75">ATUALIZAR</button>
+                                                                            
+                                                                            {{-- <button type="submit" class="btn btn-success btn-block mb-75">ATUALIZAR</button> --}}
+                                                                            <button class="btn btn-success btn-block" id="btn_update" tabindex="4">ATUALIZAR</button>
+                                                                            
+
                                                                             <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
                                                                                 <button class="btn btn-dark btn-block mb-75" id="btn_finish_demand">ENCERRAR ESTE CHAMADO</button>
                                                                                 <button class="btn btn-dark btn-warning mb-75" id="btn_finish_all_demands">ENCERRAR TODOS OS CHAMADOS RELACIONADOS</button>
                                                                             <?php endif; ?>
+                                                                            <hr/>
+                                                                            <h3 class="text-success text-center" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
+                                                                            <h4 class="text-danger text-center" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
+                                                                            <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3>
+                                                                            <h4 class="text-danger text-center" id="message-error-finished" style="display:none"><b>Erro ao encerrar o chamado!</b></h4>
+                                                                            
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -503,93 +515,162 @@
             });
         }
         
-        $("#form").validate({
-            rules: {
-                type_service: {
-                    required: true
+        function validateFormInputs(){
+
+            $('#form').validate({
+                rules: {
+                    client_name_new: {
+                        required: true
+                    },
+                    type_service: {
+                        required: true
+                    },
+                    date_begin: {
+                        required: true
+                    },
+                    date_removal_dumpster: {
+                        required: true
+                    },
+                    date_effective_removal_dumpster: {
+                        required: true
+                    },
+                    address: {
+                        required: true
+                    },
+                    number: {
+                        required: true
+                    },
+                    zipcode: {
+                        required: true
+                    },
+                    city: {
+                        required: true
+                    },
+                    district: {
+                        required: true
+                    },
+                    state: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 2
+                    },
+                    phone: {
+                        required: true
+                    },
+                    price_unit: {
+                        required: true
+                    },
+                    dumpster_total: {
+                        required: true
+                    },
+                    dumpster_total_opened: {
+                        required: true
+                    },
+                    period: {
+                        required: true
+                    },
+                    note: {
+                        required: true
+                    }
+
                 },
-                date_begin: {
-                    required: true
+
+                messages:{
+                    client_name_new: "Campo <b>Campo Nome</b> deve ser preenchido!",
+                    type_service: "Campo <b>Tipo de serviço</b> deve ser preenchido!",
+                    date_begin: "Campo <b>Data Pedido</b> deve ser preenchido!",
+                    date_removal_dumpster: "Campo <b>Previsao de Retirada</b> deve ser preenchido!",
+                    date_effective_removal_dumpster: "Campo <b>Previsão de Retirada Efetiva</b> deve ser preenchido!",
+                    id_client: "Campo <b>Cliente</b> deve ser preenchido!",
+                    address: "Campo <b>Endereço</b> deve ser preenchido!",
+                    number: "Campo <b>Número</b> deve ser preenchido!",
+                    zipcode: "Campo <b>CEP</b> deve ser preenchido!",
+                    city: "Campo <b>Cidade</b> deve ser preenchido!",
+                    district: "Campo <b>Bairro</b> deve ser preenchido!",
+                    state: "Campo <b>Estado</b> deve ser preenchido!",
+                    phone: "Campo <b>Telefone</b> deve ser preenchido!",
+                    price_unit: "Campo <b>Preço Unidade</b> deve ser preenchido!",
+                    dumpster_total: "Campo <b>Total de Caçambas</b> deve ser preenchido!",
+                    dumpster_total_opened: "Campo <b>Total em aberto</b> deve ser preenchido!",
+                    id_landfill: "Campo <b>Aterro</b> deve ser preenchido!",
+                    period: "Campo <b>Período</b> deve ser preenchido!",
+                    id_driver: "Campo <b>Motorista</b> deve ser preenchido!",
+                    note: "Campo <b>Observação</b> deve ser preenchido!"            
+
+                }            
+            });
+        }            
+
+        $("#form input").focusin(function() {
+            $(this).siblings(".form-group__bar").hide()
+        });        
+
+        $("#btn_update").on('click', function(){
+
+            $("#message-success").css("display","none");
+            $("#message-error").css("display","none");
+
+            validateFormInputs();
+            
+            let id_demand       = $("input[name=id_demand]").val();
+            let id_demand_reg   = $("input[name=id_demand_reg]").val();
+            let client_name_new = $("input[name=client_name_new]").val();
+            let zipcode         = $("input[name=zipcode]").val();
+            let address         = $("input[name=address]").val();
+            let address_complement         = $("input[name=address_complement]").val();
+            let number          = $("input[name=number]").val();
+            let district        = $("input[name=district]").val();
+            let city            = $("input[name=city]").val();
+            let state           = $("input[name=state]").val();
+            let phone           = $("input[name=phone]").val();
+            let price_unit      = $("input[name=price_unit]").val();
+            let dumpster_total  = $("input[name=dumpster_total]").val();
+            let comments        = $("#note").val();
+            let type_service    = $("#type_service").val();
+            let period          = $("#period").val();
+            let date_allocation_dumpster        = $("input[name=date_allocation_dumpster]").val();
+            let date_removal_dumpster_forecast  = $("input[name=date_removal_dumpster_forecast]").val();
+            let total_days      = $("input[name=total_days]").val();
+
+            $.ajax({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                method: 'POST',
+                url: '{{ route('change.demand') }}',
+                data: { 
+                    'id_demand' : id_demand,
+                    'id_demand_reg' : id_demand_reg,
+                    'client_name_new' : client_name_new,
+                    'zipcode' : zipcode,
+                    'address' : address,
+                    'number' : number,
+                    'district' : district,
+                    'city' : city,
+                    'state' : state,
+                    'phone' : phone,
+                    'price_unit' : price_unit,
+                    'dumpster_total' : dumpster_total,
+                    'comments' : comments,
+                    'type_service' : type_service,
+                    'period' : period,
+                    'date_allocation_dumpster' : date_allocation_dumpster,
+                    'date_removal_dumpster_forecast' : date_removal_dumpster_forecast,
+                    'total_days' : total_days
                 },
-                date_removal_dumpster: {
-                    required: true
+                success: function(dataResponse) {
+                    if(dataResponse){
+                        $("#message-success").css("display","block");
+                    }else
+                        $("#message-error").css("display","block");
                 },
-                date_effective_removal_dumpster: {
-                    required: true
-                },
-                // id_client: {
-                //     required: true
-                // },
-                address: {
-                    required: true
-                },
-                number: {
-                    required: true
-                },
-                zipcode: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                district: {
-                    required: true
-                },
-                state: {
-                    required: true,
-                    minlength: 2,
-                    maxlength: 2
-                },
-                phone: {
-                    required: true
-                },
-                price_unit: {
-                    required: true
-                },
-                dumpster_total: {
-                    required: true
-                },
-                dumpster_total_opened: {
-                    required: true
-                },
-                // id_landfill: {
-                //     required: true
-                // },
-                period: {
-                    required: true
-                },
-                // id_driver: {
-                //     required: true
-                // },
-                note: {
-                    required: true
+                error: function(responseError){
+                    alert("Erro interno: " + responseError);
+                    console.log(responseError);
+                    console.log("***********");
                 }
+            });  
 
-            },
-
-            messages:{
-                type_service: "Campo <b>Tipo de serviço</b> deve ser preenchido!",
-                date_begin: "Campo <b>Data Pedido</b> deve ser preenchido!",
-                date_removal_dumpster: "Campo <b>Previsao de Retirada</b> deve ser preenchido!",
-                date_effective_removal_dumpster: "Campo <b>Previsão de Retirada Efetiva</b> deve ser preenchido!",
-                id_client: "Campo <b>Cliente</b> deve ser preenchido!",
-                address: "Campo <b>Endereço</b> deve ser preenchido!",
-                number: "Campo <b>Número</b> deve ser preenchido!",
-                zipcode: "Campo <b>CEP</b> deve ser preenchido!",
-                city: "Campo <b>Cidade</b> deve ser preenchido!",
-                district: "Campo <b>Bairro</b> deve ser preenchido!",
-                state: "Campo <b>Estado</b> deve ser preenchido!",
-                phone: "Campo <b>Telefone</b> deve ser preenchido!",
-                price_unit: "Campo <b>Preço Unidade</b> deve ser preenchido!",
-                dumpster_total: "Campo <b>Total de Caçambas</b> deve ser preenchido!",
-                dumpster_total_opened: "Campo <b>Total em aberto</b> deve ser preenchido!",
-                id_landfill: "Campo <b>Aterro</b> deve ser preenchido!",
-                period: "Campo <b>Período</b> deve ser preenchido!",
-                id_driver: "Campo <b>Motorista</b> deve ser preenchido!",
-                note: "Campo <b>Observação</b> deve ser preenchido!"            
-
-            }            
         });
+
 
     });
     
@@ -611,7 +692,7 @@
         if(dataAlocacao.value.length > 0 && city.length > 0){
             $.ajax({
                     method: 'GET',
-                    url: 'dias_municipio',
+                    url: '{{ route('dias.municipio') }}',
                     data: {city : city},
                     success: function(dataResponse) {
                         $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
@@ -627,6 +708,18 @@
             });
         }
     }
+
+    let validaTotalDays = (days) => {
+
+        let dateAllocationDumpster  = $("input[name=date_allocation_dumpster]").val();
+
+        if(dateAllocationDumpster !== '' && days.value > 0){
+            $("input[name='date_removal_dumpster_forecast']").val(adicionaDiasEmData(days.value));
+        }
+        else {
+            $("input[name='date_removal_dumpster_forecast']").val("");
+        }
+    };
 
     let adicionaDiasEmData = (days) => {
 
@@ -693,41 +786,60 @@
     $("#btn_finish_demand").on('click', function(e){
         e.preventDefault();
 
-        if($("#landfill").val() !== '')
-            finishDemand(false);
-        else
+        if($("#landfill").val() == '')
+        {
             alert("Selecione o aterro!");
+        
+        }else if($("#driver").val() == ''){
+            alert("Selecione o motorista!");
+        
+        }else{
+            finishDemand(false);
+        }
+
     });
 
     $("#btn_finish_all_demands").on('click', function(e){
         e.preventDefault();
-        if($("#landfill").val() !== '')        
-            finishDemand(true);
-        else
+
+        if($("#landfill").val() == '')
+        {
             alert("Selecione o aterro!");
+        
+        }else if($("#driver").val() == ''){
+            alert("Selecione o motorista!");
+        
+        }else{
+            finishDemand(true);
+        }            
     });
     
     function finishDemand(isAllDemand){
+
         let idDemandReg = $('input[name=id_demand_reg]').val();
         let idDemand    = $('input[name=id_demand]').val();
         let typeService = $('#type_service').val();
+        let idLandfill = $("#landfill").val();
 
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             method: 'POST',
-            url: '/finish_demand',
+            url: '{{ route('finish.demand') }}',
             data: { 
                 id_call_demand_reg: idDemandReg,
                 id_call_demand: idDemand,
                 type_service: typeService,
+                id_landfill: idLandfill,
                 is_all_demand: isAllDemand
             },
             success: function(dataResponse) {
 
                 if(dataResponse){
-                    window.location.reload();
-                }else
-                    alert("Erro ao encerrar o chamado!");
+                    $("#message-success-finished").css("display","block");
+                }else{
+                    $("#message-error-finished").css("display","block");
+                }
+
             },
             error: function(responseError){
                 alert("Erro interno: " + responseError);
@@ -735,8 +847,6 @@
                 console.log("***********");
             }
         });  
-
-
     }
     
 </script>

@@ -46,7 +46,7 @@ if(session('id_user') != null && session('login') != null){ ?>
                                         <div class="invalid-feedback">{{ $data }}</div>
                                     <?php } ?>
 
-                                    <form action="/save_call_demand_cliente" method= "POST" id="form" class="form-validate" autocomplete="off">
+                                    <form action="save_call_demand_cliente" method= "POST" id="form" class="form-validate" autocomplete="off">
                                         @csrf
                                         <div class="row invoice-add">
                         
