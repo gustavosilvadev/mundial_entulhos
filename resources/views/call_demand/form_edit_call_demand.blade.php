@@ -307,7 +307,7 @@
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">RETIRADA EFETIVA</label>
                                                                                                             {{-- <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" disabled /> --}}
-                                                                                                            <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date  date_format" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" disabled />
+                                                                                                            <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date  date_format" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" />
                                                                                                             <div class="loadingMask text-primary" style="display:none;">Loading...</div>
                                                                                                         </div>    
                                                                                                     </div> 
@@ -629,6 +629,7 @@
             let type_service    = $("#type_service").val();
             let period          = $("#period").val();
             let date_allocation_dumpster        = $("input[name=date_allocation_dumpster]").val();
+            let date_effective_removal_dumpster = $("input[name=date_effective_removal_dumpster]").val();
             let date_removal_dumpster_forecast  = $("input[name=date_removal_dumpster_forecast]").val();
             let total_days      = $("input[name=total_days]").val();
 
@@ -653,6 +654,7 @@
                     'type_service' : type_service,
                     'period' : period,
                     'date_allocation_dumpster' : date_allocation_dumpster,
+                    'date_effective_removal_dumpster' : date_effective_removal_dumpster,
                     'date_removal_dumpster_forecast' : date_removal_dumpster_forecast,
                     'total_days' : total_days
                 },

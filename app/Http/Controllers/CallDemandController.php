@@ -631,6 +631,7 @@ class CallDemandController extends Controller
                 'type_service' => $request->type_service,
                 'period' => $request->period,
                 'date_allocation_dumpster' => (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : ''),
+                'date_effective_removal_dumpster' => (isset($request->date_effective_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_effective_removal_dumpster))) : ''),
                 'date_removal_dumpster_forecast' => (isset($request->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster_forecast))) : ''),
                 'days_allocation' => $request->total_days
             ]);
@@ -677,7 +678,6 @@ class CallDemandController extends Controller
 
         $calldemandFirst         = CallDemand::where('id',$request->id_reg)->where('id_demand',$request->id_demand)->first();
         $calldemandRemovalFirst  = CallDemand::where('type_service', 'RETIRADA')->where('id',$request->id_reg)->where('id_demand',$request->id_demand)->first();
-        // $effectiveDateRemoval    = isset($request->effective_date_removal) ? $request->effective_date_removal : null;
         $effectiveDateRemoval    = isset($request->effective_date_removal) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->effective_date_removal))) : null;
         
         if(isset($calldemandFirst))
@@ -692,8 +692,8 @@ class CallDemandController extends Controller
                 $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
                 $calldemandDumpsterRemoval->id_parent      = $calldemandFirst->id_parent;
                 $calldemandDumpsterRemoval->period         = $calldemandFirst->period;
-                $calldemandDumpsterRemoval->date_allocation_dumpster = $calldemandFirst->date_allocation_dumpster;
-                $calldemandDumpsterRemoval->date_removal_dumpster_forecast = $calldemandFirst->date_removal_dumpster_forecast;
+                $calldemandDumpsterRemoval->date_allocation_dumpster = isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '';
+                $calldemandDumpsterRemoval->date_removal_dumpster_forecast  = isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '';
                 $calldemandDumpsterRemoval->date_effective_removal_dumpster = $effectiveDateRemoval;
                 $calldemandDumpsterRemoval->name           = $calldemandFirst->name;
                 $calldemandDumpsterRemoval->address        = $calldemandFirst->address;
@@ -715,22 +715,34 @@ class CallDemandController extends Controller
 
             // INSERE ID DO MOTORISTA NO CHAMADO E DATA DE REMOÇÃO EFETIVA SE EXISTIR
             $drivers_checked = $request->drivers_checked === 'true' ? true: false;
+            $effectivedateremoval_checked = $request->effectivedateremoval_checked === 'true' ? true: false;
             
             if($drivers_checked)
             {
                 $call_demand = CallDemand::where('id_demand',$request->id_demand)
-                ->where('type_service',$calldemandFirst->type_service)
-                ->update([
-                    'id_driver' => $request->id_driver,
-                    'date_effective_removal_dumpster' => $effectiveDateRemoval
-                ]);
+                ->where('type_service',$calldemandFirst->type_service)->update(['id_driver' => $request->id_driver]);
 
             }else{
                 $call_demand = CallDemand::where('id',$request->id_reg)
                 ->where('id_demand',$request->id_demand)
                 ->where('type_service',$calldemandFirst->type_service)
                 ->update([
-                    'id_driver' => $request->id_driver,
+                    'id_driver' => $request->id_driver
+
+                ]);
+            }
+
+            if($effectivedateremoval_checked){
+
+                $call_demand = CallDemand::where('id_demand',$request->id_demand)
+                ->where('type_service',$calldemandFirst->type_service)->update(['date_effective_removal_dumpster' => $effectiveDateRemoval]);
+            
+            }else{
+
+                $call_demand = CallDemand::where('id',$request->id_reg)
+                ->where('id_demand',$request->id_demand)
+                ->where('type_service',$calldemandFirst->type_service)
+                ->update([
                     'date_effective_removal_dumpster' => $effectiveDateRemoval
                 ]);
             }

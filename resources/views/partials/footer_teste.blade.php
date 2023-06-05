@@ -87,7 +87,8 @@
 
             $('.date_format_allocation').flatpickr({
                 dateFormat: "d/m/Y",
-                minDate: dataDiaSeguinteFormatada(),
+                // minDate: dataDiaSeguinteFormatada(),
+                minDate: "today",
             });
 
             $('.date_format_allocation_search').flatpickr({

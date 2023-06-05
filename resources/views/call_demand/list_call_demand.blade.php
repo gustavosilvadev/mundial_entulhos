@@ -194,12 +194,20 @@
 
                         <?php endif;?>
                     </select>
+{{-- 
                     <div class="form-check form-check-info">
                         <input type="checkbox" class="form-check-input" id="all_drivers" checked="">
                         <label class="form-check-label" for="colorCheck6">Atualizar para todos</label>
                     </div>
+--}}
                     <label for="">Data de Retirada Efetiva</label>
                     <input type="text" name="effective_date_removal_dumpster" id="effective_date_removal_dumpster" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4"/>
+{{--                     
+                    <div class="form-check form-check-info">
+                        <input type="checkbox" class="form-check-input" id="all_effectivedateremoval" checked="">
+                        <label class="form-check-label" for="colorCheck6">Atualizar para todos</label>
+                    </div> 
+--}}
 
                     <input type="hidden" id="iddemand" value="" />
                     <input type="hidden" id="idreg" value="" />
@@ -387,8 +395,11 @@ $(document).ready(function() {
                 let id_reg       = $(this).find("td:eq(1)").text();
                 let id_demand    = $(this).find("td:eq(2)").text();
                 let nameDriver   = $(this).find("td:eq(19)").text();
+                let dateEffectiveRemoval   = $(this).find("td:eq(10)").text();
 
-                $("#all_drivers").prop("checked", true);
+                // $("#all_drivers").prop("checked", false);
+                // $("#all_effectivedateremoval").prop("checked", false);
+
                 $("#modal-edit").modal('toggle');
 
                 if(nameDriver != "")
@@ -399,6 +410,8 @@ $(document).ready(function() {
 
                     $("#name_driver_selected  option:contains()").attr("selected", false);
                 }
+
+                $("#effective_date_removal_dumpster").val(dateEffectiveRemoval);
 
                 $("#idreg").val(id_reg);
                 $("#iddemand").val(id_demand);
@@ -414,8 +427,12 @@ $(document).ready(function() {
             let idReg               = $("#idreg").val();
             let idDriverSelected    = $("#name_driver_selected").val();
             let nameDriverSelected  = $("#name_driver_selected").find('option:selected').text()
-            let all_drivers_checked = $("#all_drivers")[0].checked;
+            // let all_drivers_checked = $("#all_drivers")[0].checked;
+            let all_drivers_checked = false;
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
+            // let all_effectivedateremoval_checked = $("#all_effectivedateremoval")[0].checked;
+            let all_effectivedateremoval_checked = false;
+
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -423,20 +440,22 @@ $(document).ready(function() {
                 url: '{{ route('changedriver.demand') }}',
                 data: { 
                     drivers_checked : all_drivers_checked, 
+                    effectivedateremoval_checked : all_effectivedateremoval_checked, 
                     id_driver : idDriverSelected,
                     effective_date_removal : effectiveDateRemoval,
                     id_reg: idReg, 
                     id_demand : idDemand
                 },
                 success: function(dataResponse) {
-                    
+
+
                     if(dataResponse){
-                        /*
+                        
                         rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
                         tbpedido.cell(":eq("+rowIndex+")", 19).data(nameDriverSelected);
                         tbpedido.cell(":eq("+rowIndex+")", 10).data(effectiveDateRemoval);
-                        */
-                       location.reload();
+
+                    //    location.reload();
 
                     }else
                         alert("Erro na atualização do nomes!");
