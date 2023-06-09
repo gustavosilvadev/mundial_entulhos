@@ -237,7 +237,7 @@ $(document).ready(function() {
                 idDemands[i] = $(this).val();
             });
 
-            idDemands.splice(-1);
+            // idDemands.splice(-1);
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

@@ -758,9 +758,10 @@ class CallDemandController extends Controller
         return false;
     }
 
-    public function destroy(Request $request){
+    public function destroy(Request $request)
+    {
 
-        foreach ($request->id_demands as  $idDemand) {
+        foreach ($request->id_demands as $idDemand) {
 
             $dataQueryPayment  = DB::table('payment_call_demand')->where('id_call_demand_reg', $idDemand)->first();
             
@@ -772,7 +773,7 @@ class CallDemandController extends Controller
                     return false;
                 }
             }
-            
+          
             $dataQueryActivity = DB::table('activity_user_demand_dumpster')->where('id_call_demand_reg', $idDemand)->first();
 
             if($dataQueryActivity){
@@ -782,7 +783,6 @@ class CallDemandController extends Controller
                     return false;
                 }
             }
-
 
             $dataDelete = DB::table('call_demand')->where('id', $idDemand)->delete();
             if($dataDelete){
