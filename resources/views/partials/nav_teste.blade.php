@@ -1,13 +1,4 @@
 <?php
-// echo env('APP_URL');
-// echo env('APP_URL').'/'.env('APP_NAME');
-// die();
-
-// echo "<pre>";
-    // print_r(url());
-    // echo request()->getHttpHost();    
-// echo "</pre>";
-
 $name_perfil = '';
 
 if(session('access_permission') == 1){
@@ -27,57 +18,33 @@ if(session('access_permission') == 1){
         <?php if(session('access_permission') == 1){ ?>
             <div class="bd-example">
                 <div class="btn-group">
-                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PEDIDOS</button>
+                    <a class="btn dropdown-toggle waves-effect waves-float waves-light" href="{{ url('call_demand') }}">BASE PEDIDOS</a>
+                </div>
+
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle waves-effect waves-float waves-light" href="{{ url('call_demand_resume') }}">RESUMO PEDIDOS</a>
+                </div><!-- /btn-group -->
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle waves-effect waves-float waves-light" href="{{ url('createcalldemand') }}">NOVO</a>
+                </div><!-- /btn-group -->
+
+
+                <div class="btn-group">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CONFIGURAÇÕES</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="{{ url('call_demand') }}">BASE PEDIDOS</a>
-                        <a class="dropdown-item" href="{{ url('call_demand_resume') }}">RESUMO PEDIDOS</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url('createcalldemand') }}">NOVO</a>
+                        <a class="dropdown-item" href="{{ url('createlandfill') }}">ATERROS</a>
+                        <a class="dropdown-item" href="{{ url('cacamba_dias_municipio') }}">MUNICÍPIOS</a>
+                        <label class="dropdown-item" href="#">FUNCIONÁRIOS</label>
+                        <ul class="menu-content">
+                            <li>
+                                <a class="dropdown-item" href="{{ url('employee') }}">LISTA</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url('createemployee') }}">NOVO</a>
+                            </li>
+                        </ul>
 
                     </div>
-                </div><!-- /btn-group -->
-                <div class="btn-group">
-                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">FUNCIONÁRIOS</button>
-                    <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="{{ url('employee') }}">LISTA</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url('createemployee') }}">NOVO</a>
-
-                    </div>
-                </div><!-- /btn-group -->
-{{--                 
-                <div class="btn-group">
-                    <a type="button" class="btn dropdown-toggle" href="createdriver">MOTORISTAS</a>
-
-                </div><!-- /btn-group --> 
---}}
-{{-- 
-                <div class="btn-group">
-                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">ATERROS</button>
-                    <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -164px, 0px);">
-                        <a class="dropdown-item" href="createlandfill">NOVO</a>
-                    </div>
-                </div><!-- /btn-group -->
- --}}
-
-                <div class="btn-group">
-                    {{-- <a class="btn dropdown-toggle" href="createlandfill">ATERROS</a> --}}
-                    {{-- <a class="btn dropdown-toggle" href="{{ route('createlandfill') }}">ATERROS</a> --}}
-                    <a class="btn dropdown-toggle" href="{{ url('createlandfill') }}">ATERROS</a>
-
-                </div><!-- /btn-group -->
-
-{{--                 
-                <div class="btn-group">
-                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">MUNICÍPIOS</button>
-                    <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
-                        <a class="dropdown-item" href="cacamba_dias_municipio">NOVO</a>
-                    </div>
-                </div><!-- /btn-group --> 
---}}
-
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle" href="{{ url('cacamba_dias_municipio') }}">MUNICÍPIOS</a>
                 </div><!-- /btn-group -->
 
 
@@ -104,9 +71,6 @@ if(session('access_permission') == 1){
                         
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
-                        
-                        {{-- <i class="mr-50" data-feather="user"></i> Perfil</a><a class="dropdown-item" href="#"> --}}
-                        
                         <div class="dropdown-divider"></div>
                         {{-- <a class="dropdown-item" href="employee/{{session('id_user')}}"><i class="mr-50" data-feather="settings"></i> Configurações</a> --}}
                         <a class="dropdown-item" href="{{ url('logout') }}">

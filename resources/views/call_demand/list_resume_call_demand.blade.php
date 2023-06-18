@@ -183,7 +183,7 @@ $(document).ready(function() {
                 "url": "public/assets/json/Portuguese-Brasil.json"
             },
 
-            order: [[0, 'desc']],
+            // order: [[0, 'desc']],
             scrollX: true,
             dom: 'Bfrtip',
             buttons: [

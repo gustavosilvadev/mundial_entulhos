@@ -29,7 +29,11 @@
                                       <span class="input-group-text" id="inputGroup-sizing-lg">Data:</span>
                                     </div>
                                     {{-- <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm"> --}}
-                                    <input type="text" name="date_allocation_dumpster" id="data_filter_demand" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                                    
+                                    {{-- <input type="text" name="date_allocation_dumpster" id="data_filter_demand" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" aria-label="Large" aria-describedby="inputGroup-sizing-sm" /> --}}
+                                    
+                                    {{-- <input type="text" name="date_allocation_dumpster" id="data_filter_demand" class="form-control dt-date flatpickr-range dt-input date_format date_format_act_driver" aria-label="Large" aria-describedby="inputGroup-sizing-sm" /> --}}
+                                    <input type="text" class="form-control dt-date flatpickr-range dt-input date_format_service_search" id="data_filter_demand" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                   </div>
                             </div>
 {{--                             
@@ -50,7 +54,7 @@
 
                             <!-- Todo List starts -->
                             <div class="todo-task-list-wrapper list-group">
-                                <ul class="todo-task-list media-list" id="todo-task-list">
+                                <ul class="todo-task-list media-list list-unstyled" id="todo-task-list">
                                     <h1 class="loadingMask text-success text-center" style="display:none;">Loading...</div>
                                     <?php if(is_object($call_demands)): ?>
 
@@ -144,13 +148,14 @@
                                                     </div>
                                                 </div>
                                             </li>
+                                            
                                         <?php endforeach; ?>
                                     
                                     <?php else: ?>
                                 </ul>
                                                     
                                 <div class="no-results" style="display: block; text-align:center">
-                                    <h5>Sem pedido disponível</h5>
+                                    <h5>Sem pedido disponí­vel</h5>
                                 </div>
                                 <?php endif; ?>
                             </div>
@@ -159,21 +164,23 @@
 
                         <!-- Right Sidebar starts -->
                         <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
-                            {{-- <div class="modal-dialog sidebar-lg" style="width: 28rem !important;"> --}}
-                            <div class="modal-dialog sidebar-lg" style="">
+                            {{-- <div class="modal-dialog sidebar-lg"> --}}
+                            <div class="modal-dialog w-100">
                                 <div class="modal-content p-0">
     
                                     <form id="form-modal-todo" class="todo-modal needs-validation" >
                                         @csrf
+{{-- 
                                         <div class="modal-header align-items-center mb-1">
                                             
                                             <div class="todo-item-action d-flex align-items-center justify-content-between ml-auto">
     
                                                 <button type="button" class="close font-large-1 font-weight-normal py-0" data-dismiss="modal" aria-label="Close">
-                                                    ×
+                                                    X
                                                 </button>
                                             </div>
                                         </div>
+ --}}
                                         <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
                                             
                                             <div class="form-group my-1">
@@ -241,7 +248,7 @@
 
 
 
-                        <!-- Modal Baixa Caçamba -->
+                        <!-- Modal Baixa CaÃ§amba -->
 
                         <div class="modal fade" id="open_new_modal">
                             
@@ -251,15 +258,15 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body px-sm-5 mx-50 pb-4" data-select2-id="82">
-                                        <h1 class="text-center mb-1" id="shareProjectTitle">Registro de Caçambas</h1>
+                                        <h1 class="text-center mb-1" id="shareProjectTitle">Registro de CaÃ§ambas</h1>
                                         <label class="form-label fw-bolder font-size font-small-4 mb-50" for="addMemberSelect"> Add members </label>
                                        
-                                        <p class="fw-bolder pt-50 mt-2">Quantidade de Caçambas: 3</p>
+                                        <p class="fw-bolder pt-50 mt-2">Quantidade de CaÃ§ambas: 3</p>
 
                                         <!-- form dumpster's list  -->
                                         <div class="card">
                                             <div class="card-header">
-                                                <h4 class="card-title">Caçambas</h4>
+                                                <h4 class="card-title">CaÃ§ambas</h4>
                                             </div>
                                             <div class="card-body">
                                                 <form action="#" class="invoice-repeater">
@@ -268,7 +275,7 @@
                                                             <div class="row d-flex align-items-end">
                                                                 <div class="col-md-4 col-2">
                                                                     <div class="form-group">
-                                                                        <label for="itemname">Número de caçambas</label>
+                                                                        <label for="itemname">NÃºmero de caÃ§ambas</label>
                                                                         <input type="text" class="form-control" id="itemname" aria-describedby="itemname" placeholder="Vuexy Admin Template" />
                                                                     </div>
                                                                 </div>
@@ -296,7 +303,7 @@
                             </div>
                         </div>
  
-                        <!-- Modal Baixa Caçamba -->
+                        <!-- Modal Baixa CaÃ§amba -->
 
                     </div>
                 </div>
@@ -315,6 +322,9 @@
 <script>
 
     $( document ).ready(function() {
+
+        // flatpickr(".date_format_allocation_search",{ dateFormat: "d/m/Y", allowInput: true });
+
 
         $("form").submit(function(a){
 
@@ -368,14 +378,14 @@
                 $.each(dumpsterNumbers, function(i, field) {
                 
                     if(field == '' || field == 0){
-                        alert("Preencha o número da caçamba!");
+                        alert("Preencha o nÃºmero da caÃ§amba!");
                         stopExec = true;
                         return false;
                     }
                 });
 
             }else{
-                alert("Preencha todas as caçambas!");
+                alert("Preencha todas as caÃ§ambas!");
                 stopExec = true;
                 return false;
             }
@@ -404,7 +414,7 @@
                         if(dataResponse == true)
                             location.reload();
                         else
-                            alert("Caçamba em uso!");
+                            alert("CaÃ§amba em uso!");
                     },
                     error: function(responseError){
                         console.log(responseError);
@@ -442,7 +452,7 @@
                 $.each(dumpsterNumbers, function(i, field) {
                     
                     if(field == '' || field == 0){
-                        alert("Preencha o número da caçamba!");
+                        alert("Preencha o nÃºmero da caÃ§amba!");
                         stopExec = true;
                         return false;
                     }
@@ -450,7 +460,7 @@
 
             }else{
 
-                alert("Preencha todas as caçambas!");
+                alert("Preencha todas as caÃ§ambas!");
                 stopExec = true;
                 return false;
             }
@@ -476,6 +486,10 @@
                     },
                     success: function(dataResponse) {
 
+console.log("**************");
+console.log(dataResponse);
+console.log("**************");
+                        return false;
                         if(dataResponse == true)
                             location.reload();
                         else
@@ -512,7 +526,7 @@
 
                 console.log("ID do chamado : " + idDemand);
                 console.log("ID do aterro : " + idLandfill);
-                console.log("DAdos caçamba : " + dumpsterNumbers);
+                console.log("DAdos caÃ§amba : " + dumpsterNumbers);
 
             }else{
                 alert("Selecione o Aterro!");
@@ -595,7 +609,7 @@
                                 contentTwo += '<span class="todo-dumpster-quantity d-none">' + field.dumpster_quantity + '</span>';
                                 contentTwo += '</div>';
 
-                                $("#todo-task-list").append('<li class="todo-item my-3">' + h1 + h2 + contentOne + contentTwo + '</li>');
+                                $("#todo-task-list").append('<li class="border-bottom-info todo-item my-3 py-1">' + h1 + h2 + contentOne + contentTwo + '</li>');
 
                             });                            
                             

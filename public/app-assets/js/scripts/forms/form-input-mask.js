@@ -21,6 +21,7 @@ $(function () {
     prefixMask = $('.prefix-mask'),
     zipcodeMask = $('.zipcode-mask'),
     priceUnit = $('.price_unit');
+    iss = $('.iss');
 
 
   // Credit Card
@@ -119,6 +120,17 @@ $(function () {
 
   if(priceUnit.length) {
     new Cleave(priceUnit, {
+      numeral: true,
+      numeralDecimalMark: ',',
+      delimiter: '.',      
+      blocks: [0, 2],
+      // prefix: 'R$',
+      rawValueTrimPrefix: true
+    });
+  }
+
+  if(iss.length) {
+    new Cleave(iss, {
       numeral: true,
       numeralDecimalMark: ',',
       delimiter: '.',      

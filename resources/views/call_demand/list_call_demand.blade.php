@@ -237,26 +237,26 @@ $(document).ready(function() {
                 idDemands[i] = $(this).val();
             });
 
-            // idDemands.splice(-1);
+            if(idDemands != ""){
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    method: 'POST',
+                    url: 'delete_demand',
+                    data: { 
+                        id_demands : idDemands
+                        
+                    },
+                    success: function(dataResponse) {
 
-            $.ajax({
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                method: 'POST',
-                url: 'delete_demand',
-                data: { 
-                    id_demands : idDemands
-                    
-                },
-                success: function(dataResponse) {
+                        location.reload();
 
-                    location.reload();
-
-                },
-                error: function(responseError){
-                    alert("Erro ao deletar registros: " + responseError);
-                    console.log(responseError);
-                }
-            });
+                    },
+                    error: function(responseError){
+                        alert("Erro ao deletar registros: " + responseError);
+                        console.log(responseError);
+                    }
+                });
+            }
         });
 
         $("#btn_reset_input").click(function(){
@@ -285,9 +285,7 @@ $(document).ready(function() {
             $('.date_format_allocation_search').flatpickr({
                 mode: "multiple",
                 dateFormat: "d/m/Y"
-            });
-            
-            $('#date_format_allocation_search').val('');
+            }).clear();
 
         });
 
@@ -301,7 +299,7 @@ $(document).ready(function() {
                 // "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
                 "url": "public/assets/json/Portuguese-Brasil.json"
             },
-            order: [[2, 'asc']],
+            // order: [[2, 'asc']],
             scrollX: true,
             dom: 'Bfrtip',
             buttons: [
@@ -427,11 +425,10 @@ $(document).ready(function() {
             let idReg               = $("#idreg").val();
             let idDriverSelected    = $("#name_driver_selected").val();
             let nameDriverSelected  = $("#name_driver_selected").find('option:selected').text()
-            // let all_drivers_checked = $("#all_drivers")[0].checked;
-            let all_drivers_checked = false;
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
             // let all_effectivedateremoval_checked = $("#all_effectivedateremoval")[0].checked;
-            let all_effectivedateremoval_checked = false;
+            // let all_drivers_checked = $("#all_drivers")[0].checked;
+
 
 
             $.ajax({
@@ -439,15 +436,14 @@ $(document).ready(function() {
                 method: 'POST',
                 url: '{{ route('changedriver.demand') }}',
                 data: { 
-                    drivers_checked : all_drivers_checked, 
-                    effectivedateremoval_checked : all_effectivedateremoval_checked, 
+                    // drivers_checked : all_drivers_checked, 
+                    // effectivedateremoval_checked : all_effectivedateremoval_checked, 
                     id_driver : idDriverSelected,
                     effective_date_removal : effectiveDateRemoval,
                     id_reg: idReg, 
                     id_demand : idDemand
                 },
                 success: function(dataResponse) {
-
 
                     if(dataResponse){
                         
@@ -458,7 +454,7 @@ $(document).ready(function() {
                     //    location.reload();
 
                     }else
-                        alert("Erro na atualização do nomes!");
+                        alert("Erro ao atualizar o nome do Motorista!");
                 },
                 error: function(responseError){
                     alert("Erro interno: " + responseError);

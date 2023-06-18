@@ -96,6 +96,11 @@
                 dateFormat: "d/m/Y"
             });
 
+            $('.date_format_service_search').flatpickr({
+                disableMobile: "true",
+                dateFormat: "d/m/Y"
+            });
+
             $('.date_format_allocation_drive_search').flatpickr({
                 // mode: "range",
                 // dateFormat: "d/m/Y"

@@ -56,7 +56,7 @@
                                         @csrf
                                         <div class="row invoice-add">
                         
-                                            <div class="col-xl-9 col-md-8 col-12">
+                                            <div class="col-md-12">
                                                 <div class="card invoice-preview-card">
                         
                                                     <section class="app-user-edit">
@@ -74,7 +74,7 @@
                                                                         </div>
 
                                                                         <div class="row">
-                                                                            <div class="col-md-12">
+                                                                            <div class="col-md-6">
                                                                                 <div class="form-group">
                                                                                     <label for="id_client">CLIENTE</label>
                                                                                     <select class="select2 form-control form-control-lg" name="id_client" id="search_data_client">
@@ -89,7 +89,7 @@
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="col-md-12">
+                                                                            <div class="col-md-6">
                                                                                 <div class="form-group">
                                                                                     <label for="id_client">CLIENTE NOVO</label>
                                                                                     <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" autocomplete="off"/>
@@ -97,9 +97,9 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                        <hr />
                                                                         <div class="row">
-                                                                            <div class="col-md-12">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="type_service">Serviço desejado</label>
                                                                                     <select class="select2 form-control form-control-lg" id="type_service" name="type_service">
@@ -109,39 +109,41 @@
                                                                                     </select>            
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <hr />                                                                        
-                                                                        <div class="row">
-                                                                          
-                                                                            <div class="col-md-3">
+
+                                                                            <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <label for="zipcode">CEP</label>
                                                                                         <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" autocomplete="off"/>
                                                                                 </div>
-                                                                            </div>                                                                                        
-                                    
-                                                                            <div class="col-md-4">
+                                                                            </div>
+
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="address">Endereço</label>
                                                                                     <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="col-md-3">
+                                                                            <div class="col-md-4">
                                                                                 <div class="form-group">
                                                                                     <label for="address">Complemento</label>
                                                                                     <input type="text" class="form-control only-text" name="address_complement" id="address_complement" minlength="2" maxlength="44" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
+
+                                                                        </div>
+
+                                                                        <div class="row">
+                                                                          
                                     
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-md-1">
                                                                                 <div class="form-group">
                                                                                     <label for="number">Número</label>
                                                                                     <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
                                                                             
-                                                                            <div class="col-md-4">
+                                                                            <div class="col-md-5">
                                                                                 <div class="form-group">
                                                                                     <label for="district">Bairro</label>
                                                                                     <input type="text" class="form-control only-text" name="district" id="district" minlength="2" maxlength="44" autocomplete="off"/>
@@ -149,7 +151,7 @@
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="city">Cidade</label>
                                                                                     <input type="text" class="form-control only-text" name="city" id="city" minlength="2" maxlength="50" autocomplete="off"/>
@@ -165,7 +167,7 @@
                                                                                 </div>
                                                                             </div>
                                     
-                                                                            <div class="col-md-4">
+                                                                            <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <label for="phone">Telefone</label>
                                                                                     <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" autocomplete="off"/>
@@ -188,16 +190,7 @@
                                                                                     <i>R$</i>
                                                                                 </div>
                                                                             </div>
-{{-- 
-                                                                            <div class="col-md-2">
-                                                                                <div class="form-group input-icon">
-                                                                                    <label for="price_unit">Desconto(%).</label>
-                                                                                    <input type="number" name="discount_value" class="form-control discount_value" id="discount_value" maxlength="5"/>
-                                                                                    <i style="float: right;position: relative;bottom: 19px;">%</i>
-                                                                                    
-                                                                                </div>
-                                                                            </div>
---}}
+
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="driver">MOTORISTA</label>
@@ -267,24 +260,84 @@
                                                                                 </div>    
                                                                             </div> 
                                                                         </div>
+                                                                        <hr />
+                                                                        <div class="row">
+
+
+                                                                            <div class="col-md-3">
+                                                                                <div class="form-group input-icon">
+                                                                                    <label for="iss">ISS</label>
+                                                                                    <input type="text" name="iss" class="form-control iss" id="iss" />
+                                                                                    <i>R$</i>
+                                                                                </div>
+                                                                            </div>                                                                            
+                                                                            <div class="col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label for="has_paid">PAGAMENTO REALIZADO</label>
+                                                                                    <select class="select2 form-control form-control-lg" id="has_paid" name="has_paid">
+                                                                                        <option value="">----</option>
+                                                                                        <option value="1">SIM</option>
+                                                                                        <option value="0">NÃO</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label for="by_bank">FORMA DE PAGAMENTO</label>
+                                                                                    <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
+                                                                                        <option value="">----</option>
+                                                                                        <option value="1">TRANSFERÊNCA</option>
+                                                                                        <option value="2">BOLETO BANCÁRIO</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <span class="title" for="invoice_number">CÓDIGO NF</span>
+                                                                                    <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" autocomplete="off"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            
+                                                                            
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <span class="title" for="date_issue">DATA DA EMISSÃO</span>
+                                                                                    <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_issue" data-column="5"  data-column-index="4" />
+                                                                                    {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                </div>    
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <span class="title" for="date_payment_forecast">PREV. PAGAMENTO</span>
+                                                                                    <input type="text" name="date_payment_forecast" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast" data-column="5"  data-column-index="4" />
+                                                                                    {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                </div>    
+                                                                            </div>
+                                                                            
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <span class="title" for="date_effective_paymen">PAGAMENTO EFETIVO</span>
+                                                                                    <input type="text" name="date_effective_paymen" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_paymen" data-column="5"  data-column-index="4" />
+                                                                                    {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                </div>    
+                                                                            </div>                                                                            
+                                                                        </div>                                                                        
+                                                                        <hr />
+                                                                        <div class="col-12 text-center">
+                                                                            <button type="submit" class="btn btn-success ">Salvar</button>
+                                                                            <button type="reset" class="btn btn-warning ">Limpar Formulário</button>                                                                                
+                                                                        </div>
                                                                     </div>
-                                                                    
+
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </section>                            
                                                 </div>
                                             </div>
-                                            
-                                            <div class="col-xl-3 col-md-4 col-12">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <button type="submit" class="btn btn-success btn-block mb-75">Salvar</button>
-                                                        <button type="reset" class="btn btn-warning btn-block mb-75">Limpar Formulário</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                        
                                         </div>
                                     </form>
 

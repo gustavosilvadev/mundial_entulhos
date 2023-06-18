@@ -30,11 +30,7 @@
 </style>
 
 <!-- BEGIN: Content-->
-{{-- <div class="app-content content "> --}}
 <div class="app-content content-designed">
-    {{-- <div class="content-overlay"></div> --}}
-    {{-- <div class="header-navbar-shadow"></div> --}}
-    {{-- <div class="content-wrapper container-xxl p-0"> --}}
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
@@ -71,15 +67,13 @@
                                                         <form id="form" class="form-validate" autocomplete="off" onsubmit="return false;">
                                                             @csrf
                                                             <div class="row invoice-add">
-                                                                <div class="col-xl-9 col-md-8 col-12">
+                                                                <div class="col-md-12">
                                                                     <div class="card invoice-preview-card">
                                             
                                                                         <section class="app-user-edit">
                                                                             <div class="card">
                                                                                 <div class="card-body">
                                                                                     <div class="tab-content">
-
-
                                                                                             <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
                                                 
                                                                                                 <div class="media mb-2"></div>
@@ -87,17 +81,15 @@
                                                                                                 <input type="hidden" name="id_demand" value={{ $value->id_demand }}>
                                                                                                 <div class="row">
 
-                                                                                                    <div class="col-md-12">
+                                                                                                    <div class="col-md-6">
                                                                                                         <div class="form-group">
-                                                                                                            <label for="id_client">CLIENTE NOVO</label>
+                                                                                                            <label for="id_client">CLIENTE</label>
                                                                                                             <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}" required />
                                                             
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                </div>
 
-                                                                                                <div class="row">
-                                                                                                    <div class="col-md-12">
+                                                                                                    <div class="col-md-6">
                                                                                                         <div class="form-group">
                                                                                                             <label for="type_service">Tipo de Serviço</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="type_service" name="type_service" required>
@@ -115,14 +107,14 @@
                                                                                                                 
                                                                                                             </select>            
                                                                                                         </div>
-                                                                                                    </div> 
+                                                                                                    </div>                                                                                                     
                                                                                                 </div>
-                                                                                            
+
                                                                                                 <hr />
                                                                                                 
                                                                                                 <div class="row">
                                                                                                 
-                                                                                                    <div class="col-md-4">
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="zipcode">CEP</label>
                                                                                                                 <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" value="{{ $value->zipcode_address_service }}" required/>
@@ -136,7 +128,7 @@
                                                                                                         </div>
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-3">
+                                                                                                    <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <label for="address">Complemento</label>
                                                                                                             <input type="text" class="form-control only-text" name="address_complement" id="address_complement" minlength="2" maxlength="44" value="{{ $value->address_complement }}"/>
@@ -149,7 +141,10 @@
                                                                                                             <input type="text" class="form-control" name="number" id="number" minlength="1" maxlength="6" value="{{ $value->number_address_service }}"/>
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                    
+                                                                                                </div>
+                                                                                                <hr />
+                                                                                                <div class="row">
+
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <label for="district">Bairro</label>
@@ -158,7 +153,7 @@
                                                                                                         </div>
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-2">
+                                                                                                    <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <label for="city">Cidade</label>
                                                                                                             <input type="text" class="form-control only-text" name="city" id="city" minlength="2" maxlength="50" value="{{ $value->city_address_service }}"/>
@@ -166,7 +161,7 @@
                                                                                                         </div>
                                                                                                     </div>
                                                             
-                                                                                                    <div class="col-md-1">
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="state">Estado</label>
                                                                                                             <input type="text" class="form-control only-text" name="state" id="state" maxlength="2" onkeydown="return /[a-z]/i.test(event.key)" value="{{ $value->state_address_service }}"/>
@@ -174,15 +169,24 @@
                                                                                                         </div>
                                                                                                     </div>
                                                             
-                                                                                                    <div class="col-md-4">
+                                                                                                    <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <label for="phone">Telefone</label>
                                                                                                             
                                                                                                             <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" value="{{ $value->phone_demand }}"/>
                                                                                                         </div>
                                                                                                     </div>
-                                                            
-                                                                                                    <div class="col-md-3">
+                                                                                                </div>
+                                                                                                <hr />
+                                                                                                <div class="row">
+                                                                                                    <div class="col-md-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="dumpster_total">QTD CAÇAMBAS</label>
+                                                                                                            <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_quantity }}"/>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group input-icon">
                                                                                                             <label for="price_unit">Preço UNIT.</label>
                                                                                                             <input type="text" name="price_unit" class="form-control price_unit" id="price_unit" value="{{ $value->price_unit }}"/>
@@ -191,21 +195,16 @@
                                                                                                         </div>
                                                                                                     </div>
                                                             
-                                                                                                    <div class="col-md-3">
-                                                                                                        <div class="form-group">
-                                                                                                            <label for="dumpster_total">QUANTIDADE DE CAÇAMBAS</label>
-                                                                                                            <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_quantity }}"/>
-                                                                                                        </div>
-                                                                                                    </div>
 
-                                                                                                    <div class="col-md-3">
+
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="dumpster_total_opened">NÚMERO CAÇAMBA</label>
                                                                                                             <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_number }}"/>
                                                                                                         </div>
                                                                                                     </div>
                                                 
-                                                                                                    <div class="col-md-3">
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="landfill">ATERRO</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill">
@@ -226,7 +225,6 @@
                                                                                                         </div>
                                                                                                     </div>                                                    
                                                 
-                                                                                                
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <label for="driver">MOTORISTA</label>
@@ -245,7 +243,9 @@
                                                                                                             </select>
                                                                                                         </div>
                                                                                                     </div>
-
+                                                                                                </div>
+                                                                                                <hr />
+                                                                                                <div class="row">                                                                                                
                                                                                                     <div class="col-md-12">
                                                                                                         <div class="form-group mb-2">
                                                                                                             <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
@@ -260,10 +260,6 @@
                                                                                                         </div>
                                                                                                     </div>
                                                 
-                                                                                                </div>
-                                                
-                                                                                                <div class="row">
-                                                                                                                                                        
 
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
@@ -297,8 +293,7 @@
 
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
-                                                                                                            <label for="period">PREVISÃO RETIRADA</label>
-                                                                                                            {{-- <input type="text" name="date_removal_dumpster_forecast" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_format_removal" data-column="5"  data-column-index="4" value="{{ $value->date_removal_dumpster_forecast }}"/> --}}
+                                                                                                            <label for="period">PREVISÃO RETIRADA</label>                                                                                                            
                                                                                                             <input type="text" name="date_removal_dumpster_forecast" id="date_format" class="form-control dt-date date-mask" data-column="5"  data-column-index="4"  value="{{ $value->date_removal_dumpster_forecast }}"/>
                                                                                                         </div>    
                                                                                                     </div>
@@ -306,7 +301,6 @@
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">RETIRADA EFETIVA</label>
-                                                                                                            {{-- <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_removal_dumpster date_format_effective_removal" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" disabled /> --}}
                                                                                                             <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date  date_format" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" />
                                                                                                             <div class="loadingMask text-primary" style="display:none;">Loading...</div>
                                                                                                         </div>    
@@ -319,44 +313,89 @@
                                                                                                             <div class="loadingMask text-primary" style="display:none;">Loading...</div>
                                                                                                         </div>    
                                                                                                     </div> 
-{{-- 
-                                                                                                    <div class="col-md-12" style="border: 2px solid rgb(149, 145, 145); margin:10px 0 10px 0"></div>
-                                                                                                    <div class="col-md-4">
+                                                                                                </div>
+                                                                                                <hr/>
+                                                                                                <div class="row">
+
+
+                                                                                                    <div class="col-md-3">
+                                                                                                        <div class="form-group input-icon">
+                                                                                                            <label for="iss">ISS</label>
+                                                                                                            <input type="text" name="iss" class="form-control iss" id="iss" />
+                                                                                                            <i>R$</i>
+                                                                                                        </div>
+                                                                                                    </div>                                                                            
+                                                                                                    <div class="col-md-3">
                                                                                                         <div class="form-group">
-                                                                                                            <label for="driver">PAGO</label>
-                                                                                                            <select class="select2 form-control form-control-lg" id="driver" name="is_payed">
+                                                                                                            <label for="has_paid">PAGAMENTO REALIZADO</label>
+                                                                                                            <select class="select2 form-control form-control-lg" id="has_paid" name="has_paid">
                                                                                                                 <option value="">----</option>
                                                                                                                 <option value="1">SIM</option>
                                                                                                                 <option value="0">NÃO</option>
                                                                                                             </select>
                                                                                                         </div>
-                                                                                                    </div>                                                                                                    
+                                                                                                    </div>
+                        
+                                                                                                    <div class="col-md-3">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="by_bank">FORMA DE PAGAMENTO</label>
+                                                                                                            <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
+                                                                                                                <option value="">----</option>
+                                                                                                                <option value="1">TRANSFERÊNCA</option>
+                                                                                                                <option value="2">BOLETO BANCÁRIO</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    </div>
+                        
+                                                                                                    <div class="col-md-3">
+                                                                                                        <div class="form-group">
+                                                                                                            <span class="title" for="invoice_number">CÓDIGO NF</span>
+                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" autocomplete="off"/>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    
+                                                                                                    
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
-                                                                                                            <label for="driver">Nº NOTA</label>
-                                                                                                            <input type="number" class="form-control" min="0" max="1000" placeholder="0">
-                                                                                                        </div>
-                                                                                                    </div>                      
+                                                                                                            <span class="title" for="date_issue">DATA DA EMISSÃO</span>
+                                                                                                            <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_issue" data-column="5"  data-column-index="4" />
+                                                                                                            {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                                        </div>    
+                                                                                                    </div>
+                        
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
-                                                                                                            <label for="driver">DATA EMISSÃO</label>
-                                                                                                            <input type="number" class="form-control" min="0" max="1000" placeholder="0">
-                                                                                                        </div>
-                                                                                                    </div>                      
+                                                                                                            <span class="title" for="date_payment_forecast">PREV. PAGAMENTO</span>
+                                                                                                            <input type="text" name="date_payment_forecast" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast" data-column="5"  data-column-index="4" />
+                                                                                                            {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                                        </div>    
+                                                                                                    </div>
+                                                                                                    
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
-                                                                                                            <label for="driver">PRAZO PAGAMENTO</label>
-                                                                                                            <input type="number" class="form-control" min="0" max="1000" placeholder="0">
-                                                                                                        </div>
-                                                                                                    </div>                      
-                                                                                                    <div class="col-md-4">
-                                                                                                        <div class="form-group">
-                                                                                                            <label for="driver">PREVISÃO PAGAMENTO</label>
-                                                                                                            <input type="number" class="form-control" min="0" max="1000" placeholder="0">
-                                                                                                        </div>
-                                                                                                    </div>               
- --}}
-                                                                                                </div>
+                                                                                                            <span class="title" for="date_effective_paymen">PAGAMENTO EFETIVO</span>
+                                                                                                            <input type="text" name="date_effective_paymen" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_paymen" data-column="5"  data-column-index="4" />
+                                                                                                            {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                                        </div>    
+                                                                                                    </div>                                                                            
+                                                                                                </div>                                                                        
+                                                                                                <hr />
+
+                                                                                                <div class="col-12 text-center">
+
+                                                                                                    <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
+
+                                                                                                    <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
+                                                                                                        <button class="btn btn-dark " id="btn_finish_demand">ENCERRAR ESTE CHAMADO</button>
+                                                                                                        <button class="btn btn-dark btn-warning " id="btn_finish_all_demands">ENCERRAR TODOS OS CHAMADOS RELACIONADOS</button>
+                                                                                                    <?php endif; ?>
+
+                                                                                                    <h3 class="text-success text-center" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
+                                                                                                    <h4 class="text-danger text-center" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
+                                                                                                    <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3>
+                                                                                                    <h4 class="text-danger text-center" id="message-error-finished" style="display:none"><b>Erro ao encerrar o chamado!</b></h4>
+                                                                                                </div>                                                                                                    
+
                                                                                             </div>
 
                                                                                     </div>
@@ -365,14 +404,12 @@
                                                                         </section>                            
                                                                     </div>
                                                                 </div>
-
+{{-- 
                                                                 <div class="col-xl-3 col-md-4 col-12">
                                                                     <div class="card">
                                                                         <div class="card-body">
                                                                             
-                                                                            {{-- <button type="submit" class="btn btn-success btn-block mb-75">ATUALIZAR</button> --}}
                                                                             <button class="btn btn-success btn-block" id="btn_update" tabindex="4">ATUALIZAR</button>
-                                                                            
 
                                                                             <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
                                                                                 <button class="btn btn-dark btn-block mb-75" id="btn_finish_demand">ENCERRAR ESTE CHAMADO</button>
@@ -386,8 +423,9 @@
                                                                             
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                            
+                                                                </div> 
+--}}
+
                                                             </div>
                                                         </form>
                                                 <?php
