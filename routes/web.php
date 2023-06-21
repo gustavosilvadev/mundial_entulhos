@@ -48,13 +48,17 @@ Route::middleware('usersession')->group(function(){
     // Route::get('/listlandfill', [DriverController::class,'getLandFill']);
     
     Route::post('atualiza_dias_cacamba_municipio',[DumpsterServiceDemandController::class,'updateDaysDumpsterCounty']);
+
+    //Dumpsters
+    Route::get('/dumpsters', [DumpsterServiceDemandController::class, 'showQuantityDumpters']);
+    Route::post('/change_dumpster_number', [DumpsterServiceDemandController::class, 'updateQuantityDumpters']);
     
     // Landfill
     Route::get('createlandfill', function(){
         return view('landfill.form_cad_landfill');
     });
+
     Route::post('save_landfill',[LandfillController::class,'store']);
-    
     
     // Call Demand
     Route::get('createcalldemand', [CallDemandController::class,'callFormCreateDemand']);

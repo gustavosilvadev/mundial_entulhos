@@ -32,6 +32,7 @@ if(session('access_permission') == 1){
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CONFIGURAÇÕES</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
+                        <a class="dropdown-item" href="{{ url('dumpsters') }}">CAÇAMBAS</a>
                         <a class="dropdown-item" href="{{ url('createlandfill') }}">ATERROS</a>
                         <a class="dropdown-item" href="{{ url('cacamba_dias_municipio') }}">MUNICÍPIOS</a>
                         <label class="dropdown-item" href="#">FUNCIONÁRIOS</label>

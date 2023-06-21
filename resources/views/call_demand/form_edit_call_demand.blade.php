@@ -387,8 +387,9 @@
 
                                                                                                     <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
                                                                                                         <button class="btn btn-dark " id="btn_finish_demand">ENCERRAR ESTE CHAMADO</button>
-                                                                                                        <button class="btn btn-dark btn-warning " id="btn_finish_all_demands">ENCERRAR TODOS OS CHAMADOS RELACIONADOS</button>
+                                                                                                        {{-- <button class="btn btn-dark btn-warning " id="btn_finish_all_demands">ENCERRAR TODOS OS CHAMADOS RELACIONADOS</button> --}}
                                                                                                     <?php endif; ?>
+                                                                                                    
 
                                                                                                     <h3 class="text-success text-center" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
                                                                                                     <h4 class="text-danger text-center" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>

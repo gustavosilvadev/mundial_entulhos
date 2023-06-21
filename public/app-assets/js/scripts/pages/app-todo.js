@@ -11,6 +11,7 @@
 
 $(function () {
   var taskTitle,
+    taskIdDemandReg,
     taskIdDemand,
     taskTypeService,
     taskNameClient,
@@ -393,7 +394,12 @@ $(function () {
       $("#btn_start_call_demand").css("display","block");
       $("#btn_finish_call_demand").css("display","none");
 
-    }else{
+    }else if($serviceStatus == 5){
+
+      $("#btn_start_call_demand").css("display","none");
+      $("#btn_finish_call_demand").css("display","none");      
+    }
+    else{
 
       $("#btn_start_call_demand").css("display","none");
       $("#btn_finish_call_demand").css("display","block");
@@ -409,9 +415,15 @@ $(function () {
     var $idDemand  = taskIdDemand.html();
     newTaskForm.find('.todo-id-demand').val($idDemand);
 
+    taskIdDemandReg   = $(this).find('.todo-id-demand-reg');
+    var $idDemandReg      = taskIdDemandReg.html();
+    newTaskForm.find('.todo-id-demand-reg').val($idDemandReg);
+    // console.log("idDemandReg: " + $idDemandReg);
+
 //Tipo de Serviço
     taskTypeService   = $(this).find('.todo-type-service');
     var $typeService  = taskTypeService.html();
+console.log("$typeService: " + $typeService);
     newTaskForm.find('.todo-type-service').val($typeService);
 
 //Descrição / Observação    
@@ -441,13 +453,17 @@ $(function () {
     let show_dumpster_demand   = $(this).find('.todo-url-show-dumpster-demand');
 
     // $.get("show_dumpster_demand",{ id_demand: $idDemand, type_service: $typeService } )
-    $.get(show_dumpster_demand.text(),{ id_demand: $idDemand, type_service: $typeService } )
+    $.get(show_dumpster_demand.text(),{ id_demand_reg: $idDemandReg } )
     .done(function ( dataResponse ){
-      
+
+      newTaskForm.find('#number-dumpster-repeat').append("<div class='row d-flex align-items-end'><div class='col-6'><div class='form-group'><input type='text' class='form-control dumpster_number' id='1' value='" + dataResponse.dumpster_number + "'/></div></div></div>");
+
+/*
       $.each(dataResponse, function(kItem, item){
         let count = kItem + 1;
         newTaskForm.find('#number-dumpster-repeat').append("<div class='row d-flex align-items-end'><div class='col-6'><div class='form-group'><label for='itemname'>Nº " + count + "</label><input type='text' class='form-control dumpster_number' id='"+count+"' value='" + item.dumpster_number + "'/></div></div></div>");
       });
+*/      
     });
     
 /*

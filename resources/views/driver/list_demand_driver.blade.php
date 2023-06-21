@@ -36,6 +36,9 @@
                                     <input type="text" class="form-control dt-date flatpickr-range dt-input date_format_service_search" id="data_filter_demand" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                   </div>
                             </div>
+
+                     
+
 {{--                             
                             <div class="app-fixed-search d-flex align-items-center">
 
@@ -63,7 +66,7 @@
                                             <li class="todo-item my-3">
 
                                                 <div class="">
-
+<!--                                                    
                                                     <h1 class="<?php 
                                                         if($call_demand->type_service == "COLOCACAO"){
                                                             echo "text-info";
@@ -73,7 +76,12 @@
                                                         }else{
                                                             echo "text-danger";
                                                         }
-                                                    ?>"><?php echo $call_demand->type_service; ?></h1>
+                                                    ?>">
+-->                                                    
+                                                    <h1 class="bg-dark text-white">
+                                                    <?php echo $call_demand->type_service; ?>
+                                                    </h1>
+
                                                     <h2 class="text-dark todo-title-address">
                                                         {{
                                                             $call_demand->address_service.
@@ -134,12 +142,14 @@
                                                         <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-url-show-dumpster-demand" style="display: none;">{{ url('show_dumpster_demand') }}</label>
 
+                                                        <label class="text-nowrap text-muted mr-1 todo-id-demand-reg" style="display: none;">{{ $call_demand->id }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">{{ $call_demand->id_demand }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-type-service" style="display: none;">{{ $call_demand->type_service }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">{{ $call_demand->comments_demand }}</label>
                                                         <label class="text-nowrap text-muted mr-1 todo-name-client" style="display: none;">{{ $call_demand->phone_demand }}</label>
 
 
+                                                        <input type="hidden" class="id_call_demand_reg" value="{{ $call_demand->id }}" />
                                                         <input type="hidden" class="id_demand" value="{{ $call_demand->id_demand }}" />
                                                         <input type="hidden" name="service_status" class="todo-service-status" value="{{ $call_demand->service_status }}" />
                                                         <span class="todo-date-start d-none">{{ $call_demand->date_start }} </span>
@@ -200,8 +210,6 @@
                                                     <p class="todo-phone"></p>
                                                 </div>                                            
 
-
-
                                                 <div class="form-group">
                                                     <h3 class="form-label">Descrição</h3>
                                                     <p class="todo-item-description"></p>
@@ -225,6 +233,7 @@
 
                                                 </div>                                                
 
+                                                <input type="hidden" name= "id_demand_reg" class="todo-id-demand-reg" />
                                                 <input type="hidden" name= "id_demand" class="todo-id-demand" />
                                                 <input type="hidden" name= "type_service" class="todo-type-service" />
 
@@ -358,14 +367,19 @@
             let dataInfo = dataForm.serializeArray();
             let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
             let typeService = "";
+            let idDemandReg   = 0;
             let idDemand   = 0;
             let idLandfill = 0;
             let stopExec   = false; 
 
             $.each(dataInfo, function(i, field) {
 
+                if(field.name.trim() == "id_demand_reg")
+                    idDemandReg = field.value;
+
                 if(field.name.trim() == "id_demand")
                     idDemand = field.value;
+
 
                 if(field.name.trim() == "type_service")
                     typeService = field.value;
@@ -389,6 +403,8 @@
                 stopExec = true;
                 return false;
             }
+console.log("typeService: " + typeService);
+return false;
 
             if(typeService == 'RETIRADA' || typeService == 'TROCA' && idLandfill == 0)
             {
@@ -396,7 +412,8 @@
                 stopExec = true;
             }
 
-
+console.log("idDemandReg: " + idDemandReg);
+return false;
 
             if(stopExec == false){
 
@@ -406,6 +423,7 @@
                     url: 'start_demand',
                     data: {
                         type_service: typeService, 
+                        id_demand_reg: idDemandReg,
                         id_demand: idDemand,
                         id_landfill: idLandfill,
                         dumpster_numbers: dumpsterNumbers
@@ -430,22 +448,25 @@
             let dataForm = $('#form-modal-todo');
             let dataInfo = dataForm.serializeArray();
             let dumpsterNumbers = $.map($('.dumpster_number'), function(el) { return el.value; });
-            let idDemand   = 0;
-            let idLandfill = 0;
+            let idDemandReg = 0;
+            let idDemand    = 0;
+            let idLandfill  = 0;
             let typeService = '';
             let stopExec    = false; 
 
-            
             $.each(dataInfo, function(i, field) {
 
+                if(field.name.trim() == "id_demand_reg")
+                    idDemandReg = field.value;
+                
                 if(field.name.trim() == "id_demand")
                     idDemand = field.value;
-                    
-                    if(field.name.trim() == "landfill")
-                    idLandfill = field.value;
-                    
-                    if(field.name.trim() == "type_service")
-                    typeService = field.value;
+                
+                if(field.name.trim() == "landfill")
+                idLandfill = field.value;
+                
+                if(field.name.trim() == "type_service")
+                typeService = field.value;
             });
 
             if(dumpsterNumbers.length > 0){
@@ -464,13 +485,21 @@
                 stopExec = true;
                 return false;
             }
-
+            
             if(typeService == 'RETIRADA' || typeService == 'TROCA' && idLandfill == 0)
             {
                 alert('Selecione o aterro!');
                 stopExec = true
                 // return false;
             }
+
+
+// console.log("idDemandReg: " + idDemandReg);
+// console.log("idDemand: " + idDemand);
+// console.log("idLandfill: " + idLandfill);
+// console.log("typeService: " + typeService);
+// console.log("dumpsterNumbers: " + dumpsterNumbers);
+// return false;
                     
             if(stopExec == false){
                 
@@ -479,17 +508,15 @@
                     method: 'POST',
                     url: 'finish_demand',
                     data: { 
-                        id_demand: idDemand,
+                        id_demand_reg: idDemandReg,
+                        // id_demand: idDemand,
                         id_landfill: idLandfill,
                         type_service: typeService,
                         dumpster_numbers: dumpsterNumbers,
+                        is_all_demand: false // Temp
                     },
                     success: function(dataResponse) {
 
-console.log("**************");
-console.log(dataResponse);
-console.log("**************");
-                        return false;
                         if(dataResponse == true)
                             location.reload();
                         else
@@ -531,9 +558,7 @@ console.log("**************");
             }else{
                 alert("Selecione o Aterro!");
 
-
             }
-
 
         });
 
@@ -563,7 +588,8 @@ console.log("**************");
 
                                 }
 
-                                let h1 = '<h1 class="' + className + '">'+ field.type_service + '</h1>';
+                                // let h1 = '<h1 class="' + className + '">'+ field.type_service + '</h1>';
+                                let h1 = '<h1 class="bg-dark text-white">'+ field.type_service + '</h1>';
                                 let h2 = '<h2 class="text-dark todo-title-address">' + field.address_service +
                                 ' - ' + field.number_address_service +
                                 ' - ' + field.zipcode_address_service +
@@ -588,17 +614,20 @@ console.log("**************");
 
                                 }else if(field.service_status == 2 && empty(field.date_end) ){
 
-                                    showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-info">ALOCADO</div>';
+                                    // showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-info">ALOCADO</div>';
+                                    showStatusDemand = '<div class="badge badge-pill badge-light-info">ALOCADO</div>';
 
                                 }else{
 
-                                    showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-success">ENCERRADO</div>';
+                                    // showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-success">ENCERRADO</div>';
+                                    showStatusDemand = '<div class="badge badge-pill badge-light-success">ENCERRADO</div>';
 
                                 }
                                 
                                 let contentTwo = '<div class="todo-item-action"><div class="badge-wrapper mr-1">' + showStatusDemand + '</div>';
                                 contentTwo += '<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">' + $('#todo-url-list-landfill').text() + '</label>';
                                 contentTwo += '<label class="text-nowrap text-muted mr-1 todo-url-show-dumpster-demand" style="display: none;">' + $('#todo-url-show-dumpster-demand').text() + '</label>';
+                                contentTwo += '<label class="text-nowrap text-muted mr-1 todo-id-demand-reg" style="display: none;">' + field.id_demand_reg + '</label>';
                                 contentTwo += '<label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">' + field.id_demand + '</label>';
                                 contentTwo += '<label class="text-nowrap text-muted mr-1 todo-type-service" style="display: none;">' + field.type_service + '</label>';
                                 contentTwo += '<label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">' + field.comments_demand + '</label>';
@@ -609,7 +638,7 @@ console.log("**************");
                                 contentTwo += '<span class="todo-dumpster-quantity d-none">' + field.dumpster_quantity + '</span>';
                                 contentTwo += '</div>';
 
-                                $("#todo-task-list").append('<li class="border-bottom-info todo-item my-3 py-1">' + h1 + h2 + contentOne + contentTwo + '</li>');
+                                $("#todo-task-list").append('<li class="border-bottom-dark todo-item my-3 py-1">' + h1 + h2 + contentOne + contentTwo + '</li>');
 
                             });                            
                             

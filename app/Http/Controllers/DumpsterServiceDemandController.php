@@ -8,42 +8,49 @@ use App\Models\CallDemand;
 use App\Models\Driver;
 use App\Models\DumpsterServiceDemand;
 use App\Models\CountyDaysDumpster;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\CallLike;
+use App\Models\TotalDumpster;
 
 class DumpsterServiceDemandController extends Controller
 {
 
-    public function show(Request $request)
+    public function showQuantityDumpters()
     {
-/*
-        if(isset($request->id)){
 
+        $totalDumpsters = TotalDumpster::get('number_total', 'number_available')->first();
+        return view('dumpster_service_demand.form_cad_total_dumspter',[
+            'number_total' => (isset($totalDumpsters['number_total']) ? $totalDumpsters['number_total'] : 0),
+            'number_available' => (isset($totalDumpsters['number_available']) ? $totalDumpsters['number_available'] : 0),
+        ]);
+    }
 
-            $calldemand = CallDemand::where('id',$request->id)->orderBy('id','DESC')->first();
-            $client     = Client::where('id',$calldemand->id_client)->first();
+    public function updateQuantityDumpters(Request $request)
+    {
+        $checkTotalDumpsters = TotalDumpster::get('number_total', 'number_available')->first();
 
-            if(isset($calldemand)){
-                
-                return view('call_demand.preview_call_demand',['calldemand' => $calldemand, 'client' => $client]);
+        if(isset($checkTotalDumpsters['number_total'])){
+            $totalDumpster = TotalDumpster::where('id',1)->update([
+                'number_total' => $request->number_total,
+                'number_available' => $request->number_available
+            ]);
 
-            }else{
-
-                return view('call_demand.preview_call_demand',['calldemand','']);
+            if($totalDumpster){
+                return true;
             }
+
+            return false;
 
         }else{
-            
-            $calldemands = CallDemand::all();
 
-            if(isset($calldemands)){
-                return view('call_demand.list_call_demand',['calldemands'=> $calldemands]);
+            $totalDumpster = new TotalDumpster();
+            $totalDumpster->number_total     = $request->number_total;
+            $totalDumpster->number_available = $request->number_available;
+
+            if($totalDumpster->save()){
+                return true;
             }
 
-
-            return view('call_demand.list_call_demand');
+            return false;
         }
-*/        
     }
 
     public function showNameDriverDemand()
@@ -129,8 +136,6 @@ class DumpsterServiceDemandController extends Controller
         }
 
     }
-
-
 
     private function returnSuccess($dados)
     {

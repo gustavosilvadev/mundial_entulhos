@@ -216,11 +216,12 @@ class DriverController extends Controller
 
         $get_id_driver  = Driver::select()->where("id_employee", $id_employee)->first();
         $service_status = 5;
-
+/*
         $calldemands = DB::table('call_demand')
         ->groupBy('call_demand.id_demand','call_demand.type_service')
         ->orderBy('call_demand.type_service', 'desc')        
         ->select(
+            'call_demand.id as id_demand_reg',
             'call_demand.id_demand as id_demand',
             'call_demand.type_service  as type_service',
             'call_demand.period',
@@ -259,7 +260,49 @@ class DriverController extends Controller
         // ->orWhere(DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
         ->groupBy('id_demand')
         ->get();
+*/
 
+$calldemands = DB::table('call_demand')
+->select(
+    'call_demand.id as id_demand_reg',
+    'call_demand.id_demand as id_demand',
+    'call_demand.type_service  as type_service',
+    'call_demand.period',
+    'call_demand.name as name',
+    DB::raw('DATE_FORMAT(call_demand.date_start, "%d/%m/%Y") as date_start'),
+    DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+    DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster_forecast, "%d/%m/%Y") as date_removal_dumpster_forecast'),
+    DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
+    DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
+    'call_demand.address as address_service',
+    'call_demand.number as number_address_service',
+    'call_demand.zipcode as zipcode_address_service',
+    'call_demand.city as city_address_service',
+    'call_demand.district as district_address_service',
+    'call_demand.state as state_address_service',
+    'call_demand.comments as comments_demand',
+    'call_demand.phone as phone_demand',
+    'call_demand.price_unit',
+    'call_demand.dumpster_quantity',
+    'call_demand.dumpster_number',
+    'call_demand.id_landfill',
+    'call_demand.id_driver',
+    'call_demand.service_status',
+    DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
+    DB::raw('"" as name_landfill'),
+    DB::raw('"" as name_driver'),
+    DB::raw('"" as type_service_driver'),
+    DB::raw('"" as datetime_start_demand'),
+    DB::raw('"" as datetime_finish_demand'),
+    DB::raw('"" as dumpsters')
+
+)
+->where('call_demand.id_driver', $get_id_driver['id'])
+->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
+->orderBy('call_demand.type_service', 'desc')
+->get();
+
+        
         return $calldemands;
     }
 
@@ -346,9 +389,9 @@ class DriverController extends Controller
     {
         $id_employee    = session('id_user');
         $service_status = 5;
-        $is_all_demand  = $request->is_all_demand === 'true' ? true: false;
+        // $is_all_demand  = $request->is_all_demand === 'true' ? true: false;
         $is_updated     = (object)[];
-
+/*
         if($is_all_demand){
 
             $is_updated = CallDemand::where('id_demand',$request->id_call_demand)
@@ -379,6 +422,25 @@ class DriverController extends Controller
             ->where('service_status', $service_status)
             ->get();
         }
+*/
+
+// echo 
+// "id_call_demand_reg: ".$request->id_demand_reg."<BR />".
+// "id_call_demand: ".$request->id_call_demand."<BR />".
+// "type_service: ".$request->type_service."<BR />".
+// "id_landfill: ".$request->id_landfill."<BR />";
+// die();
+        $is_updated = CallDemand::where('id',$request->id_demand_reg)
+        ->where('service_status','<>', 5)
+        ->update([
+            'service_status' => $service_status,
+            'id_landfill' => $request->id_landfill
+        ]);
+
+        $call_demands = CallDemand::where('id',$request->id_demand_reg)
+        ->where('service_status', $service_status)
+        ->get();
+
 
         if($is_updated)
         {
@@ -415,10 +477,15 @@ class DriverController extends Controller
     {
         $id_user_employee  = session('id_user');
         $driver       = Driver::select()->where("id_employee", $id_user_employee)->first();
+        /*
         $callDemand   = CallDemand::where('id_demand', $request->id_demand)
         ->where('id_driver', $driver->id)
         ->where('type_service', trim($request->type_service))
         ->get("dumpster_number");
+        */
+        $callDemand   = CallDemand::where('id', $request->id_demand_reg)
+        ->where('id_driver', $driver->id)
+        ->get("dumpster_number")->first();
         
         return $callDemand;
         // $callDemand   = CallDemand::where('id_demand', $request->id_demand)->where('id_driver', $id_driver->id)->where('type_service', $request->type_service)->groupBy('type_service')->get("dumpster_number");

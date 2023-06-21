@@ -5,7 +5,7 @@
 <footer class="footer footer-static footer-light">
     <p class="col-xs-1 text-center"><span class="d-md-inline-block mt-25">© 2023-<script>document.write(new Date().getFullYear());</script> Mundial Entulhos<span class="d-none d-sm-inline-block">, All Rights Reserved</span></span></p>
 </footer>
-<button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
+<button class="btn btn-dark btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
 <!-- END: Footer-->
 
     <!-- BEGIN: Vendor JS-->
