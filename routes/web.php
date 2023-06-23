@@ -63,7 +63,7 @@ Route::middleware('usersession')->group(function(){
     // Call Demand
     Route::get('createcalldemand', [CallDemandController::class,'callFormCreateDemand']);
     Route::post('save_call_demand',[CallDemandController::class,'store']);
-    Route::get('call_demand/{id?}',[CallDemandController::class,'show']);
+    Route::get('call_demand/{id?}',[CallDemandController::class,'show'])->name('calldemand.list');
     Route::post('update_call_demand',[CallDemandController::class,'update']);
     Route::post('delete_demand',[CallDemandController::class,'destroy']);
     

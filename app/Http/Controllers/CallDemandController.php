@@ -161,6 +161,7 @@ class CallDemandController extends Controller
                 'call_demand.service_status',
                 DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
                 DB::raw('"" as name_landfill'),
+                DB::raw('"" as payment_demand'),
                 DB::raw('"" as name_driver')
 
             )->where('call_demand.id_driver','>=',0)
@@ -170,15 +171,9 @@ class CallDemandController extends Controller
             ->orderByDesc('call_demand.created_at')
             ->get();
 
-
-            // print("<pre>");
-            // print_r($calldemands);
-            // print("</pre>");
-            // die();
             foreach($calldemands as $call_demand){
 
                 if($call_demand->id_driver){
-
                     $findDriver = DB::table('driver')
                     ->join('employee', 'employee.id', '=', 'driver.id_employee')
                     ->where('driver.id', '=', $call_demand->id_driver)
@@ -187,7 +182,6 @@ class CallDemandController extends Controller
                         $call_demand->name_driver =  $findDriver[0]->name_driver;
                 }
 
-
                 if($call_demand->id_landfill){
 
                     $findLandfill = DB::table('landfill')
@@ -195,8 +189,20 @@ class CallDemandController extends Controller
                     ->get('landfill.name as name_landfill');
                     if(isset($findLandfill))
                         $call_demand->name_landfill =  $findLandfill[0]->name_landfill;
-                }                
+                }
+                
+                $payment = DB::table('payment_call_demand')
+                ->where('id_call_demand_reg', '=', $call_demand->id)
+                ->get('payment_call_demand.has_paid as has_paid')->first();
+
+                if(empty($payment) || $payment->has_paid == false){
+                    $call_demand->payment_demand = false;
+                }else{
+                    $call_demand->payment_demand = true;
+                }
+                    
             }
+
             $driver_name_demands = DB::table('driver')
                                     ->join('employee', 'employee.id', '=', 'driver.id_employee')
                                     ->where('driver.flg_status','=', 1)
@@ -578,7 +584,9 @@ class CallDemandController extends Controller
 
             }
             // return redirect('createcalldemand');
-            return redirect()->back()->with(['response' => 'Dados cadastrados com sucesso!']);
+            // return redirect()->back()->with(['response' => 'Dados cadastrados com sucesso!']);
+
+            return redirect('/call_demand');
 
         }else{
             return back()->withErrors(['response' => 'Dados incompletos']);
@@ -742,10 +750,21 @@ class CallDemandController extends Controller
                 
             }
 
+            // ATUALIZA PAGAMENTO DO PEDIDO
+
+            $paymentDemand = PaymentCallDemand::where('id_call_demand_reg', $request->id_reg)
+            ->where('id_call_demand', $request->id_demand)
+            ->update([
+                'has_paid' => $request->payment_status
+            ]);
+
+            if(!$paymentDemand){
+                return false;
+            }
+
             // INSERE ID DO MOTORISTA NO CHAMADO E DATA DE REMOÇÃO EFETIVA SE EXISTIR
             // $drivers_checked = $request->drivers_checked === 'true' ? true: false;
             // $effectivedateremoval_checked = $request->effectivedateremoval_checked === 'true' ? true: false;
-            
             $call_demand = CallDemand::where('id',$request->id_reg)
             ->where('id_demand',$request->id_demand)
             ->where('type_service',$calldemandFirst->type_service)

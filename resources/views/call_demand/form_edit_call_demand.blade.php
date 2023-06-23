@@ -386,13 +386,12 @@
                                                                                                     <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
 
                                                                                                     <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
-                                                                                                        <button class="btn btn-dark " id="btn_finish_demand">ENCERRAR ESTE CHAMADO</button>
+                                                                                                        <button class="btn btn-dark " id="btn_finish_demand">ENCERRAR CHAMADO</button>
                                                                                                         {{-- <button class="btn btn-dark btn-warning " id="btn_finish_all_demands">ENCERRAR TODOS OS CHAMADOS RELACIONADOS</button> --}}
                                                                                                     <?php endif; ?>
-                                                                                                    
 
-                                                                                                    <h3 class="text-success text-center" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
-                                                                                                    <h4 class="text-danger text-center" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
+                                                                                                    <h3 class="text-success text-center py-3" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
+                                                                                                    <h4 class="text-danger text-center py-3" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
                                                                                                     <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3>
                                                                                                     <h4 class="text-danger text-center" id="message-error-finished" style="display:none"><b>Erro ao encerrar o chamado!</b></h4>
                                                                                                 </div>                                                                                                    
@@ -699,7 +698,8 @@
                 },
                 success: function(dataResponse) {
                     if(dataResponse){
-                        $("#message-success").css("display","block");
+                        // $("#message-success").css("display","block");
+                        window.location.href = '{{ route('calldemand.list')}}';
                     }else
                         $("#message-error").css("display","block");
                 },
@@ -875,11 +875,13 @@
             },
             success: function(dataResponse) {
 
-                if(dataResponse){
-                    $("#message-success-finished").css("display","block");
-                }else{
-                    $("#message-error-finished").css("display","block");
-                }
+                // if(dataResponse){
+                //     $("#message-success-finished").css("display","block");
+                // }else{
+                //     $("#message-error-finished").css("display","block");
+                // }
+
+                window.location.href = '{{ route('calldemand.list')}}';
 
             },
             error: function(responseError){

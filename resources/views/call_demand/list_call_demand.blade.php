@@ -98,6 +98,7 @@
                                             <th>STATUS</th> 
                                             <th>ATERRO</th>
                                             <th>MOTORISTA</th>
+                                            <th>PAGO</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -133,6 +134,11 @@
                                             <td><?php echo $valDemand->service_status; ?></td>
                                             <td><?php echo $valDemand->name_landfill; ?></td>
                                             <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
+                                            <td class="text-center">
+                                                <?php if($valDemand->payment_demand == true):?>
+                                                    <h4 class="text-success">SIM</h4>
+                                                <?php endif;?>
+                                            </td>
                                         </tr>
                                             <?php endforeach;?>
                                         <?php endif; ?>      
@@ -159,6 +165,7 @@
                                             <th>STATUS</th> 
                                             <th>ATERRO</th>
                                             <th>MOTORISTA</th>
+                                            <th>PAGO</th>
                                         </tr>                                            
                                     </tfoot>
                                 </table>
@@ -208,6 +215,12 @@
                         <label class="form-check-label" for="colorCheck6">Atualizar para todos</label>
                     </div> 
 --}}
+
+                    <label for="">Pago</label>
+                    <select class="form-control" id="payment_status">
+                        <option value="0">NÃO</option>
+                        <option value="1">SIM</option>
+                    </select>
 
                     <input type="hidden" id="iddemand" value="" />
                     <input type="hidden" id="idreg" value="" />
@@ -393,10 +406,12 @@ $(document).ready(function() {
                 let id_reg       = $(this).find("td:eq(1)").text();
                 let id_demand    = $(this).find("td:eq(2)").text();
                 let nameDriver   = $(this).find("td:eq(19)").text();
+                let paymentStatus= $(this).find("td:eq(20)").text();
                 let dateEffectiveRemoval   = $(this).find("td:eq(10)").text();
 
                 // $("#all_drivers").prop("checked", false);
                 // $("#all_effectivedateremoval").prop("checked", false);
+
 
                 $("#modal-edit").modal('toggle');
 
@@ -409,8 +424,16 @@ $(document).ready(function() {
                     $("#name_driver_selected  option:contains()").attr("selected", false);
                 }
 
-                $("#effective_date_removal_dumpster").val(dateEffectiveRemoval);
+                if(paymentStatus.trim() != "")
+                {
 
+                    $("#payment_status option:contains("+ paymentStatus.trim() +")").attr("selected", "selected");
+
+                }else{
+                    $("#payment_status option:contains()").attr("selected", false);
+                }
+
+                $("#effective_date_removal_dumpster").val(dateEffectiveRemoval);
                 $("#idreg").val(id_reg);
                 $("#iddemand").val(id_demand);
                 $("#btn_edit").attr("href","editcalldemand/" + id_reg);
@@ -426,20 +449,16 @@ $(document).ready(function() {
             let idDriverSelected    = $("#name_driver_selected").val();
             let nameDriverSelected  = $("#name_driver_selected").find('option:selected').text()
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
-            // let all_effectivedateremoval_checked = $("#all_effectivedateremoval")[0].checked;
-            // let all_drivers_checked = $("#all_drivers")[0].checked;
-
-
+            let paymentStatus       = ($("#payment_status").val() == "1") ? true : false;
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: 'POST',
                 url: '{{ route('changedriver.demand') }}',
                 data: { 
-                    // drivers_checked : all_drivers_checked, 
-                    // effectivedateremoval_checked : all_effectivedateremoval_checked, 
                     id_driver : idDriverSelected,
                     effective_date_removal : effectiveDateRemoval,
+                    payment_status : paymentStatus,
                     id_reg: idReg, 
                     id_demand : idDemand
                 },
@@ -449,9 +468,8 @@ $(document).ready(function() {
                         
                         rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
                         tbpedido.cell(":eq("+rowIndex+")", 19).data(nameDriverSelected);
+                        tbpedido.cell(":eq("+rowIndex+")", 20).data((paymentStatus) ? "SIM" : "");
                         tbpedido.cell(":eq("+rowIndex+")", 10).data(effectiveDateRemoval);
-
-                    //    location.reload();
 
                     }else
                         alert("Erro ao atualizar o nome do Motorista!");
