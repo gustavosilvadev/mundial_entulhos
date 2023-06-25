@@ -137,6 +137,7 @@ class CallDemandController extends Controller
             ->select(
                 'call_demand.id as id',
                 'call_demand.id_demand as id_demand',
+                'call_demand.id_parent  as id_parent',
                 'call_demand.type_service  as type_service',
                 'call_demand.period',
                 'call_demand.name as name',
@@ -430,6 +431,11 @@ class CallDemandController extends Controller
 
     }
 
+    // public function callFormCreateReplaceDumpster()
+    // {
+    //     return view('call_demand.form_cad_call_replace_dumpster', $this->showInfoParamsDemand());
+    // }
+
     /**
      * showInfoParamsDemand
      */
@@ -507,6 +513,7 @@ class CallDemandController extends Controller
 
     public function store(Request $request)
     {
+
         // CÓDIGO DE REFERÊNCIA LOGO ABAIXO:
         if (isset($request->client_name_new)
         && isset($request->type_service)
@@ -520,20 +527,25 @@ class CallDemandController extends Controller
         && isset($request->dumpster_quantity)
         && isset($request->price_unit)
         && isset($request->id_driver)
-        // && isset($request->comments)
         && isset($request->period)
         && isset($request->date_allocation_dumpster)
         && isset($request->date_removal_dumpster))
         {
-
             $lastIdDemand = isset(CallDemand::orderBy('id', 'desc')->first()->id) ? (CallDemand::orderBy('id', 'desc')->first()->id + 1) : 1 ;
-            
+
             for($repeatInfo = 0; $repeatInfo < $request->dumpster_quantity; $repeatInfo ++){
 
                 $calldemand = new CallDemand();
                 $calldemand->id_demand      = $lastIdDemand;
-                $calldemand->type_service   = $request->type_service;
-                $calldemand->period         = $request->period;
+                $calldemand->type_service   = ((int)$request->type_service == 1) ? "COLOCACAO" : "TROCA";
+                
+                if((int)$request->type_service == 1){
+                    $calldemand->dumpster_allocation = true;
+                }else{
+                    $calldemand->dumpster_replacement = true;
+                }
+
+                $calldemand->period     = $request->period;
                 $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
                 $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
                 $calldemand->name       = $request->client_name_new;
@@ -545,7 +557,7 @@ class CallDemandController extends Controller
                 $calldemand->district   = $request->district;
                 $calldemand->state      = $request->state;
                 $calldemand->phone      = str_replace([" ","(",")"],"",$request->phone);
-                $calldemand->price_unit = $request->price_unit;
+                $calldemand->price_unit = preg_replace('/[^0-9]+/','.',str_replace('.','',$request->price_unit));
                 $calldemand->comments   = $request->comments;
                 $calldemand->comments_contract   = $request->comments_contract;
                 $calldemand->dumpster_sequence_demand = $repeatInfo + 1;
@@ -562,7 +574,7 @@ class CallDemandController extends Controller
                 $paymentCallDemand->id_call_demand = $lastIdDemand;
 
                 $paymentCallDemand->iss = preg_replace('/[^0-9]+/','.',str_replace('.','',$request->iss));
-                $paymentCallDemand->has_paid = $request->has_paid;
+                $paymentCallDemand->has_paid = (($request->has_paid == "1") ? true : false);
                 
                 if((int)$request->by_bank == 1)
                 {
@@ -598,6 +610,12 @@ class CallDemandController extends Controller
     {
         $showdata   = $this->showAPI($id_demand);
         return view('call_demand.form_edit_call_demand',  $showdata);
+    }
+
+    public function callFormCreateReplaceDumpster($id_demand)
+    {
+        $showdata   = $this->showAPI($id_demand);
+        return view('call_demand.form_cad_call_replace_dumpster',  $showdata);
     }
 
     public function update(Request $request)
@@ -710,6 +728,17 @@ class CallDemandController extends Controller
         return $call_demand;
     }
 
+    public function showStatusDemand(Request $request)
+    {
+        $calldemandFirst  = CallDemand::where('id',$request->id_reg)
+            ->where('id_demand',$request->id_demand)
+            ->where('id_driver','<>', 0)
+            ->whereNotNull('date_effective_removal_dumpster')
+            ->first();
+        
+        return isset($calldemandFirst);
+    }
+
     public function changeDriverDemand(Request $request)
     {
 
@@ -727,7 +756,8 @@ class CallDemandController extends Controller
                 $calldemandDumpsterRemoval = new CallDemand();
                 $calldemandDumpsterRemoval->id_demand      = $calldemandFirst->id_demand;
                 $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
-                $calldemandDumpsterRemoval->id_parent      = $calldemandFirst->id_parent;
+                $calldemandDumpsterRemoval->dumpster_removal = true;
+                $calldemandDumpsterRemoval->id_parent      = $calldemandFirst->id;
                 $calldemandDumpsterRemoval->period         = $calldemandFirst->period;
                 $calldemandDumpsterRemoval->date_allocation_dumpster = isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '';
                 $calldemandDumpsterRemoval->date_removal_dumpster_forecast  = isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '';
@@ -752,15 +782,15 @@ class CallDemandController extends Controller
 
             // ATUALIZA PAGAMENTO DO PEDIDO
 
-            $paymentDemand = PaymentCallDemand::where('id_call_demand_reg', $request->id_reg)
-            ->where('id_call_demand', $request->id_demand)
-            ->update([
-                'has_paid' => $request->payment_status
-            ]);
+            // $paymentDemand = PaymentCallDemand::where('id_call_demand_reg', $request->id_reg)
+            // ->where('id_call_demand', $request->id_demand);
 
-            if(!$paymentDemand){
-                return false;
-            }
+            // if($paymentDemand->count != 0){
+
+            //     $paymentDemand->update([
+            //         'has_paid' => $request->payment_status
+            //     ]);
+            // }
 
             // INSERE ID DO MOTORISTA NO CHAMADO E DATA DE REMOÇÃO EFETIVA SE EXISTIR
             // $drivers_checked = $request->drivers_checked === 'true' ? true: false;

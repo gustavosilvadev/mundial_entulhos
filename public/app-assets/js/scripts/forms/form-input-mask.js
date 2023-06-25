@@ -20,8 +20,8 @@ $(function () {
     customDelimiter = $('.custom-delimiter-mask'),
     prefixMask = $('.prefix-mask'),
     zipcodeMask = $('.zipcode-mask'),
-    priceUnit = $('.price_unit');
-    iss = $('.iss');
+    priceUnit = $('.price_unit'),
+    issValue = $('.iss-value');
 
 
   // Credit Card
@@ -45,6 +45,7 @@ $(function () {
       // uppercase: true
 
       // phoneRegionCode: 'BR',
+      
       delimiters: ['(',') ', '-'],
       blocks: [0,2, 5, 4]
     });
@@ -129,8 +130,8 @@ $(function () {
     });
   }
 
-  if(iss.length) {
-    new Cleave(iss, {
+  if(issValue.length) {
+    new Cleave(issValue, {
       numeral: true,
       numeralDecimalMark: ',',
       delimiter: '.',      

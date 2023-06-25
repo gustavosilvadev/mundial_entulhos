@@ -392,19 +392,18 @@
                 $.each(dumpsterNumbers, function(i, field) {
                 
                     if(field == '' || field == 0){
-                        alert("Preencha o nÃºmero da caÃ§amba!");
+                        alert("Preencha o número da caçamba!");
                         stopExec = true;
                         return false;
                     }
                 });
 
             }else{
-                alert("Preencha todas as caÃ§ambas!");
+                alert("Preencha caçamba!");
                 stopExec = true;
                 return false;
             }
-console.log("typeService: " + typeService);
-return false;
+
 
             if(typeService == 'RETIRADA' || typeService == 'TROCA' && idLandfill == 0)
             {
@@ -412,10 +411,8 @@ return false;
                 stopExec = true;
             }
 
-console.log("idDemandReg: " + idDemandReg);
-return false;
-
             if(stopExec == false){
+
 
                 $.ajax({
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

@@ -61,16 +61,24 @@ Route::middleware('usersession')->group(function(){
     Route::post('save_landfill',[LandfillController::class,'store']);
     
     // Call Demand
-    Route::get('createcalldemand', [CallDemandController::class,'callFormCreateDemand']);
-    Route::post('save_call_demand',[CallDemandController::class,'store']);
-    Route::get('call_demand/{id?}',[CallDemandController::class,'show'])->name('calldemand.list');
-    Route::post('update_call_demand',[CallDemandController::class,'update']);
-    Route::post('delete_demand',[CallDemandController::class,'destroy']);
+        // ALOCAÇÃO
+        Route::get('createcalldemand', [CallDemandController::class,'callFormCreateDemand']);
+        Route::post('save_call_demand',[CallDemandController::class,'store']);
+        Route::get('call_demand/{id?}',[CallDemandController::class,'show'])->name('calldemand.list');
+        Route::post('update_call_demand',[CallDemandController::class,'update']);
+        Route::post('delete_demand',[CallDemandController::class,'destroy']);
+
+        // TROCA
+        Route::get('create_replacement_calldemand', [CallDemandController::class,'callFormCreateReplaceDumpster']);
+        // Route::get('create_replacement_calldemand', [CallDemandController::class,'callFormCreateReplaceDumpster']);
     
     Route::get('demand_list_client/{id?}',[CallDemandController::class,'showInfoClientDemand']);
     
     Route::get('editcalldemand/{id}',[CallDemandController::class,'showUpdateForm']);
     Route::post('change_call_demand',[CallDemandController::class,'update'])->name('change.demand');
+    
+    Route::get('status_demand',[CallDemandController::class,'showStatusDemand'])->name('calldemand.checkstatus');
+
     Route::post('changedriverdemand',[CallDemandController::class,'changeDriverDemand'])->name('changedriver.demand');
     
     // Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);

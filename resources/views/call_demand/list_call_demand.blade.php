@@ -9,19 +9,17 @@
     <!-- BEGIN: Content-->
 
     <div class="app-content content-designed">
+{{-- 
         <div class="content-header row">
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-
-                        {{-- <h1>{{ $parse['host'] }}</h1> --}}
                         <h2 class="content-header-title float-left mb-0 text-info" style="text-decoration: underline">BASE PEDIDOS</h2>
-
                     </div>
                 </div>
             </div>
-
         </div>
+ --}}
         <div class="content-body">
             <div class="row">
             <!-- 
@@ -39,9 +37,6 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header border-bottom">
-                                {{-- <h4 class="card-title">PESQUISA</h4> --}}
-                            </div>
 
                             <div class="card-body mt-2">
                                 <form class="dt_adv_search" method="POST">
@@ -66,109 +61,119 @@
                                                         <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                                     </div>
                                                 </div>
+                                                <div class="col-lg-4">
+                                                    <label>-----</label>
+                                                    <div class="form-group mb-0">
+                                                        <input type="button" class="btn btn-warning" value="Limpar Filtro" id="btn_reset_input">
+                                                        <input type="button" class="btn btn-danger" value="Deletar Pedido" id="btn_delete_demand">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="button" class="btn btn-warning" value="Limpar" id="btn_reset_input">
-                                    <input type="button" class="btn btn-danger" value="Deletar" id="btn_delete_demand">
+
                                 </form>
                             </div>                              
                             <div class="card-datatable">
+                                <div class="table-responsive">
+                                    <table id="tbpedido" class="table table-striped display nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp</th>
+                                                <th>Nº FICHA</th>
+                                                <th>Nº PEDIDO</th>
+                                                <th>ID PAI</th>
+                                                <th>COLOCAÇÃO/TROCA</th>
+                                                <th>PERÍODO DO DIA</th>
+                                                <th>CLIENTE</th>
+                                                <th>DATA PEDIDO</th>
+                                                <th>DATA OPERAÇÃO</th>
+                                                <th>DATA ALOCAÇÃO</th>
+                                                <th>DATA PREV RETIRADA</th>
+                                                <th>DATA RETIRADA EFETIVA</th>
+                                                <th>ENDEREÇO</th>
+                                                <th>TELEFONE</th>
+                                                <th>PREÇO</th>
+                                                <th>COMENTÁRIOS</th>
+                                                <th>QUANTIDADE CACAMBAS</th>
+                                                <th>NÚMERO CAÇAMBA</th>
+                                                <th>STATUS</th> 
+                                                <th>ATERRO</th>
+                                                <th>MOTORISTA</th>
+                                                <th>PAGO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if(!empty($calldemands)): ?>
+                                                <?php foreach($calldemands as $valDemand):?>        
+                                            <tr>
 
-                                <table id="tbpedido" class="table table-striped display nowrap" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Nº FICHA</th>
-                                            <th>Nº PEDIDO</th>
-                                            <th>COLOCAÇÃO/TROCA</th>
-                                            <th>PERÍODO DO DIA</th>
-                                            <th>CLIENTE</th>
-                                            <th>DATA PEDIDO</th>
-                                            <th>DATA OPERAÇÃO</th>
-                                            <th>DATA ALOCAÇÃO</th>
-                                            <th>DATA PREV RETIRADA</th>
-                                            <th>DATA RETIRADA EFETIVA</th>
-                                            <th>ENDEREÇO</th>
-                                            <th>TELEFONE</th>
-                                            <th>PREÇO</th>
-                                            <th>COMENTÁRIOS</th>
-                                            <th>QUANTIDADE CACAMBAS</th>
-                                            <th>NÚMERO CAÇAMBA</th>
-                                            <th>STATUS</th> 
-                                            <th>ATERRO</th>
-                                            <th>MOTORISTA</th>
-                                            <th>PAGO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if(!empty($calldemands)): ?>
-                                            <?php foreach($calldemands as $valDemand):?>        
-                                        <tr>
-
-                                            <td><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
-                                            <td>{{ $valDemand->id }}</td>
-                                            
-                                            <td>{{ $valDemand->id_demand }}</td>
-                                            <td><?php echo $valDemand->type_service; ?></td>
-                                            <td><?php echo $valDemand->period; ?></td>
-                                            <td><?php echo $valDemand->name; ?></td>
-                                            <td><?php echo $valDemand->created_at; ?></td>
-                                            <td><?php echo $valDemand->date_start; ?></td>
-                                            <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
-                                            <td><?php echo $valDemand->date_removal_dumpster_forecast; ?></td>
-                                            <td><?php echo $valDemand->date_effective_removal_dumpster; ?></td>
-                                            <td>
-                                                <?php echo $valDemand->address_service.' '.
-                                                    $valDemand->number_address_service.' '.
-                                                    $valDemand->district_address_service.' '.
-                                                    $valDemand->city_address_service.' '.
-                                                    $valDemand->state_address_service.' '; 
-                                                ?>
-                                            </td>
-                                            <td><?php echo $valDemand->phone_demand; ?></td>
-                                            <td><?php echo $valDemand->price_unit; ?></td>
-                                            <td><?php echo $valDemand->comments_demand; ?></td>
-                                            <td><?php echo $valDemand->dumpster_quantity; ?></td>
-                                            <td><?php echo $valDemand->dumpster_number; ?></td>
-                                            <td><?php echo $valDemand->service_status; ?></td>
-                                            <td><?php echo $valDemand->name_landfill; ?></td>
-                                            <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
-                                            <td class="text-center">
-                                                <?php if($valDemand->payment_demand == true):?>
-                                                    <h4 class="text-success">SIM</h4>
-                                                <?php endif;?>
-                                            </td>
-                                        </tr>
-                                            <?php endforeach;?>
-                                        <?php endif; ?>      
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th></th>
-                                            <th>Nº FICHA</th>
-                                            <th>Nº PEDIDO</th>
-                                            <th>COLOCAÇÃO/TROCA</th>
-                                            <th>PERÍODO DO DIA</th>
-                                            <th>CLIENTE</th>
-                                            <th>DATA PEDIDO</th>  
-                                            <th>DATA OPERAÇÃO</th>
-                                            <th>DATA ALOCAÇÃO</th>
-                                            <th>DATA PREV RETIRADA</th>
-                                            <th>DATA RETIRADA EFETIVA</th>
-                                            <th>ENDEREÇO</th>
-                                            <th>TELEFONE</th>
-                                            <th>PREÇO</th>
-                                            <th>COMENTÁRIOS</th>
-                                            <th>QUANTIDADE CACAMBAS</th>
-                                            <th>NÚMERO CAÇAMBA</th>
-                                            <th>STATUS</th> 
-                                            <th>ATERRO</th>
-                                            <th>MOTORISTA</th>
-                                            <th>PAGO</th>
-                                        </tr>                                            
-                                    </tfoot>
-                                </table>
+                                                <td><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
+                                                <td>{{ $valDemand->id }}</td>
+                                                
+                                                <td>{{ $valDemand->id_demand }}</td>
+                                                <td><?php echo $valDemand->id_parent; ?></td>
+                                                <td><?php echo $valDemand->type_service; ?></td>
+                                                <td><?php echo $valDemand->period; ?></td>
+                                                <td><?php echo $valDemand->name; ?></td>
+                                                <td><?php echo $valDemand->created_at; ?></td>
+                                                <td><?php echo $valDemand->date_start; ?></td>
+                                                <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
+                                                <td><?php echo $valDemand->date_removal_dumpster_forecast; ?></td>
+                                                <td><?php echo $valDemand->date_effective_removal_dumpster; ?></td>
+                                                <td>
+                                                    <?php echo $valDemand->address_service.' '.
+                                                        $valDemand->number_address_service.' '.
+                                                        $valDemand->district_address_service.' '.
+                                                        $valDemand->city_address_service.' '.
+                                                        $valDemand->state_address_service.' '; 
+                                                    ?>
+                                                </td>
+                                                <td><?php echo $valDemand->phone_demand; ?></td>
+                                                <td><?php echo $valDemand->price_unit; ?></td>
+                                                <td><?php echo $valDemand->comments_demand; ?></td>
+                                                <td><?php echo $valDemand->dumpster_quantity; ?></td>
+                                                <td><?php echo $valDemand->dumpster_number; ?></td>
+                                                <td><?php echo $valDemand->service_status; ?></td>
+                                                <td><?php echo $valDemand->name_landfill; ?></td>
+                                                <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
+                                                <td class="text-center">
+                                                    <?php if($valDemand->payment_demand == true):?>
+                                                        <h4 class="text-success">SIM</h4>
+                                                    <?php endif;?>
+                                                </td>
+                                            </tr>
+                                                <?php endforeach;?>
+                                            <?php endif; ?>      
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th></th>
+                                                <th>Nº FICHA</th>
+                                                <th>Nº PEDIDO</th>
+                                                <th>ID PAI</th>
+                                                <th>COLOCAÇÃO/TROCA</th>
+                                                <th>PERÍODO DO DIA</th>
+                                                <th>CLIENTE</th>
+                                                <th>DATA PEDIDO</th>  
+                                                <th>DATA OPERAÇÃO</th>
+                                                <th>DATA ALOCAÇÃO</th>
+                                                <th>DATA PREV RETIRADA</th>
+                                                <th>DATA RETIRADA EFETIVA</th>
+                                                <th>ENDEREÇO</th>
+                                                <th>TELEFONE</th>
+                                                <th>PREÇO</th>
+                                                <th>COMENTÁRIOS</th>
+                                                <th>QUANTIDADE CACAMBAS</th>
+                                                <th>NÚMERO CAÇAMBA</th>
+                                                <th>STATUS</th> 
+                                                <th>ATERRO</th>
+                                                <th>MOTORISTA</th>
+                                                <th>PAGO</th>
+                                            </tr>                                            
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -183,14 +188,14 @@
             
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel6">EDITAR</h4>
+                    <h4 class="modal-title text-danger" id="modalTitleError"></h4>
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>MOTORISTAS</p>
-
+                    <label for="">Motorista</label>
                     <select class="form-control" id="name_driver_selected">
                         <option value=""></option>
                         <?php if($driver_name_demands):?>
@@ -201,20 +206,10 @@
 
                         <?php endif;?>
                     </select>
-{{-- 
-                    <div class="form-check form-check-info">
-                        <input type="checkbox" class="form-check-input" id="all_drivers" checked="">
-                        <label class="form-check-label" for="colorCheck6">Atualizar para todos</label>
-                    </div>
---}}
+
                     <label for="">Data de Retirada Efetiva</label>
                     <input type="text" name="effective_date_removal_dumpster" id="effective_date_removal_dumpster" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4"/>
-{{--                     
-                    <div class="form-check form-check-info">
-                        <input type="checkbox" class="form-check-input" id="all_effectivedateremoval" checked="">
-                        <label class="form-check-label" for="colorCheck6">Atualizar para todos</label>
-                    </div> 
---}}
+
 
                     <label for="">Pago</label>
                     <select class="form-control" id="payment_status">
@@ -224,17 +219,15 @@
 
                     <input type="hidden" id="iddemand" value="" />
                     <input type="hidden" id="idreg" value="" />
+                    <button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>
                 </div>
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>
-                    <a class="btn btn-warning" id="btn_edit">EDITAR</a>
+                    <a class="btn btn-info" id="btn_replace_dumpster">ACIONAR TROCA</a>
+                    <a class="btn btn-warning" id="btn_edit">EDITAR PEDIDO</a>
                 </div> 
                
             </div> 
-
-
-        
         </div>
     </div>
 
@@ -313,7 +306,19 @@ $(document).ready(function() {
                 "url": "public/assets/json/Portuguese-Brasil.json"
             },
             // order: [[2, 'asc']],
+            // scrollX: true,
+            // scrollY: "350",
+            // scrollX: "100%",
+
+            scrollY: "300px",
             scrollX: true,
+            autoWidth: true,
+            processing: true,
+            scrollCollapse: true,
+            paginate: true,
+            fixedColumns: {
+            left: 2
+            },
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel'
@@ -395,6 +400,8 @@ $(document).ready(function() {
 
         } );
 
+        let dateEffectiveRemoval = '';
+
         $('#tbpedido tbody tr').on('click', function (evt) {
             
             let $cell=$(evt.target).closest('td');
@@ -407,7 +414,7 @@ $(document).ready(function() {
                 let id_demand    = $(this).find("td:eq(2)").text();
                 let nameDriver   = $(this).find("td:eq(19)").text();
                 let paymentStatus= $(this).find("td:eq(20)").text();
-                let dateEffectiveRemoval   = $(this).find("td:eq(10)").text();
+                dateEffectiveRemoval   = $(this).find("td:eq(10)").text();
 
                 // $("#all_drivers").prop("checked", false);
                 // $("#all_effectivedateremoval").prop("checked", false);
@@ -438,8 +445,44 @@ $(document).ready(function() {
                 $("#iddemand").val(id_demand);
                 $("#btn_edit").attr("href","editcalldemand/" + id_reg);
 
-
             }
+        });
+
+       
+        $("#btn_replace_dumpster").click(function(){
+
+            // OBTER OS IDs DESTE PEDIDO SELECIONADO 
+            /* 
+                VALIDAR PEDIDO - BUSCAR PEDIDO, 
+                                 CHECAR SE PEDIDO FOI ATENDIDO E FINALIZADO, 
+                                 CHECAR SE FOI FINALIZADO, 
+            */
+
+            let idReg    = $("#idreg").val();
+            let idDemand = $("#iddemand").val();
+
+            $.ajax({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                method: 'GET',
+                url: '{{ route('calldemand.checkstatus') }}',
+                data: { 
+                    id_reg: idReg, 
+                    id_demand : idDemand
+                },
+                success: function(dataResponse) {
+
+                    if(dataResponse == true)
+                        window.location.href = '{{ route('calldemand.list')}}';
+                    else
+                        $("#modalTitleError").text("O Pedido de Alocação ainda não concluído!");
+                },
+                error: function(responseError){
+                    alert("Erro interno: " + responseError);
+                    console.log(responseError);
+                }
+            });   
+
+
         });
 
         $("#btn_driver_update").click(function(){
@@ -450,6 +493,7 @@ $(document).ready(function() {
             let nameDriverSelected  = $("#name_driver_selected").find('option:selected').text()
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
             let paymentStatus       = ($("#payment_status").val() == "1") ? true : false;
+
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

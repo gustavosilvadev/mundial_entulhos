@@ -316,7 +316,7 @@ $calldemands = DB::table('call_demand')
 
         for($number = 0; $number < count($request->dumpster_numbers); $number++)
         {
-            $call_demands = CallDemand::where('id_demand','<>',$request->id_demand)
+            $call_demands = CallDemand::where('id','<>',$request->id_demand_reg)
             ->where('dumpster_number','<>', 0)
             ->where('dumpster_number',$request->dumpster_numbers[$number])
             ->where('date_effective_removal_dumpster','=', null)

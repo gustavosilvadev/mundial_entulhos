@@ -18,19 +18,23 @@ if(session('access_permission') == 1){
         <?php if(session('access_permission') == 1){ ?>
             <div class="bd-example">
                 <div class="btn-group">
-                    <a class="btn dropdown-toggle waves-effect waves-float waves-light" href="{{ url('call_demand') }}">BASE PEDIDOS</a>
+                    <a class="{{ request()->is('call_demand') ? 'btn btn-outline-success' : 'btn dropdown-toggle waves-effect waves-float waves-light' }}" href="{{ request()->is('call_demand') ? '#' : url('call_demand') }}">BASE PEDIDOS</a>
                 </div>
 
                 <div class="btn-group">
-                    <a class="btn dropdown-toggle waves-effect waves-float waves-light" href="{{ url('call_demand_resume') }}">RESUMO PEDIDOS</a>
-                </div><!-- /btn-group -->
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle waves-effect waves-float waves-light" href="{{ url('createcalldemand') }}">NOVO</a>
-                </div><!-- /btn-group -->
-
+                    <a class="{{ request()->is('call_demand_resume') ? 'btn btn-outline-success' : 'btn dropdown-toggle waves-effect waves-float waves-light' }}" href="{{ request()->is('call_demand_resume') ? '#' : url('call_demand_resume') }}">RESUMO PEDIDOS</a>
+                </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CONFIGURAÇÕES</button>
+                    <a class="{{ request()->is('createcalldemand') ? 'btn btn-outline-success' : 'btn dropdown-toggle waves-effect waves-float waves-light' }}" href="{{ request()->is('createcalldemand') ? '#' : url('createcalldemand') }}">NOVA ALOCAÇÃO</a>
+                </div>
+{{--                 
+                <div class="btn-group">
+                    <a class="{{ request()->is('create_replacement_calldemand') ? 'btn btn-outline-success' : 'btn dropdown-toggle waves-effect waves-float waves-light' }}" href="{{ request()->is('create_replacement_calldemand') ? '#' : url('create_replacement_calldemand') }}">NOVA TROCA</a>
+                </div> --}}
+
+                <div class="btn-group">
+                    <button type="button" class="{{ (request()->is('dumpsters') || request()->is('createlandfill') || request()->is('cacamba_dias_municipio') || request()->is('employee') || request()->is('createemployee')) ? 'btn btn-outline-success' : 'btn dropdown-toggle' }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CONFIGURAÇÕES</button>
                     <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 40px; left: 0px; transform: translate3d(0px, -2px, 0px);">
                         <a class="dropdown-item" href="{{ url('dumpsters') }}">CAÇAMBAS</a>
                         <a class="dropdown-item" href="{{ url('createlandfill') }}">ATERROS</a>

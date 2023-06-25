@@ -18,6 +18,10 @@ class TblCalldemand extends Migration
             $table->id();
             $table->integer('id_demand');
             $table->string('type_service')->comment('COLOCACAO|TROCA');
+            $table->boolean('dumpster_allocation')->default(0);
+            $table->boolean('dumpster_replacement')->default(0);
+            $table->boolean('dumpster_removal')->default(0);
+
             $table->string('period')->nullable(); // PERÍODO DO DIA +++ DIURNO/NOTURNO
 
             $table->dateTime('date_start')->nullable(); // DATA NO MOMENTO QUE INICIA O SERVIÇO PELO MOTORISTA

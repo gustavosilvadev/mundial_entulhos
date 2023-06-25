@@ -28,7 +28,7 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h3 class="content-header-title float-left mb-0">CADASTRO</h3>
+                        <h3 class="content-header-title float-left mb-0">NOVO CHAMADO</h3>
                     </div>
                 </div>
             </div>
@@ -99,32 +99,23 @@
                                                                         </div>
                                                                         <hr />
                                                                         <div class="row">
-                                                                            <div class="col-md-3">
-                                                                                <div class="form-group">
-                                                                                    <label for="type_service">Serviço desejado</label>
-                                                                                    <select class="select2 form-control form-control-lg" id="type_service" name="type_service">
-                                                                                        <option value="" selected>----</option>
-                                                                                        <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                                        <option value="TROCA">TROCA</option>
-                                                                                    </select>            
-                                                                                </div>
-                                                                            </div>
+                                                                            <input type="hidden" name="type_service" value="1" />
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <label for="zipcode">CEP</label>
                                                                                         <input type="text" class="form-control zipcode-mask" name="zipcode" id="zipcode" placeholder="00000-00" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="col-md-3">
+                                                                            <div class="col-md-4">
                                                                                 <div class="form-group">
                                                                                     <label for="address">Endereço</label>
                                                                                     <input type="text" class="form-control only-text" name="address" id="address" minlength="2" maxlength="44" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="col-md-4">
+                                                                            <div class="col-md-5">
                                                                                 <div class="form-group">
                                                                                     <label for="address">Complemento</label>
                                                                                     <input type="text" class="form-control only-text" name="address_complement" id="address_complement" minlength="2" maxlength="44" autocomplete="off"/>
@@ -267,7 +258,7 @@
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group input-icon">
                                                                                     <label for="iss">ISS</label>
-                                                                                    <input type="text" name="iss" class="form-control iss" id="iss" />
+                                                                                    <input type="text" name="iss" class="form-control iss-value" id="iss" />
                                                                                     <i>R$</i>
                                                                                 </div>
                                                                             </div>                                                                            
