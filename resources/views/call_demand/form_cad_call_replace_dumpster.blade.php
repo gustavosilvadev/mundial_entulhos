@@ -35,7 +35,7 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">EDITAR CHAMADO</h2>
+                        <h2 class="content-header-title float-left mb-0">EFETUANDO TROCA</h2>
 
                     </div>
                 </div>
@@ -65,6 +65,7 @@
                                                     foreach ($calldemand as $key => $value):
                                                 ?>                                                
                                                         <form id="form" class="form-validate" autocomplete="off" onsubmit="return false;">
+                                                        {{-- <form action="calldemand.saveinfo" method= "POST" id="form" class="form-validate" autocomplete="off"> --}}
                                                             @csrf
                                                             <div class="row invoice-add">
                                                                 <div class="col-md-12">
@@ -81,14 +82,14 @@
                                                                                                 <input type="hidden" name="id_demand" value={{ $value->id_demand }}>
                                                                                                 <div class="row">
 
-                                                                                                    <div class="col-md-6">
+                                                                                                    <div class="col-md-12">
                                                                                                         <div class="form-group">
                                                                                                             <label for="id_client">CLIENTE</label>
                                                                                                             <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}" required />
                                                             
                                                                                                         </div>
                                                                                                     </div>
-
+{{-- 
                                                                                                     <div class="col-md-6">
                                                                                                         <div class="form-group">
                                                                                                             <label for="type_service">Tipo de Serviço</label>
@@ -107,7 +108,9 @@
                                                                                                                 
                                                                                                             </select>            
                                                                                                         </div>
-                                                                                                    </div>                                                                                                     
+                                                                                                    </div> 
+--}}
+                                                                                                    <input type="hidden" id="type_service" name="type_service" value="2" />
                                                                                                 </div>
 
                                                                                                 <hr />
@@ -249,14 +252,16 @@
                                                                                                     <div class="col-md-12">
                                                                                                         <div class="form-group mb-2">
                                                                                                             <label for="note" class="form-label font-weight-bold">COMENTÁRIOS:</label>
-                                                                                                            <textarea class="form-control" rows="2" id="note" name="comments" >{{ $value->comments_demand }}</textarea>
+                                                                                                            {{-- <textarea class="form-control" rows="2" id="note" name="comments" >{{ $value->comments_demand }}</textarea> --}}
+                                                                                                            <textarea class="form-control" rows="2" id="note" name="comments" ></textarea>
                                                                                                         </div>
                                                                                                     </div>
 
                                                                                                     <div class="col-md-12">
                                                                                                         <div class="form-group mb-2">
                                                                                                             <label for="note" class="form-label font-weight-bold">COMENTÁRIOS (CONTRATUAL):</label>
-                                                                                                            <textarea class="form-control" rows="2" id="note" name="comments" >{{ $value->comments_contract }}</textarea>
+                                                                                                            {{-- <textarea class="form-control" rows="2" id="note" name="comments" >{{ $value->comments_contract }}</textarea> --}}
+                                                                                                            <textarea class="form-control" rows="2" id="note" name="comments" ></textarea>
                                                                                                         </div>
                                                                                                     </div>
                                                 
@@ -383,7 +388,8 @@
 
                                                                                                 <div class="col-12 text-center">
 
-                                                                                                    <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
+                                                                                                    <button class="btn btn-success " id="btn_create" tabindex="4">SALVAR</button>
+                                                                                                    {{-- <button type="submit" class="btn btn-success ">Salvar</button> --}}
 
                                                                                                     <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
                                                                                                         <button class="btn btn-dark " id="btn_finish_demand">ENCERRAR CHAMADO</button>
@@ -643,7 +649,7 @@
             $(this).siblings(".form-group__bar").hide()
         });        
 
-        $("#btn_update").on('click', function(){
+        $("#btn_create").on('click', function(){
 
             $("#message-success").css("display","none");
             $("#message-error").css("display","none");
@@ -670,11 +676,13 @@
             let date_effective_removal_dumpster = $("input[name=date_effective_removal_dumpster]").val();
             let date_removal_dumpster_forecast  = $("input[name=date_removal_dumpster_forecast]").val();
             let total_days      = $("input[name=total_days]").val();
+            let id_driver       = ($("#driver").val() == '' || $("#driver").val() == 'undefined') ? '0' : $("#driver").val();
+            ;
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: 'POST',
-                url: '{{ route('change.demand') }}',
+                url: '{{ route('save.replacement_demand') }}',
                 data: { 
                     'id_demand' : id_demand,
                     'id_demand_reg' : id_demand_reg,
@@ -687,18 +695,20 @@
                     'state' : state,
                     'phone' : phone,
                     'price_unit' : price_unit,
-                    'dumpster_total' : dumpster_total,
+                    'dumpster_quantity' : dumpster_total,
                     'comments' : comments,
                     'type_service' : type_service,
                     'period' : period,
                     'date_allocation_dumpster' : date_allocation_dumpster,
                     'date_effective_removal_dumpster' : date_effective_removal_dumpster,
-                    'date_removal_dumpster_forecast' : date_removal_dumpster_forecast,
+                    'date_removal_dumpster' : date_removal_dumpster_forecast,
+                    'id_driver' : id_driver,
                     'total_days' : total_days
                 },
                 success: function(dataResponse) {
+
                     if(dataResponse){
-                        // $("#message-success").css("display","block");
+
                         window.location.href = '{{ route('calldemand.list')}}';
                     }else
                         $("#message-error").css("display","block");

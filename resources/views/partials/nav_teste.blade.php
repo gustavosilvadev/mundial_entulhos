@@ -26,7 +26,7 @@ if(session('access_permission') == 1){
                 </div>
 
                 <div class="btn-group">
-                    <a class="{{ request()->is('createcalldemand') ? 'btn btn-outline-success' : 'btn dropdown-toggle waves-effect waves-float waves-light' }}" href="{{ request()->is('createcalldemand') ? '#' : url('createcalldemand') }}">NOVA ALOCAÇÃO</a>
+                    <a class="{{ request()->is('createcalldemand') ? 'btn btn-outline-success' : 'btn dropdown-toggle waves-effect waves-float waves-light' }}" href="{{ request()->is('createcalldemand') ? '#' : url('createcalldemand') }}"><u>NOVA ALOCAÇÃO</u></a>
                 </div>
 {{--                 
                 <div class="btn-group">

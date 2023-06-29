@@ -63,13 +63,13 @@ Route::middleware('usersession')->group(function(){
     // Call Demand
         // ALOCAÇÃO
         Route::get('createcalldemand', [CallDemandController::class,'callFormCreateDemand']);
-        Route::post('save_call_demand',[CallDemandController::class,'store']);
+        Route::post('save_call_demand',[CallDemandController::class,'store'])->name('save.replacement_demand');
         Route::get('call_demand/{id?}',[CallDemandController::class,'show'])->name('calldemand.list');
         Route::post('update_call_demand',[CallDemandController::class,'update']);
         Route::post('delete_demand',[CallDemandController::class,'destroy']);
 
         // TROCA
-        Route::get('create_replacement_calldemand', [CallDemandController::class,'callFormCreateReplaceDumpster']);
+        Route::get('replacement_calldemand/{id?}', [CallDemandController::class,'callFormCreateReplaceDumpster'])->name('calldemand.replacement');
         // Route::get('create_replacement_calldemand', [CallDemandController::class,'callFormCreateReplaceDumpster']);
     
     Route::get('demand_list_client/{id?}',[CallDemandController::class,'showInfoClientDemand']);

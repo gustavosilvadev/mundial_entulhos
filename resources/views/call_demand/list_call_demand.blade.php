@@ -5,6 +5,12 @@
     thead input {
         width: 100%;
     }
+
+    .row_bg_status {
+        background: lightgreen !important;
+        font-weight: 600;
+    }
+
  </style>
     <!-- BEGIN: Content-->
 
@@ -106,7 +112,7 @@
                                         <tbody>
                                             <?php if(!empty($calldemands)): ?>
                                                 <?php foreach($calldemands as $valDemand):?>        
-                                            <tr>
+                                            <tr class="{{ ($valDemand->payment_demand == true) ? 'row_bg_status' : '' }}">
 
                                                 <td><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
                                                 <td>{{ $valDemand->id }}</td>
@@ -139,7 +145,7 @@
                                                 <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
                                                 <td class="text-center">
                                                     <?php if($valDemand->payment_demand == true):?>
-                                                        <h4 class="text-success">SIM</h4>
+                                                        <h4 class="text-danger">SIM</h4>
                                                     <?php endif;?>
                                                 </td>
                                             </tr>
@@ -148,7 +154,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th></th>
+                                                <th>&nbsp;</th>
                                                 <th>Nº FICHA</th>
                                                 <th>Nº PEDIDO</th>
                                                 <th>ID PAI</th>
@@ -400,21 +406,26 @@ $(document).ready(function() {
 
         } );
 
-        let dateEffectiveRemoval = '';
-
         $('#tbpedido tbody tr').on('click', function (evt) {
             
+            let selectedRows    = "";
+            let selectedData    = "";
+            let id_reg          = "";
+            let id_demand       = "";
+            let nameDriver      = "";
+            let paymentStatus   = "";
+            let dateEffectiveRemoval = "";
             let $cell=$(evt.target).closest('td');
-            
+
             if( $cell.index()>0){
 
-                let selectedRows = tbpedido.rows({ selected: true });
-                let selectedData = selectedRows.data();
-                let id_reg       = $(this).find("td:eq(1)").text();
-                let id_demand    = $(this).find("td:eq(2)").text();
-                let nameDriver   = $(this).find("td:eq(19)").text();
-                let paymentStatus= $(this).find("td:eq(20)").text();
-                dateEffectiveRemoval   = $(this).find("td:eq(10)").text();
+                selectedRows = tbpedido.rows({ selected: true });
+                selectedData = selectedRows.data();
+                id_reg       = $(this).find("td:eq(1)").text();
+                id_demand    = $(this).find("td:eq(2)").text();
+                nameDriver   = $(this).find("td:eq(20)").text();
+                paymentStatus= $(this).find("td:eq(21)").text();
+                dateEffectiveRemoval = $(this).find("td:eq(11)").text();
 
                 // $("#all_drivers").prop("checked", false);
                 // $("#all_effectivedateremoval").prop("checked", false);
@@ -471,10 +482,11 @@ $(document).ready(function() {
                 },
                 success: function(dataResponse) {
 
-                    if(dataResponse == true)
-                        window.location.href = '{{ route('calldemand.list')}}';
-                    else
+                    if(dataResponse == true){
+                        window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
+                    }else{
                         $("#modalTitleError").text("O Pedido de Alocação ainda não concluído!");
+                    }
                 },
                 error: function(responseError){
                     alert("Erro interno: " + responseError);
@@ -494,7 +506,6 @@ $(document).ready(function() {
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
             let paymentStatus       = ($("#payment_status").val() == "1") ? true : false;
 
-
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: 'POST',
@@ -511,9 +522,9 @@ $(document).ready(function() {
                     if(dataResponse){
                         
                         rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
-                        tbpedido.cell(":eq("+rowIndex+")", 19).data(nameDriverSelected);
-                        tbpedido.cell(":eq("+rowIndex+")", 20).data((paymentStatus) ? "SIM" : "");
-                        tbpedido.cell(":eq("+rowIndex+")", 10).data(effectiveDateRemoval);
+                        tbpedido.cell(":eq("+rowIndex+")", 20).data(nameDriverSelected);
+                        tbpedido.cell(":eq("+rowIndex+")", 21).data((paymentStatus) ? "SIM" : "");
+                        tbpedido.cell(":eq("+rowIndex+")", 11).data(effectiveDateRemoval);
 
                     }else
                         alert("Erro ao atualizar o nome do Motorista!");
