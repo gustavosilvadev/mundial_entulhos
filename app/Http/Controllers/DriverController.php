@@ -262,45 +262,46 @@ class DriverController extends Controller
         ->get();
 */
 
-$calldemands = DB::table('call_demand')
-->select(
-    'call_demand.id as id_demand_reg',
-    'call_demand.id_demand as id_demand',
-    'call_demand.type_service  as type_service',
-    'call_demand.period',
-    'call_demand.name as name',
-    DB::raw('DATE_FORMAT(call_demand.date_start, "%d/%m/%Y") as date_start'),
-    DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
-    DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster_forecast, "%d/%m/%Y") as date_removal_dumpster_forecast'),
-    DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
-    DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
-    'call_demand.address as address_service',
-    'call_demand.number as number_address_service',
-    'call_demand.zipcode as zipcode_address_service',
-    'call_demand.city as city_address_service',
-    'call_demand.district as district_address_service',
-    'call_demand.state as state_address_service',
-    'call_demand.comments as comments_demand',
-    'call_demand.phone as phone_demand',
-    'call_demand.price_unit',
-    'call_demand.dumpster_quantity',
-    'call_demand.dumpster_number',
-    'call_demand.id_landfill',
-    'call_demand.id_driver',
-    'call_demand.service_status',
-    DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
-    DB::raw('"" as name_landfill'),
-    DB::raw('"" as name_driver'),
-    DB::raw('"" as type_service_driver'),
-    DB::raw('"" as datetime_start_demand'),
-    DB::raw('"" as datetime_finish_demand'),
-    DB::raw('"" as dumpsters')
 
-)
-->where('call_demand.id_driver', $get_id_driver['id'])
-->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
-->orderBy('call_demand.type_service', 'desc')
-->get();
+        $calldemands = DB::table('call_demand')
+        ->select(
+            'call_demand.id as id_demand_reg',
+            'call_demand.id_demand as id_demand',
+            'call_demand.type_service  as type_service',
+            'call_demand.period',
+            'call_demand.name as name',
+            DB::raw('DATE_FORMAT(call_demand.date_start, "%d/%m/%Y") as date_start'),
+            DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+            DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster_forecast, "%d/%m/%Y") as date_removal_dumpster_forecast'),
+            DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
+            DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
+            'call_demand.address as address_service',
+            'call_demand.number as number_address_service',
+            'call_demand.zipcode as zipcode_address_service',
+            'call_demand.city as city_address_service',
+            'call_demand.district as district_address_service',
+            'call_demand.state as state_address_service',
+            'call_demand.comments as comments_demand',
+            'call_demand.phone as phone_demand',
+            'call_demand.price_unit',
+            'call_demand.dumpster_quantity',
+            'call_demand.dumpster_number',
+            'call_demand.id_landfill',
+            'call_demand.id_driver',
+            'call_demand.service_status',
+            DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
+            DB::raw('"" as name_landfill'),
+            DB::raw('"" as name_driver'),
+            DB::raw('"" as type_service_driver'),
+            DB::raw('"" as datetime_start_demand'),
+            DB::raw('"" as datetime_finish_demand'),
+            DB::raw('"" as dumpsters')
+
+        )
+        ->where('call_demand.id_driver', $get_id_driver['id'])
+        ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
+        ->orderBy('call_demand.type_service', 'desc')
+        ->get();
 
         
         return $calldemands;
@@ -387,90 +388,41 @@ $calldemands = DB::table('call_demand')
 
     public function finishDemand(Request $request)
     {
+
         $id_employee    = session('id_user');
         $service_status = 5;
-        // $is_all_demand  = $request->is_all_demand === 'true' ? true: false;
-        $is_updated     = (object)[];
-/*
-        if($is_all_demand){
 
-            $is_updated = CallDemand::where('id_demand',$request->id_call_demand)
-            ->where('service_status','<>', 5)
-            ->update([
-                'service_status' => $service_status,
-                'id_landfill' => $request->id_landfill
-            ]);
+        $recordCallDemand = CallDemand::find($request->id_call_demand_reg);
 
-            $call_demands = CallDemand::where('id_demand',$request->id_call_demand)
-            ->where('service_status', $service_status)
-            ->get();            
-
-        }else{
-
-            $is_updated = CallDemand::where('id',$request->id_call_demand_reg)
-            ->where('id_demand',$request->id_call_demand)
-            ->where('type_service', trim($request->type_service))
-            ->where('service_status','<>', 5)
-            ->update([
-                'service_status' => $service_status,
-                'id_landfill' => $request->id_landfill
-            ]);
-
-            $call_demands = CallDemand::where('id',$request->id_call_demand_reg)
-            ->where('id_demand',$request->id_call_demand)
-            ->where('type_service', trim($request->type_service))
-            ->where('service_status', $service_status)
-            ->get();
-        }
-*/
-
-// echo 
-// "id_call_demand_reg: ".$request->id_demand_reg."<BR />".
-// "id_call_demand: ".$request->id_call_demand."<BR />".
-// "type_service: ".$request->type_service."<BR />".
-// "id_landfill: ".$request->id_landfill."<BR />";
-// die();
-        $is_updated = CallDemand::where('id',$request->id_demand_reg)
-        ->where('service_status','<>', 5)
-        ->update([
-            'service_status' => $service_status,
-            'id_landfill' => $request->id_landfill
-        ]);
-
-        $call_demands = CallDemand::where('id',$request->id_demand_reg)
-        ->where('service_status', $service_status)
-        ->get();
-
-
-        if($is_updated)
+        if($recordCallDemand)
         {
-            if($call_demands->count()){
+            $recordCallDemand->service_status = $service_status;
 
-                foreach ($call_demands as $call_demand) {
+            if($recordCallDemand->save()){
 
-                    $activityUserDemandDumpster = new ActivityUserDemandDumpster();
-                    $activityUserDemandDumpster->id_call_demand_reg = $call_demand->id;
-                    $activityUserDemandDumpster->id_call_demand     = $call_demand->id_demand;
-                    $activityUserDemandDumpster->id_employee        = $id_employee;
-                    $activityUserDemandDumpster->type_service       = $call_demand->type_service;
-                    $activityUserDemandDumpster->service_status     = $service_status; // ENCERRAR CHAMADO
-                
-                    if($activityUserDemandDumpster->save()){
-                        continue;
+                $recordId = $recordCallDemand->id;
+                $recordIdDemand    = $recordCallDemand->id_demand;
+                $recordTypeDervice = $recordCallDemand->type_service;
 
-                    }else{
-                        return false;
-                    }
+                $activityUserDemandDumpster = new ActivityUserDemandDumpster();
+                $activityUserDemandDumpster->id_call_demand_reg = $recordId;
+                $activityUserDemandDumpster->id_call_demand     = $recordIdDemand;
+                $activityUserDemandDumpster->id_employee        = $id_employee;
+                $activityUserDemandDumpster->type_service       = $recordTypeDervice;
+                $activityUserDemandDumpster->service_status     = $service_status; // ENCERRAR CHAMADO
+
+                if($activityUserDemandDumpster->save()){
+                    return true;
+
+                }else{
+                    return false;
                 }
-                return true;
-
-            }else{
+            } else
                 return false;
-            }
-        }else{
 
-            return false;
-        }        
+        } else
+            return true;
+
     }
 
     public function getDumpsterDemand(Request $request)

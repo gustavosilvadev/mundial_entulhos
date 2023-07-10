@@ -462,37 +462,34 @@ $(document).ready(function() {
        
         $("#btn_replace_dumpster").click(function(){
 
-            // OBTER OS IDs DESTE PEDIDO SELECIONADO 
-            /* 
-                VALIDAR PEDIDO - BUSCAR PEDIDO, 
-                                 CHECAR SE PEDIDO FOI ATENDIDO E FINALIZADO, 
-                                 CHECAR SE FOI FINALIZADO, 
-            */
 
             let idReg    = $("#idreg").val();
             let idDemand = $("#iddemand").val();
 
-            $.ajax({
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                method: 'GET',
-                url: '{{ route('calldemand.checkstatus') }}',
-                data: { 
-                    id_reg: idReg, 
-                    id_demand : idDemand
-                },
-                success: function(dataResponse) {
+            window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
+            /*
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    method: 'GET',
+                    url: '{{ route('calldemand.checkstatus') }}',
+                    data: { 
+                        id_reg: idReg, 
+                        id_demand : idDemand
+                    },
+                    success: function(dataResponse) {
 
-                    if(dataResponse == true){
-                        window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
-                    }else{
-                        $("#modalTitleError").text("O Pedido de Alocação ainda não concluído!");
+                        if(dataResponse == true){
+                            window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
+                        }else{
+                            $("#modalTitleError").text("O Pedido de Alocação ainda não concluído!");
+                        }
+                    },
+                    error: function(responseError){
+                        alert("Erro interno: " + responseError);
+                        console.log(responseError);
                     }
-                },
-                error: function(responseError){
-                    alert("Erro interno: " + responseError);
-                    console.log(responseError);
-                }
-            });   
+                });
+            */
 
 
         });

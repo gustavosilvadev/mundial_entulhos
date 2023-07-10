@@ -16,6 +16,7 @@ class CallDemandController extends Controller
     public function showAPI($id_register)
     {
         if(isset($id_register)){
+
                 $calldemand = DB::table('call_demand')
                 ->select(
                     'call_demand.id as id',
@@ -46,10 +47,13 @@ class CallDemandController extends Controller
                     'call_demand.id_driver',
                     'call_demand.service_status',
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
+                    'call_demand.dumpster_allocation',
+                    'call_demand.dumpster_replacement',
+                    'call_demand.dumpster_removal',
                     DB::raw('"" as name_landfill'),
                     DB::raw('"" as name_driver')
-                )->where('call_demand.id', '=', $id_register)->where('call_demand.id_driver','>=',0)->get();
-
+                // )->where('call_demand.id', '=', $id_register)->where('call_demand.id_driver','>=',0)->get();
+                )->where('call_demand.id', '=', $id_register)->get();
 
                 foreach($calldemand as $demand){
 
@@ -88,7 +92,7 @@ class CallDemandController extends Controller
                 if($calldemand->isEmpty() != true){
 
                     $calldemandPayment = PaymentCallDemand::where('id_call_demand_reg', $calldemand[0]->id)
-                    ->where('id_call_demand', $calldemand[0]->id_demand)->first();
+                    ->where('id_call_demand', $calldemand[0]->id_demand)->first()->get();
                     
                     return [
                         'drivers'=> $drivers,
@@ -570,7 +574,7 @@ class CallDemandController extends Controller
                     return back()->withErrors(['response' => "Erro ao cadastrar o chamado"]);
 
                 // Gravando na tabela de pagamentos
-                if((int)$request->type_service == 1){
+                // if((int)$request->type_service == 1){
                     $paymentCallDemand = new PaymentCallDemand();
                     $paymentCallDemand->id_call_demand_reg = $calldemand->id;
                     $paymentCallDemand->id_call_demand = $lastIdDemand;
@@ -596,7 +600,7 @@ class CallDemandController extends Controller
                     if(!$paymentCallDemand->save()){
                         return back()->withErrors(['response' => "Erro ao registrar ids de pagamento"]);
                     }
-                }
+                // }
 
             }
             // return redirect('createcalldemand');

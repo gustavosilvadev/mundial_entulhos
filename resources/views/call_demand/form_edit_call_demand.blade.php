@@ -92,20 +92,20 @@
                                                                                                     <div class="col-md-6">
                                                                                                         <div class="form-group">
                                                                                                             <label for="type_service">Tipo de Serviço</label>
-                                                                                                            <select class="select2 form-control form-control-lg" id="type_service" name="type_service" required>
+
+                                                                                                            <select class="select2 form-control form-control-lg" id="type_service" name="type_service" required disabled>
                                                                                                                 <option value="">----</option>
-                                                                                                                <?php if($value->type_service == 'COLOCACAO'): ?>
+                                                                                                                <?php if($value->dumpster_allocation == true): ?>
                                                                                                                     <option value="COLOCACAO" selected>COLOCAÇÃO</option>
-                                                                                                                    <option value="TROCA">TROCA</option>
-                                                                                                                <?php elseif($value->type_service == 'TROCA'): ?>
-                                                                                                                <option value="COLOCACAO">COLOCAÇÃO</option>
+
+                                                                                                                <?php elseif($value->dumpster_replacement == true): ?>
+                                                                                                                
                                                                                                                 <option value="TROCA" selected>TROCA</option>
                                                                                                                 <?php else: ?>
-                                                                                                                    <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                                                                    <option value="TROCA">TROCA</option>
+                                                                                                                    <option value="RETIRADA" selected>RETIRADA</option>
                                                                                                                 <?php endif; ?>
                                                                                                                 
-                                                                                                            </select>            
+                                                                                                            </select> 
                                                                                                         </div>
                                                                                                     </div>                                                                                                     
                                                                                                 </div>
@@ -218,7 +218,7 @@
                                                                                                                             <option value="<?php echo $landfill->id; ?>"><?php echo $landfill->name; ?></option>
                                                                                                                         <?php endif; ?>                                                                                                                    
                                                                                                                     <?php endforeach; ?>
-                                                                                                                <?php endif; ?>                                                                
+                                                                                                                <?php endif; ?>                                                          
                                                                                                             
                                                                                                             </select>
                                                             
@@ -301,7 +301,10 @@
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">RETIRADA EFETIVA</label>
-                                                                                                            <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date  date_format" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster }}" />
+
+                                                                                                            <br>
+                                                                                                            {{-- <h1>{{ date_format(date_create($value->date_effective_removal_dumpster),"d/m/Y"); }}</h1> --}}
+                                                                                                            <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date  date_format" data-column="5"  data-column-index="4" value="{{ $value->date_effective_removal_dumpster == '00/00/0000' ? '' : $value->date_effective_removal_dumpster  }}" />
                                                                                                             <div class="loadingMask text-primary" style="display:none;">Loading...</div>
                                                                                                         </div>    
                                                                                                     </div> 
@@ -321,7 +324,13 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group input-icon">
                                                                                                             <label for="iss">ISS</label>
-                                                                                                            <input type="text" name="iss" class="form-control iss" id="iss" />
+
+                                                                                                            <?php if(isset($calldemandpayment[0])): ?>
+                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" value="{{$calldemandpayment[0]->iss}}"/>
+                                                                                                            <?php else:?>
+                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" />
+                                                                                                            <?php endif;?>
+
                                                                                                             <i>R$</i>
                                                                                                         </div>
                                                                                                     </div>                                                                            
@@ -329,10 +338,22 @@
                                                                                                         <div class="form-group">
                                                                                                             <label for="has_paid">PAGAMENTO REALIZADO</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="has_paid" name="has_paid">
-                                                                                                                <option value="">----</option>
-                                                                                                                <option value="1">SIM</option>
-                                                                                                                <option value="0">NÃO</option>
-                                                                                                            </select>
+                                                                                                                <?php if(isset($calldemandpayment[0])): ?>
+                                                                                                                    <?php if($calldemandpayment[0]->has_paid): ?>
+                                                                                                                        <option value="1" selected>Sim</option>
+                                                                                                                        <option value="0">Não</option>
+                                                                                                                        <?php else: ?>
+                                                                                                                        <option value="1">Sim</option>
+                                                                                                                        <option value="0" selected>Não</option>
+                                                                                                                    <?php endif; ?>    
+                                                                                                                <?php else: ?>    
+
+                                                                                                                    <option value="1">Sim</option>
+                                                                                                                    <option value="0">Não</option>
+                                                                                                                <?php endif; ?>    
+
+                                                                                                            </select> 
+
                                                                                                         </div>
                                                                                                     </div>
                         
@@ -341,8 +362,23 @@
                                                                                                             <label for="by_bank">FORMA DE PAGAMENTO</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
                                                                                                                 <option value="">----</option>
-                                                                                                                <option value="1">TRANSFERÊNCA</option>
-                                                                                                                <option value="2">BOLETO BANCÁRIO</option>
+
+                                                                                                                <?php if(isset($calldemandpayment[0])): ?>
+                                                                                                                    <?php if($calldemandpayment[0]->by_bank_transfer): ?>
+                                                                                                                        <option value="1" selected>TRANSFERÊNCA</option>
+                                                                                                                        <option value="2">BOLETO BANCÁRIO</option>
+                                                                                                                    <?php elseif($calldemandpayment[0]->by_bank_slip): ?>
+                                                                                                                        <option value="1">TRANSFERÊNCA</option>
+                                                                                                                        <option value="2" selected>BOLETO BANCÁRIO</option>
+                                                                                                                    <?php else: ?>
+
+                                                                                                                        <option value="1">TRANSFERÊNCA</option>
+                                                                                                                        <option value="2">BOLETO BANCÁRIO</option>
+                                                                                                                    <?php endif; ?>    
+
+                                                                                                                <?php endif; ?>
+
+
                                                                                                             </select>
                                                                                                         </div>
                                                                                                     </div>
@@ -386,13 +422,13 @@
                                                                                                     <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
 
                                                                                                     <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
-                                                                                                        <button class="btn btn-dark " id="btn_finish_demand">ENCERRAR CHAMADO</button>
+                                                                                                        <button class="btn btn-dark " id="btn_finish_demand">CONCLUIR PEDIDO</button>
                                                                                                         {{-- <button class="btn btn-dark btn-warning " id="btn_finish_all_demands">ENCERRAR TODOS OS CHAMADOS RELACIONADOS</button> --}}
                                                                                                     <?php endif; ?>
 
                                                                                                     <h3 class="text-success text-center py-3" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
                                                                                                     <h4 class="text-danger text-center py-3" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
-                                                                                                    <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3>
+                                                                                                    {{-- <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3> --}}
                                                                                                     <h4 class="text-danger text-center" id="message-error-finished" style="display:none"><b>Erro ao encerrar o chamado!</b></h4>
                                                                                                 </div>                                                                                                    
 
@@ -455,7 +491,7 @@
     $(document).ready(function(){
 
         $('.date_format_allocation_edit').flatpickr({
-                mode: "multiple",
+                // mode: "multiple",
                 dateFormat: "d/m/Y"
             }).setDate($('#date_allocation_dumpster').val());
 
@@ -569,9 +605,9 @@
                     date_removal_dumpster: {
                         required: true
                     },
-                    date_effective_removal_dumpster: {
-                        required: true
-                    },
+                    // date_effective_removal_dumpster: {
+                    //     required: true
+                    // },
                     address: {
                         required: true
                     },
@@ -618,7 +654,7 @@
                     type_service: "Campo <b>Tipo de serviço</b> deve ser preenchido!",
                     date_begin: "Campo <b>Data Pedido</b> deve ser preenchido!",
                     date_removal_dumpster: "Campo <b>Previsao de Retirada</b> deve ser preenchido!",
-                    date_effective_removal_dumpster: "Campo <b>Previsão de Retirada Efetiva</b> deve ser preenchido!",
+                    // date_effective_removal_dumpster: "Campo <b>Previsão de Retirada Efetiva</b> deve ser preenchido!",
                     id_client: "Campo <b>Cliente</b> deve ser preenchido!",
                     address: "Campo <b>Endereço</b> deve ser preenchido!",
                     number: "Campo <b>Número</b> deve ser preenchido!",
@@ -670,6 +706,9 @@
             let date_effective_removal_dumpster = $("input[name=date_effective_removal_dumpster]").val();
             let date_removal_dumpster_forecast  = $("input[name=date_removal_dumpster_forecast]").val();
             let total_days      = $("input[name=total_days]").val();
+            let hasPaid      = $("#has_paid").val();
+            let byBank = $('#by_bank').val();
+
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -694,10 +733,16 @@
                     'date_allocation_dumpster' : date_allocation_dumpster,
                     'date_effective_removal_dumpster' : date_effective_removal_dumpster,
                     'date_removal_dumpster_forecast' : date_removal_dumpster_forecast,
-                    'total_days' : total_days
+                    'total_days' : total_days,
+                    'has_paid' :  hasPaid,
+                    'by_bank' : byBank
                 },
                 success: function(dataResponse) {
                     if(dataResponse){
+// console.log("**************");
+// console.log(dataResponse);
+// console.log("**************");
+// return false;
                         // $("#message-success").css("display","block");
                         window.location.href = '{{ route('calldemand.list')}}';
                     }else
@@ -826,7 +871,7 @@
 
     $("#btn_finish_demand").on('click', function(e){
         e.preventDefault();
-
+/*
         if($("#landfill").val() == '')
         {
             alert("Selecione o aterro!");
@@ -837,9 +882,12 @@
         }else{
             finishDemand(false);
         }
+*/        
+        finishDemand();
 
     });
 
+/*    
     $("#btn_finish_all_demands").on('click', function(e){
         e.preventDefault();
 
@@ -854,32 +902,24 @@
             finishDemand(true);
         }            
     });
+*/    
     
-    function finishDemand(isAllDemand){
+    function finishDemand(){
 
         let idDemandReg = $('input[name=id_demand_reg]').val();
         let idDemand    = $('input[name=id_demand]').val();
         let typeService = $('#type_service').val();
-        let idLandfill = $("#landfill").val();
+        let idLandfill  = $("#landfill").val();
+
 
         $.ajax({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             method: 'POST',
             url: '{{ route('finish.demand') }}',
             data: { 
-                id_call_demand_reg: idDemandReg,
-                id_call_demand: idDemand,
-                type_service: typeService,
-                id_landfill: idLandfill,
-                is_all_demand: isAllDemand
+                id_call_demand_reg: idDemandReg
             },
             success: function(dataResponse) {
-
-                // if(dataResponse){
-                //     $("#message-success-finished").css("display","block");
-                // }else{
-                //     $("#message-error-finished").css("display","block");
-                // }
 
                 window.location.href = '{{ route('calldemand.list')}}';
 
