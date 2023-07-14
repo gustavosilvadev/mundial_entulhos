@@ -169,7 +169,8 @@ class CallDemandController extends Controller
                 DB::raw('"" as payment_demand'),
                 DB::raw('"" as name_driver')
 
-            )->where('call_demand.service_status','<>',5)
+            )
+            // )->where('call_demand.service_status','<>',5)
             // ->where('call_demand.id_driver','>=',0)
             // ->where('call_demand.type_service','<>','RETIRADA')
             // ->orderByDesc('call_demand.id')

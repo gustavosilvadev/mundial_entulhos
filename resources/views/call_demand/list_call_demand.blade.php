@@ -11,6 +11,14 @@
         font-weight: 600;
     }
 
+    .dataTables_scrollBody{
+        position: relative;
+        overflow: auto;
+        width: 100%;
+        max-height: 100% !important;
+        /* max-height: 0px !important; */
+    }
+
  </style>
     <!-- BEGIN: Content-->
 
@@ -46,6 +54,7 @@
 
                             <div class="card-body mt-2">
                                 <form class="dt_adv_search" method="POST">
+{{--                                     
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-row mb-1">
@@ -75,6 +84,63 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+ --}}
+ 
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <div id="accordionWrapa1" role="tablist" aria-multiselectable="true">
+                                                <div class="card collapse-icon">
+                                                    <div class="collapse-default">
+                                                        <div class="card">
+
+                                                            <button onclick="return false;" class="btn btn-dark" data-toggle="collapse" role="button" data-target="#accordion1" aria-expanded="false" aria-controls="accordion1">
+                                                                PESQUISAR
+                                                            </button>
+                                                            <div id="accordion1" role="tabpanel" data-parent="#accordionWrapa1" aria-labelledby="heading1" class="collapse">
+                                                                <div class="card-body">
+                                                                    <div class="form-row mb-1">
+                                                                        <div class="col-lg-4 mb-1">
+                                                                            <label>MOTORISTA</label>
+                                                                            <select class="select2 form-control" id="name_search" multiple>
+                                                                                <?php if($driver_name_demands):?>
+                                                                                <?php foreach($driver_name_demands as $driver_name):?>
+                                                                                    <option value="{{ $driver_name->name }}">{{ $driver_name->name }}</option>
+                                                                                <?php endforeach;?>
+
+                                                                                <?php endif;?>
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <div class="col-lg-4">
+                                                                            <label>DATA DE ALOCAÇÃO</label>
+                                                                            <div class="form-group mb-0">
+                                                                                <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4">
+                                                                            <label>-----</label>
+                                                                            <div class="form-group mb-0">
+                                                                                <input type="button" class="btn btn-warning" value="Limpar Filtro" id="btn_reset_input">
+                                                                                <input type="button" class="btn btn-danger" value="Deletar Pedido" id="btn_delete_demand">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                </div>
+                                            </div>
+ 
+
+ 
                                         </div>
                                     </div>
 
@@ -140,7 +206,14 @@
                                                 <td><?php echo $valDemand->comments_demand; ?></td>
                                                 <td><?php echo $valDemand->dumpster_quantity; ?></td>
                                                 <td><?php echo $valDemand->dumpster_number; ?></td>
-                                                <td><?php echo $valDemand->service_status; ?></td>
+                                                <td>
+                                                    <?php if($valDemand->service_status == 5):?>
+                                                        <label class="text-info font-weight-bold">PEDIDO FINALIZADO</label>
+                                                    <?php else:?>
+                                                        <label class="text-warning font-weight-bold">{{$valDemand->service_status}}</label>
+                                                    <?php endif;?>
+                                                    
+                                                </td>
                                                 <td><?php echo $valDemand->name_landfill; ?></td>
                                                 <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
                                                 <td class="text-center">
@@ -298,6 +371,8 @@ $(document).ready(function() {
                 mode: "multiple",
                 dateFormat: "d/m/Y"
             }).clear();
+
+            tbpedido.search('').columns().search('').draw();
 
         });
 
@@ -539,7 +614,8 @@ $(document).ready(function() {
             let namesList = String($("#name_search").val());
 
             tbpedido
-                .columns(19)
+                // .columns(19)
+                .columns(20)
                 .search(namesList.replace(/,/g, "|"), true,false)
                 .draw();
         });
@@ -549,7 +625,8 @@ $(document).ready(function() {
             let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
 
             tbpedido
-                .columns(8)
+                // .columns(8)
+                .columns(9)
                 .search(dateDemandFilter.replace(/,/g,"|"), true,false)
                 .draw();            
 
