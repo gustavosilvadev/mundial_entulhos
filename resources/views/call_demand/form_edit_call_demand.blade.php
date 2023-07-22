@@ -1,3 +1,11 @@
+<?php 
+// echo '<pre>';
+//     print_r($calldemandpayment);
+// echo '</pre>';
+// die();
+
+?>
+
 @include('partials.header_teste')
 @include('partials.nav_teste');
 
@@ -325,8 +333,8 @@
                                                                                                         <div class="form-group input-icon">
                                                                                                             <label for="iss">ISS</label>
 
-                                                                                                            <?php if(isset($calldemandpayment[0])): ?>
-                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" value="{{$calldemandpayment[0]->iss}}"/>
+                                                                                                            <?php if(isset($calldemandpayment)): ?>
+                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" value="{{$calldemandpayment->iss}}"/>
                                                                                                             <?php else:?>
                                                                                                                 <input type="text" name="iss" class="form-control iss" id="iss" />
                                                                                                             <?php endif;?>
@@ -338,8 +346,8 @@
                                                                                                         <div class="form-group">
                                                                                                             <label for="has_paid">PAGAMENTO REALIZADO</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="has_paid" name="has_paid">
-                                                                                                                <?php if(isset($calldemandpayment[0])): ?>
-                                                                                                                    <?php if($calldemandpayment[0]->has_paid): ?>
+                                                                                                                <?php if(isset($calldemandpayment)): ?>
+                                                                                                                    <?php if($calldemandpayment->has_paid): ?>
                                                                                                                         <option value="1" selected>Sim</option>
                                                                                                                         <option value="0">Não</option>
                                                                                                                         <?php else: ?>
@@ -363,11 +371,12 @@
                                                                                                             <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
                                                                                                                 <option value="">----</option>
 
-                                                                                                                <?php if(isset($calldemandpayment[0])): ?>
-                                                                                                                    <?php if($calldemandpayment[0]->by_bank_transfer): ?>
+                                                                                                                <?php if(isset($calldemandpayment)): ?>
+                                                                                                                 
+                                                                                                                    <?php if($calldemandpayment->by_bank_transfer): ?>
                                                                                                                         <option value="1" selected>TRANSFERÊNCA</option>
                                                                                                                         <option value="2">BOLETO BANCÁRIO</option>
-                                                                                                                    <?php elseif($calldemandpayment[0]->by_bank_slip): ?>
+                                                                                                                    <?php elseif($calldemandpayment->by_bank_slip): ?>
                                                                                                                         <option value="1">TRANSFERÊNCA</option>
                                                                                                                         <option value="2" selected>BOLETO BANCÁRIO</option>
                                                                                                                     <?php else: ?>
@@ -386,7 +395,8 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="invoice_number">CÓDIGO NF</span>
-                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" autocomplete="off"/>
+                                                                                                            {{-- <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ $calldemandpayment->invoice_number }}" autocomplete="off"/> --}}
+                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="" autocomplete="off"/>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     
@@ -394,7 +404,10 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_issue">DATA DA EMISSÃO</span>
-                                                                                                            <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_issue" data-column="5"  data-column-index="4" />
+                                                                                                            {{-- <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_issue date-mask" value="{{ $calldemandpayment->date_issue }}" data-column="5"  data-column-index="4" /> --}}
+                                                                                                            
+                                                                                                            <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_issue date-mask" value="{{ $calldemandpayment->date_issue }}" data-column="5"  data-column-index="4" />
+                                                                                                            
                                                                                                             {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
                                                                                                         </div>    
                                                                                                     </div>

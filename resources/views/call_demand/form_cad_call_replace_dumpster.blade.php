@@ -279,13 +279,20 @@
                                                                                                     </div> 
                                                                                                 </div>
                                                                                                 <hr/>
+
                                                                                                 <div class="row">
 
 
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group input-icon">
                                                                                                             <label for="iss">ISS</label>
-                                                                                                            <input type="text" name="iss" class="form-control iss" id="iss" />
+
+                                                                                                            <?php if(isset($calldemandpayment)): ?>
+                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" value="{{$calldemandpayment->iss}}"/>
+                                                                                                            <?php else:?>
+                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" />
+                                                                                                            <?php endif;?>
+
                                                                                                             <i>R$</i>
                                                                                                         </div>
                                                                                                     </div>                                                                            
@@ -293,28 +300,57 @@
                                                                                                         <div class="form-group">
                                                                                                             <label for="has_paid">PAGAMENTO REALIZADO</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="has_paid" name="has_paid">
-                                                                                                                <option value="">----</option>
-                                                                                                                <option value="1">SIM</option>
-                                                                                                                <option value="0">NÃO</option>
-                                                                                                            </select>
+                                                                                                                <?php if(isset($calldemandpayment)): ?>
+                                                                                                                    <?php if($calldemandpayment->has_paid): ?>
+                                                                                                                        <option value="1" selected>Sim</option>
+                                                                                                                        <option value="0">Não</option>
+                                                                                                                        <?php else: ?>
+                                                                                                                        <option value="1">Sim</option>
+                                                                                                                        <option value="0" selected>Não</option>
+                                                                                                                    <?php endif; ?>    
+                                                                                                                <?php else: ?>    
+
+                                                                                                                    <option value="1">Sim</option>
+                                                                                                                    <option value="0">Não</option>
+                                                                                                                <?php endif; ?>    
+
+                                                                                                            </select> 
+
                                                                                                         </div>
                                                                                                     </div>
-                        
+
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <label for="by_bank">FORMA DE PAGAMENTO</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
                                                                                                                 <option value="">----</option>
-                                                                                                                <option value="1">TRANSFERÊNCA</option>
-                                                                                                                <option value="2">BOLETO BANCÁRIO</option>
+
+                                                                                                                <?php if(isset($calldemandpayment)): ?>
+                                                                                                                
+                                                                                                                    <?php if($calldemandpayment->by_bank_transfer): ?>
+                                                                                                                        <option value="1" selected>TRANSFERÊNCA</option>
+                                                                                                                        <option value="2">BOLETO BANCÁRIO</option>
+                                                                                                                    <?php elseif($calldemandpayment->by_bank_slip): ?>
+                                                                                                                        <option value="1">TRANSFERÊNCA</option>
+                                                                                                                        <option value="2" selected>BOLETO BANCÁRIO</option>
+                                                                                                                    <?php else: ?>
+
+                                                                                                                        <option value="1">TRANSFERÊNCA</option>
+                                                                                                                        <option value="2">BOLETO BANCÁRIO</option>
+                                                                                                                    <?php endif; ?>    
+
+                                                                                                                <?php endif; ?>
+
+
                                                                                                             </select>
                                                                                                         </div>
                                                                                                     </div>
-                        
+
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="invoice_number">CÓDIGO NF</span>
-                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" autocomplete="off"/>
+                                                                                                            {{-- <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ $calldemandpayment->invoice_number }}" autocomplete="off"/> --}}
+                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="" autocomplete="off"/>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     
@@ -322,15 +358,18 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_issue">DATA DA EMISSÃO</span>
-                                                                                                            <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_issue" data-column="5"  data-column-index="4" />
+                                                                                                            {{-- <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_issue date-mask" value="{{ $calldemandpayment->date_issue }}" data-column="5"  data-column-index="4" /> --}}
+                                                                                                            
+                                                                                                            <input type="text" name="date_issue" id="date_issue" class="form-control dt-date flatpickr-range dt-input date_format date_issue date-mask" value="{{ $calldemandpayment->date_issue }}" data-column="5"  data-column-index="4" />
+                                                                                                            
                                                                                                             {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
                                                                                                         </div>    
                                                                                                     </div>
-                        
+
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_payment_forecast">PREV. PAGAMENTO</span>
-                                                                                                            <input type="text" name="date_payment_forecast" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast" data-column="5"  data-column-index="4" />
+                                                                                                            <input type="text" name="date_payment_forecast" id="date_payment_forecast" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast" data-column="5"  data-column-index="4" />
                                                                                                             {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
                                                                                                         </div>    
                                                                                                     </div>
@@ -338,11 +377,11 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_effective_paymen">PAGAMENTO EFETIVO</span>
-                                                                                                            <input type="text" name="date_effective_paymen" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_effective_paymen" data-column="5"  data-column-index="4" />
+                                                                                                            <input type="text" name="date_effective_paymen" id="date_effective_paymen" class="form-control dt-date flatpickr-range dt-input date_format date_effective_paymen" data-column="5"  data-column-index="4" />
                                                                                                             {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
                                                                                                         </div>    
                                                                                                     </div>                                                                            
-                                                                                                </div>                                                                        
+                                                                                                </div>
                                                                                                 <hr />
 
                                                                                                 <div class="col-12 text-center">
@@ -637,6 +676,13 @@
             let date_removal_dumpster_forecast  = $("input[name=date_removal_dumpster_forecast]").val();
             let total_days      = $("input[name=total_days]").val();
             let id_driver       = ($("#driver").val() == '' || $("#driver").val() == 'undefined') ? '0' : $("#driver").val();
+            let iss             = $("#iss").val();
+            let hasPaid         = $("#has_paid").val();
+            let byBank          = $('#by_bank').val();
+            let invoiceNumber  = $('#invoice_number').val();
+            let dateIssue      = $('#date_issue').val();
+            let datePaymentForecast = $('#date_payment_forecast').val();
+            let dateEffectivePaymen = $('#date_effective_paymen').val();
         
             if(date_allocation_dumpster == "" || date_allocation_dumpster == undefined)
             {
@@ -673,7 +719,14 @@
                     'date_effective_removal_dumpster' : date_effective_removal_dumpster,
                     'date_removal_dumpster' : date_removal_dumpster_forecast,
                     'id_driver' : id_driver,
-                    'total_days' : total_days
+                    'total_days' : total_days,
+                    'iss' :  iss,
+                    'has_paid' :  hasPaid,
+                    'by_bank' : byBank,                    
+                    'invoice_number' : invoiceNumber,
+                    'date_issue' : dateIssue,
+                    'date_payment_forecast' : datePaymentForecast,
+                    'date_effective_paymen' : dateEffectivePaymen
                 },
                 success: function(dataResponse) {
 

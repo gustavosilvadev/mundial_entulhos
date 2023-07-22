@@ -161,7 +161,7 @@
                                                                             <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <label for="phone">Telefone</label>
-                                                                                    <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="xx xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" autocomplete="off"/>
+                                                                                    <input type="phone" class="form-control phone-number-mask" name="phone" id="phone" placeholder="(xx) xxxxx-xxxx" id="phone-number" onkeypress="return onlynumber()" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -287,7 +287,7 @@
                                                                             <div class="col-md-3">
                                                                                 <div class="form-group">
                                                                                     <span class="title" for="invoice_number">CÓDIGO NF</span>
-                                                                                    <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" autocomplete="off"/>
+                                                                                    <input type="text" class="form-control invoice_number" name="invoice_number" id="invoice_number" autocomplete="off"/>
                                                                                 </div>
                                                                             </div>
                                                                             
@@ -578,8 +578,9 @@
         });        
 
     });
-    
+
     function onlynumber(evt) {
+
         let theEvent = evt || window.event;
         let key = theEvent.keyCode || theEvent.which;
         key = String.fromCharCode( key );
@@ -589,7 +590,21 @@
             theEvent.returnValue = false;
             if(theEvent.preventDefault) theEvent.preventDefault();
         }
-    }          
+    }
+
+
+    $("#phone").blur(function(){
+
+        let number = $(this).val();
+        let format_number = number.substring(5);
+
+        if(format_number.length == 9){
+            let concatedNumber = format_number.replace('-','');
+            let resultNumberFormat = number.substring(0,4) + ' ' + concatedNumber.substring(0,4) + '-' + concatedNumber.substring(4);
+            $(this).val(resultNumberFormat);
+        }
+
+    });    
 
 
     let validaData = (dataAlocacao) => {

@@ -22,6 +22,7 @@ $(function () {
     zipcodeMask = $('.zipcode-mask'),
     priceUnit = $('.price_unit'),
     issValue = $('.iss-value');
+    // invoiceNumber = $('.invoice_number');
 
 
   // Credit Card
@@ -101,7 +102,6 @@ $(function () {
       uppercase: true
     });
   }
-
   // Prefix
   if (prefixMask.length) {
     new Cleave(prefixMask, {
@@ -140,4 +140,13 @@ $(function () {
       rawValueTrimPrefix: true
     });
   }
+
+  // if(invoiceNumber.length) {
+  //   alert('dssadljlakd');
+  //   new Cleave(invoiceNumber, {
+  //     delimiters: ['.', '.'],
+  //     blocks: [3, 3, 3],
+  //     uppercase: true
+  //   });
+  // }
 });

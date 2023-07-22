@@ -21,6 +21,7 @@ class CallDemandController extends Controller
                 ->select(
                     'call_demand.id as id',
                     'call_demand.id_demand as id_demand',
+                    'call_demand.id_parent as id_parent',
                     'call_demand.type_service  as type_service',
                     'call_demand.period',
                     'call_demand.name as name',
@@ -90,10 +91,16 @@ class CallDemandController extends Controller
                     ->get();
 
                 if($calldemand->isEmpty() != true){
-
-                    $calldemandPayment = PaymentCallDemand::where('id_call_demand_reg', $calldemand[0]->id)
-                    ->where('id_call_demand', $calldemand[0]->id_demand)->first()->get();
                     
+                    $id_call_demand = $calldemand[0]->id;
+                    
+                    if($calldemand[0]->dumpster_removal == true){
+                        $id_call_demand = $calldemand[0]->id_parent;
+                    }
+
+                    $calldemandPayment = PaymentCallDemand::where('id_call_demand_reg', $id_call_demand)
+                    ->where('id_call_demand', $calldemand[0]->id_demand)->first();
+
                     return [
                         'drivers'=> $drivers,
                         'landfills'=> $landfills,
@@ -593,11 +600,11 @@ class CallDemandController extends Controller
                         $paymentCallDemand->by_bank_slip = true;
                     }
                     
-                    $paymentCallDemand->invoice_number = $request->invoice_number;
-                    $paymentCallDemand->date_issue = $request->date_issue;
-                    $paymentCallDemand->date_payment_forecast = $request->date_payment_forecast;
-                    $paymentCallDemand->date_effective_paymen = $request->date_effective_paymen;
-
+                    $paymentCallDemand->invoice_number = str_replace('.','',$request->invoice_number);
+                    $paymentCallDemand->date_issue = (isset($request->date_issue) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_issue))) : '');
+                    $paymentCallDemand->date_payment_forecast = (isset($request->date_payment_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_payment_forecast))) : '');
+                    $paymentCallDemand->date_effective_paymen = (isset($request->date_effective_paymen) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_effective_paymen))) : '');
+                    
                     if(!$paymentCallDemand->save()){
                         return back()->withErrors(['response' => "Erro ao registrar ids de pagamento"]);
                     }
@@ -756,68 +763,73 @@ class CallDemandController extends Controller
         if(isset($calldemandFirst))
         {
 
-            // 001 - INSERIR SE NÃO EXISTIR REGISTRO
-            $checkDemandRemoval  = CallDemand::where('dumpster_removal', 1)->where('id_parent',$request->id_reg)->where('id_demand',$request->id_demand)->first();
-            
-            if(empty($checkDemandRemoval)){
+            if($effectiveDateRemoval != null){
+
+                // 001 - INSERIR SE NÃO EXISTIR REGISTRO
+                $checkDemandRemoval  = CallDemand::where('dumpster_removal', 1)->where('id_parent',$request->id_reg)->where('id_demand',$request->id_demand)->first();
                 
-                // Gravando Registro para Futura Retirada da caçamba
-                $calldemandDumpsterRemoval = new CallDemand();
-                $calldemandDumpsterRemoval->id_demand      = $calldemandFirst->id_demand;
-                $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
-                $calldemandDumpsterRemoval->dumpster_removal = true;
-                $calldemandDumpsterRemoval->id_parent      = $calldemandFirst->id;
-                $calldemandDumpsterRemoval->period         = $calldemandFirst->period;
-                $calldemandDumpsterRemoval->date_allocation_dumpster = isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '';
-                $calldemandDumpsterRemoval->date_removal_dumpster_forecast  = isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '';
-                $calldemandDumpsterRemoval->date_effective_removal_dumpster = $effectiveDateRemoval;
-                $calldemandDumpsterRemoval->name           = $calldemandFirst->name;
-                $calldemandDumpsterRemoval->address        = $calldemandFirst->address;
-                $calldemandDumpsterRemoval->address_complement = $calldemandFirst->address_complement;
-                $calldemandDumpsterRemoval->number         = $calldemandFirst->number;
-                $calldemandDumpsterRemoval->zipcode        = $calldemandFirst->zipcode;
-                $calldemandDumpsterRemoval->city           = $calldemandFirst->city;
-                $calldemandDumpsterRemoval->district       = $calldemandFirst->district;
-                $calldemandDumpsterRemoval->state          = $calldemandFirst->state;
-                $calldemandDumpsterRemoval->phone          = $calldemandFirst->phone;
-                $calldemandDumpsterRemoval->dumpster_sequence_demand = $calldemandFirst->dumpster_sequence_demand;
-                $calldemandDumpsterRemoval->dumpster_number = $calldemandFirst->dumpster_number;
-                $calldemandDumpsterRemoval->dumpster_quantity  = $calldemandFirst->dumpster_quantity;
-                $calldemandDumpsterRemoval->days_allocation    = $calldemandFirst->days_allocation;
-                $calldemandDumpsterRemoval->id_driver      = $calldemandFirst->id_driver;
+                if(empty($checkDemandRemoval)){
+                    
+                    // Gravando Registro para Futura Retirada da caçamba
+                    $calldemandDumpsterRemoval = new CallDemand();
+                    $calldemandDumpsterRemoval->id_demand      = $calldemandFirst->id_demand;
+                    $calldemandDumpsterRemoval->type_service   = 'RETIRADA';
+                    $calldemandDumpsterRemoval->dumpster_removal = true;
+                    $calldemandDumpsterRemoval->id_parent      = $calldemandFirst->id;
+                    $calldemandDumpsterRemoval->period         = $calldemandFirst->period;
+                    $calldemandDumpsterRemoval->date_allocation_dumpster = isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '';
+                    $calldemandDumpsterRemoval->date_removal_dumpster_forecast  = isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '';
+                    $calldemandDumpsterRemoval->date_effective_removal_dumpster = $effectiveDateRemoval;
+                    $calldemandDumpsterRemoval->name           = $calldemandFirst->name;
+                    $calldemandDumpsterRemoval->address        = $calldemandFirst->address;
+                    $calldemandDumpsterRemoval->address_complement = $calldemandFirst->address_complement;
+                    $calldemandDumpsterRemoval->number         = $calldemandFirst->number;
+                    $calldemandDumpsterRemoval->zipcode        = $calldemandFirst->zipcode;
+                    $calldemandDumpsterRemoval->city           = $calldemandFirst->city;
+                    $calldemandDumpsterRemoval->district       = $calldemandFirst->district;
+                    $calldemandDumpsterRemoval->state          = $calldemandFirst->state;
+                    $calldemandDumpsterRemoval->phone          = $calldemandFirst->phone;
+                    $calldemandDumpsterRemoval->dumpster_sequence_demand = $calldemandFirst->dumpster_sequence_demand;
+                    $calldemandDumpsterRemoval->dumpster_number = $calldemandFirst->dumpster_number;
+                    $calldemandDumpsterRemoval->dumpster_quantity  = $calldemandFirst->dumpster_quantity;
+                    $calldemandDumpsterRemoval->days_allocation    = $calldemandFirst->days_allocation;
+                    $calldemandDumpsterRemoval->id_driver      = $calldemandFirst->id_driver;
 
-                if(!$calldemandDumpsterRemoval->save())
-                    return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
-            }else{
-                $updateDumpsterRemoval = CallDemand::where('dumpster_removal', 1)
-                ->where('id_parent',$request->id_reg)
-                ->where('id_demand',$request->id_demand)
-                ->update([
+                    if(!$calldemandDumpsterRemoval->save())
+                        return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
+                }else{
+                    $updateDumpsterRemoval = CallDemand::where('dumpster_removal', 1)
+                    ->where('id_parent',$request->id_reg)
+                    ->where('id_demand',$request->id_demand)
+                    ->update([
 
-                    'id_demand' => $calldemandFirst->id_demand,
-                    'type_service' => 'RETIRADA',
-                    'dumpster_removal' => true,
-                    'id_parent' => $calldemandFirst->id,
-                    'period' => $calldemandFirst->period,
-                    'date_allocation_dumpster' => isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '',
-                    'date_removal_dumpster_forecast' => isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '',
-                    'date_effective_removal_dumpster' => $effectiveDateRemoval,
-                    'name' => $calldemandFirst->name,
-                    'address' => $calldemandFirst->address,
-                    'address_complement' => $calldemandFirst->address_complement,
-                    'number' => $calldemandFirst->number,
-                    'zipcode' => $calldemandFirst->zipcode,
-                    'city' => $calldemandFirst->city,
-                    'district' => $calldemandFirst->district,
-                    'state' => $calldemandFirst->state,
-                    'phone' => $calldemandFirst->phone,
-                    'dumpster_sequence_demand' => $calldemandFirst->dumpster_sequence_demand,
-                    'dumpster_quantity' => $calldemandFirst->dumpster_quantity,
-                    'days_allocation' => $calldemandFirst->days_allocation,
-                    'id_driver' => $request->id_driver
-                ]);
+                        'id_demand' => $calldemandFirst->id_demand,
+                        'type_service' => 'RETIRADA',
+                        'dumpster_removal' => true,
+                        'id_parent' => $calldemandFirst->id,
+                        'period' => $calldemandFirst->period,
+                        'date_allocation_dumpster' => isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '',
+                        'date_removal_dumpster_forecast' => isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '',
+                        'date_effective_removal_dumpster' => $effectiveDateRemoval,
+                        'name' => $calldemandFirst->name,
+                        'address' => $calldemandFirst->address,
+                        'address_complement' => $calldemandFirst->address_complement,
+                        'number' => $calldemandFirst->number,
+                        'zipcode' => $calldemandFirst->zipcode,
+                        'city' => $calldemandFirst->city,
+                        'district' => $calldemandFirst->district,
+                        'state' => $calldemandFirst->state,
+                        'phone' => $calldemandFirst->phone,
+                        'dumpster_sequence_demand' => $calldemandFirst->dumpster_sequence_demand,
+                        'dumpster_quantity' => $calldemandFirst->dumpster_quantity,
+                        'days_allocation' => $calldemandFirst->days_allocation,
+                        'id_driver' => $request->id_driver
+                    ]);
+                }
             }
 
+
+            // Se cliente pagou ou não 
             $paymentDemand = PaymentCallDemand::where('id_call_demand_reg',$request->id_reg)
             ->where('id_call_demand', $request->id_demand)
             ->update([

@@ -210,7 +210,7 @@
                                                     <?php if($valDemand->service_status == 5):?>
                                                         <label class="text-info font-weight-bold">PEDIDO FINALIZADO</label>
                                                     <?php else:?>
-                                                        <label class="text-warning font-weight-bold">{{$valDemand->service_status}}</label>
+                                                        <label class="text-warning font-weight-bold">EM ANDAMENTO</label>
                                                     <?php endif;?>
                                                     
                                                 </td>
@@ -218,7 +218,9 @@
                                                 <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
                                                 <td class="text-center">
                                                     <?php if($valDemand->payment_demand == true):?>
-                                                        <h4 class="text-danger">SIM</h4>
+                                                    <h4 class="text-primary">SIM</h4>
+                                                    <?php else:?>
+                                                    <h4 class="text-danger">Não</h4>
                                                     <?php endif;?>
                                                 </td>
                                             </tr>
