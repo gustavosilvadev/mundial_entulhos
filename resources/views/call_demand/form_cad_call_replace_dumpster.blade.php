@@ -286,12 +286,7 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group input-icon">
                                                                                                             <label for="iss">ISS</label>
-
-                                                                                                            <?php if(isset($calldemandpayment)): ?>
-                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" value="{{$calldemandpayment->iss}}"/>
-                                                                                                            <?php else:?>
-                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" />
-                                                                                                            <?php endif;?>
+                                                                                                            <input type="text" name="iss" class="form-control iss" id="iss" value="{{  str_replace('.',',',$calldemandpayment->iss); }}"/>
 
                                                                                                             <i>R$</i>
                                                                                                         </div>
@@ -349,8 +344,7 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="invoice_number">CÓDIGO NF</span>
-                                                                                                            {{-- <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ $calldemandpayment->invoice_number }}" autocomplete="off"/> --}}
-                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="" autocomplete="off"/>
+                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ $calldemandpayment->invoice_number }}" autocomplete="off"/>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     
@@ -358,27 +352,27 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_issue">DATA DA EMISSÃO</span>
-                                                                                                            {{-- <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_issue date-mask" value="{{ $calldemandpayment->date_issue }}" data-column="5"  data-column-index="4" /> --}}
-                                                                                                            
-                                                                                                            <input type="text" name="date_issue" id="date_issue" class="form-control dt-date flatpickr-range dt-input date_format date_issue date-mask" value="{{ $calldemandpayment->date_issue }}" data-column="5"  data-column-index="4" />
-                                                                                                            
-                                                                                                            {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                                            <input type="hidden" id="date_issue" value="{{ $calldemandpayment->date_issue != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_issue))) : '' }}" />
+                                                                                                            <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_issue_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
+
                                                                                                         </div>    
                                                                                                     </div>
 
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_payment_forecast">PREV. PAGAMENTO</span>
-                                                                                                            <input type="text" name="date_payment_forecast" id="date_payment_forecast" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast" data-column="5"  data-column-index="4" />
-                                                                                                            {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                                            {{-- <input type="text" name="date_payment_forecast" id="date_payment_forecast" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast" data-column="5"  data-column-index="4" /> --}}
+                                                                                                            <input type="hidden" id="date_payment_forecast" value="{{ $calldemandpayment->date_payment_forecast != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_payment_forecast))) : '' }}" />
+                                                                                                            <input type="text" name="date_payment_forecast" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_payment_forecast_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
                                                                                                         </div>    
                                                                                                     </div>
                                                                                                     
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_effective_paymen">PAGAMENTO EFETIVO</span>
-                                                                                                            <input type="text" name="date_effective_paymen" id="date_effective_paymen" class="form-control dt-date flatpickr-range dt-input date_format date_effective_paymen" data-column="5"  data-column-index="4" />
-                                                                                                            {{-- <div class="loadingMask text-primary" style="display:none;">Loading...</div> --}}
+                                                                                                            {{-- <input type="text" name="date_effective_paymen" id="date_effective_paymen" class="form-control dt-date flatpickr-range dt-input date_format date_effective_paymen" data-column="5"  data-column-index="4" /> --}}
+                                                                                                            <input type="hidden" id="date_effective_paymen" value="{{ $calldemandpayment->date_effective_paymen != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_effective_paymen))) : '' }}" />
+                                                                                                            <input type="text" name="date_effective_paymen" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_effective_paymen_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
                                                                                                         </div>    
                                                                                                     </div>                                                                            
                                                                                                 </div>
@@ -446,6 +440,18 @@
 <script>
 
     $(document).ready(function(){
+
+        $('.date_payment_forecast_edit').flatpickr({
+            dateFormat: "d/m/Y"
+        }).setDate($('#date_payment_forecast').val());
+        
+        $('.date_effective_paymen_edit').flatpickr({
+            dateFormat: "d/m/Y"
+        }).setDate($('#date_effective_paymen').val());
+        
+        $('.date_issue_edit').flatpickr({
+            dateFormat: "d/m/Y"
+        }).setDate($('#date_issue').val());
 
         $('.date_format_allocation_edit').flatpickr({
                 // mode: "multiple",
@@ -676,6 +682,7 @@
             let date_removal_dumpster_forecast  = $("input[name=date_removal_dumpster_forecast]").val();
             let total_days      = $("input[name=total_days]").val();
             let id_driver       = ($("#driver").val() == '' || $("#driver").val() == 'undefined') ? '0' : $("#driver").val();
+            /*
             let iss             = $("#iss").val();
             let hasPaid         = $("#has_paid").val();
             let byBank          = $('#by_bank').val();
@@ -683,7 +690,15 @@
             let dateIssue      = $('#date_issue').val();
             let datePaymentForecast = $('#date_payment_forecast').val();
             let dateEffectivePaymen = $('#date_effective_paymen').val();
-        
+            */
+            let iss      = $("#iss").val();
+            let hasPaid      = $("#has_paid").val();
+            let byBank = $('#by_bank').val();
+            let invoiceNumber  = $('#invoice_number').val();
+            let dateIssue = $("input[name=date_issue]").val();
+            let datePaymentForecast = $("input[name=date_payment_forecast]").val();
+            let dateEffectivePaymen = $("input[name=date_effective_paymen]").val();
+
             if(date_allocation_dumpster == "" || date_allocation_dumpster == undefined)
             {
                 return false;

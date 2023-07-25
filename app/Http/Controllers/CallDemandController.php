@@ -794,7 +794,7 @@ class CallDemandController extends Controller
                     $calldemandDumpsterRemoval->dumpster_number = $calldemandFirst->dumpster_number;
                     $calldemandDumpsterRemoval->dumpster_quantity  = $calldemandFirst->dumpster_quantity;
                     $calldemandDumpsterRemoval->days_allocation    = $calldemandFirst->days_allocation;
-                    $calldemandDumpsterRemoval->id_driver      = $calldemandFirst->id_driver;
+                    $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
 
                     if(!$calldemandDumpsterRemoval->save())
                         return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);

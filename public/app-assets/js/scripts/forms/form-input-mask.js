@@ -21,7 +21,7 @@ $(function () {
     prefixMask = $('.prefix-mask'),
     zipcodeMask = $('.zipcode-mask'),
     priceUnit = $('.price_unit'),
-    issValue = $('.iss-value');
+    issValue = $('.iss');
     // invoiceNumber = $('.invoice_number');
 
 
