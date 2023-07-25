@@ -697,14 +697,15 @@ class CallDemandController extends Controller
             PaymentCallDemand::where('id_call_demand_reg', $request->id_demand_reg)
             ->where('id_call_demand', $request->id_demand)
             ->update([
-                'iss' => $request->iss,
+                // 'iss' => $request->iss,
+                'iss' => preg_replace('/[^0-9]+/','.',str_replace('.','',$request->iss)),
                 'has_paid' => $request->has_paid,
                 'by_bank_transfer' => $by_bank_transfer,
                 'by_bank_slip' => $by_bank_slip,
                 'invoice_number' => $request->invoice_number,
-                'date_issue' => $request->date_issue,
-                'date_payment_forecast' => $request->date_payment_forecast,
-                'date_effective_paymen' => $request->date_effective_paymen
+                'date_issue' => (isset($request->date_issue) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_issue))) : ''),
+                'date_payment_forecast' => (isset($request->date_payment_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_payment_forecast))) : ''),
+                'date_effective_paymen' => (isset($request->date_effective_paymen) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_effective_paymen))) : '')
             ]);
 
             if($call_demand){
