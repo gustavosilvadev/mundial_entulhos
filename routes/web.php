@@ -93,6 +93,7 @@ Route::middleware('usersession')->group(function(){
     //Resumo Pedidos
     Route::get('call_demand_resume', [CallDemandController::class, 'showCallDemandResume']);
     Route::get('show_activities_driver', [CallDemandController::class,'showActivitiesEmployee']);
+    Route::get('search_activities_driver', [CallDemandController::class,'searchActivitiesEmployee']);
     
 
 

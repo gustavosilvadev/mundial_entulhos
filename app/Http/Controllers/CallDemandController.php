@@ -177,10 +177,7 @@ class CallDemandController extends Controller
                 DB::raw('"" as name_driver')
 
             )
-            // )->where('call_demand.service_status','<>',5)
-            // ->where('call_demand.id_driver','>=',0)
-            // ->where('call_demand.type_service','<>','RETIRADA')
-            // ->orderByDesc('call_demand.id')
+            ->where('call_demand.dumpster_removal','<>',true)
             ->orderByDesc('call_demand.created_at')
             ->get();
 
@@ -241,8 +238,135 @@ class CallDemandController extends Controller
         }
     }
 
-    public function showCallDemandResume()
+    public function showCallDemandResume(Request $request)
     {
+
+        $date_demand_filter = isset($request->date_demand_filter) ? $request->date_demand_filter : date('d/m/Y');
+        $calldemands = DB::table('call_demand')
+        ->select(
+            'call_demand.id as id',
+            'call_demand.id_demand as id_demand',
+            'call_demand.type_service  as type_service',
+            'call_demand.period',
+            'call_demand.name as name',
+            DB::raw('DATE_FORMAT(call_demand.date_start, "%d/%m/%Y") as date_start'),
+            DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as date_allocation_dumpster'),
+            DB::raw('DATE_FORMAT(call_demand.date_removal_dumpster_forecast, "%d/%m/%Y") as date_removal_dumpster_forecast'),
+            DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
+            // DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_end'),
+            DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
+            'call_demand.address as address_service',
+            'call_demand.number as number_address_service',
+            'call_demand.zipcode as zipcode_address_service',
+            'call_demand.city as city_address_service',
+            'call_demand.district as district_address_service',
+            'call_demand.state as state_address_service',
+            'call_demand.comments as comments_demand',
+            'call_demand.phone as phone_demand',
+            'call_demand.price_unit',
+            'call_demand.dumpster_quantity',
+            'call_demand.dumpster_number',
+            'call_demand.id_landfill',
+            'call_demand.id_driver',
+            'call_demand.service_status',
+            DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
+            DB::raw('"" as name_landfill'),
+            DB::raw('employee.name as name_driver')
+
+        )
+        ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+        ->join('employee', 'employee.id', '=', 'driver.id_employee')
+        ->where('call_demand.id_driver','>=',0)
+        // ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'),'=',date('d/m/Y'))
+        ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'),'=',$date_demand_filter)
+        // ->orderByDesc('call_demand.id')
+        ->orderByDesc('call_demand.created_at')
+        ->get();
+
+        if($calldemands->isEmpty() != true){
+            return view('call_demand.list_resume_call_demand',[
+                'calldemands'=> $calldemands
+            ]);
+
+        }else{
+            
+            return view('call_demand.list_resume_call_demand',[
+                'employee_activities' => '',
+                'calldemands'=> ''
+            ]);
+        }
+    }
+
+    public function showActivitiesEmployee(Request $request)
+    {
+        if(!empty(trim($request->date_demand_filter))){
+            
+            $date_demand_filter = explode(',', str_replace("|", ",",$request->date_demand_filter));
+
+            $calldemands = DB::table('call_demand')
+            ->select(
+                'employee.name as name',
+                'call_demand.id_driver as id_driver',
+                'call_demand.type_service  as type_service',
+                DB::raw('COUNT(*) as total')
+            )
+            ->join('driver','driver.id', '=', 'call_demand.id_driver')
+            ->join('employee','employee.id', '=', 'driver.id_employee')
+            ->where('call_demand.id_driver','>=',0)
+            // ->whereIn(DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y")'), $date_demand_filter)
+            ->whereIn(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $date_demand_filter)
+            ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
+            ->get();
+            
+
+        }else{
+            $calldemands = DB::table('call_demand')
+            ->select(
+                'employee.name as name',
+                'call_demand.id_driver as id_driver',
+                'call_demand.type_service  as type_service',
+                DB::raw('COUNT(*) as total')
+            )
+            ->join('driver','driver.id', '=', 'call_demand.id_driver')
+            ->join('employee','employee.id', '=', 'driver.id_employee')
+            ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
+            ->where('call_demand.id_driver','>=',0)
+            ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'),'=',date('d/m/Y'))
+            ->get();
+        }
+
+        $activitiesDriverGroup = array();
+        foreach ($calldemands as $demand) { 
+
+            $activitiesDriverGroup[$demand->name][$demand->type_service] = $demand->total;
+        }
+
+
+
+        foreach($activitiesDriverGroup as $keyActName=>$activity)
+        {
+            if(!array_key_exists("COLOCACAO",$activitiesDriverGroup[$keyActName])){
+                $activitiesDriverGroup[$keyActName]["COLOCACAO"] = 0;
+            }
+            
+            if(!array_key_exists("TROCA",$activitiesDriverGroup[$keyActName])){
+                $activitiesDriverGroup[$keyActName]["TROCA"] = 0;
+            }
+
+            if(!array_key_exists('RETIRADA',$activitiesDriverGroup[$keyActName])){
+                $activitiesDriverGroup[$keyActName]['RETIRADA'] = 0;
+            }
+        }
+
+        return $activitiesDriverGroup;
+    }
+
+    public function searchActivitiesEmployee(Request $request)
+    {
+        // return "Response: ".$request->date_demand_filter;
+
+        $date_demand_filter_valid = isset($request->date_demand_filter) ? $request->date_demand_filter : date('d/m/Y');
+        $date_demand_filter       = explode(',', str_replace("|", ",",$date_demand_filter_valid));
 
         $calldemands = DB::table('call_demand')
         ->select(
@@ -279,86 +403,14 @@ class CallDemandController extends Controller
         ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
         ->join('employee', 'employee.id', '=', 'driver.id_employee')
         ->where('call_demand.id_driver','>=',0)
-        // ->orderByDesc('call_demand.id')
+        ->whereIn(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $date_demand_filter)
         ->orderByDesc('call_demand.created_at')
         ->get();
+        // ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'),'=',date('d/m/Y'))
+        // ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'),'=',$date_demand_filter)
+        // ->orderByDesc('call_demand.id')
 
-        if($calldemands->isEmpty() != true){
-            return view('call_demand.list_resume_call_demand',[
-                'calldemands'=> $calldemands
-            ]);
-
-        }else{
-            
-            return view('call_demand.list_resume_call_demand',[
-                'employee_activities' => '',
-                'calldemands'=> ''
-            ]);
-        }
-    }
-
-    public function showActivitiesEmployee(Request $request)
-    {
-
-        if(!empty(trim($request->date_demand_filter))){
-            
-            $date_demand_filter = explode(',', str_replace("|", ",",$request->date_demand_filter));
-
-            $calldemands = DB::table('call_demand')
-            ->select(
-                'employee.name as name',
-                'call_demand.id_driver as id_driver',
-                'call_demand.type_service  as type_service',
-                DB::raw('COUNT(*) as total')
-            )
-            ->join('driver','driver.id', '=', 'call_demand.id_driver')
-            ->join('employee','employee.id', '=', 'driver.id_employee')
-            ->where('call_demand.id_driver','>=',0)
-            // ->whereIn(DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y")'), $date_demand_filter)
-            ->whereIn(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $date_demand_filter)
-            ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
-            ->get();
-            
-
-        }else{
-            $calldemands = DB::table('call_demand')
-            ->select(
-                'employee.name as name',
-                'call_demand.id_driver as id_driver',
-                'call_demand.type_service  as type_service',
-                DB::raw('COUNT(*) as total')
-            )
-            ->join('driver','driver.id', '=', 'call_demand.id_driver')
-            ->join('employee','employee.id', '=', 'driver.id_employee')
-            ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
-            ->where('call_demand.id_driver','>=',0)
-            ->get();
-        }
-
-        $activitiesDriverGroup = array();
-        foreach ($calldemands as $demand) { 
-
-            $activitiesDriverGroup[$demand->name][$demand->type_service] = $demand->total;
-        }
-
-
-
-        foreach($activitiesDriverGroup as $keyActName=>$activity)
-        {
-            if(!array_key_exists("COLOCACAO",$activitiesDriverGroup[$keyActName])){
-                $activitiesDriverGroup[$keyActName]["COLOCACAO"] = 0;
-            }
-            
-            if(!array_key_exists("TROCA",$activitiesDriverGroup[$keyActName])){
-                $activitiesDriverGroup[$keyActName]["TROCA"] = 0;
-            }
-
-            if(!array_key_exists('RETIRADA',$activitiesDriverGroup[$keyActName])){
-                $activitiesDriverGroup[$keyActName]['RETIRADA'] = 0;
-            }
-        }
-
-        return $activitiesDriverGroup;
+        return $calldemands;
     }
 
     public function showHistoryDemand($id_demand)

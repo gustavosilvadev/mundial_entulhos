@@ -34,7 +34,7 @@
                                 <form class="dt_adv_search" method="POST">
                                     <div class="row">
                                         <div class="col-sm">
-                                            <label>DATA DE ALOCAÇÃO</label>
+                                            <label>DATA DA OPERAÇÃO</label>
                                             <div class="form-group mb-0">
                                                 <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                             </div>
@@ -67,7 +67,8 @@
                                     <thead>
                                         <tr>
                                             <th>COLOCAÇÃO/TROCA</th>
-                                            <th>DATA DE ALOCAÇÃO</th>
+                                            <th>DATA DA OPERACAO</th>
+                                            {{-- <th>DATA DE RETIRADA EFETIVA</th> --}}
                                             <th>CLIENTE</th>
                                             <th>ENDEREÇO</th>
                                             <th>BAIRRO</th>
@@ -75,7 +76,7 @@
                                             <th>COMENTÁRIOS</th>
                                             <th>MOTORISTAS</th>
                                             <th>Nº FICHA</th>
-                                            <th>Nº PEDIDO</th>
+                                            {{-- <th>Nº PEDIDO</th> --}}
 
 
                                         </tr>
@@ -86,6 +87,7 @@
                                         <tr>
                                             <td><?php echo $valDemand->type_service; ?></td>
                                             <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
+                                            {{-- <td><?php echo $valDemand->date_effective_removal_dumpster; ?></td> --}}
                                             <td><?php echo $valDemand->name; ?></td>
                                             <td>
                                                 <?php echo $valDemand->address_service.' '.
@@ -97,7 +99,7 @@
                                             <td><?php echo $valDemand->comments_demand; ?></td>
                                             <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td> 
                                             <td>{{ $valDemand->id }}</td>
-                                            <td>{{ $valDemand->id_demand }}</td>
+                                            {{-- <td>{{ $valDemand->id_demand }}</td> --}}
                                         </tr>
                                             <?php endforeach;?>
                                         <?php endif; ?>      
@@ -105,7 +107,8 @@
                                     <tfoot>
                                         <tr>
                                             <th>COLOCAÇÃO/TROCA</th>
-                                            <th>DATA</th>
+                                            <th>DATA DA OPERAÇÃO</th>
+                                            {{-- <th>DATA RET. EFETIVA</th> --}}
                                             <th>CLIENTE</th>
                                             <th>ENDEREÇO</th>
                                             <th>BAIRRO</th>
@@ -113,7 +116,7 @@
                                             <th>COMENTÁRIOS</th>
                                             <th>MOTORISTAS</th>
                                             <th>Nº FICHA</th>
-                                            <th>Nº PEDIDO</th>
+                                            {{-- <th>Nº PEDIDO</th> --}}
                                         </tr>                                            
                                     </tfoot>
                                 </table>
@@ -133,7 +136,6 @@
 $(document).ready(function() {
     
     let searchQuantityTypeService = (dateDemandFilter) => {
-
         $("#tbmotoristaservicos tr td").remove();
         $.ajax({
             method: 'GET',
@@ -170,6 +172,50 @@ $(document).ready(function() {
     };
 
     searchQuantityTypeService();
+
+    function searchDataService(dateDemandFilter){
+
+        $('#tbpedido tr').detach();
+        
+        $.ajax({
+            method: 'GET',
+            url: 'search_activities_driver',
+            data: {date_demand_filter : dateDemandFilter},
+            success: function(dataResponse) {
+
+            dataResponse.forEach(responseInfo => {
+
+                let nameDriver = (responseInfo.name_driver != "") ? responseInfo.name_driver : "";
+                let rowTable = "<tr>" +
+                    '<td>' + responseInfo.type_service + '</td>' +
+                '<td>' + responseInfo.date_allocation_dumpster + '</td>' +
+                '<td>' + responseInfo.name + '</td>' +
+                '<td>' + responseInfo.address_service + ' ' + responseInfo.number_address_service + '</td>' +
+                '<td>' + responseInfo.district_address_service + '</td>' +
+                '<td>' + responseInfo.city_address_service + '</td>' +
+                '<td>' + responseInfo.comments_demand + '</td>' +
+                '<td>' + nameDriver + '</td>' +
+                '<td>' + responseInfo.id + '</td>' +
+                '</tr>';
+                
+                $('#tbpedido').append(rowTable);
+
+            });
+
+            $('#tbpedido thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#tbpedido thead');
+
+            },
+            error: function(responseError){
+
+                console.log(responseError);
+            }
+        });
+
+
+    }
 
     // Formating Call Demand Table
 
@@ -274,11 +320,9 @@ $(document).ready(function() {
             .columns(1)
             .search(dateDemandFilter.replace(/,/g,"|"), true,false)
             .draw();
-
-
+            
+        searchDataService(dateDemandFilter.replace(/,/g,"|"));
         searchQuantityTypeService(dateDemandFilter.replace(/,/g,"|"));
-
-
     });
 
 });

@@ -153,8 +153,10 @@
                                             <tr>
                                                 <th>&nbsp</th>
                                                 <th>Nº FICHA</th>
-                                                <th>Nº PEDIDO</th>
-                                                <th>ID PAI</th>
+                                                {{-- <th>Nº PEDIDO</th> --}}
+                                                {{-- <th>ID PAI</th> --}}
+                                                <th></th>
+                                                <th></th>
                                                 <th>COLOCAÇÃO/TROCA</th>
                                                 <th>PERÍODO DO DIA</th>
                                                 <th>CLIENTE</th>
@@ -183,8 +185,10 @@
                                                 <td><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
                                                 <td>{{ $valDemand->id }}</td>
                                                 
-                                                <td>{{ $valDemand->id_demand }}</td>
-                                                <td><?php echo $valDemand->id_parent; ?></td>
+                                                {{-- <td>{{ $valDemand->id_demand }}</td> --}}
+                                                {{-- <td><?php echo $valDemand->id_parent; ?></td> --}}
+                                                <td></td>
+                                                <td></td>
                                                 <td><?php echo $valDemand->type_service; ?></td>
                                                 <td><?php echo $valDemand->period; ?></td>
                                                 <td><?php echo $valDemand->name; ?></td>
@@ -231,8 +235,10 @@
                                             <tr>
                                                 <th>&nbsp;</th>
                                                 <th>Nº FICHA</th>
-                                                <th>Nº PEDIDO</th>
-                                                <th>ID PAI</th>
+                                                {{-- <th>Nº PEDIDO</th> --}}
+                                                {{-- <th>ID PAI</th> --}}
+                                                <th></th>
+                                                <th></th>
                                                 <th>COLOCAÇÃO/TROCA</th>
                                                 <th>PERÍODO DO DIA</th>
                                                 <th>CLIENTE</th>
