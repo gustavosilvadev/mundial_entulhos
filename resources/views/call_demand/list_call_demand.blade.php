@@ -206,7 +206,6 @@
                                                     <?php else:?>
                                                         <label class="text-warning font-weight-bold">EM ANDAMENTO</label>
                                                     <?php endif;?>
-                                                    
                                                 </td>
                                                 <td><?php echo $valDemand->name_landfill; ?></td>
                                                 <td>{{ (isset($valDemand->name_driver) && $valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>

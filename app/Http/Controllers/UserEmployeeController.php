@@ -8,7 +8,7 @@ use App\Http\Controllers\Controllers;
 use \Session as Session;
 use App\Models\Employee;
 use App\Models\Driver;
-
+use Cookie;
 class UserEmployeeController extends Controller
 {
 
@@ -66,6 +66,7 @@ class UserEmployeeController extends Controller
         $LoginUser = Employee::where("login","=",$login)
                     ->orWhere("email","=",$login)
                     ->first();
+
 
         if($LoginUser){
 

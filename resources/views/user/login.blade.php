@@ -14,12 +14,6 @@
                         <!-- Login v1 -->
                         <div class="card mb-0">
                             <div class="card-body">
-{{--                                 
-                                <a class="brand-logo display-4" href="/" data-toggle="tooltip" data-placement="top">
-                                    <ins style="text-color:black">Mudial</ins> 
-                                    <mark class="bg-dark text-white">Entulhos</mark>
-                                </a>
- --}}
  
                                 <h4 class="card-title mb-1">Acesse o portal!</h4>
 
@@ -58,11 +52,12 @@
 {{-- 
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" id="remember-me" type="checkbox" tabindex="3" />
+                                            <input class="custom-control-input" name="remember_me" id="remember-me" type="checkbox" tabindex="3" />
                                             <label class="custom-control-label" for="remember-me"> Lembrar Senha</label>
                                         </div>
-                                    </div> 
+                                    </div>  
 --}}
+
 
                                     <div class="form-group">
                                         <a class="" href="perfil-create">Criar conta </a>
