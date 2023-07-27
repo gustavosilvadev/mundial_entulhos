@@ -134,7 +134,7 @@ class CallDemandController extends Controller
             $calldemand = CallDemand::where('id_demand',$id_demand)->orderBy('id_demand','DESC')->first();
 
             if(isset($calldemand)){
-                
+
                 return view('call_demand.preview_call_demand',['calldemand' => $calldemand]);
 
             }else{
@@ -174,14 +174,19 @@ class CallDemandController extends Controller
                 DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
                 DB::raw('"" as name_landfill'),
                 DB::raw('"" as payment_demand'),
-                DB::raw('"" as name_driver')
+                DB::raw('"" as nf'),
+                DB::raw('"" as date_issue'),
+                DB::raw('"" as date_payment_forecast')
 
             )
             ->where('call_demand.dumpster_removal','<>',true)
+            ->where('call_demand.service_status','<>',5)
             ->orderByDesc('call_demand.created_at')
             ->get();
 
             foreach($calldemands as $call_demand){
+                
+                $call_demand->date_effective_removal_dumpster = ($call_demand->date_effective_removal_dumpster != 0 ? $call_demand->date_effective_removal_dumpster : "" );
 
                 if($call_demand->id_driver){
                     $findDriver = DB::table('driver')
@@ -203,14 +208,22 @@ class CallDemandController extends Controller
                 
                 $payment = DB::table('payment_call_demand')
                 ->where('id_call_demand_reg', '=', $call_demand->id)
-                ->get('payment_call_demand.has_paid as has_paid')->first();
+                ->get([
+                    'payment_call_demand.has_paid as has_paid',
+                    'payment_call_demand.invoice_number as invoice_number',
+                    DB::raw('DATE_FORMAT(payment_call_demand.date_issue, "%d/%m/%Y") as date_issue'),
+                    DB::raw('DATE_FORMAT(payment_call_demand.date_payment_forecast, "%d/%m/%Y") as date_payment_forecast')
+                ])->first();
 
                 if(empty($payment) || $payment->has_paid == false){
                     $call_demand->payment_demand = false;
                 }else{
                     $call_demand->payment_demand = true;
                 }
-                    
+
+                $call_demand->nf = $payment->invoice_number;
+                $call_demand->date_issue = ($payment->date_issue != 0 ? $payment->date_issue : "" );
+                $call_demand->date_payment_forecast = ($payment->date_payment_forecast != 0 ? $payment->date_payment_forecast : "" );
             }
 
             $driver_name_demands = DB::table('driver')
@@ -218,6 +231,7 @@ class CallDemandController extends Controller
                                     ->where('driver.flg_status','=', 1)
                                     // ->get(["driver.id", "employee.name"]);
                                     ->get(["employee.name","driver.id"]);
+
 
             if($calldemands->isEmpty() != true){
                 return view('call_demand.list_call_demand',[
@@ -830,7 +844,10 @@ class CallDemandController extends Controller
                     $calldemandDumpsterRemoval->dumpster_removal = true;
                     $calldemandDumpsterRemoval->id_parent      = $calldemandFirst->id;
                     $calldemandDumpsterRemoval->period         = $calldemandFirst->period;
-                    $calldemandDumpsterRemoval->date_allocation_dumpster = isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '';
+                    // $calldemandDumpsterRemoval->date_allocation_dumpster = isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '';
+                    
+                    // MUDAR NOME DA COLUNA ABAIXO PARA "DATA DE OPERAÇÃO" ONDE AGORA IRÁ ASSUMIR TANTO ALOCAÇÃO QUANTO TROCA E RETIRADA
+                    $calldemandDumpsterRemoval->date_allocation_dumpster = $effectiveDateRemoval;
                     $calldemandDumpsterRemoval->date_removal_dumpster_forecast  = isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '';
                     $calldemandDumpsterRemoval->date_effective_removal_dumpster = $effectiveDateRemoval;
                     $calldemandDumpsterRemoval->name           = $calldemandFirst->name;

@@ -153,14 +153,9 @@
                                             <tr>
                                                 <th>&nbsp</th>
                                                 <th>Nº FICHA</th>
-                                                {{-- <th>Nº PEDIDO</th> --}}
-                                                {{-- <th>ID PAI</th> --}}
-                                                <th></th>
-                                                <th></th>
                                                 <th>COLOCAÇÃO/TROCA</th>
                                                 <th>PERÍODO DO DIA</th>
                                                 <th>CLIENTE</th>
-                                                <th>DATA PEDIDO</th>
                                                 <th>DATA OPERAÇÃO</th>
                                                 <th>DATA ALOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
@@ -169,12 +164,14 @@
                                                 <th>TELEFONE</th>
                                                 <th>PREÇO</th>
                                                 <th>COMENTÁRIOS</th>
-                                                <th>QUANTIDADE CACAMBAS</th>
                                                 <th>NÚMERO CAÇAMBA</th>
                                                 <th>STATUS</th> 
                                                 <th>ATERRO</th>
                                                 <th>MOTORISTA</th>
                                                 <th>PAGO</th>
+                                                <th>NF</th>
+                                                <th>Data Emissão NF</th>
+                                                <th>Data Vencimento NF</th>                                                
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -183,16 +180,10 @@
                                             <tr class="{{ ($valDemand->payment_demand == true) ? 'row_bg_status' : '' }}">
 
                                                 <td><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
-                                                <td>{{ $valDemand->id }}</td>
-                                                
-                                                {{-- <td>{{ $valDemand->id_demand }}</td> --}}
-                                                {{-- <td><?php echo $valDemand->id_parent; ?></td> --}}
-                                                <td></td>
-                                                <td></td>
+                                                <td>{{ $valDemand->id}}/{{$valDemand->id_demand}}</td>
                                                 <td><?php echo $valDemand->type_service; ?></td>
                                                 <td><?php echo $valDemand->period; ?></td>
                                                 <td><?php echo $valDemand->name; ?></td>
-                                                <td><?php echo $valDemand->created_at; ?></td>
                                                 <td><?php echo $valDemand->date_start; ?></td>
                                                 <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
                                                 <td><?php echo $valDemand->date_removal_dumpster_forecast; ?></td>
@@ -208,7 +199,6 @@
                                                 <td><?php echo $valDemand->phone_demand; ?></td>
                                                 <td><?php echo $valDemand->price_unit; ?></td>
                                                 <td><?php echo $valDemand->comments_demand; ?></td>
-                                                <td><?php echo $valDemand->dumpster_quantity; ?></td>
                                                 <td><?php echo $valDemand->dumpster_number; ?></td>
                                                 <td>
                                                     <?php if($valDemand->service_status == 5):?>
@@ -219,7 +209,7 @@
                                                     
                                                 </td>
                                                 <td><?php echo $valDemand->name_landfill; ?></td>
-                                                <td>{{ ($valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
+                                                <td>{{ (isset($valDemand->name_driver) && $valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
                                                 <td class="text-center">
                                                     <?php if($valDemand->payment_demand == true):?>
                                                     <h4 class="text-primary">SIM</h4>
@@ -227,6 +217,10 @@
                                                     <h4 class="text-danger">Não</h4>
                                                     <?php endif;?>
                                                 </td>
+
+                                                <td>{{ ($valDemand->nf != "") ? $valDemand->nf : "" }}</td>
+                                                <td>{{ ($valDemand->date_issue != "") ? $valDemand->date_issue : "" }}</td>                                                
+                                                <td>{{ ($valDemand->date_payment_forecast != "") ? $valDemand->date_payment_forecast : "" }}</td>                                                
                                             </tr>
                                                 <?php endforeach;?>
                                             <?php endif; ?>      
@@ -235,14 +229,9 @@
                                             <tr>
                                                 <th>&nbsp;</th>
                                                 <th>Nº FICHA</th>
-                                                {{-- <th>Nº PEDIDO</th> --}}
-                                                {{-- <th>ID PAI</th> --}}
-                                                <th></th>
-                                                <th></th>
                                                 <th>COLOCAÇÃO/TROCA</th>
                                                 <th>PERÍODO DO DIA</th>
                                                 <th>CLIENTE</th>
-                                                <th>DATA PEDIDO</th>  
                                                 <th>DATA OPERAÇÃO</th>
                                                 <th>DATA ALOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
@@ -251,12 +240,14 @@
                                                 <th>TELEFONE</th>
                                                 <th>PREÇO</th>
                                                 <th>COMENTÁRIOS</th>
-                                                <th>QUANTIDADE CACAMBAS</th>
                                                 <th>NÚMERO CAÇAMBA</th>
                                                 <th>STATUS</th> 
                                                 <th>ATERRO</th>
                                                 <th>MOTORISTA</th>
                                                 <th>PAGO</th>
+                                                <th>NF</th>
+                                                <th>Data Emissão NF</th>
+                                                <th>Data Vencimento NF</th>
                                             </tr>                                            
                                         </tfoot>
                                     </table>
@@ -502,18 +493,17 @@ $(document).ready(function() {
 
             if( $cell.index()>0){
 
-                selectedRows = tbpedido.rows({ selected: true });
-                selectedData = selectedRows.data();
-                id_reg       = $(this).find("td:eq(1)").text();
-                id_demand    = $(this).find("td:eq(2)").text();
-                nameDriver   = $(this).find("td:eq(20)").text();
-                paymentStatus= $(this).find("td:eq(21)").text();
-                dateEffectiveRemoval = $(this).find("td:eq(11)").text();
+                selectedRows  = tbpedido.rows({ selected: true });
+                selectedData  = selectedRows.data();
+                id_reg        = $(this).find("td:eq(1)").text().split('/')[0];
+                id_demand     = $(this).find("td:eq(1)").text().split('/')[1];
+                nameDriver    = $(this).find("td:eq(16)").text();
+                paymentStatus = $(this).find("td:eq(17)").text();
+                dateEffectiveRemoval = $(this).find("td:eq(8)").text();
 
-                // $("#all_drivers").prop("checked", false);
-                // $("#all_effectivedateremoval").prop("checked", false);
-
-
+                // let data = tbpedido.row(evt.target.closest('tr')).data();
+                // console.log("Serviço: " + data[4]);
+                
                 $("#modal-edit").modal('toggle');
 
                 if(nameDriver != "")
@@ -527,7 +517,6 @@ $(document).ready(function() {
 
                 if(paymentStatus.trim() != "")
                 {
-
                     $("#payment_status option:contains("+ paymentStatus.trim() +")").attr("selected", "selected");
 
                 }else{
@@ -538,7 +527,6 @@ $(document).ready(function() {
                 $("#idreg").val(id_reg);
                 $("#iddemand").val(id_demand);
                 $("#btn_edit").attr("href","editcalldemand/" + id_reg);
-
             }
         });
 
@@ -581,6 +569,7 @@ $(document).ready(function() {
 
             let idDemand            = $("#iddemand").val();
             let idReg               = $("#idreg").val();
+            let numeroFicha         = idReg + '/' + idDemand;
             let idDriverSelected    = $("#name_driver_selected").val();
             let nameDriverSelected  = $("#name_driver_selected").find('option:selected').text()
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
@@ -601,10 +590,11 @@ $(document).ready(function() {
 
                     if(dataResponse){
                         
-                        rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
-                        tbpedido.cell(":eq("+rowIndex+")", 20).data(nameDriverSelected);
-                        tbpedido.cell(":eq("+rowIndex+")", 21).data((paymentStatus) ? "SIM" : "");
-                        tbpedido.cell(":eq("+rowIndex+")", 11).data(effectiveDateRemoval);
+                        // rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
+                        rowIndex = tbpedido.row().column(1).data().indexOf(numeroFicha);
+                        tbpedido.cell(":eq("+rowIndex+")", 16).data(nameDriverSelected);
+                        tbpedido.cell(":eq("+rowIndex+")", 17).data((paymentStatus) ? "SIM" : "Não");
+                        tbpedido.cell(":eq("+rowIndex+")", 8).data(effectiveDateRemoval);
 
                     }else
                         alert("Erro ao atualizar o nome do Motorista!");

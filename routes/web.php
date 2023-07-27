@@ -101,7 +101,7 @@ Route::middleware('usersession')->group(function(){
     Route::get('clientinfopayment', [ClientInfoPaymentController::class,'showInfoClientInfoPayment']);
     Route::post('save_client_info_payment',[ClientInfoPaymentController::class,'store']);
     
-    
+
 });
 
 Route::get('listlandfill', [DriverController::class,'getLandFill']);
@@ -111,7 +111,7 @@ Route::get('call_demand_teste/{id?}',[CallDemandController::class,'showTeste']);
 
 
 // USUÁRIO / LOGIN
-Route::get('/login', function(){
+Route::get('login', function(){
 
     if(session('id_user') != null
         && session('login') != null
@@ -129,7 +129,7 @@ Route::get('perfil-create', function(){
 
 Route::get('ger-login',[UserEmployeeController::class,'generateLogin']);
 Route::post('/perfil-save',[UserEmployeeController::class,'store']);
-Route::post('login',[UserEmployeeController::class,'conectLogin']);
+Route::post('/login',[UserEmployeeController::class,'conectLogin']);
 Route::get('/logout',[UserEmployeeController::class,'logoutAccount']);
 
 

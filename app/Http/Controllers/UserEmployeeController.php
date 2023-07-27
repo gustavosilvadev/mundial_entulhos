@@ -47,7 +47,6 @@ class UserEmployeeController extends Controller
     public function conectLogin(Request $request)
     {
 
-
         $isRemovedUser = null;
 
         if(filter_var($request->login, FILTER_VALIDATE_EMAIL)){
@@ -118,12 +117,12 @@ class UserEmployeeController extends Controller
         return $response;
     }
 
-    public function getCookie()
-    {
-        $response = new \Illuminate\Http\Response('Set Cookie Login');
-        $value = $request->cookie('name');
-        echo $value;
-    }
+    // public function getCookie()
+    // {
+    //     $response = new \Illuminate\Http\Response('Set Cookie Login');
+    //     $value = $request->cookie('name');
+    //     echo $value;
+    // }
 
     public function redirectPagePerfil(){
 
@@ -141,7 +140,7 @@ class UserEmployeeController extends Controller
                 return redirect('/driver_demand');
             }
         }else{
-    
+
             // return view('main.home');
             // return view('client.form_cad_call_demand_cliente');
             return redirect('/login');

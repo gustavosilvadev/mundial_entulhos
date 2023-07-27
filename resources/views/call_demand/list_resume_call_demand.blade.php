@@ -135,6 +135,96 @@
 <script>
 $(document).ready(function() {
     
+    // Formatando Tabela
+    $('#tbpedido thead tr').clone(true).addClass('filters').appendTo('#tbpedido thead');
+
+    var tbpedido = $('#tbpedido').DataTable( {
+        "language": {
+            "url": "public/assets/json/Portuguese-Brasil.json"
+        },
+
+        // order: [[0, 'desc']],
+        scrollX: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel'
+        ],
+
+        // Adicionando filtros em todas as colunas
+        orderCellsTop: true,
+        fixedHeader: true,
+        initComplete: function () {
+            var api = this.api();
+
+            // For each column
+            api
+                .columns()
+                .every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                })
+                .eq(0)
+                .each(function (colIdx) {
+
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+                    var title = $(cell).text();
+                    $(cell).html('<input type="text" />');
+
+                    // On every keypress in this input
+                    $(
+                        'input',
+                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                    )
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '({search})'; 
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                                .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+        },
+
+    });
+
+    
     let searchQuantityTypeService = (dateDemandFilter) => {
         $("#tbmotoristaservicos tr td").remove();
         $.ajax({
@@ -175,37 +265,32 @@ $(document).ready(function() {
 
     function searchDataService(dateDemandFilter){
 
-        $('#tbpedido tr').detach();
-        
+        // $('#tbpedido tr').detach();
+        tbpedido.rows().remove().draw();
+
         $.ajax({
             method: 'GET',
             url: 'search_activities_driver',
             data: {date_demand_filter : dateDemandFilter},
             success: function(dataResponse) {
 
-            dataResponse.forEach(responseInfo => {
+                dataResponse.forEach(responseInfo => {
 
-                let nameDriver = (responseInfo.name_driver != "") ? responseInfo.name_driver : "";
-                let rowTable = "<tr>" +
-                    '<td>' + responseInfo.type_service + '</td>' +
-                '<td>' + responseInfo.date_allocation_dumpster + '</td>' +
-                '<td>' + responseInfo.name + '</td>' +
-                '<td>' + responseInfo.address_service + ' ' + responseInfo.number_address_service + '</td>' +
-                '<td>' + responseInfo.district_address_service + '</td>' +
-                '<td>' + responseInfo.city_address_service + '</td>' +
-                '<td>' + responseInfo.comments_demand + '</td>' +
-                '<td>' + nameDriver + '</td>' +
-                '<td>' + responseInfo.id + '</td>' +
-                '</tr>';
-                
-                $('#tbpedido').append(rowTable);
+                    let nameDriver = (responseInfo.name_driver != "") ? responseInfo.name_driver : "";
+                    tbpedido.row.add( [
+                        responseInfo.type_service,
+                        responseInfo.date_allocation_dumpster,
+                        responseInfo.name,
+                        responseInfo.address_service + ' ' + responseInfo.number_address_service,
+                        responseInfo.district_address_service,
+                        responseInfo.city_address_service,
+                        responseInfo.comments_demand,
+                        nameDriver,
+                        responseInfo.id
 
-            });
+                    ] ).draw(false);
+                });
 
-            $('#tbpedido thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#tbpedido thead');
 
             },
             error: function(responseError){
@@ -213,113 +298,17 @@ $(document).ready(function() {
                 console.log(responseError);
             }
         });
-
-
     }
-
-    // Formating Call Demand Table
-
-    $('#tbpedido thead tr')
-        .clone(true)
-        .addClass('filters')
-        .appendTo('#tbpedido thead');
-
-        let tbpedido = $('#tbpedido').DataTable( {
-            "language": {
-                "url": "public/assets/json/Portuguese-Brasil.json"
-            },
-
-            // order: [[0, 'desc']],
-            scrollX: true,
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel'
-            ],
-
-            // Adicionando filtros em todas as colunas
-            orderCellsTop: true,
-            fixedHeader: true,
-            initComplete: function () {
-                var api = this.api();
-
-                // For each column
-                api
-                    .columns()
-                    .every(function () {
-                        var column = this;
-                        var select = $('<select><option value=""></option></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-    
-                                column.search(val ? '^' + val + '$' : '', true, false).draw();
-                            });
-    
-                        column
-                            .data()
-                            .unique()
-                            .sort()
-                            .each(function (d, j) {
-                                select.append('<option value="' + d + '">' + d + '</option>');
-                            });
-                    })
-                    .eq(0)
-                    .each(function (colIdx) {
-
-                        // Set the header cell to contain the input element
-                        var cell = $('.filters th').eq(
-                            $(api.column(colIdx).header()).index()
-                        );
-                        var title = $(cell).text();
-                        $(cell).html('<input type="text" />');
-
-                        // On every keypress in this input
-                        $(
-                            'input',
-                            $('.filters th').eq($(api.column(colIdx).header()).index())
-                        )
-                            .off('keyup change')
-                            .on('change', function (e) {
-                                // Get the search value
-                                $(this).attr('title', $(this).val());
-                                var regexr = '({search})'; 
-
-                                var cursorPosition = this.selectionStart;
-                                // Search the column for that value
-                                api
-                                    .column(colIdx)
-                                    .search(
-                                        this.value != ''
-                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
-                                            : '',
-                                        this.value != '',
-                                        this.value == ''
-                                    )
-                                    .draw();
-                            })
-                            .on('keyup', function (e) {
-                                e.stopPropagation();
-
-                                $(this).trigger('change');
-                                $(this)
-                                    .focus()[0]
-                                    .setSelectionRange(cursorPosition, cursorPosition);
-                            });
-
-                    });
-            },
-
-        } );
 
     $("#date_format_allocation_search").on('change', function(a){
 
         let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
         
         
-        tbpedido
-            .columns(1)
-            .search(dateDemandFilter.replace(/,/g,"|"), true,false)
-            .draw();
+        // tbpedido
+        //     .columns(1)
+        //     .search(dateDemandFilter.replace(/,/g,"|"), true,false)
+        //     .draw();
             
         searchDataService(dateDemandFilter.replace(/,/g,"|"));
         searchQuantityTypeService(dateDemandFilter.replace(/,/g,"|"));

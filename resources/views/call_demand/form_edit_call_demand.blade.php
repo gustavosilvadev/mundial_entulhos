@@ -310,7 +310,7 @@
                                                                                                         </div>    
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-2">
+                                                                                                    <div class="col-md-2 d-none">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">RETIRADA EFETIVA</label>
 
@@ -432,10 +432,9 @@
 
                                                                                                     <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
 
-                                                                                                    <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
+                                                                                                    {{-- <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?> --}}
                                                                                                         <button class="btn btn-dark " id="btn_finish_demand">CONCLUIR PEDIDO</button>
-                                                                                                        {{-- <button class="btn btn-dark btn-warning " id="btn_finish_all_demands">ENCERRAR TODOS OS CHAMADOS RELACIONADOS</button> --}}
-                                                                                                    <?php endif; ?>
+                                                                                                    {{-- <?php endif; ?> --}}
 
                                                                                                     <h3 class="text-success text-center py-3" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
                                                                                                     <h4 class="text-danger text-center py-3" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
