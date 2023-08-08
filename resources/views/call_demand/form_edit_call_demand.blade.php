@@ -305,7 +305,7 @@
 
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
-                                                                                                            <label for="period">PREVISÃO RETIRADA</label>                                                                                                            
+                                                                                                            <label for="period">PREVISÃO RETIRADA</label>
                                                                                                             <input type="text" name="date_removal_dumpster_forecast" id="date_format" class="form-control dt-date date-mask" data-column="5"  data-column-index="4"  value="{{ $value->date_removal_dumpster_forecast }}"/>
                                                                                                         </div>    
                                                                                                     </div>
@@ -401,7 +401,8 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_issue">DATA DA EMISSÃO</span>
-                                                                                                            <input type="hidden" id="date_issue" value="{{ $calldemandpayment->date_issue != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_issue))) : '' }}" />
+                                                                                                            {{-- <input type="hidden" id="date_issue" value="{{ $calldemandpayment->date_issue != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_issue))) : '' }}" /> --}}
+                                                                                                            <input type="hidden" id="date_issue" value="{{ ($calldemandpayment->date_issue !== '0000-00-00 00:00:00') ? (date('d/m/Y', strtotime($calldemandpayment->date_issue))) : '' }}" />
                                                                                                             <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_issue_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
 
                                                                                                         </div>    
@@ -411,7 +412,9 @@
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_payment_forecast">PREV. PAGAMENTO</span>
 
-                                                                                                            <input type="hidden" id="date_payment_forecast" value="{{ $calldemandpayment->date_payment_forecast != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_payment_forecast))) : '' }}" />
+                                                                                                            {{-- <input type="hidden" id="date_payment_forecast" value="{{ $calldemandpayment->date_payment_forecast != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_payment_forecast))) : '' }}" /> --}}
+
+                                                                                                            <input type="hidden" id="date_payment_forecast" value="{{ ($calldemandpayment->date_payment_forecast !== '0000-00-00 00:00:00') ? (date('d/m/Y', strtotime($calldemandpayment->date_payment_forecast))) : '' }}" />
                                                                                                             <input type="text" name="date_payment_forecast" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_payment_forecast_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
                                                                                                         </div>    
                                                                                                     </div>
@@ -420,7 +423,8 @@
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_effective_paymen">PAGAMENTO EFETIVO</span>
 
-                                                                                                            <input type="hidden" id="date_effective_paymen" value="{{ $calldemandpayment->date_effective_paymen != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_effective_paymen))) : '' }}" />
+                                                                                                            {{-- <input type="hidden" id="date_effective_paymen" value="{{ $calldemandpayment->date_effective_paymen != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_effective_paymen))) : '' }}" /> --}}
+                                                                                                            <input type="hidden" id="date_effective_paymen" value="{{ ($calldemandpayment->date_effective_paymen !== '0000-00-00 00:00:00')  ? (date('d/m/Y', strtotime($calldemandpayment->date_effective_paymen))) : '' }}" />
                                                                                                             <input type="text" name="date_effective_paymen" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_effective_paymen_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
 
                                                                                                         </div>    
