@@ -85,6 +85,16 @@
 
             $('.date_format').flatpickr({
                 dateFormat: "d/m/Y",
+                onReady: function(dateObj, dateStr, instance) {
+                    let $cal = $(instance.calendarContainer);
+                    if ($cal.find('.flatpickr-clear').length < 1) {
+                        $cal.append('<button class="btn flatpickr-clear"><h4>LIMPAR</h4></button>');
+                        $cal.find('.flatpickr-clear').on('click', function() {
+                            instance.clear();
+                            instance.close();
+                        });
+                    }
+                }
             });
 
             $('.date_format_allocation').flatpickr({

@@ -531,10 +531,7 @@
                         url: 'search_demand',
                         data: {data_alocacao : dataAlocacao},
                         success: function(dataResponse) {
-console.log("**************");
-console.log(dataResponse);
-console.log("**************");
-return false;
+
                             $.each(dataResponse, function(i, field) {
                                 let className = "";
                                 if(field.type_service == "COLOCACAO"){

@@ -54,40 +54,6 @@
 
                             <div class="card-body mt-2">
                                 <form class="dt_adv_search" method="POST">
-{{--                                     
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-row mb-1">
-                                                <div class="col-lg-4 mb-1">
-                                                    <label>MOTORISTA</label>
-                                                    <select class="select2 form-control" id="name_search" multiple>
-                                                        <?php if($driver_name_demands):?>
-                                                        <?php foreach($driver_name_demands as $driver_name):?>
-                                                            <option value="{{ $driver_name->name }}">{{ $driver_name->name }}</option>
-                                                        <?php endforeach;?>
-
-                                                        <?php endif;?>
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-lg-4">
-                                                    <label>DATA DE ALOCAÇÃO</label>
-                                                    <div class="form-group mb-0">
-                                                        <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <label>-----</label>
-                                                    <div class="form-group mb-0">
-                                                        <input type="button" class="btn btn-warning" value="Limpar Filtro" id="btn_reset_input">
-                                                        <input type="button" class="btn btn-danger" value="Deletar Pedido" id="btn_delete_demand">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
- --}}
- 
                                     <div class="row">
                                         <div class="col-12">
 
@@ -115,7 +81,7 @@
                                                                         </div>
 
                                                                         <div class="col-lg-4">
-                                                                            <label>DATA DE ALOCAÇÃO</label>
+                                                                            <label>DATA DE COLOCAÇÃO</label>
                                                                             <div class="form-group mb-0">
                                                                                 <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                                                             </div>
@@ -156,8 +122,10 @@
                                                 <th>COLOCAÇÃO/TROCA</th>
                                                 <th>PERÍODO DO DIA</th>
                                                 <th>CLIENTE</th>
-                                                <th>DATA OPERAÇÃO</th>
-                                                <th>DATA ALOCAÇÃO</th>
+                                                {{-- <th>DATA OPERAÇÃO</th> --}}
+                                                <th>DATA ATEND/MOTORISTA</th>
+                                                {{-- <th>DATA ALOCAÇÃO</th> --}}
+                                                <th>DATA DA OPERAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
                                                 <th>DATA RETIRADA EFETIVA</th>
                                                 <th>ENDEREÇO</th>
@@ -180,10 +148,15 @@
                                             <tr class="{{ ($valDemand->payment_demand == true) ? 'row_bg_status' : '' }}">
 
                                                 <td><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
+                                                {{-- <td><strong>{{ $valDemand->id}}</strong>/{{$valDemand->id_demand}}</td> --}}
                                                 <td>{{ $valDemand->id}}/{{$valDemand->id_demand}}</td>
                                                 <td><?php echo $valDemand->type_service; ?></td>
                                                 <td><?php echo $valDemand->period; ?></td>
                                                 <td><?php echo $valDemand->name; ?></td>
+                                                {{-- <td><?php echo $valDemand->date_start; ?></td>
+                                                <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
+                                                <td><?php echo $valDemand->date_removal_dumpster_forecast; ?></td>
+                                                <td><?php echo $valDemand->date_effective_removal_dumpster; ?></td> --}}
                                                 <td><?php echo $valDemand->date_start; ?></td>
                                                 <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
                                                 <td><?php echo $valDemand->date_removal_dumpster_forecast; ?></td>
@@ -201,11 +174,22 @@
                                                 <td><?php echo $valDemand->comments_demand; ?></td>
                                                 <td><?php echo $valDemand->dumpster_number; ?></td>
                                                 <td>
+                                                    {{-- 
                                                     <?php if($valDemand->service_status == 5):?>
                                                         <label class="text-info font-weight-bold">PEDIDO FINALIZADO</label>
                                                     <?php else:?>
                                                         <label class="text-warning font-weight-bold">EM ANDAMENTO</label>
-                                                    <?php endif;?>
+                                                    <?php endif;?> 
+                                                    --}}
+
+                                                    <?php if($valDemand->service_status == 0):?>
+                                                        <label class="text-warning font-weight-bold">PENDENTE</label>
+                                                    <?php elseif($valDemand->service_status == 1):?>
+                                                        <label class="text-success font-weight-bold">EM ATENDIMENTO</label>
+                                                    
+                                                    <?php elseif($valDemand->service_status == 5):?>
+                                                        <label class="text-info font-weight-bold">FINALIZADO</label>                                                        
+                                                    <?php endif;?>                                                    
                                                 </td>
                                                 <td><?php echo $valDemand->name_landfill; ?></td>
                                                 <td>{{ (isset($valDemand->name_driver) && $valDemand->name_driver != "") ? $valDemand->name_driver : "" }}</td>
@@ -217,9 +201,9 @@
                                                     <?php endif;?>
                                                 </td>
 
-                                                <td>{{ ($valDemand->nf != "") ? $valDemand->nf : "" }}</td>
-                                                <td>{{ ($valDemand->date_issue != "") ? $valDemand->date_issue : "" }}</td>                                                
-                                                <td>{{ ($valDemand->date_payment_forecast != "") ? $valDemand->date_payment_forecast : "" }}</td>                                                
+                                                <td>{{ $valDemand->nf }}</td>
+                                                <td>{{ $valDemand->date_issue }}</td>                                                
+                                                <td>{{ $valDemand->date_payment_forecast }}</td>                                                
                                             </tr>
                                                 <?php endforeach;?>
                                             <?php endif; ?>      
@@ -231,8 +215,10 @@
                                                 <th>COLOCAÇÃO/TROCA</th>
                                                 <th>PERÍODO DO DIA</th>
                                                 <th>CLIENTE</th>
-                                                <th>DATA OPERAÇÃO</th>
-                                                <th>DATA ALOCAÇÃO</th>
+                                                {{-- <th>DATA OPERAÇÃO</th> --}}
+                                                <th>DATA ATEND/MOTORISTA</th>
+                                                {{-- <th>DATA ALOCAÇÃO</th> --}}
+                                                <th>DATA DA OPERAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
                                                 <th>DATA RETIRADA EFETIVA</th>
                                                 <th>ENDEREÇO</th>
@@ -359,9 +345,9 @@ $(document).ready(function() {
 
             $(".flatpickr").on('input', function(e) {
                 if(!this.shouldClear && !this.value.length && this._flatpickr.currentYear ) {
-                this.shouldClear = true;
-                this._flatpickr.clear();
-                this.shouldClear = false;
+                    this.shouldClear = true;
+                    this._flatpickr.clear();
+                    this.shouldClear = false;
                 }
             });
 
@@ -497,14 +483,13 @@ $(document).ready(function() {
                 id_reg        = $(this).find("td:eq(1)").text().split('/')[0];
                 id_demand     = $(this).find("td:eq(1)").text().split('/')[1];
                 nameDriver    = $(this).find("td:eq(16)").text();
-                paymentStatus = $(this).find("td:eq(17)").text();
+                paymentStatus = $(this).find("td:eq(17)").text().toUpperCase();
                 dateEffectiveRemoval = $(this).find("td:eq(8)").text();
 
                 // let data = tbpedido.row(evt.target.closest('tr')).data();
                 // console.log("Serviço: " + data[4]);
                 
                 $("#modal-edit").modal('toggle');
-
                 if(nameDriver != "")
                 {
                     $("#name_driver_selected  option:contains("+ nameDriver +")").attr("selected", "selected");
@@ -516,10 +501,17 @@ $(document).ready(function() {
 
                 if(paymentStatus.trim() != "")
                 {
-                    $("#payment_status option:contains("+ paymentStatus.trim() +")").attr("selected", "selected");
+                    // $("#payment_status option:contains("+ paymentStatus.trim() +")").attr("selected", "selected");
+
+                    if(paymentStatus.trim() != 'SIM'){
+                        $('#payment_status option').eq(0).prop('selected', true);
+                    }else{
+                        $('#payment_status option').eq(1).prop('selected', true);
+                    }
 
                 }else{
-                    $("#payment_status option:contains()").attr("selected", false);
+                    // $("#payment_status option:contains()").attr("selected", false);
+                    $('#payment_status option').eq(0).prop('selected', true);
                 }
 
                 $("#effective_date_removal_dumpster").val(dateEffectiveRemoval);
@@ -592,8 +584,15 @@ $(document).ready(function() {
                         // rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
                         rowIndex = tbpedido.row().column(1).data().indexOf(numeroFicha);
                         tbpedido.cell(":eq("+rowIndex+")", 16).data(nameDriverSelected);
-                        tbpedido.cell(":eq("+rowIndex+")", 17).data((paymentStatus) ? "SIM" : "Não");
+                        tbpedido.cell(":eq("+rowIndex+")", 17).data((paymentStatus) ? "<h4 class='text-primary'>SIM</h4>" : "<h4 class='text-danger'>Não</h4>");
                         tbpedido.cell(":eq("+rowIndex+")", 8).data(effectiveDateRemoval);
+
+                        if(paymentStatus){
+                            $('#tbpedido tr:contains("'+ numeroFicha +'")').addClass('row_bg_status');
+
+                        }else{
+                            $('#tbpedido tr:contains("'+ numeroFicha +'")').removeClass('row_bg_status');
+                        }
 
                     }else
                         alert("Erro ao atualizar o nome do Motorista!");
@@ -611,8 +610,7 @@ $(document).ready(function() {
             let namesList = String($("#name_search").val());
 
             tbpedido
-                // .columns(19)
-                .columns(20)
+                .columns(16)
                 .search(namesList.replace(/,/g, "|"), true,false)
                 .draw();
         });

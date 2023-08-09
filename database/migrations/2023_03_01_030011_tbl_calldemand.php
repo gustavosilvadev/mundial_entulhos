@@ -44,6 +44,7 @@ class TblCalldemand extends Migration
             $table->integer('dumpster_sequence_demand')->default(0); // Sequencia de pedido de acordo com a quantidade de caçambas
             $table->integer('dumpster_quantity')->nullable(); // QUANTIDADE DE CAÇAMBAS
             $table->integer('dumpster_number')->default(0); // NÚMERO DA CAÇAMBA
+            $table->integer('dumpster_number_substitute')->default(0); // NÚMERO DA CAÇAMBA SUBSTITUTA
             $table->integer('days_allocation')->default(0); // QUANTIDADE DE DIAS
             
             $table->integer('id_landfill')->nullable(); // ID DO ATERRO ++++ PARA NÃO SER OBRIGATÓRIO, O ADM E MOTORISTA DEVEM PREENCHER ESTE CAMPO || O MOTORISTA DEVE OBRIGATORIAMENTE SELECIONAR O ATERRO NO ATO DA RETIRADA 

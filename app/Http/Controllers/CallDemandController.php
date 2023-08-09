@@ -180,13 +180,16 @@ class CallDemandController extends Controller
 
             )
             ->where('call_demand.dumpster_removal','<>',true)
-            ->where('call_demand.service_status','<>',5)
             ->orderByDesc('call_demand.created_at')
             ->get();
 
             foreach($calldemands as $call_demand){
-                
-                $call_demand->date_effective_removal_dumpster = ($call_demand->date_effective_removal_dumpster != 0 ? $call_demand->date_effective_removal_dumpster : "" );
+
+                $call_demand->date_start = ($call_demand->date_start != '00/00/0000') ? $call_demand->date_start : "";
+                $call_demand->date_allocation_dumpster = ($call_demand->date_allocation_dumpster != '00/00/0000') ? $call_demand->date_allocation_dumpster : "";
+                $call_demand->date_removal_dumpster_forecast = ($call_demand->date_removal_dumpster_forecast != '00/00/0000') ? $call_demand->date_removal_dumpster_forecast : "";
+                $call_demand->date_effective_removal_dumpster = ($call_demand->date_effective_removal_dumpster != '00/00/0000') ? $call_demand->date_effective_removal_dumpster : "";
+
 
                 if($call_demand->id_driver){
                     $findDriver = DB::table('driver')
@@ -222,8 +225,8 @@ class CallDemandController extends Controller
                 }
 
                 $call_demand->nf = $payment->invoice_number;
-                $call_demand->date_issue = ($payment->date_issue != 0 ? $payment->date_issue : "" );
-                $call_demand->date_payment_forecast = ($payment->date_payment_forecast != 0 ? $payment->date_payment_forecast : "" );
+                $call_demand->date_issue = ($payment->date_issue != '00/00/0000' ? $payment->date_issue : "" );
+                $call_demand->date_payment_forecast = ($payment->date_payment_forecast != '00/00/0000' ? $payment->date_payment_forecast : "" );
             }
 
             $driver_name_demands = DB::table('driver')
@@ -290,7 +293,8 @@ class CallDemandController extends Controller
         )
         ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
         ->join('employee', 'employee.id', '=', 'driver.id_employee')
-        ->where('call_demand.id_driver','>=',0)
+        ->where('call_demand.id_driver','<>',0)
+        ->where('call_demand.service_status','>=',1)
         // ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'),'=',date('d/m/Y'))
         ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'),'=',$date_demand_filter)
         // ->orderByDesc('call_demand.id')

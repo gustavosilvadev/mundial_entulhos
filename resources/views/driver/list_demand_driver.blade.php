@@ -65,7 +65,7 @@
                         <span class="todo-date-start d-none">{{ $call_demand['data_inicio'] }} </span>
 
                     </li>
-                    <hr>
+                    {{-- <hr> --}}
                 
                 <?php endforeach; ?>
                     
@@ -161,3 +161,103 @@
 {{-- END MODAL  --}}
 
 @include('partials.footer_mobile') 
+
+<script>
+
+
+$("#data_filter_demand").on('change',function(){
+            
+let dataAlocacao = $(this).val();
+
+if(dataAlocacao.length > 0){
+    $('.loadingMask').show();
+
+    $("#todo-task-list li").remove();
+    $.ajax({
+            method: 'GET',
+            url: 'search_demand',
+            data: {data_alocacao : dataAlocacao},
+            success: function(dataResponse) {
+
+// console.log(dataResponse);
+//                 return false;
+                $.each(dataResponse, function(i, field) {
+                    let className = "";
+                    if(field.type_service == "COLOCACAO"){
+                        className = "text-info";
+                    }else if(field.type_service == "TROCA"){
+                        className = "text-warning";
+                    }else{
+                        className = "text-danger";
+
+                    }
+
+                    // let h1 = '<h1 class="' + className + '">'+ field.type_service + '</h1>';
+                    let h1 = '<h1 class="bg-dark text-white">'+ field.type_service + '</h1>';
+                    let h2 = '<h2 class="text-dark todo-title-address">' + field.address_service +
+                    ' - ' + field.number_address_service +
+                    ' - ' + field.zipcode_address_service +
+                    ' - ' + field.city_address_service +
+                    ' - ' + field.district_address_service +
+                    ' - ' + field.state_address_service + '</h2>'; 
+
+                    let contentOne = '<div class="todo-title-area"><div class="title-wrapper"><span class="todo-name-client d-none">' 
+                        + field.name 
+                        + '</span><span class="todo-phone d-none">'
+                        + field.phone_demand + '</span></div></div>';
+
+                    let showStatusDemand = "";
+                    if(field.service_status == 0){
+                        
+                        showStatusDemand =  '<div class="badge badge-pill badge-light-danger"><div class="badge badge-pill badge-light-danger">PENDENTE</div></div>';
+
+
+                    }else if(field.service_status == 1){
+
+                        showStatusDemand =  '<div class="badge badge-pill badge-light-warning">ATENDENDO</div>';
+
+                    }else if(field.service_status == 2 && empty(field.date_end) ){
+
+                        // showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-info">ALOCADO</div>';
+                        showStatusDemand = '<div class="badge badge-pill badge-light-info">ALOCADO</div>';
+
+                    }else{
+
+                        // showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-success">ENCERRADO</div>';
+                        showStatusDemand = '<div class="badge badge-pill badge-light-success">ENCERRADO</div>';
+
+                    }
+                    
+                    let contentTwo = '<div class="todo-item-action"><div class="badge-wrapper mr-1">' + showStatusDemand + '</div>';
+                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">' + $('#todo-url-list-landfill').text() + '</label>';
+                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-url-show-dumpster-demand" style="display: none;">' + $('#todo-url-show-dumpster-demand').text() + '</label>';
+                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-id-demand-reg" style="display: none;">' + field.id_demand_reg + '</label>';
+                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">' + field.id_demand + '</label>';
+                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-type-service" style="display: none;">' + field.type_service + '</label>';
+                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">' + field.comments_demand + '</label>';
+                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-name-client" style="display: none;">' + field.phone_demand + '</label>';
+                    contentTwo += '<input type="hidden" class="id_demand" value="' + field.id_demand + '" />';
+                    contentTwo += '<input type="hidden" name="service_status" class="todo-service-status" value="' + field.service_status + '" />';
+                    contentTwo += '<span class="todo-date-start d-none">' + field.date_start + ' </span>';
+                    contentTwo += '<span class="todo-dumpster-quantity d-none">' + field.dumpster_quantity + '</span>';
+                    contentTwo += '</div>';
+
+                    $("#todo-task-list").append('<li class="border-bottom-dark todo-item my-3 py-1">' + h1 + h2 + contentOne + contentTwo + '</li>');
+
+                });                            
+                
+                
+                $('.loadingMask').hide();
+                // $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
+                // $("input[name='total_days']").val(dataResponse);
+                
+            },
+            error: function(responseError){
+                $('.loadingMask').hide();
+                alert(responseError);
+            }
+    });
+}
+
+});
+</script>

@@ -289,7 +289,7 @@ class DriverController extends Controller
 
         
         $get_id_driver  = Driver::select()->where("id_employee", $id_employee)->first();
-        $service_status = 5;
+        $service_status = 5; // FINALIZADOS
 
         $calldemands = DB::table('call_demand')
         ->select(
@@ -326,8 +326,8 @@ class DriverController extends Controller
             DB::raw('"" as dumpsters')
         )
         ->where('call_demand.id_driver', $get_id_driver['id'])
-        ->where('call_demand.service_status','<>',$service_status)
-        // ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
+        // ->where('call_demand.service_status','<>',$service_status)
+        ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
         ->orderBy('call_demand.id_demand', 'asc')
         ->orderBy('call_demand.type_service', 'desc')
         ->get();
@@ -340,23 +340,61 @@ class DriverController extends Controller
      */
     public function startDemand(Request $request)
     {
+        
         $id_user_employee = session('id_user');
         $driver_data = Driver::where('id_employee',$id_user_employee)->first();
 
-        for($number = 0; $number < count($request->dumpster_numbers); $number++)
-        {
-            $call_demands = CallDemand::where('id','<>',$request->id_demand_reg)
-            ->where('dumpster_number','<>', 0)
-            ->where('dumpster_number',$request->dumpster_numbers[$number])
-            ->where('date_effective_removal_dumpster','=', null)
-            ->where('id_driver','=', $driver_data->id)
-            ->get();
 
-            if($call_demands->count()){
+// ATUALIZAÇÃO BEGIN
+
+        $call_demand_updated_data = CallDemand::where('id', $request->id_demand_reg)
+        ->where('id_demand', $request->id_demand)
+        ->where('type_service', $request->type_service)
+        ->where('id_driver','=', $driver_data->id)
+        ->update([
+            'service_status' => $request->service_status,
+            'date_start' => date('Y-m-d H:i:s'),
+            'dumpster_number' => $request->dumpster_numbers,
+            'id_landfill' => $request->id_landfill
+        ]);
+
+        if($call_demand_updated_data){
+                
+            $activityUserDemandDumpster = new ActivityUserDemandDumpster();
+            $activityUserDemandDumpster->id_call_demand_reg = $request->id_demand_reg;
+            $activityUserDemandDumpster->id_call_demand     = $request->id_demand;
+            $activityUserDemandDumpster->id_employee        = $id_user_employee;
+            $activityUserDemandDumpster->type_service       = $request->type_service;
+            $activityUserDemandDumpster->service_status     = $request->service_status; // STATUS  CHAMADO
+
+            if($activityUserDemandDumpster->save()){
+                return true;
+    
+            }else{
                 return false;
-                break;
-            }
+            }               
+        }else{
+            return false;
         }
+
+
+
+     
+
+// ATUALIZAÇÃO END
+
+/*
+        $call_demands = CallDemand::where('id','<>',$request->id_demand_reg)
+        ->where('dumpster_number','<>', 0)
+        ->where('dumpster_number',$request->dumpster_numbers)
+        ->where('date_effective_removal_dumpster','=', null)
+        ->where('id_driver','=', $driver_data->id)
+        ->get();
+
+        if($call_demands->count()){
+            return false;
+        }
+
 
         $call_demands = CallDemand::where('id_demand',$request->id_demand)->where('type_service', $request->type_service)->get();
 
@@ -388,13 +426,6 @@ class DriverController extends Controller
             ->first();
 
 
-            // $activityUserDemandDumpster = ActivityUserDemandDumpster::where('id_demand', $request->id_demand)
-            // ->where('id_call_demand_reg', $call_demand_updated_data->id)
-            // ->where('id_call_demand', $call_demand_updated_data->id_demand)
-            // ->first();
-
-            // if(!$activityUserDemandDumpster)
-            // {
                 $activityUserDemandDumpster = new ActivityUserDemandDumpster();
                 $activityUserDemandDumpster->id_call_demand_reg = $call_demand_updated_data->id;
                 $activityUserDemandDumpster->id_call_demand     = $call_demand_updated_data->id_demand;
@@ -408,10 +439,11 @@ class DriverController extends Controller
                 }else{
                     return false;
                 }
-            // }
+
         }
 
         return true;
+*/        
     }
 
     public function finishDemand(Request $request)
