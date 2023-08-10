@@ -16,35 +16,20 @@
         overflow: auto;
         width: 100%;
         max-height: 100% !important;
-        /* max-height: 0px !important; */
+    }
+
+    input[type="checkbox"].checkBoxDeleteId {
+        width: 20px;
+        height: 20px;
     }
 
  </style>
     <!-- BEGIN: Content-->
 
     <div class="app-content content-designed">
-{{-- 
-        <div class="content-header row">
-            <div class="content-header-left col-md-9 col-12 mb-2">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0 text-info" style="text-decoration: underline">BASE PEDIDOS</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
- --}}
-        <div class="content-body">
-            <div class="row">
-            <!-- 
-                <div class="col-12">
-                    <div class="alert alert-primary" role="alert">
-                        <div class="alert-body"><strong>Info:</strong> Use this layout to set menu (navigation) default collapsed. Please check the&nbsp;<a class="text-primary" href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/documentation-layout-collapsed-menu.html" target="_blank">Layout collapsed menu documentation</a>&nbsp; for more details.</div>
-                    </div>
-                </div>
-            -->
 
-            </div>
+        <div class="content-body">
+            <div class="row"></div>
 
 
             <section id="ajax-datatable">
@@ -70,7 +55,7 @@
                                                                     <div class="form-row mb-1">
                                                                         <div class="col-lg-4 mb-1">
                                                                             <label>MOTORISTA</label>
-                                                                            <select class="select2 form-control" id="name_search" multiple>
+                                                                            <select class="select2 form-control" id="name_search" multiple data-mdb-clear-button="true">
                                                                                 <?php if($driver_name_demands):?>
                                                                                 <?php foreach($driver_name_demands as $driver_name):?>
                                                                                     <option value="{{ $driver_name->name }}">{{ $driver_name->name }}</option>
@@ -81,7 +66,7 @@
                                                                         </div>
 
                                                                         <div class="col-lg-4">
-                                                                            <label>DATA DE COLOCAÇÃO</label>
+                                                                            <label>DATA DA COLOCAÇÃO</label>
                                                                             <div class="form-group mb-0">
                                                                                 <input type="text" class="form-control dt-date flatpickr-range dt-input  date_format_allocation_search" id="date_format_allocation_search" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
                                                                             </div>
@@ -125,7 +110,7 @@
                                                 {{-- <th>DATA OPERAÇÃO</th> --}}
                                                 <th>DATA ATEND/MOTORISTA</th>
                                                 {{-- <th>DATA ALOCAÇÃO</th> --}}
-                                                <th>DATA DA OPERAÇÃO</th>
+                                                <th>DATA DA COLOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
                                                 <th>DATA RETIRADA EFETIVA</th>
                                                 <th>ENDEREÇO</th>
@@ -218,7 +203,7 @@
                                                 {{-- <th>DATA OPERAÇÃO</th> --}}
                                                 <th>DATA ATEND/MOTORISTA</th>
                                                 {{-- <th>DATA ALOCAÇÃO</th> --}}
-                                                <th>DATA DA OPERAÇÃO</th>
+                                                <th>DATA DA COLOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
                                                 <th>DATA RETIRADA EFETIVA</th>
                                                 <th>ENDEREÇO</th>
@@ -330,17 +315,10 @@ $(document).ready(function() {
 
         $("#btn_reset_input").click(function(){
 
-            optionsRecover = "";
-            $("#name_search option").each(function(a ,b){
+            let multiselectName = $('#name_search');
+            multiselectName.select2();
+            multiselectName.val(null).trigger('change');
 
-                optionsRecover += b.outerHTML;
-            });
-
-            $("#name_search").val('');
-            $("#name_search").text('');
-
-            $("#name_search").append(optionsRecover);
-            
             flatpickr(".date_format_allocation_search",{ dateFormat: "d/m/Y", allowInput: true });
 
             $(".flatpickr").on('input', function(e) {
@@ -367,13 +345,8 @@ $(document).ready(function() {
 
         let tbpedido = $('#tbpedido').DataTable( {
             "language": {
-                // "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
                 "url": "public/assets/json/Portuguese-Brasil.json"
             },
-            // order: [[2, 'asc']],
-            // scrollX: true,
-            // scrollY: "350",
-            // scrollX: "100%",
 
             scrollY: "300px",
             scrollX: true,
@@ -465,6 +438,9 @@ $(document).ready(function() {
 
         } );
 
+
+
+
         $('#tbpedido tbody tr').on('click', function (evt) {
             
             let selectedRows    = "";
@@ -486,9 +462,6 @@ $(document).ready(function() {
                 paymentStatus = $(this).find("td:eq(17)").text().toUpperCase();
                 dateEffectiveRemoval = $(this).find("td:eq(8)").text();
 
-                // let data = tbpedido.row(evt.target.closest('tr')).data();
-                // console.log("Serviço: " + data[4]);
-                
                 $("#modal-edit").modal('toggle');
                 if(nameDriver != "")
                 {
@@ -501,8 +474,6 @@ $(document).ready(function() {
 
                 if(paymentStatus.trim() != "")
                 {
-                    // $("#payment_status option:contains("+ paymentStatus.trim() +")").attr("selected", "selected");
-
                     if(paymentStatus.trim() != 'SIM'){
                         $('#payment_status option').eq(0).prop('selected', true);
                     }else{
@@ -529,29 +500,7 @@ $(document).ready(function() {
             let idDemand = $("#iddemand").val();
 
             window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
-            /*
-                $.ajax({
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    method: 'GET',
-                    url: '{{ route('calldemand.checkstatus') }}',
-                    data: { 
-                        id_reg: idReg, 
-                        id_demand : idDemand
-                    },
-                    success: function(dataResponse) {
-
-                        if(dataResponse == true){
-                            window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
-                        }else{
-                            $("#modalTitleError").text("O Pedido de Alocação ainda não concluído!");
-                        }
-                    },
-                    error: function(responseError){
-                        alert("Erro interno: " + responseError);
-                        console.log(responseError);
-                    }
-                });
-            */
+           
 
 
         });
@@ -620,17 +569,11 @@ $(document).ready(function() {
             let dateDemandFilter = String($("#date_format_allocation_search").val()).replace(/\s/g,'');
 
             tbpedido
-                // .columns(8)
-                .columns(9)
+                .columns(6)
                 .search(dateDemandFilter.replace(/,/g,"|"), true,false)
                 .draw();            
 
         });
-
-
 });
-
-
-
 
 </script>
