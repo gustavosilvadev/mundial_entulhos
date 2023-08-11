@@ -168,6 +168,7 @@ class CallDemandController extends Controller
                 'call_demand.price_unit',
                 'call_demand.dumpster_quantity',
                 'call_demand.dumpster_number',
+                'call_demand.dumpster_number_substitute',
                 'call_demand.id_landfill',
                 'call_demand.id_driver',
                 'call_demand.service_status',
@@ -330,8 +331,8 @@ class CallDemandController extends Controller
             )
             ->join('driver','driver.id', '=', 'call_demand.id_driver')
             ->join('employee','employee.id', '=', 'driver.id_employee')
-            ->where('call_demand.id_driver','>=',0)
-            // ->whereIn(DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y")'), $date_demand_filter)
+            ->where('call_demand.id_driver','<>',0)
+            ->where('call_demand.service_status','>=',1)
             ->whereIn(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $date_demand_filter)
             ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
             ->get();
@@ -348,7 +349,8 @@ class CallDemandController extends Controller
             ->join('driver','driver.id', '=', 'call_demand.id_driver')
             ->join('employee','employee.id', '=', 'driver.id_employee')
             ->groupBy('call_demand.id_driver', 'call_demand.type_service')        
-            ->where('call_demand.id_driver','>=',0)
+            ->where('call_demand.id_driver','<>',0)
+            ->where('call_demand.service_status','>=',1)
             ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'),'=',date('d/m/Y'))
             ->get();
         }
@@ -420,7 +422,9 @@ class CallDemandController extends Controller
         )
         ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
         ->join('employee', 'employee.id', '=', 'driver.id_employee')
-        ->where('call_demand.id_driver','>=',0)
+        // ->where('call_demand.id_driver','>=',0)
+        ->where('call_demand.id_driver','<>',0)
+        ->where('call_demand.service_status','>=',1)        
         ->whereIn(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $date_demand_filter)
         ->orderByDesc('call_demand.created_at')
         ->get();
@@ -620,7 +624,7 @@ class CallDemandController extends Controller
                 $calldemand = new CallDemand();
                 $calldemand->id_demand      = $lastIdDemand;
                 $calldemand->type_service   = ((int)$request->type_service == 1) ? "COLOCACAO" : "TROCA";
-                
+                $calldemand->dumpster_number = ((int)$request->dumpster_number > 0) ? $request->dumpster_number : 0;
                 if((int)$request->type_service == 1){
                     $calldemand->dumpster_allocation = true;
                 }else{

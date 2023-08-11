@@ -133,16 +133,42 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
 
 
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/pages/app-todo.css') }}">
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
 
 
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/vendors.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/forms/wizard/bs-stepper.min.css') }}">
+    
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/forms/select/select2.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/editors/quill/katex.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/editors/quill/monokai-sublime.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/editors/quill/quill.snow.css') }}">
+    
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/forms/select/select2.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/extensions/dragula.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/extensions/toastr.min.css') }}">  
+        
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+        
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/bootstrap.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/bootstrap-extended.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/colors.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/components.css') }}">
+        {{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/themes/dark-layout.css') }}"> --}}
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/themes/bordered-layout.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/themes/semi-dark-layout.css') }}">
+    
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/plugins/forms/form-quill-editor.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/pages/page-blog.css') }}">
+    
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/plugins/extensions/ext-component-toastr.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/plugins/forms/form-validation.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/plugins/forms/form-wizard.css') }}">
+    
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/pages/app-todo.css') }}">
 
 
 </head>
-<body>
+<body class="vertical-layout vertical-menu-modern content-left-sidebar navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="content-left-sidebar">
 

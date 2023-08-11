@@ -720,6 +720,7 @@
             let state           = $("input[name=state]").val();
             let phone           = $("input[name=phone]").val();
             let price_unit      = $("input[name=price_unit]").val();
+            let driver          = $("#driver").val();
             let dumpster_total  = $("input[name=dumpster_total]").val();
             let comments        = $("#note").val();
             let type_service    = $("#type_service").val();
@@ -752,6 +753,7 @@
                     'state' : state,
                     'phone' : phone,
                     'price_unit' : price_unit,
+                    'id_driver' : driver,
                     'dumpster_total' : dumpster_total,
                     'comments' : comments,
                     'type_service' : type_service,

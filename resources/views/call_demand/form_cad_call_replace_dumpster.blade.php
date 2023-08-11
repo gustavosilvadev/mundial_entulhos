@@ -248,6 +248,15 @@
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
 
+                                                                                                            <label for="period">Número da Caçamba</label>
+
+                                                                                                            <input type="text" name="dumpster_number" id="dumpster_number" class="form-control" data-column="5"  value="{{ $value->dumpster_number }}" data-column-index="4" disabled/>
+                                                                                                        </div>    
+                                                                                                    </div>
+
+                                                                                                    <div class="col-md-2">
+                                                                                                        <div class="form-group">
+
                                                                                                             <label for="period">DATA ALOCAÇÃO</label>
                                                                                                             {{-- <input type="hidden" id="date_allocation_dumpster" value="{{ $value->date_allocation_dumpster }}" /> --}}
                                                                                                             <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);" value="" required />
@@ -294,6 +303,7 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <label for="has_paid">PAGAMENTO REALIZADO</label>
+{{--                                                                                                             
                                                                                                             <select class="select2 form-control form-control-lg" id="has_paid" name="has_paid">
                                                                                                                 <?php if(isset($calldemandpayment)): ?>
                                                                                                                     <?php if($calldemandpayment->has_paid): ?>
@@ -310,6 +320,11 @@
                                                                                                                 <?php endif; ?>    
 
                                                                                                             </select> 
+ --}}
+                                                                                                            <select class="select2 form-control form-control-lg" id="has_paid" name="has_paid">
+                                                                                                                <option value="1">Sim</option>
+                                                                                                                <option value="0" selected>Não</option>
+                                                                                                            </select> 
 
                                                                                                         </div>
                                                                                                     </div>
@@ -317,6 +332,7 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <label for="by_bank">FORMA DE PAGAMENTO</label>
+{{--                                                                                                             
                                                                                                             <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
                                                                                                                 <option value="">----</option>
 
@@ -336,7 +352,12 @@
 
                                                                                                                 <?php endif; ?>
 
-
+                                                                                                           </select>
+ --}}
+                                                                                                            <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
+                                                                                                                <option value="" selected>----</option>
+                                                                                                                <option value="1">TRANSFERÊNCA</option>
+                                                                                                                <option value="2">BOLETO BANCÁRIO</option>
                                                                                                             </select>
                                                                                                         </div>
                                                                                                     </div>
@@ -344,7 +365,8 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="invoice_number">CÓDIGO NF</span>
-                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ $calldemandpayment->invoice_number }}" autocomplete="off"/>
+                                                                                                            {{-- <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ $calldemandpayment->invoice_number }}" autocomplete="off"/> --}}
+                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="" autocomplete="off"/>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     
@@ -666,12 +688,12 @@
         });        
 
         $("#btn_create").on('click', function(){
-
+            
             $("#message-success").css("display","none");
             $("#message-error").css("display","none");
 
             validateFormInputs();
-            
+
             let id_demand       = $("input[name=id_demand]").val();
             let id_demand_reg   = $("input[name=id_demand_reg]").val();
             let client_name_new = $("input[name=client_name_new]").val();
@@ -686,6 +708,7 @@
             let price_unit      = $("input[name=price_unit]").val();
             // let dumpster_total  = $("input[name=dumpster_total]").val();
             let dumpster_total  = 1;
+            let dumpsterNumber  = $('#dumpster_number').val();
             let comments        = $("#note").val();
             let comments_contract = $("#note_contract").val();
             let type_service    = $("#type_service").val();
@@ -695,15 +718,7 @@
             let date_removal_dumpster_forecast  = $("input[name=date_removal_dumpster_forecast]").val();
             let total_days      = $("input[name=total_days]").val();
             let id_driver       = ($("#driver").val() == '' || $("#driver").val() == 'undefined') ? '0' : $("#driver").val();
-            /*
-            let iss             = $("#iss").val();
-            let hasPaid         = $("#has_paid").val();
-            let byBank          = $('#by_bank').val();
-            let invoiceNumber  = $('#invoice_number').val();
-            let dateIssue      = $('#date_issue').val();
-            let datePaymentForecast = $('#date_payment_forecast').val();
-            let dateEffectivePaymen = $('#date_effective_paymen').val();
-            */
+
             let iss      = $("#iss").val();
             let hasPaid      = $("#has_paid").val();
             let byBank = $('#by_bank').val();
@@ -714,11 +729,13 @@
 
             if(date_allocation_dumpster == "" || date_allocation_dumpster == undefined)
             {
+                date_allocation_dumpster.addClass('border border-danger');
                 return false;
             }
 
             if(date_removal_dumpster_forecast == "" || date_removal_dumpster_forecast == undefined)
             {
+                date_removal_dumpster_forecast.addClass('border border-danger');
                 return false;
             }
 
@@ -739,6 +756,7 @@
                     'phone' : phone,
                     'price_unit' : price_unit,
                     'dumpster_quantity' : dumpster_total,
+                    'dumpster_number' : dumpsterNumber,
                     'comments' : comments,
                     'comments_contract' : comments_contract,
                     'type_service' : type_service,

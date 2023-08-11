@@ -2,262 +2,254 @@
 @include('partials.nav_mobile')
 
 
-<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
+    <!-- BEGIN: Content-->
+    <div class="app-content content todo-application">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-area-wrapper container-xxl p-0">
 
-    <input type="text" class="form-control dt-date flatpickr-range dt-input date_format_service_search" id="data_filter_demand" data-column="5" placeholder="" data-column-index="4" name="dt_date" readonly="readonly">
+            <div class="content-right">
+                <div class="content-wrapper container-xxl p-0">
+                    <div class="content-header row">
+                    </div>
+                    <div class="content-body">
+                        <div class="body-content-overlay"></div>
+                        <div class="todo-app-list">
 
-    <select class="form-control py-2 m-1" id="name_driver_selected">
-        <option value="" selected>Tipo de Serviço</option>
-        <option value="1">Colocação</option>
-        <option value="2">Troca</option>
-        <option value="3">Retirada</option>
+                            <div class="app-fixed-search d-flex align-items-center">
+                                <div class="d-flex align-content-center justify-content-between w-100">
+                                    <div class="input-group input-group-merge">
+                                        <div class="col-md-12">
+                                            <input type="text" class="form-control border border-secondary dt-date flatpickr-range dt-input date_format_service_search" id="data_filter_demand" data-column="5" placeholder="Selecione a Data" data-column-index="4" name="dt_date" readonly="readonly">
+                                        </div>
+                                        <div class="col-md-12">
 
-    </select>
-
-    </div>
-</nav>
-
-
-
-<div class="container" style="max-width: 720px">
-
-    <div class="todo-task-list-wrapper list-group">
-
-        <ul class="todo-task-list media-list p-0" id="todo-task-list" style>
-            <?php if(is_array($call_demands)): ?>
-
-                <?php foreach($call_demands as $call_demand): ?>    
-                
-                    <li class="todo-item mt-3">
-                        <div class="todo-title-wrapper">
-                            <div class="todo-title-area">
-                                <i data-feather="more-vertical" class="drag-icon"></i>
-                                <div class="title-wrapper">
-
-                                        <h3 class="bg-dark text-white todo-title">
-                                        {{ $call_demand['tipo_servico'] }}
-                                        ({{$call_demand['quantidade_cacamba']}})
-                                        </h3>
-                                        <BR />
-                                        <h4 class="text-dark todo-title-address">
-                                        {{ $call_demand['endereco']; }}
-                                        </h4>                    
+                                            <select class="select2 form-control" id="filter_tipo_servico" name="filter_tipo_servico">
+                                                <option value="" selected>
+                                                    Tipo de Serviço
+                                                </option>
+                                                <option value="1">
+                                                    Colocação
+                                                </option>
+                                                <option value="2">
+                                                    Troca
+                                                </option>
+                                                <option value="3">
+                                                    Retirada
+                                                </option>                                            
+                                            </select>   
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        
-                        </div>
+                            <!-- Todo search ends -->
 
-                        <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
-                        <label class="text-nowrap text-muted mr-1 todo-url-show-dumpster-demand" style="display: none;">{{ url('show_dumpster_demand') }}</label>
+                            <!-- Todo List starts -->
+                            <div class="todo-task-list-wrapper list-group">
+                                <ul class="todo-task-list media-list" id="todo-task-list">
+                                    <?php if(is_array($lista_chamados)): ?>
 
-                        <label class="text-nowrap text-muted mr-1 todo-id-demand-reg" style="display: none;">{{ $call_demand['id_chamado_reg'] }}</label>
-                        <label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">{{ $call_demand['id_pedido'] }}</label>
-                        <label class="text-nowrap text-muted mr-1 todo-type-service" style="display: none;">{{ $call_demand['tipo_servico'] }}</label>
-                        <label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">{{ $call_demand['comentario'] }}</label>
-                        <label class="text-nowrap text-muted mr-1 todo-name-client" style="display: none;">{{ $call_demand['nome_cliente'] }}</label>
-                        <label class="text-nowrap text-muted mr-1 todo-phone" style="display: none;">{{ $call_demand['telefone'] }}</label>
+                                        <?php foreach($lista_chamados as $id_chamado => $chamados): ?>
+                                            <?php foreach($chamados as $ind_atividade => $chamado_info): ?>
+                                                <li class="todo-item my-2 border">
+                                                    <div class="todo-title-wrapper">
+                                                        <div class="todo-title-area">
+                                                            <i data-feather="more-vertical" class="drag-icon"></i>
+                                                            {{-- <div class="title-wrapper"> --}}
+                                                            <div >
 
-
-                        <input type="hidden" class="id_call_demand_reg" value="{{ $call_demand['id_chamado_reg'] }}" />
-                        <input type="hidden" class="id_demand" value="{{ $call_demand['id_pedido'] }}" />
-                        <input type="hidden" name="service_status" class="todo-service-status" value="{{ $call_demand['status_servico'] }}" />
-                        <span class="todo-date-start d-none">{{ $call_demand['data_inicio'] }} </span>
-
-                    </li>
-                    {{-- <hr> --}}
-                
-                <?php endforeach; ?>
-                    
-            <?php else: ?>
-        </ul>
-                            
-        <div class="no-results" style="display: block; text-align:center">
-            <h5>Sem pedido disponí­vel</h5>
-        </div>
-        <?php endif; ?>  
-    </div>
-</div>
+                                                                {{-- <span class="todo-title">Fix Responsiveness for new structure 💻</span> --}}
 
 
-{{-- BEGIN MODAL  --}}
-<div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
+                                                                    <h3 class="bg-dark text-white todo-title">{{ $chamado_info['tipo_servico'] }} ({{$chamado_info['quantidade_cacamba']}})</h3>
+                                                                    
+                                                                    <label class="text-nowrap text-muted mr-1">{{ $id_chamado }}</label>
 
-    <div class="modal-dialog w-100">
-        <div class="modal-content p-0">
+                                                                    <h4 class="text-dark todo-title-address">
+                                                                        {{ $chamado_info['endereco'].', '
+                                                                    .$chamado_info['numero_endereco'].', '
+                                                                    .$chamado_info['bairro_endereco'].', '
+                                                                    .$chamado_info['cidade_endereco'].' - '
+                                                                    .$chamado_info['cep_endereco']
+                                                                    }}
+                                                                    </h4>
 
-            <form id="form-modal-todo" class="todo-modal needs-validation" >
-                @csrf
+                                                                    
+                                                                    <label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">{{ $id_chamado }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">{{ $chamado_info['id_motorista'] }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">{{ $chamado_info['data_operacao'] }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand') }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
 
-                <div class="modal-header align-items-center mb-1">
-                    <h5 class="modal-title todo-name-client">Nome do cliente</h5>
-                    <div class="todo-item-action d-flex align-items-center justify-content-between ml-auto">
-                        <span class="todo-item-favorite cursor-pointer mr-75"><i data-feather="star" class="font-medium-2"></i></span>
-                        <button type="button" class="close font-large-1 font-weight-normal py-0" data-dismiss="modal" aria-label="Close">
-                            ×
-                        </button>
-                    </div>
-                </div>                
+                                                            </div>
+                                                        </div>
 
-                <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
-                    
-                    <div class="form-group my-1">
+                                                    </div>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        <?php endforeach; ?>
 
-                        <div class="form-group">
-                            <p><a class="todo-item-address-waze" href="#"></a></p>
-                            <p><a class="todo-item-address-google-maps" href="#"></a></p>
-                        </div>
-
-                        <div class="form-group">
-                            <h3 class="form-label">Telefone</h3>
-                            <p><a class="todo-phone" href="#"></a></p>
-                        </div>                                            
-
-                        <div class="form-group">
-                            <h3 class="form-label">Descrição</h3>
-                            <p class="todo-item-description"></p>
-                            
-                            <div id="task-desc" class="border-bottom-0 d-none" data-placeholder="Write Your Description"></div>
-                            <div class="desc-toolbar border-top-0 d-none"></div>
-                            
-                        </div>
-                        <div class="form-group">
-                            {{-- <h3 class="form-label">Número da Caçamba: </h3> --}}
-                            <div data-repeater-item id="number-dumpster-repeat"></div>
-                            <div data-repeater-item id="lista_aterros"></div>
-                            
-                            
-                            <div id="atividade_input">
-
-                                <p class="botao_iniciar"></p>
-                                <p class="botao_encerrar"></p>
+                                <?php else: ?>
+                                </ul>
+                                <div class="no-results">
+                                    <h5>Sem item disponível</h5>
+                                </div>
+                                <?php endif; ?>  
                             </div>
-                            <hr/>
-
-                            {{-- <h3 class="form-label">Aterro: </h3> --}}
-                            
+                            <!-- Todo List ends -->
                         </div>
 
-                        <input type="hidden" name= "id_demand_reg" class="todo-id-demand-reg" />
-                        <input type="hidden" name= "id_demand" class="todo-id-demand" />
-                        <input type="hidden" name= "type_service" class="todo-type-service" />
-{{-- 
-                        <label for="type_service">Aterro</label>
-                        <select class="select2 form-control form-control-lg edit-landfill-list" id="type_service" name="landfill">
-                        </select>  
---}}
-                        <hr />
+                        <!-- Right Sidebar starts -->
+                        <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
+                            <div class="modal-dialog sidebar-lg w-100">
+                                <div class="modal-content p-0">
+                                    <form id="form-modal-todo" class="todo-modal needs-validation" novalidate onsubmit="return false">
+                                        <div class="modal-header align-items-center mb-1">
+                                            <p class="h3" id="nome_cliente">--</p>
+                                            <div class="todo-item-action d-flex align-items-center justify-content-between ml-auto">
+                                                <span class="todo-item-favorite cursor-pointer mr-75"><i data-feather="star" class="font-medium-2"></i></span>
+                                                <button type="button" class="close font-large-1 font-weight-normal py-0" data-dismiss="modal" aria-label="Close">
+                                                    X
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body flex-grow-1 pb-sm-0 pb-3" id="body_modal">
 
-                        {{-- <button type="button" class="btn btn-success" id="btn_start_call_demand">INICIAR ATENDIMENTO</button> --}}
-                        <button type="button" class="btn btn-primary update-btn d-none my-2" id="btn_finish_call_demand" style="" data-dismiss="modal">ENCERRAR ATENDIMENTO</button>
-                        <button type="button" class="btn btn-secondary my-2" data-dismiss="modal">CANCELAR</button>
+
+                                            <div class="action-tags" id="atividade_input">
+                                            
+                                            </div>    
+                                            <!--
+                                            <div class="action-tags">
+
+
+                                                <div class="form-group p-1 mb-1 bg-primary text-white">COLOCAÇÃO</div>
+                                                <div class="form-group p-1 mb-1 bg-warning text-white">TROCA</div>
+                                                <div class="form-group p-1 mb-1 bg-success text-white">RETIRADA</div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-4">
+                                                        <label for="task-due-date" class="form-label">CAÇAMBA 1 </label>
+                                                        <input class="form-control" id="ex1" type="text">
+                                                    </div>
+                                                    
+
+                                                    <div class="col-4">
+                                                        <label for="task-due-date" class="form-label">CAÇAMBA 2 </label>
+                                                        <input class="form-control" id="ex1" type="text">
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row">
+                                                    <div class="col-4">
+                                                        <label for="task-due-date" class="form-label">CAÇAMBA 1 </label>
+                                                        <input class="form-control" id="ex1" type="text">
+                                                    </div>
+
+                                                </div>                                                
+                                                <div class="form-group position-relative">
+                                                    <label for="task-assigned" class="form-label d-block">Aterro</label>
+                                                    <select class="select2 form-control" id="task-assigned" name="task-assigned">
+                                                    </select>
+                                                </div>
+
+                                                <button type="button" class="btn btn-success  update-btn update-todo-item mr-1">ATENDENR</button>
+                                                <button type="button" class="btn btn-info update-btn " data-dismiss="modal">FINALIZAR</button>
+
+                                            </div>
+                                            -->
+                                            <hr>
+                                            <hr>
+
+                                        <!--
+                                            <div class="action-tags">
+
+
+                                                <div class="form-group p-1 mb-1 bg-primary text-white">COLOCAÇÃO</div>
+                                                <div class="form-group p-1 mb-1 bg-warning text-white">TROCA</div>
+                                                <div class="form-group p-1 mb-1 bg-success text-white">RETIRADA</div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-4">
+                                                        <label for="task-due-date" class="form-label">CAÇAMBA 1 </label>
+                                                        <input class="form-control" id="ex1" type="text">
+                                                    </div>
+                                                    
+
+                                                    <div class="col-4">
+                                                        <label for="task-due-date" class="form-label">CAÇAMBA 2 </label>
+                                                        <input class="form-control" id="ex1" type="text">
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row">
+                                                    <div class="col-4">
+                                                        <label for="task-due-date" class="form-label">CAÇAMBA 1 </label>
+                                                        <input class="form-control" id="ex1" type="text">
+                                                    </div>
+
+                                                </div>                                                
+                                                <div class="form-group position-relative">
+                                                    <label for="task-assigned" class="form-label d-block">Aterro</label>
+                                                    <select class="select2 form-control" id="task-assigned" name="task-assigned">
+                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-3.jpg" value="Phill Buffer" selected>
+                                                            Phill Buffer
+                                                        </option>
+                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-1.jpg" value="Chandler Bing">
+                                                            Chandler Bing
+                                                        </option>
+                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-4.jpg" value="Ross Geller">
+                                                            Ross Geller
+                                                        </option>
+                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-6.jpg" value="Monica Geller">
+                                                            Monica Geller
+                                                        </option>
+                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-2.jpg" value="Joey Tribbiani">
+                                                            Joey Tribbiani
+                                                        </option>
+                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-11.jpg" value="Rachel Green">
+                                                            Rachel Green
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <button type="button" class="btn btn-success  update-btn update-todo-item mr-1">ATENDENR</button>
+                                                <button type="button" class="btn btn-info update-btn " data-dismiss="modal">FINALIZAR</button>                                                
+
+                                            </div>
+
+                                        -->
+                                            <div class="form-group my-1">
+                                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                                                    Fechar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Right Sidebar ends -->
+
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+    <!-- END: Content-->
 
-{{-- END MODAL  --}}
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+{{-- 
+    <!-- BEGIN: Footer-->
+    <footer class="footer footer-static footer-light">
+        <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2021<a class="ml-25" href="https://1.envato.market/pixinvent_portfolio" target="_blank">Pixinvent</a><span class="d-none d-sm-inline-block">, All rights Reserved</span></span><span class="float-md-right d-none d-md-block">Hand-crafted & Made with<i data-feather="heart"></i></span></p>
+    </footer>
+    <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
+    <!-- END: Footer--> 
+--}}
 
 @include('partials.footer_mobile') 
 
-<script>
-
-
-$("#data_filter_demand").on('change',function(){
-            
-let dataAlocacao = $(this).val();
-
-if(dataAlocacao.length > 0){
-    $('.loadingMask').show();
-
-    $("#todo-task-list li").remove();
-    $.ajax({
-            method: 'GET',
-            url: 'search_demand',
-            data: {data_alocacao : dataAlocacao},
-            success: function(dataResponse) {
-
-// console.log(dataResponse);
-//                 return false;
-                $.each(dataResponse, function(i, field) {
-                    let className = "";
-                    if(field.type_service == "COLOCACAO"){
-                        className = "text-info";
-                    }else if(field.type_service == "TROCA"){
-                        className = "text-warning";
-                    }else{
-                        className = "text-danger";
-
-                    }
-
-                    // let h1 = '<h1 class="' + className + '">'+ field.type_service + '</h1>';
-                    let h1 = '<h1 class="bg-dark text-white">'+ field.type_service + '</h1>';
-                    let h2 = '<h2 class="text-dark todo-title-address">' + field.address_service +
-                    ' - ' + field.number_address_service +
-                    ' - ' + field.zipcode_address_service +
-                    ' - ' + field.city_address_service +
-                    ' - ' + field.district_address_service +
-                    ' - ' + field.state_address_service + '</h2>'; 
-
-                    let contentOne = '<div class="todo-title-area"><div class="title-wrapper"><span class="todo-name-client d-none">' 
-                        + field.name 
-                        + '</span><span class="todo-phone d-none">'
-                        + field.phone_demand + '</span></div></div>';
-
-                    let showStatusDemand = "";
-                    if(field.service_status == 0){
-                        
-                        showStatusDemand =  '<div class="badge badge-pill badge-light-danger"><div class="badge badge-pill badge-light-danger">PENDENTE</div></div>';
-
-
-                    }else if(field.service_status == 1){
-
-                        showStatusDemand =  '<div class="badge badge-pill badge-light-warning">ATENDENDO</div>';
-
-                    }else if(field.service_status == 2 && empty(field.date_end) ){
-
-                        // showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-info">ALOCADO</div>';
-                        showStatusDemand = '<div class="badge badge-pill badge-light-info">ALOCADO</div>';
-
-                    }else{
-
-                        // showStatusDemand = '<div class="badge badge-pill badge-light-success">RETIRADA: ' + field.date_effective_removal_dumpster + '</div><div class="badge badge-pill badge-light-success">ENCERRADO</div>';
-                        showStatusDemand = '<div class="badge badge-pill badge-light-success">ENCERRADO</div>';
-
-                    }
-                    
-                    let contentTwo = '<div class="todo-item-action"><div class="badge-wrapper mr-1">' + showStatusDemand + '</div>';
-                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">' + $('#todo-url-list-landfill').text() + '</label>';
-                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-url-show-dumpster-demand" style="display: none;">' + $('#todo-url-show-dumpster-demand').text() + '</label>';
-                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-id-demand-reg" style="display: none;">' + field.id_demand_reg + '</label>';
-                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">' + field.id_demand + '</label>';
-                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-type-service" style="display: none;">' + field.type_service + '</label>';
-                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-description" style="display: none;">' + field.comments_demand + '</label>';
-                    contentTwo += '<label class="text-nowrap text-muted mr-1 todo-name-client" style="display: none;">' + field.phone_demand + '</label>';
-                    contentTwo += '<input type="hidden" class="id_demand" value="' + field.id_demand + '" />';
-                    contentTwo += '<input type="hidden" name="service_status" class="todo-service-status" value="' + field.service_status + '" />';
-                    contentTwo += '<span class="todo-date-start d-none">' + field.date_start + ' </span>';
-                    contentTwo += '<span class="todo-dumpster-quantity d-none">' + field.dumpster_quantity + '</span>';
-                    contentTwo += '</div>';
-
-                    $("#todo-task-list").append('<li class="border-bottom-dark todo-item my-3 py-1">' + h1 + h2 + contentOne + contentTwo + '</li>');
-
-                });                            
-                
-                
-                $('.loadingMask').hide();
-                // $("input[name='date_removal_dumpster']").val(adicionaDiasEmData(dataResponse));
-                // $("input[name='total_days']").val(dataResponse);
-                
-            },
-            error: function(responseError){
-                $('.loadingMask').hide();
-                alert(responseError);
-            }
-    });
-}
-
-});
-</script>

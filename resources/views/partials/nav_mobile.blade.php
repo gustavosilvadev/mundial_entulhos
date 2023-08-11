@@ -80,6 +80,8 @@
 --}}
 
 
+
+{{-- 
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
     <div class="container">
         <a class="navbar-brand" href="#">Mundial Entulhos</a>
@@ -89,7 +91,7 @@
         <div class="collapse navbar-collapse" id="main_nav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="#"> Principal </a></li>
-                {{-- 
+            <!--
                 <li class="nav-item"><a class="nav-link" href="#"> Resumo </a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown">Configurações</a>
@@ -98,7 +100,7 @@
                         <li><a class="dropdown-item" href="#">****</a></li>
                     </ul>
                 </li> 
-                --}}
+            -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('logout') }}">
                         SAIR
@@ -109,4 +111,28 @@
         </div>
     </div>
 </nav>
+ --}}
 
+
+ <nav class="header-navbar navbar navbar-expand-lg align-items-center floating-nav navbar-light navbar-shadow container-xxl">
+    <div class="navbar-container d-flex content">
+       
+        <ul class="nav navbar-nav align-items-center ml-auto">
+            
+
+            <li class="nav-item dropdown dropdown-user">
+                <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
+                    <a class="dropdown-item" href="page-profile.html"><i class="mr-50" data-feather="user"></i> Motorista</a>
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item " href="{{ url('logout') }}">
+                        <i class="mr-50" data-feather="power"></i> SAIR
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,146 +1,4 @@
-{{-- 
-<div class="sidenav-overlay"></div>
-<div class="drag-target"></div>
 
-
-
-<button class="btn btn-dark btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
-<script src="{{ URL::asset('public/app-assets/vendors/js/vendors.min.js') }}"></script>
-
-    <script src="{{ URL::asset('public/app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/editors/quill/katex.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/editors/quill/highlight.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/editors/quill/quill.min.js') }}"></script>
-
-
-    <script src="{{ URL::asset('public/app-assets/vendors/js/extensions/dragula.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
-
-
-    <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script> 
-
-
-
-    <script src="{{ URL::asset('public/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
-
-    <script src="{{ URL::asset('public/app-assets/vendors/js/forms/cleave/cleave.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/forms/cleave/addons/cleave-phone.pt.js') }}"></script>
-
-
-
-    <script src="{{ URL::asset('public/app-assets/js/core/app-menu.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/js/core/app.js') }}"></script>
-
-
-
-
-    <script src="{{ URL::asset('public/app-assets/js/scripts/pages/page-blog-edit.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/js/scripts/pages/app-todo.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/js/scripts/tables/table-datatables-advanced.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/js/scripts/forms/form-input-mask.js') }}"></script>
-
-
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
-
-
-
-<script>
-    $(window).on('load', function() {
-        if (feather) {
-            feather.replace({
-                width: 14,
-                height: 14
-            });
-        }
-
-        $('#table_teste_gustavo').DataTable();
-            
-            if (feather) {
-                feather.replace({
-                    width: 14,
-                    height: 14
-                });
-            }
-
-            $('.date_format').flatpickr({
-                dateFormat: "d/m/Y",
-            });
-
-            $('.date_format_allocation').flatpickr({
-                dateFormat: "d/m/Y",
-                minDate: "today",
-            });
-
-            $('.date_format_allocation_search').flatpickr({
-                mode: "multiple",
-                dateFormat: "d/m/Y"
-            });
-
-            $('.date_format_service_search').flatpickr({
-                disableMobile: "true",
-                dateFormat: "d/m/Y"
-            });
-
-            $('.date_format_allocation_drive_search').flatpickr({
-                dateFormat: "d/m/Y",
-                minDate: dataDiaSeguinteFormatada(),
-            });
-            
-            $('.date_format_removal').flatpickr({
-                dateFormat: "d/m/Y",
-                minDate: dataDiaSeguinteFormatada(),
-            });
-            
-            $('.date_format_effective_removal').flatpickr({
-                dateFormat: "d/m/Y",
-                minDate: dataDiaSeguinteFormatada(),
-            });        
-    });
-
-
-    let dataAtualFormatada = () => {
-            let data = new Date(),
-                dia  = data.getDate().toString(),
-                diaF = (dia.length == 1) ? '0'+dia : dia,
-                mes  = (data.getMonth()+1).toString(), 
-                mesF = (mes.length == 1) ? '0'+mes : mes,
-                anoF = data.getFullYear();
-            return diaF+"/"+mesF+"/"+anoF;
-        };
-
-        let dataDiaSeguinteFormatada = () => {
-
-            let d = new Date();
-            d.setDate(d.getDate() + 1);
-
-            let year = d.getFullYear()
-            let month = String(d.getMonth() + 1)
-            let day = String(d.getDate())
-
-            month = month.length == 1 ? 
-            month.padStart('2', '0') : month;
-
-            day = day.length == 1 ? 
-            day.padStart('2', '0') : day;
-
-            return `${day}/${month}/${year}`;
-        };    
-</script>
-</body>
-
-
-</html> 
-
---}}
 
 
 
@@ -151,28 +9,15 @@
 
     
     <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ URL::asset('public/app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/editors/quill/katex.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/editors/quill/highlight.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/editors/quill/quill.min.js') }}"></script>
+    <script src="{{ URL::asset('public/app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
+    <script src="{{ URL::asset('public/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
 
-    
     <script src="{{ URL::asset('public/app-assets/vendors/js/extensions/dragula.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
-
-
-    <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script> 
-
-
-
-    <script src="{{ URL::asset('public/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
-    
-    <script src="{{ URL::asset('public/app-assets/vendors/js/forms/cleave/cleave.min.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/vendors/js/forms/cleave/addons/cleave-phone.pt.js') }}"></script>
 
 
     <!-- BEGIN: Theme JS-->
@@ -182,20 +27,7 @@
 
 
     <!-- BEGIN: Page JS-->
-    <script src="{{ URL::asset('public/app-assets/js/scripts/pages/page-blog-edit.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/js/scripts/pages/app-todo.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/js/scripts/tables/table-datatables-advanced.js') }}"></script>
-    <script src="{{ URL::asset('public/app-assets/js/scripts/forms/form-input-mask.js') }}"></script>
-    
-
-    {{-- <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
-    {{-- <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> --}}
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
     <!-- END: Page JS-->
 
 
@@ -219,7 +51,17 @@
 
         $('.date_format_service_search').flatpickr({
                 disableMobile: "true",
-                dateFormat: "d/m/Y"
+                dateFormat: "d/m/Y",
+                onReady: function(dateObj, dateStr, instance) {
+                    let $cal = $(instance.calendarContainer);
+                    if ($cal.find('.flatpickr-clear').length < 1) {
+                        $cal.append('<button class="btn flatpickr-clear"><h4>LIMPAR</h4></button>');
+                        $cal.find('.flatpickr-clear').on('click', function() {
+                            instance.clear();
+                            instance.close();
+                        });
+                    }
+                }                
         });
 
 	}); 

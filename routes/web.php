@@ -35,6 +35,7 @@ Route::middleware('usersession')->group(function(){
     Route::post('/save_driver',[DriverController::class,'store']);
     Route::get('driver/{id?}',[DriverController::class,'show']);
     Route::get('/driver_demand', [DriverController::class, 'showDemands']);
+    Route::get('/get_details_demand', [DriverController::class, 'buscarDetahesPedidoSelecionados']);
     Route::get('search_demand',[DriverController::class,'showDemandFilter']);
     
     // resolver problema ao Clicar no botão Inciar Atendimento
@@ -45,8 +46,6 @@ Route::middleware('usersession')->group(function(){
     Route::get('show_dumpster_demand',[DriverController::class,'getDumpsterDemand']);
     Route::post('get_dumpster_location',[DriverController::class,'getDumpsterLocation']);
 
-    // Route::get('/listlandfill', [DriverController::class,'getLandFill']);
-    
     Route::post('atualiza_dias_cacamba_municipio',[DumpsterServiceDemandController::class,'updateDaysDumpsterCounty']);
 
     //Dumpsters
@@ -61,16 +60,15 @@ Route::middleware('usersession')->group(function(){
     Route::post('save_landfill',[LandfillController::class,'store']);
     
     // Call Demand
-        // ALOCAÇÃO
-        Route::get('createcalldemand', [CallDemandController::class,'callFormCreateDemand']);
-        Route::post('save_call_demand',[CallDemandController::class,'store'])->name('save.replacement_demand');
-        Route::get('call_demand/{id?}',[CallDemandController::class,'show'])->name('calldemand.list');
-        Route::post('update_call_demand',[CallDemandController::class,'update']);
-        Route::post('delete_demand',[CallDemandController::class,'destroy']);
+    // ALOCAÇÃO
+    Route::get('createcalldemand', [CallDemandController::class,'callFormCreateDemand']);
+    Route::post('save_call_demand',[CallDemandController::class,'store'])->name('save.replacement_demand');
+    Route::get('call_demand/{id?}',[CallDemandController::class,'show'])->name('calldemand.list');
+    Route::post('update_call_demand',[CallDemandController::class,'update']);
+    Route::post('delete_demand',[CallDemandController::class,'destroy']);
 
-        // TROCA
-        Route::get('replacement_calldemand/{id?}', [CallDemandController::class,'callFormCreateReplaceDumpster'])->name('calldemand.replacement');
-        // Route::get('create_replacement_calldemand', [CallDemandController::class,'callFormCreateReplaceDumpster']);
+    // TROCA
+    Route::get('replacement_calldemand/{id?}', [CallDemandController::class,'callFormCreateReplaceDumpster'])->name('calldemand.replacement');
     
     Route::get('demand_list_client/{id?}',[CallDemandController::class,'showInfoClientDemand']);
     

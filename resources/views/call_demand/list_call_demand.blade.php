@@ -157,7 +157,7 @@
                                                 <td><?php echo $valDemand->phone_demand; ?></td>
                                                 <td><?php echo $valDemand->price_unit; ?></td>
                                                 <td><?php echo $valDemand->comments_demand; ?></td>
-                                                <td><?php echo $valDemand->dumpster_number; ?></td>
+                                                <td><?php echo ($valDemand->dumpster_number_substitute > 0) ? $valDemand->dumpster_number_substitute : $valDemand->dumpster_number; ?></td>
                                                 <td>
                                                     {{-- 
                                                     <?php if($valDemand->service_status == 5):?>
@@ -463,13 +463,16 @@ $(document).ready(function() {
                 dateEffectiveRemoval = $(this).find("td:eq(8)").text();
 
                 $("#modal-edit").modal('toggle');
+
                 if(nameDriver != "")
                 {
+
                     $("#name_driver_selected  option:contains("+ nameDriver +")").attr("selected", "selected");
 
                 }else {
 
                     $("#name_driver_selected  option:contains()").attr("selected", false);
+                    // $("#name_driver_selected").val($("#name_driver_selected  option:first").val())
                 }
 
                 if(paymentStatus.trim() != "")
