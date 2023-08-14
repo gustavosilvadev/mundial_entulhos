@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use App\Models\CallDemand;
+use App\Models\Client;
 use App\Models\PaymentCallDemand;
 use App\Models\Driver;
 use App\Models\Landfill;
@@ -31,6 +32,7 @@ class CallDemandController extends Controller
                     DB::raw('DATE_FORMAT(call_demand.date_effective_removal_dumpster, "%d/%m/%Y") as date_effective_removal_dumpster'),
                     DB::raw('DATE_FORMAT(call_demand.created_at, "%d/%m/%Y") as created_at'),
                     'call_demand.days_allocation AS days_allocation',
+                    'call_demand.id_client as id_client',
                     'call_demand.address as address_service',
                     'call_demand.address_complement as address_complement',
                     'call_demand.number as number_address_service',
@@ -513,25 +515,24 @@ class CallDemandController extends Controller
 
     public function callFormCreateDemand()
     {
-        return view('call_demand.form_cad_call_demand', $this->showInfoParamsDemand());
 
+        return view('call_demand.form_cad_call_demand', $this->showInfoParamsDemand());
     }
 
-    // public function callFormCreateReplaceDumpster()
-    // {
-    //     return view('call_demand.form_cad_call_replace_dumpster', $this->showInfoParamsDemand());
-    // }
 
-    /**
-     * showInfoParamsDemand
-     */
     public function showInfoParamsDemand()
     {
-        $info_client_demand = DB::table('call_demand')
-        ->groupBy('call_demand.name')
-        ->orderBy('call_demand.id_demand', 'desc')
-        ->select('call_demand.id', 'call_demand.id_demand', 'call_demand.name')
+        
+        // $info_client_demand = DB::table('call_demand')
+        // ->groupBy('call_demand.name')
+        // ->orderBy('call_demand.id_demand', 'desc')
+        // ->select('call_demand.id', 'call_demand.id_demand', 'call_demand.name')
+        // ->get();
+
+        $info_client_demand = DB::table('client')
+        ->select('client.id', 'client.name')
         ->get();
+
 
         $drivers = Driver::join('employee', function($join){
             $join->on('driver.id_employee', '=', 'employee.id')->where('driver.flg_status', 1);
@@ -544,6 +545,7 @@ class CallDemandController extends Controller
             'drivers' => $drivers,
             'landfills' => $landfills
         ];
+
     }
 
     public function showInfoClientDemand(Request $request)
@@ -600,6 +602,7 @@ class CallDemandController extends Controller
     public function store(Request $request)
     {
 
+   
         // CÓDIGO DE REFERÊNCIA LOGO ABAIXO:
         if (isset($request->client_name_new)
         && isset($request->type_service)
@@ -617,6 +620,65 @@ class CallDemandController extends Controller
         && isset($request->date_allocation_dumpster)
         && isset($request->date_removal_dumpster))
         {
+            // VALIDA SE CLIENTE JÁ ESTÁ CADASTRO
+            $id_client  = 0;
+            // $findCliente = Client::where([
+            //     ['name', '=', $request->client_name_new],
+            //     ['address', '=', $request->address],
+            //     ['number', '=', $request->number],
+            //     ['zipcode', '=', $request->zipcode],
+            //     ['city', '=', $request->city],
+            // ])->first();
+
+            $findCliente = Client::find($request->id_client);
+
+            if($findCliente === null){
+                if(((int)$request->type_service == 1)){
+                    $cliente = new Client();
+                    $cliente->name       = $request->client_name_new;
+                    $cliente->address    = $request->address;
+                    $cliente->address_complement    = $request->address_complement;
+                    $cliente->number     = $request->number;
+                    $cliente->zipcode    = $request->zipcode;
+                    $cliente->city       = $request->city;
+                    $cliente->district   = $request->district;
+                    $cliente->state      = $request->state;
+                    $cliente->phone      = str_replace([" ","(",")"],"",$request->phone);
+
+                    $cliente->save();
+
+                    $id_client =  $cliente->id;
+                }
+            }else{
+
+                if($findCliente->name       != $request->client_name_new
+                    || $findCliente->address    != $request->address
+                    || $findCliente->address_complement    != $request->address_complement
+                    || $findCliente->number     != $request->number
+                    || $findCliente->zipcode    != $request->zipcode
+                    || $findCliente->city       != $request->city
+                    || $findCliente->district   != $request->district
+                    || $findCliente->state      != $request->state
+                    || $findCliente->phone      != str_replace([" ","(",")"],"",$request->phone)
+                ){
+                    
+                    Client::where('id', $findCliente->id)
+                    ->update([
+                        'name' =>        $request->client_name_new,
+                        'address' =>     $request->address,
+                        'address_complement' =>     $request->address_complement,
+                        'number' =>      $request->number,
+                        'zipcode' =>     $request->zipcode,
+                        'city' =>        $request->city,
+                        'district' =>    $request->district,
+                        'state' =>       $request->state,
+                        'phone' =>       str_replace([" ","(",")"],"",$request->phone)                       ,
+                    ]);
+                }
+
+                $id_client = $findCliente->id;
+            }
+
             $lastIdDemand = isset(CallDemand::orderBy('id', 'desc')->first()->id) ? (CallDemand::orderBy('id', 'desc')->first()->id + 1) : 1 ;
 
             for($repeatInfo = 0; $repeatInfo < $request->dumpster_quantity; $repeatInfo ++){
@@ -635,6 +697,7 @@ class CallDemandController extends Controller
                 $calldemand->period     = $request->period;
                 $calldemand->date_allocation_dumpster       = (isset($request->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_allocation_dumpster))) : '');
                 $calldemand->date_removal_dumpster_forecast = (isset($request->date_removal_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_removal_dumpster))) : '');
+                $calldemand->id_client  = $id_client;
                 $calldemand->name       = $request->client_name_new;
                 $calldemand->address    = $request->address;
                 $calldemand->address_complement    = $request->address_complement;
@@ -656,7 +719,7 @@ class CallDemandController extends Controller
                     return back()->withErrors(['response' => "Erro ao cadastrar o chamado"]);
 
                 // Gravando na tabela de pagamentos
-                // if((int)$request->type_service == 1){
+
                     $paymentCallDemand = new PaymentCallDemand();
                     $paymentCallDemand->id_call_demand_reg = $calldemand->id;
                     $paymentCallDemand->id_call_demand = $lastIdDemand;
@@ -682,11 +745,7 @@ class CallDemandController extends Controller
                     if(!$paymentCallDemand->save()){
                         return back()->withErrors(['response' => "Erro ao registrar ids de pagamento"]);
                     }
-                // }
-
             }
-            // return redirect('createcalldemand');
-            // return redirect()->back()->with(['response' => 'Dados cadastrados com sucesso!']);
 
             return redirect('/call_demand');
 
@@ -852,13 +911,13 @@ class CallDemandController extends Controller
                     $calldemandDumpsterRemoval->dumpster_removal = true;
                     $calldemandDumpsterRemoval->id_parent      = $calldemandFirst->id;
                     $calldemandDumpsterRemoval->period         = $calldemandFirst->period;
-                    // $calldemandDumpsterRemoval->date_allocation_dumpster = isset($calldemandFirst->date_allocation_dumpster) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_allocation_dumpster))) : '';
                     
                     // MUDAR NOME DA COLUNA ABAIXO PARA "DATA DE OPERAÇÃO" ONDE AGORA IRÁ ASSUMIR TANTO ALOCAÇÃO QUANTO TROCA E RETIRADA
                     $calldemandDumpsterRemoval->date_allocation_dumpster = $effectiveDateRemoval;
                     $calldemandDumpsterRemoval->date_removal_dumpster_forecast  = isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '';
                     $calldemandDumpsterRemoval->date_effective_removal_dumpster = $effectiveDateRemoval;
                     $calldemandDumpsterRemoval->name           = $calldemandFirst->name;
+                    $calldemandDumpsterRemoval->id_client        = $calldemandFirst->id_client;
                     $calldemandDumpsterRemoval->address        = $calldemandFirst->address;
                     $calldemandDumpsterRemoval->address_complement = $calldemandFirst->address_complement;
                     $calldemandDumpsterRemoval->number         = $calldemandFirst->number;
@@ -890,6 +949,7 @@ class CallDemandController extends Controller
                         'date_removal_dumpster_forecast' => isset($calldemandFirst->date_removal_dumpster_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $calldemandFirst->date_removal_dumpster_forecast))) : '',
                         'date_effective_removal_dumpster' => $effectiveDateRemoval,
                         'name' => $calldemandFirst->name,
+                        'id_client' => $calldemandFirst->id_client,
                         'address' => $calldemandFirst->address,
                         'address_complement' => $calldemandFirst->address_complement,
                         'number' => $calldemandFirst->number,
@@ -967,12 +1027,8 @@ class CallDemandController extends Controller
             }else{
                 return false;
             }
-
-
         }
-
         return false;
-
     }
 
     private function returnSuccess($dados)

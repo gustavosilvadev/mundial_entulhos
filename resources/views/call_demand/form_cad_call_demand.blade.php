@@ -35,17 +35,7 @@
 
         </div>
         <div class="content-body">
-            <div class="row">
-            <!-- 
-                <div class="col-12">
-                    <div class="alert alert-primary" role="alert">
-                        <div class="alert-body"><strong>Info:</strong> Use this layout to set menu (navigation) default collapsed. Please check the&nbsp;<a class="text-primary" href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/documentation-layout-collapsed-menu.html" target="_blank">Layout collapsed menu documentation</a>&nbsp; for more details.</div>
-                    </div>
-                </div>
-            -->
 
-            </div>
-            {{-- <section class="horizontal-wizard"> --}}
             <section id="multiple-column-form">
                     <div class="row">
                         <div class="col-12">
@@ -440,16 +430,16 @@
 
         $("#search_data_client").on('change', function(){
             
-            let id_demand_client = $(this).val();
-            findDemandClient(id_demand_client);
+            let id_client = $(this).val();
+            getInfoClient(id_client);
         });
 
 
-        function findDemandClient(id_demand){
+        function getInfoClient(id_client){
             $.ajax({
                 method: 'GET',
                 url: 'show_info_client',
-                data: {id : id_demand},
+                data: {id : id_client},
                 success: function(dataResponse) {
 
                     $("#client_name_new").val(dataResponse.name);

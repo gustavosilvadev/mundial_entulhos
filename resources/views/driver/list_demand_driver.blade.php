@@ -49,45 +49,41 @@
                                 <ul class="todo-task-list media-list" id="todo-task-list">
                                     <?php if(is_array($lista_chamados)): ?>
 
-                                        <?php foreach($lista_chamados as $id_chamado => $chamados): ?>
-                                            <?php foreach($chamados as $ind_atividade => $chamado_info): ?>
-                                                <li class="todo-item my-2 border">
-                                                    <div class="todo-title-wrapper">
-                                                        <div class="todo-title-area">
-                                                            <i data-feather="more-vertical" class="drag-icon"></i>
-                                                            {{-- <div class="title-wrapper"> --}}
-                                                            <div >
+                                        <?php foreach($lista_chamados as $id_cliente => $chamado_info): ?>
 
-                                                                {{-- <span class="todo-title">Fix Responsiveness for new structure 💻</span> --}}
+                                            <li class="todo-item my-2 border">
+                                                <div class="todo-title-wrapper">
+                                                    <div class="todo-title-area">
+                                                        <i data-feather="more-vertical" class="drag-icon"></i>
 
+                                                        <div >
 
-                                                                    <h3 class="bg-dark text-white todo-title">{{ $chamado_info['tipo_servico'] }} ({{$chamado_info['quantidade_cacamba']}})</h3>
-                                                                    
-                                                                    <label class="text-nowrap text-muted mr-1">{{ $id_chamado }}</label>
+                                                                <h3 class="bg-dark text-white todo-title">{{ $chamado_info['tipo_servico'] }} ({{$chamado_info['quantidade_cacamba']}})</h3>
+                                                                
+                                                                <label class="text-nowrap text-muted mr-1">CLIENTE: {{ $id_cliente }}</label>
 
-                                                                    <h4 class="text-dark todo-title-address">
-                                                                        {{ $chamado_info['endereco'].', '
-                                                                    .$chamado_info['numero_endereco'].', '
-                                                                    .$chamado_info['bairro_endereco'].', '
-                                                                    .$chamado_info['cidade_endereco'].' - '
-                                                                    .$chamado_info['cep_endereco']
-                                                                    }}
-                                                                    </h4>
+                                                                <h4 class="text-dark todo-title-address">
+                                                                    {{ $chamado_info['endereco'].', '
+                                                                .$chamado_info['numero_endereco'].', '
+                                                                .$chamado_info['bairro_endereco'].', '
+                                                                .$chamado_info['cidade_endereco'].' - '
+                                                                .$chamado_info['cep_endereco']
+                                                                }}
+                                                                </h4>
 
-                                                                    
-                                                                    <label class="text-nowrap text-muted mr-1 todo-id-demand" style="display: none;">{{ $id_chamado }}</label>
-                                                                    <label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">{{ $chamado_info['id_motorista'] }}</label>
-                                                                    <label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">{{ $chamado_info['data_operacao'] }}</label>
-                                                                    <label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand') }}</label>
-                                                                    <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
+                                                                <label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">{{ $id_cliente }}</label>
+                                                                <label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">{{ $chamado_info['id_motorista'] }}</label>
+                                                                <label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">{{ $chamado_info['data_operacao'] }}</label>
+                                                                <label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand') }}</label>
+                                                                <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
 
-                                                            </div>
                                                         </div>
-
                                                     </div>
-                                                </li>
-                                            <?php endforeach; ?>
+
+                                                </div>
+                                            </li>
                                         <?php endforeach; ?>
+
 
                                 <?php else: ?>
                                 </ul>
@@ -119,108 +115,10 @@
                                             <div class="action-tags" id="atividade_input">
                                             
                                             </div>    
-                                            <!--
-                                            <div class="action-tags">
 
-
-                                                <div class="form-group p-1 mb-1 bg-primary text-white">COLOCAÇÃO</div>
-                                                <div class="form-group p-1 mb-1 bg-warning text-white">TROCA</div>
-                                                <div class="form-group p-1 mb-1 bg-success text-white">RETIRADA</div>
-
-                                                <div class="form-group row">
-                                                    <div class="col-4">
-                                                        <label for="task-due-date" class="form-label">CAÇAMBA 1 </label>
-                                                        <input class="form-control" id="ex1" type="text">
-                                                    </div>
-                                                    
-
-                                                    <div class="col-4">
-                                                        <label for="task-due-date" class="form-label">CAÇAMBA 2 </label>
-                                                        <input class="form-control" id="ex1" type="text">
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="form-group row">
-                                                    <div class="col-4">
-                                                        <label for="task-due-date" class="form-label">CAÇAMBA 1 </label>
-                                                        <input class="form-control" id="ex1" type="text">
-                                                    </div>
-
-                                                </div>                                                
-                                                <div class="form-group position-relative">
-                                                    <label for="task-assigned" class="form-label d-block">Aterro</label>
-                                                    <select class="select2 form-control" id="task-assigned" name="task-assigned">
-                                                    </select>
-                                                </div>
-
-                                                <button type="button" class="btn btn-success  update-btn update-todo-item mr-1">ATENDENR</button>
-                                                <button type="button" class="btn btn-info update-btn " data-dismiss="modal">FINALIZAR</button>
-
-                                            </div>
-                                            -->
                                             <hr>
                                             <hr>
 
-                                        <!--
-                                            <div class="action-tags">
-
-
-                                                <div class="form-group p-1 mb-1 bg-primary text-white">COLOCAÇÃO</div>
-                                                <div class="form-group p-1 mb-1 bg-warning text-white">TROCA</div>
-                                                <div class="form-group p-1 mb-1 bg-success text-white">RETIRADA</div>
-
-                                                <div class="form-group row">
-                                                    <div class="col-4">
-                                                        <label for="task-due-date" class="form-label">CAÇAMBA 1 </label>
-                                                        <input class="form-control" id="ex1" type="text">
-                                                    </div>
-                                                    
-
-                                                    <div class="col-4">
-                                                        <label for="task-due-date" class="form-label">CAÇAMBA 2 </label>
-                                                        <input class="form-control" id="ex1" type="text">
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="form-group row">
-                                                    <div class="col-4">
-                                                        <label for="task-due-date" class="form-label">CAÇAMBA 1 </label>
-                                                        <input class="form-control" id="ex1" type="text">
-                                                    </div>
-
-                                                </div>                                                
-                                                <div class="form-group position-relative">
-                                                    <label for="task-assigned" class="form-label d-block">Aterro</label>
-                                                    <select class="select2 form-control" id="task-assigned" name="task-assigned">
-                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-3.jpg" value="Phill Buffer" selected>
-                                                            Phill Buffer
-                                                        </option>
-                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-1.jpg" value="Chandler Bing">
-                                                            Chandler Bing
-                                                        </option>
-                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-4.jpg" value="Ross Geller">
-                                                            Ross Geller
-                                                        </option>
-                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-6.jpg" value="Monica Geller">
-                                                            Monica Geller
-                                                        </option>
-                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-2.jpg" value="Joey Tribbiani">
-                                                            Joey Tribbiani
-                                                        </option>
-                                                        <option data-img="../../../app-assets/images/portrait/small/avatar-s-11.jpg" value="Rachel Green">
-                                                            Rachel Green
-                                                        </option>
-                                                    </select>
-                                                </div>
-
-                                                <button type="button" class="btn btn-success  update-btn update-todo-item mr-1">ATENDENR</button>
-                                                <button type="button" class="btn btn-info update-btn " data-dismiss="modal">FINALIZAR</button>                                                
-
-                                            </div>
-
-                                        -->
                                             <div class="form-group my-1">
                                                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
                                                     Fechar

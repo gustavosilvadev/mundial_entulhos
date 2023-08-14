@@ -30,6 +30,7 @@ class TblCalldemand extends Migration
             $table->dateTime('date_effective_removal_dumpster')->nullable(); // DATA RETIRADA EFETIVA - PARA ADICIONAR DATA QUANDO O MOTORISTA RETIROU A CAÇAMBA
 
             $table->integer('id_parent')->default(0); // ID RELACIONADO AO CHAMADO ANTERIOR - É PREENCHIDO SOMENTE SE O ANTERIOR NÃO ESTIVER FINALIZADO E USUÁRIO RELACIONAR
+            $table->integer('id_client')->default(0); // ID DO CLIENTE
             $table->string('name'); // NOME DO CLIENTE
             $table->string('address');
             $table->string('number');

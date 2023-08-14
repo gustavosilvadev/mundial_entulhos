@@ -86,7 +86,7 @@
                                                                                                         <div class="form-group">
                                                                                                             <label for="id_client">CLIENTE</label>
                                                                                                             <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}" required disabled/>
-                                                            
+                                                                                                            <input type="hidden" name="id_client" id="id_client"  value="{{ $value->id_client }}" required disabled/>
                                                                                                         </div>
                                                                                                     </div>
 {{-- 
@@ -696,6 +696,7 @@
 
             let id_demand       = $("input[name=id_demand]").val();
             let id_demand_reg   = $("input[name=id_demand_reg]").val();
+            let idClient       = $("input[name=id_client]").val();
             let client_name_new = $("input[name=client_name_new]").val();
             let zipcode         = $("input[name=zipcode]").val();
             let address         = $("input[name=address]").val();
@@ -746,6 +747,7 @@
                 data: { 
                     'id_demand' : id_demand,
                     'id_demand_reg' : id_demand_reg,
+                    'id_client' : idClient,
                     'client_name_new' : client_name_new,
                     'zipcode' : zipcode,
                     'address' : address,

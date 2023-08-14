@@ -59,7 +59,7 @@ public function checkDemandOpendClient(Request $request):bool
 public function showInfoClient(Request $request)
 {
     
-    $client = CallDemand::where('id',$request->id)->first();
+    $client = Client::where('id',$request->id)->first();
 
     if(isset($client)){
         return $client;

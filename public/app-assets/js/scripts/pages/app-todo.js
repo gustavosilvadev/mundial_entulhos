@@ -12,7 +12,7 @@
 $(function () {
   var taskTitle,
     taskIdDemandReg,
-    taskIdDemand,
+    taskIdClientDemand,
     taskIdDriver,
     taskDataAlocacao,
     flatPickr = $('.task-due-date'),
@@ -322,11 +322,11 @@ $(function () {
 
   
   // TESTE 
-    taskIdDemand   = $(this).find('.todo-id-demand');
+    taskIdClientDemand   = $(this).find('.todo-id-client-demand');
     taskIdDriver   = $(this).find('.todo-id-driver');
     taskDataAlocacao   = $(this).find('.todo-data-alocacao');
   
-    let $id_chamado    = taskIdDemand.html();
+    let $id_cliente_chamado    = taskIdClientDemand.html();
     let $id_motorista  = taskIdDriver.html();
     let $data_alocacao = taskDataAlocacao.html();
     let rota_detalhes_pedido   = $(this).find('.todo-url-show-details_demand');    
@@ -343,27 +343,625 @@ $(function () {
     let quantidadeRetirada = 0;
     let contadorItemsPorAtividade = 0;
 
-    $.get(rota_detalhes_pedido.text(),{ idchamado: $id_chamado,  idmotorista: $id_motorista , dataalocacao: $data_alocacao} )
+    $.get(rota_detalhes_pedido.text(),{ id_cliente_chamado: $id_cliente_chamado,  idmotorista: $id_motorista , dataalocacao: $data_alocacao} )
     .done(function ( dataResponse ){
 
       let tipo_atividade = '';
-
-console.log('*********************');
-console.log(dataResponse);
-console.log('*********************');
-
-
       quantidadeAlocacao = dataResponse.filter((obj) => obj.colocacao === 1).length;
       quantidadeTroca    = dataResponse.filter((obj) => obj.troca === 1).length;
       quantidadeRetirada = dataResponse.filter((obj) => obj.remocao === 1).length;
       
 
-console.log("quantidadeAlocacao: "+ quantidadeAlocacao);
-console.log("quantidadeTroca: "+ quantidadeTroca);
-console.log("quantidadeRetirada: "+ quantidadeRetirada);
-
 
       $("#nome_cliente").text(dataResponse[0].nome_cliente);
+      let totalAtividade = 0;
+      let arr_colocacao = [];
+      let arr_troca = [];
+      let arr_retirada = [];
+
+      $.each(dataResponse, function(kItem, item) {
+        if(item.colocacao == true){ arr_colocacao.push(item); }
+        if(item.troca == true){ arr_troca.push(item); }
+        if(item.remocao == true){ arr_retirada.push(item); }
+      });
+
+      let cacamba1   = '';
+      let cacamba2   = '';
+
+      // COLOCAÇÃO
+      if(arr_colocacao.length > 0)
+      {
+
+        $("#atividade_input").append('<div class="form-group p-1 mb-1 bg-secondary text-white">COLOCAÇÃO</div>');
+        // let contagem = 0;
+        // let id_pedidos_arr = [];
+        $.each(arr_colocacao, function(key, item) {
+
+          $("#atividade_input").append('<div class="form-group row" id="form_group_one"></div>');
+
+          cacamba1 =   '<div class="col-6">' +
+          '<label for="task-due-date" class="form-label ">CAÇAMBA(COLOCAÇÃO)</label>' +
+          '<input class="form-control col-6 mb-1" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '">' +
+          '</div>';
+
+          $("#atividade_input").append('<div class="form-group position-relative"></div>');
+          $("#atividade_input").append('<br />');
+          $("#form_group_one").append(cacamba1);
+          
+            // BOTÕES FOOTER
+
+            if(item.status_atendimento == 0 ){
+
+              let btn_iniciar = $('<button/>',
+              {
+                  text: 'Iniciar Atendimento',
+                  class: 'btn btn-success my-2',
+                  click: function () { 
+
+
+                    // METODO INCIAR ATENDIMENTO - BEGIN
+                                let dataForm = $('#form-modal-todo');
+                                let dataInfo = dataForm.serializeArray();
+                                let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
+                                let dumpsterNumberSub = 0;
+                                let typeService = "";
+                                let idDemandReg   = 0;
+                                let idDemand   = 0;
+                                let idLandfill = 0;
+                                let stopExec   = false; 
+                                let serviceStatus = 0; 
+                                let status_do_servico = 1;
+
+                                idDemandReg   = item.id_ficha;
+                                idDemand      = item.id_chamado;
+                                typeService   = item.tipo_servico;
+                                idLandfill    = $('#landfill_' + item.id_ficha).val();
+
+
+                              if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
+                                alert("Preencha o número da caçamba!");
+                                stopExec = true;
+                                return false;
+
+                              }
+
+
+                              if(stopExec == false){
+
+                                $.ajax({
+                                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                                    method: 'POST',
+                                    url: 'start_demand',
+                                    data: {
+                                        type_service: typeService, 
+                                        id_demand_reg: idDemandReg,
+                                        id_demand: idDemand,
+                                        id_landfill: idLandfill,
+                                        dumpster_numbers: dumpsterNumbers,
+                                        dumpster_number_sub : dumpsterNumberSub,
+                                        service_status  : status_do_servico
+                                    },
+                                    success: function(dataResponse) {
+                                      if(dataResponse == true)
+                                          location.reload();
+
+                                    },
+                                    error: function(responseError){
+                                        console.log(responseError);
+                                    }
+                                });
+
+                              }else{
+                                  alert('Preencha todos os campos!');
+                              }    
+                    // METODO INCIAR ATENDIMENTO - END
+                  }
+              });
+
+              $("#form_group_one").append(btn_iniciar);
+
+            }else if(item.status_atendimento == 1){
+
+              let btn_encerrar = $('<button/>',
+              {
+                  text: 'FINALIZAR',
+                  class: 'btn btn-info update-btn my-2',
+                  click: function () { 
+
+                      // METODO INCIAR ATENDIMENTO - BEGIN
+                      let dataForm = $('#form-modal-todo');
+                      let dataInfo = dataForm.serializeArray();
+                      let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
+                      let dumpsterNumberSub = $('#cacamba_sub_' + item.id_ficha).val();
+                      let typeService = "";
+                      let idDemandReg   = 0;
+                      let idDemand   = 0;
+                      let idLandfill = 0;
+                      let stopExec   = false; 
+                      let serviceStatus = 0; 
+                      let status_do_servico = 5;
+
+                      idDemandReg   = item.id_ficha;
+                      idDemand      = item.id_chamado;
+                      typeService   = item.tipo_servico;
+                      idLandfill    = item.id_aterro;
+                      
+
+                      if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
+                        alert("Preencha o número da caçamba!");
+                        stopExec = true;
+                        return false;
+
+                      }
+
+                      if(stopExec == false){
+
+                        $.ajax({
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            method: 'POST',
+                            url: 'start_demand',
+                            data: {
+                                type_service: typeService, 
+                                id_demand_reg: idDemandReg,
+                                id_demand: idDemand,
+                                id_landfill: idLandfill,
+                                dumpster_numbers: dumpsterNumbers,
+                                dumpster_number_sub : dumpsterNumberSub,
+                                service_status  : status_do_servico
+                            },
+                            success: function(dataResponse) {
+                              if(dataResponse == true)
+                                  location.reload();
+
+                            },
+                            error: function(responseError){
+                                console.log(responseError);
+                            }
+                        });
+
+                      }else{
+                          alert('Preencha todos os campos!');
+                      }    
+                      // METODO INCIAR ATENDIMENTO - END                
+                  }
+              });
+              
+              
+              $("#form_group_one").append(btn_encerrar);
+
+            }else if(item.status_atendimento == 5){
+              let btn_executa = '<div class="alert alert-success mb-2 col-12" role="alert">PEDIDO CONCLUÍDO</div>';
+              $("#form_group_one").append(btn_executa);
+
+            }
+            // BOTÕES FOOTER
+        });
+
+
+
+
+        
+      }
+
+      // TROCA
+      if(arr_troca.length > 0){
+        $("#atividade_input").append('<div class="form-group p-1 mb-1 bg-secondary text-white">TROCA</div>');
+
+        $.each(arr_troca, function(key, item) {
+
+          $("#atividade_input").append('<div class="form-group row" id="form_group_two"></div>');
+
+          cacamba1 =   '<div class="col-4">' +
+          '<label for="task-due-date" class="form-label ">CAÇAMBA</label>' +
+          '<input class="form-control" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '">' +
+          '</div> ==> ';
+
+
+          cacamba2 = '<div class="col-4">'+
+              '<label for="task-due-date" class="form-label ">TROCA</label>'+
+              '<input class="form-control" id="cacamba_sub_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba_substituto + '">'+ 
+              '</div>';
+
+
+          $("#form_group_two").append(cacamba1);
+          $("#form_group_two").append(cacamba2);
+          
+// SELECIONAR ATERRO BEGIN
+              $("#form_group_two").append('<div class="col-12"><strong>Aterro: </strong> <select class="select2 form-control edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill"></div>');
+              $('#landfill_' + item.id_ficha).append('<option value="0">Selecione o aterro</option>');
+
+              $.get(listlandfill.text(),{ id_demand_reg: item.id_ficha})
+              .done(function ( dataResponse ){
+
+                
+                  $.each(dataResponse, function(key, dataItem){
+
+                    let selectedStatus  = (dataItem.selected == true) ? true : false;
+
+
+                    $('#landfill_' + item.id_ficha).append($("<option>").attr('value',dataItem.id).attr('selected', selectedStatus).text(dataItem.name));
+
+                  });    
+              });
+            // SELECIONAR ATERRO END
+
+            $("#atividade_input").append('<br />');
+
+            // BOTÕES FOOTER
+
+            if(item.status_atendimento == 0 ){
+
+              let btn_iniciar = $('<button/>',
+              {
+                  text: 'Iniciar Atendimento',
+                  class: 'btn btn-success my-2 col-12',
+                  click: function () { 
+
+
+                    // METODO INCIAR ATENDIMENTO - BEGIN
+                                let dataForm = $('#form-modal-todo');
+                                let dataInfo = dataForm.serializeArray();
+                                let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
+                                let dumpsterNumberSub = $('#cacamba_sub_' + item.id_ficha).val();
+                                let typeService = "";
+                                let idDemandReg   = 0;
+                                let idDemand   = 0;
+                                let idLandfill = 0;
+                                let stopExec   = false; 
+                                let serviceStatus = 0; 
+                                let status_do_servico = 1;
+
+                                idDemandReg   = item.id_ficha;
+                                idDemand      = item.id_chamado;
+                                typeService   = item.tipo_servico;
+                                idLandfill    = $('#landfill_' + item.id_ficha).val();
+
+
+                              if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
+                                alert("Preencha o número da caçamba!");
+                                stopExec = true;
+                                return false;
+
+                              }
+                            
+
+
+                              if((item.troca != true || item.remocao != true) && idLandfill == 0)
+                              {
+                                  alert('Selecione o aterro!');
+                                  stopExec = true;
+                                  return false;
+                              }
+
+
+                              if(item.troca && dumpsterNumberSub == 0 || dumpsterNumberSub == '' || dumpsterNumberSub == undefined)
+                              {
+                                alert("Preencha o número da caçamba!");
+                                stopExec = true;
+                                return false;
+                              }
+
+
+                              if(stopExec == false){
+
+                                $.ajax({
+                                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                                    method: 'POST',
+                                    url: 'start_demand',
+                                    data: {
+                                        type_service: typeService, 
+                                        id_demand_reg: idDemandReg,
+                                        id_demand: idDemand,
+                                        id_landfill: idLandfill,
+                                        dumpster_numbers: dumpsterNumbers,
+                                        dumpster_number_sub : dumpsterNumberSub,
+                                        service_status  : status_do_servico
+                                    },
+                                    success: function(dataResponse) {
+                                      if(dataResponse == true)
+                                          location.reload();
+
+                                    },
+                                    error: function(responseError){
+                                        console.log(responseError);
+                                    }
+                                });
+
+                              }else{
+                                  alert('Preencha todos os campos!');
+                              }    
+                    // METODO INCIAR ATENDIMENTO - END
+                  }
+              });
+
+              $("#form_group_two").append(btn_iniciar);
+
+            }else if(item.status_atendimento == 1){
+
+              let btn_encerrar = $('<button/>',
+              {
+                  text: 'Encerrar Atendimento',
+                  class: 'btn btn-info update-btn my-2 col-12',
+                  click: function () { 
+
+                      // METODO INCIAR ATENDIMENTO - BEGIN
+                      let dataForm = $('#form-modal-todo');
+                      let dataInfo = dataForm.serializeArray();
+                      let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
+                      let dumpsterNumberSub = $('#cacamba_sub_' + item.id_ficha).val();
+                      let typeService = "";
+                      let idDemandReg   = 0;
+                      let idDemand   = 0;
+                      let idLandfill = 0;
+                      let stopExec   = false; 
+                      let serviceStatus = 0; 
+                      let status_do_servico = 5;
+
+                      idDemandReg   = item.id_ficha;
+                      idDemand      = item.id_chamado;
+                      typeService   = item.tipo_servico;
+                      idLandfill    = item.id_aterro;
+                      
+
+                      if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
+                        alert("Preencha o número da caçamba!");
+                        stopExec = true;
+                        return false;
+
+                      }
+
+                      if((item.troca != true || item.remocao != true) && idLandfill == 0)
+                      {
+                          alert('Selecione o aterro!');
+                          stopExec = true;
+                      }
+
+                      if(item.troca && dumpsterNumberSub == 0 || dumpsterNumberSub == '' || dumpsterNumberSub == undefined)
+                      {
+                        alert("Preencha o número da caçamba!");
+                        stopExec = true;
+                        return false;
+                      }                  
+
+                      if(stopExec == false){
+
+                        $.ajax({
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            method: 'POST',
+                            url: 'start_demand',
+                            data: {
+                                type_service: typeService, 
+                                id_demand_reg: idDemandReg,
+                                id_demand: idDemand,
+                                id_landfill: idLandfill,
+                                dumpster_numbers: dumpsterNumbers,
+                                dumpster_number_sub : dumpsterNumberSub,
+                                service_status  : status_do_servico
+                            },
+                            success: function(dataResponse) {
+                              if(dataResponse == true)
+                                  location.reload();
+
+                            },
+                            error: function(responseError){
+                                console.log(responseError);
+                            }
+                        });
+
+                      }else{
+                          alert('Preencha todos os campos!');
+                      }    
+                      // METODO INCIAR ATENDIMENTO - END                
+                  }
+              });
+              
+              
+              // $("#atividade_input").append(btn_encerrar);
+              $("#form_group_two").append(btn_encerrar);
+
+            }else if(item.status_atendimento == 5){
+              let btn_executa = '<div class="alert alert-success mb-2 col-12" role="alert">PEDIDO CONCLUÍDO</div>';
+              $("#form_group_two").append(btn_executa);
+            }
+            
+            // BOTÕES FOOTER          
+        });
+      }
+
+      // RETIRADA
+      if(arr_retirada.length > 0){
+        let contagem = 0;
+        $("#atividade_input").append('<div class="form-group p-1 mb-1 bg-secondary text-white">RETIRADA</div>');
+        $.each(arr_retirada, function(key, item) {
+
+          $("#atividade_input").append('<div class="form-group row" id="form_group_three"></div>');
+          cacamba1 =   '<div class="col-12 mb-1">' +
+          '<label for="task-due-date" class="form-label ">CAÇAMBA'+key+'</label>' +
+          '<input class="form-control col-2" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '">' +
+          '</div>';
+
+          $("#form_group_three").append(cacamba1);
+
+          $("#atividade_input").append('<div class="form-group position-relative"></div>');
+
+
+              // SELECIONAR ATERRO BEGIN
+                $("#form_group_three").append('<div class="col-12 mb-1"><strong>Aterro'+key+': </strong> <select class="select2 form-control edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill"></div>');
+                $('#landfill_' + item.id_ficha).append('<option value="0">Selecione o aterro</option>');
+
+                $.get(listlandfill.text(),{ id_demand_reg: item.id_ficha})
+                .done(function ( dataResponse ){
+
+                  
+                    $.each(dataResponse, function(key, dataItem){
+
+                      let selectedStatus  = (dataItem.selected == true) ? true : false;
+
+
+                      $('#landfill_' + item.id_ficha).append($("<option>").attr('value',dataItem.id).attr('selected', selectedStatus).text(dataItem.name));
+
+                    });    
+                });
+              // SELECIONAR ATERRO END
+
+
+              // BOTÕES FOOTER
+              if(item.status_atendimento == 0 ){
+
+                let btn_iniciar = $('<button/>',
+                {
+                    text: 'Iniciar Atendimento',
+                    class: 'btn btn-success mb-2 col-12',
+                    click: function () { 
+
+
+                      // METODO INCIAR ATENDIMENTO - BEGIN
+                                  let dataForm = $('#form-modal-todo');
+                                  let dataInfo = dataForm.serializeArray();
+                                  let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
+                                  let dumpsterNumberSub = 0;
+                                  let typeService = "";
+                                  let idDemandReg   = 0;
+                                  let idDemand   = 0;
+                                  let idLandfill = 0;
+                                  let stopExec   = false; 
+                                  let serviceStatus = 0; 
+                                  let status_do_servico = 1;
+
+                                  idDemandReg   = item.id_ficha;
+                                  idDemand      = item.id_chamado;
+                                  typeService   = item.tipo_servico;
+                                  idLandfill    = $('#landfill_' + item.id_ficha).val();
+
+
+                                if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
+                                  alert("Preencha o número da caçamba!");
+                                  stopExec = true;
+                                  return false;
+
+                                }
+
+                                if(stopExec == false){
+
+                                  $.ajax({
+                                      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                                      method: 'POST',
+                                      url: 'start_demand',
+                                      data: {
+                                          type_service: typeService, 
+                                          id_demand_reg: idDemandReg,
+                                          id_demand: idDemand,
+                                          id_landfill: idLandfill,
+                                          dumpster_numbers: dumpsterNumbers,
+                                          dumpster_number_sub : dumpsterNumberSub,
+                                          service_status  : status_do_servico
+                                      },
+                                      success: function(dataResponse) {
+                                        if(dataResponse == true)
+                                            location.reload();
+
+                                      },
+                                      error: function(responseError){
+                                          console.log(responseError);
+                                      }
+                                  });
+
+                                }else{
+                                    alert('Preencha todos os campos!');
+                                }    
+                      // METODO INCIAR ATENDIMENTO - END
+                    }
+                });
+
+                $("#form_group_three").append(btn_iniciar);
+
+              }else if(item.status_atendimento == 1){
+
+                let btn_encerrar = $('<button/>',
+                {
+                    text: 'FINALIZAR',
+                    class: 'btn btn-info update-btn mb-2 col-12',
+                    click: function () { 
+
+                        // METODO INCIAR ATENDIMENTO - BEGIN
+                        let dataForm = $('#form-modal-todo');
+                        let dataInfo = dataForm.serializeArray();
+                        let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
+                        let dumpsterNumberSub = $('#cacamba_sub_' + item.id_ficha).val();
+                        let typeService = "";
+                        let idDemandReg   = 0;
+                        let idDemand   = 0;
+                        let idLandfill = 0;
+                        let stopExec   = false; 
+                        let serviceStatus = 0; 
+                        let status_do_servico = 5;
+
+                        idDemandReg   = item.id_ficha;
+                        idDemand      = item.id_chamado;
+                        typeService   = item.tipo_servico;
+                        idLandfill    = item.id_aterro;
+                        
+
+                        if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
+                          alert("Preencha o número da caçamba!");
+                          stopExec = true;
+                          return false;
+
+                        }
+             
+
+                        if(stopExec == false){
+
+                          $.ajax({
+                              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                              method: 'POST',
+                              url: 'start_demand',
+                              data: {
+                                  type_service: typeService, 
+                                  id_demand_reg: idDemandReg,
+                                  id_demand: idDemand,
+                                  id_landfill: idLandfill,
+                                  dumpster_numbers: dumpsterNumbers,
+                                  dumpster_number_sub : dumpsterNumberSub,
+                                  service_status  : status_do_servico
+                              },
+                              success: function(dataResponse) {
+                                if(dataResponse == true)
+                                    location.reload();
+
+                              },
+                              error: function(responseError){
+                                  console.log(responseError);
+                              }
+                          });
+
+                        }else{
+                            alert('Preencha todos os campos!');
+                        }    
+                        // METODO INCIAR ATENDIMENTO - END                
+                    }
+                });
+                
+                
+                $("#form_group_three").append(btn_encerrar);
+
+              }else if(item.status_atendimento == 5){
+                let btn_executa = '<div class="alert alert-success mb-2 col-12" role="alert">PEDIDO CONCLUÍDO</div>';
+                $("#form_group_three").append(btn_executa);
+
+                                
+              }
+              // BOTÕES FOOTER
+
+              $("#atividade_input").append('<br />');
+
+            });
+
+
+          }
+
+return false;
+
 
       $.each(dataResponse, function(kItem, item) {
         let cacamba1   = '';
@@ -372,251 +970,23 @@ console.log("quantidadeRetirada: "+ quantidadeRetirada);
         let flg_aterro = true;
         let btn_executa   = '';
 
-
-        if(item.tipo_servico != tipo_atividade)
-        {
-          $("#atividade_input").append('<div class="form-group p-1 mb-1 bg-secondary text-white">' + item.tipo_servico + '</div>');
-          tipo_atividade = item.tipo_servico;
+        if(item.colocacao == true){
+          
+          console.log('COLOCAÇÃO *');
+          arr_colocacao.push(item);
         }
 
-        $("#atividade_input").append('<div class="form-group row" id="form_group"></div>');
-
-        cacamba1 =   '<div class="col-4">' +
-        '<label for="task-due-date" class="form-label ">CAÇAMBA</label>' +
-        '<input class="form-control" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '">' +
-        '</div>';
-
-
-        cacamba2 = '<div class="col-4">'+
-            '<label for="task-due-date" class="form-label ">CAÇAMBA/TROCA </label>'+
-            '<input class="form-control" id="cacamba_sub_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba_substituto + '">'+ 
-            '</div>';
-
-
-
-        $("#atividade_input").append('<div class="form-group position-relative"></div>');
-
-
-    // SELECT ATERRO
-
-    // aterro ='<select class="select2 form-control my-2" id="task-assigned" name="task-assigned"><option  value="Phill Buffer" selected>SELECIONAR ATERRO</option><option  value="Chandler Bing">Chandler Bing</option><option  value="Ross Geller">Ross Geller</option><option  value="Monica Geller">Monica Geller</option><option  value="Joey Tribbiani">Joey Tribbiani</option><option  value="Rachel Green">Rachel Green</option></select>';
-
-
-        if(item.troca || item.remocao){
-          $("#atividade_input").append('<strong>Aterro: </strong> <select class="select2 form-control edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill">');
-          $('#landfill_' + item.id_ficha).append('<option value="0">Selecione o aterro</option>');
-
-
-          $.get(listlandfill.text(),{ id_demand_reg: item.id_ficha})
-          .done(function ( dataResponse ){
-
-            
-              $.each(dataResponse, function(key, dataItem){
-
-                let selectedStatus  = (dataItem.selected == true) ? true : false;
-
-
-                $('#landfill_' + item.id_ficha).append($("<option>").attr('value',dataItem.id).attr('selected', selectedStatus).text(dataItem.name));
-
-              });    
-          });
-          
-          $("#atividade_input").append('<br />');
+        if(item.troca == true){
+          console.log('TROCA **');
+          arr_troca.push(item);
         }
+      
+        if(item.remocao == true){
+          console.log('REMOÇÃO ***');
+          arr_retirada.push(item);
 
-        if(item.colocacao){
-
-          $("#form_group").append(cacamba1);
-
-        }else if(item.troca){
-          $("#form_group").append(cacamba1);
-          $("#form_group").append(cacamba2);
-          // $("#form_group").append(aterro);
-          flg_aterro = true;
-          
-        }else{
-          $("#form_group").append(cacamba1);
-          // $("#form_group").append(aterro);
-          flg_aterro = true;
         }
-
-// BOTÕES FOOTER
-
-          if(item.status_atendimento == 0 ){
-
-            let btn_iniciar = $('<button/>',
-            {
-                text: 'Iniciar Atendimento',
-                class: 'btn btn-success my-2',
-                click: function () { 
-
-
-                  // METODO INCIAR ATENDIMENTO - BEGIN
-                              let dataForm = $('#form-modal-todo');
-                              let dataInfo = dataForm.serializeArray();
-                              let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
-                              let dumpsterNumberSub = $('#cacamba_sub_' + item.id_ficha).val();
-                              let typeService = "";
-                              let idDemandReg   = 0;
-                              let idDemand   = 0;
-                              let idLandfill = 0;
-                              let stopExec   = false; 
-                              let serviceStatus = 0; 
-                              let status_do_servico = 1;
-
-                              idDemandReg   = item.id_ficha;
-                              idDemand      = item.id_chamado;
-                              typeService   = item.tipo_servico;
-                              idLandfill    = $('#landfill_' + item.id_ficha).val();
-
-
-                            if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
-                              alert("Preencha o número da caçamba!");
-                              stopExec = true;
-                              return false;
-
-                            }
-                          
-
-
-                            if((item.troca != true || item.remocao != true) && idLandfill == 0)
-                            {
-                                alert('Selecione o aterro!');
-                                stopExec = true;
-                                return false;
-                            }
-
-
-                            if(item.troca && dumpsterNumberSub == 0 || dumpsterNumberSub == '' || dumpsterNumberSub == undefined)
-                            {
-                              alert("Preencha o número da caçamba!");
-                              stopExec = true;
-                              return false;
-                            }
-
-
-                            if(stopExec == false){
-
-                              $.ajax({
-                                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                                  method: 'POST',
-                                  url: 'start_demand',
-                                  data: {
-                                      type_service: typeService, 
-                                      id_demand_reg: idDemandReg,
-                                      id_demand: idDemand,
-                                      id_landfill: idLandfill,
-                                      dumpster_numbers: dumpsterNumbers,
-                                      dumpster_number_sub : dumpsterNumberSub,
-                                      service_status  : status_do_servico
-                                  },
-                                  success: function(dataResponse) {
-                                    if(dataResponse == true)
-                                        location.reload();
-
-                                  },
-                                  error: function(responseError){
-                                      console.log(responseError);
-                                  }
-                              });
-
-                            }else{
-                                alert('Preencha todos os campos!');
-                            }    
-                  // METODO INCIAR ATENDIMENTO - END
-                }
-            });
-
-            $("#form_group").append(btn_iniciar);
-
-          }else if(item.status_atendimento == 1){
-
-            let btn_encerrar = $('<button/>',
-            {
-                text: 'Encerrar Atendimento',
-                class: 'btn btn-info update-btn my-2',
-                click: function () { 
-
-                    // METODO INCIAR ATENDIMENTO - BEGIN
-                    let dataForm = $('#form-modal-todo');
-                    let dataInfo = dataForm.serializeArray();
-                    let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
-                    let dumpsterNumberSub = $('#cacamba_sub_' + item.id_ficha).val();
-                    let typeService = "";
-                    let idDemandReg   = 0;
-                    let idDemand   = 0;
-                    let idLandfill = 0;
-                    let stopExec   = false; 
-                    let serviceStatus = 0; 
-                    let status_do_servico = 5;
-
-                    idDemandReg   = item.id_ficha;
-                    idDemand      = item.id_chamado;
-                    typeService   = item.tipo_servico;
-                    idLandfill    = item.id_aterro;
-                    
-
-                    if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
-                      alert("Preencha o número da caçamba!");
-                      stopExec = true;
-                      return false;
-
-                    }
-
-                    if((item.troca != true || item.remocao != true) && idLandfill == 0)
-                    {
-                        alert('Selecione o aterro!');
-                        stopExec = true;
-                    }
-
-                    if(item.troca && dumpsterNumberSub == 0 || dumpsterNumberSub == '' || dumpsterNumberSub == undefined)
-                    {
-                      alert("Preencha o número da caçamba!");
-                      stopExec = true;
-                      return false;
-                    }                  
-
-                    if(stopExec == false){
-
-                      $.ajax({
-                          headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                          method: 'POST',
-                          url: 'start_demand',
-                          data: {
-                              type_service: typeService, 
-                              id_demand_reg: idDemandReg,
-                              id_demand: idDemand,
-                              id_landfill: idLandfill,
-                              dumpster_numbers: dumpsterNumbers,
-                              dumpster_number_sub : dumpsterNumberSub,
-                              service_status  : status_do_servico
-                          },
-                          success: function(dataResponse) {
-                            if(dataResponse == true)
-                                location.reload();
-
-                          },
-                          error: function(responseError){
-                              console.log(responseError);
-                          }
-                      });
-
-                    }else{
-                        alert('Preencha todos os campos!');
-                    }    
-                    // METODO INCIAR ATENDIMENTO - END                
-                }
-            });
-            
-            
-            $("#form_group").append(btn_encerrar);
-
-          }else if(item.status_atendimento == 5){
-            btn_executa = '<div class="alert alert-success" role="alert">PEDIDO CONCLUÍDO</div>';
-            $("#form_group").append(btn_executa);
-          }
-// BOTÕES FOOTER
-          
+     
 
       });
 
