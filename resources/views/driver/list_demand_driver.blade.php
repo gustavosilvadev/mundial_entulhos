@@ -23,7 +23,7 @@
                                             <input type="text" class="form-control border border-secondary dt-date flatpickr-range dt-input date_format_service_search" id="data_filter_demand" data-column="5" placeholder="Selecione a Data" data-column-index="4" name="dt_date" readonly="readonly">
                                         </div>
                                         <div class="col-md-12">
-
+{{-- 
                                             <select class="select2 form-control" id="filter_tipo_servico" name="filter_tipo_servico">
                                                 <option value="" selected>
                                                     Tipo de Serviço
@@ -37,7 +37,7 @@
                                                 <option value="3">
                                                     Retirada
                                                 </option>                                            
-                                            </select>   
+                                            </select>    --}}
                                         </div>
                                     </div>
                                 </div>
