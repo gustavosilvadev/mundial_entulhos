@@ -56,12 +56,10 @@
                                                     <div class="todo-title-area">
                                                         <i data-feather="more-vertical" class="drag-icon"></i>
 
-                                                        <div >
+                                                        <div>
 
                                                                 <h3 class="bg-dark text-white todo-title">{{ $chamado_info['tipo_servico'] }} ({{$chamado_info['quantidade_cacamba']}})</h3>
                                                                 
-                                                                <label class="text-nowrap text-muted mr-1">CLIENTE: {{ $id_cliente }}</label>
-
                                                                 <h4 class="text-dark todo-title-address">
                                                                     {{ $chamado_info['endereco'].', '
                                                                 .$chamado_info['numero_endereco'].', '
@@ -140,14 +138,55 @@
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
-{{-- 
-    <!-- BEGIN: Footer-->
-    <footer class="footer footer-static footer-light">
-        <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; 2021<a class="ml-25" href="https://1.envato.market/pixinvent_portfolio" target="_blank">Pixinvent</a><span class="d-none d-sm-inline-block">, All rights Reserved</span></span><span class="float-md-right d-none d-md-block">Hand-crafted & Made with<i data-feather="heart"></i></span></p>
-    </footer>
-    <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
-    <!-- END: Footer--> 
---}}
+
 
 @include('partials.footer_mobile') 
 
+
+<script>
+    $("#data_filter_demand").on('change',function(){
+            
+            let dataAlocacao = $(this).val();
+            
+            if(dataAlocacao.length > 0){
+                $('.loadingMask').show();
+            
+                $("#todo-task-list li").remove();
+           
+                $.ajax({
+                        method: 'GET',
+                        url: 'driver_demand',
+                        data: {
+                            get_data : true,
+                            data_alocacao : dataAlocacao
+                        },
+                        success: function(dataResponse) {
+
+                            $.each(dataResponse, function(i, field) {
+
+                                $("#todo-task-list").append('<li class="todo-item my-2 border"><div class="todo-title-wrapper"><div class="todo-title-area"><i data-feather="more-vertical" class="drag-icon"></i><div id="task_'+i+'"><div ></li>');
+                                $("#task_"+i).append('<h3 class="bg-dark text-white todo-title">' + field.tipo_servico + '(' + field.quantidade_cacamba + ')</h3>');
+                                $("#task_"+i).append('<h4 class="text-dark todo-title-address">' + field.endereco +', ' + field.numero_endereco + ', ' + field.bairro_endereco + ', ' +field.cidade_endereco + ' - ' + field.cep_endereco + '</h4>');
+                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">' + field.id_cliente + '</label>');
+
+                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">' + field.id_motorista + '</label>');
+                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">' + field.data_operacao + '</label>');
+                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand')}}</label>');
+                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">'+ field.listlandfill + '</label>');
+         
+                            });                            
+                            
+                            
+                            $('.loadingMask').hide();
+
+                            
+                        },
+                        error: function(responseError){
+                            $('.loadingMask').hide();
+                            alert(responseError);
+                        }
+                });
+            }
+            
+            });
+</script>
