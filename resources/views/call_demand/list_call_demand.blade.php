@@ -242,9 +242,28 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <label for="">Motorista</label>
+
+                <div class="modal-body" id="loading-content" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Carregando...</span>
+                    </div>
+                </div> 
+
+                <div class="modal-body" id="content-modal">
+                    <label for="">Motorista - DESTE CHAMADO</label>
                     <select class="form-control" id="name_driver_selected">
+                        <option value=""></option>
+                        <?php if($driver_name_demands):?>
+
+                            <?php foreach($driver_name_demands as $driver_name):?>
+                                    <option value="{{ $driver_name->id }}">{{ $driver_name->name }}</option>
+                            <?php endforeach;?>
+
+                        <?php endif;?>
+                    </select>
+                    <hr />
+                    <label for="">Motorista - RETIRADA</label>
+                    <select class="form-control" id="name_driver_removal_selected">
                         <option value=""></option>
                         <?php if($driver_name_demands):?>
 
@@ -270,7 +289,7 @@
                     <button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>
                 </div>
                 
-                <div class="modal-footer">
+                <div class="modal-footer" id="button-footer">
                     <a class="btn btn-info" id="btn_replace_dumpster">ACIONAR TROCA</a>
                     <a class="btn btn-warning" id="btn_edit">EDITAR PEDIDO</a>
                 </div> 
@@ -438,11 +457,12 @@ $(document).ready(function() {
 
         } );
 
-
-
-
         $('#tbpedido tbody tr').on('click', function (evt) {
             
+            $("#loading-content").show();
+            $("#content-modal").hide()
+            $("#button-footer").hide();
+
             let selectedRows    = "";
             let selectedData    = "";
             let id_reg          = "";
@@ -459,21 +479,58 @@ $(document).ready(function() {
                 id_reg        = $(this).find("td:eq(1)").text().split('/')[0];
                 id_demand     = $(this).find("td:eq(1)").text().split('/')[1];
                 nameDriver    = $(this).find("td:eq(16)").text();
+
+                nameDriverRemoval = "";
                 paymentStatus = $(this).find("td:eq(17)").text().toUpperCase();
                 dateEffectiveRemoval = $(this).find("td:eq(8)").text();
 
                 $("#modal-edit").modal('toggle');
 
-                if(nameDriver != "")
-                {
 
-                    $("#name_driver_selected  option:contains("+ nameDriver +")").attr("selected", "selected");
+                if(nameDriver !== ''){
+                    // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
+                    let opts = document.getElementById("name_driver_selected").options;
+                    let indexOptionDriver = 0;
+                    for(var i = 0; i < opts.length; i++) {
+                        if(opts[i].innerText == nameDriver) {
+                            indexOptionDriver = i;
+                            break;
+                        }
 
-                }else {
+                    }
+                    $('#name_driver_selected option').eq(indexOptionDriver).prop('selected', true);
+                }else{
 
-                    $("#name_driver_selected  option:contains()").attr("selected", false);
-                    // $("#name_driver_selected").val($("#name_driver_selected  option:first").val())
+                    $('#name_driver_selected option').eq(0).prop('selected', true);
+
                 }
+
+  
+                // SELECIONA MOTORISTA DE ATENDIMENTO RETIRADA
+                $.get('{{ route('showremovaldumpster.demand') }}',{ id_demand_reg: id_reg, id_demand: id_demand, dumpster_removal: true }).done(function(respData){
+
+                    if(respData.name !== undefined || respData.name !== ''){
+                        // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
+                        let opts = document.getElementById("name_driver_removal_selected").options;
+                        let indexOptionDriverRemoval = 0;
+                        for(var i = 0; i < opts.length; i++) {
+                            if(opts[i].innerText == respData.name) {
+                                indexOptionDriverRemoval = i;
+                                break;
+                            }
+                        }
+                        $('#name_driver_removal_selected option').eq(indexOptionDriverRemoval).prop('selected', true);
+                    }else{
+
+                        $('#name_driver_removal_selected option').eq(0).prop('selected', true);
+
+                    }
+
+                    $("#loading-content").hide();
+                    $("#content-modal").show()
+                    $("#button-footer").show();
+
+                });
 
                 if(paymentStatus.trim() != "")
                 {
@@ -492,6 +549,10 @@ $(document).ready(function() {
                 $("#idreg").val(id_reg);
                 $("#iddemand").val(id_demand);
                 $("#btn_edit").attr("href","editcalldemand/" + id_reg);
+
+
+
+
             }
         });
 
@@ -515,6 +576,12 @@ $(document).ready(function() {
             let numeroFicha         = idReg + '/' + idDemand;
             let idDriverSelected    = $("#name_driver_selected").val();
             let nameDriverSelected  = $("#name_driver_selected").find('option:selected').text()
+            
+            let idDriverRemovalDumpsterSelected    = $("#name_driver_removal_selected").val();
+            let nameDriverRemovalDumpsterSelected  = $("#name_driver_removal_selected").find('option:selected').text()
+
+
+
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
             let paymentStatus       = ($("#payment_status").val() == "1") ? true : false;
 
@@ -524,6 +591,7 @@ $(document).ready(function() {
                 url: '{{ route('changedriver.demand') }}',
                 data: { 
                     id_driver : idDriverSelected,
+                    id_driver_removal_dumpster : idDriverRemovalDumpsterSelected,
                     effective_date_removal : effectiveDateRemoval,
                     payment_status : paymentStatus,
                     id_reg: idReg, 

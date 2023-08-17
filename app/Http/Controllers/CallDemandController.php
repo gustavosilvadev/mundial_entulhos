@@ -992,7 +992,8 @@ class CallDemandController extends Controller
                     $calldemandDumpsterRemoval->dumpster_number = $calldemandFirst->dumpster_number;
                     $calldemandDumpsterRemoval->dumpster_quantity  = $calldemandFirst->dumpster_quantity;
                     $calldemandDumpsterRemoval->days_allocation = $calldemandFirst->days_allocation;
-                    $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
+                    // $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
+                    $calldemandDumpsterRemoval->id_driver      = $request->id_driver_removal_dumpster;
 
                     if(!$calldemandDumpsterRemoval->save())
                         return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
@@ -1024,7 +1025,8 @@ class CallDemandController extends Controller
                         'dumpster_sequence_demand' => $calldemandFirst->dumpster_sequence_demand,
                         'dumpster_quantity' => $calldemandFirst->dumpster_quantity,
                         'days_allocation' => $calldemandFirst->days_allocation,
-                        'id_driver' => $request->id_driver
+                        // 'id_driver' => $request->id_driver
+                        'id_driver' => $request->id_driver_removal_dumpster
                     ]);
                     
                     // return ($updateDumpsterRemoval) ? 'true' : false;
@@ -1064,9 +1066,9 @@ class CallDemandController extends Controller
             // INSERE ID DO MOTORISTA NO CHAMADO E DATA DE REMOÇÃO EFETIVA SE EXISTIR
             $call_demand = CallDemand::where('id',$request->id_reg)
             ->update([
+                // 'date_effective_removal_dumpster' => $effectiveDateRemoval,
+                // 'id_driver' => $request->id_driver
                 'date_effective_removal_dumpster' => $effectiveDateRemoval,
-                'id_driver' => $request->id_driver
-
             ]);
 
             if($paymentDemand && $call_demand)
@@ -1078,6 +1080,21 @@ class CallDemandController extends Controller
         }
 
         return false;
+    }
+
+    public function showDriverRemovalDumpster(Request $request)
+    {
+
+        $idDriverRemovalDumpster = DB::table('call_demand')
+        ->select('employee.name')
+        ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
+        ->join('employee', 'employee.id', '=', 'driver.id_employee')
+        ->where('call_demand.dumpster_removal', (bool)$request->dumpster_removal)
+        ->where('call_demand.id_parent', $request->id_demand_reg)
+        ->where('call_demand.id_demand', $request->id_demand)
+        ->first();
+
+        return $idDriverRemovalDumpster;
     }
 
     public function destroy(Request $request)

@@ -321,7 +321,7 @@ $(function () {
 
 
   
-  // TESTE 
+
     taskIdClientDemand   = $(this).find('.todo-id-client-demand');
     taskIdDriver   = $(this).find('.todo-id-driver');
     taskDataAlocacao   = $(this).find('.todo-data-alocacao');
@@ -331,6 +331,8 @@ $(function () {
     let $data_alocacao = taskDataAlocacao.html();
     let rota_detalhes_pedido   = $(this).find('.todo-url-show-details_demand');    
     let listlandfill           = $(this).find('.todo-url-list-landfill');
+    let checkDumpsterULR       = $(this).find('.todo-url-check-dumpster')
+    
 
     $("#body_modal").empty();
     $("#atividade_input").empty();
@@ -391,75 +393,7 @@ $(function () {
             // BOTÕES FOOTER
 
             if(item.status_atendimento == 0 ){
-/*
-              let btn_iniciar = $('<button/>',
-              {
-                  text: 'Iniciar Atendimento',
-                  class: 'btn btn-success my-2',
-                  click: function () { 
-
-
-                    // METODO INCIAR ATENDIMENTO - BEGIN
-                                let dataForm = $('#form-modal-todo');
-                                let dataInfo = dataForm.serializeArray();
-                                let dumpsterNumbers = $('#cacamba_' + item.id_ficha).val();
-                                let dumpsterNumberSub = 0;
-                                let typeService = "";
-                                let idDemandReg   = 0;
-                                let idDemand   = 0;
-                                let idLandfill = 0;
-                                let stopExec   = false; 
-                                let serviceStatus = 0; 
-                                let status_do_servico = 1;
-
-                                idDemandReg   = item.id_ficha;
-                                idDemand      = item.id_chamado;
-                                typeService   = item.tipo_servico;
-                                idLandfill    = $('#landfill_' + item.id_ficha).val();
-
-
-                              if(dumpsterNumbers == undefined || dumpsterNumbers == '' || dumpsterNumbers == 0){
-                                alert("Preencha o número da caçamba!");
-                                stopExec = true;
-                                return false;
-
-                              }
-
-
-                              if(stopExec == false){
-
-                                $.ajax({
-                                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                                    method: 'POST',
-                                    url: 'start_demand',
-                                    data: {
-                                        type_service: typeService, 
-                                        id_demand_reg: idDemandReg,
-                                        id_demand: idDemand,
-                                        id_landfill: idLandfill,
-                                        dumpster_numbers: dumpsterNumbers,
-                                        dumpster_number_sub : dumpsterNumberSub,
-                                        service_status  : status_do_servico
-                                    },
-                                    success: function(dataResponse) {
-                                      if(dataResponse == true)
-                                          location.reload();
-
-                                    },
-                                    error: function(responseError){
-                                        console.log(responseError);
-                                    }
-                                });
-
-                              }else{
-                                  alert('Preencha todos os campos!');
-                              }    
-                    // METODO INCIAR ATENDIMENTO - END
-                  }
-              });
-              $("#form_group_one").append(btn_iniciar);
-*/
-
+              
               let btn_encerrar = $('<button/>',
               {
                   text: 'ATENDER',
@@ -491,6 +425,11 @@ $(function () {
 
                       }
 
+
+                      if(checkarCacambaDisponivel(checkDumpsterULR, idDemandReg, dumpsterNumbers) == false){
+
+                      }
+return false;
                       if(stopExec == false){
 
                         $.ajax({
@@ -804,6 +743,15 @@ $(function () {
   function getSelectorValue(selector){
     let seletorAterro = document.querySelector(selector).value;
     return seletorAterro;
+  }
+
+  function checkarCacambaDisponivel(urlAvailableDumpster, id_chamado, numeroCacamba){
+      $.get(urlAvailableDumpster.text(),{ id_demand_reg: id_chamado,  dumpsterNumber: numeroCacamba } )
+      .done(function ( dataResponse ){
+        
+        return dataResponse.is_available;
+
+      });
   }
 
 });

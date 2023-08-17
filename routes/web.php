@@ -52,6 +52,8 @@ Route::middleware('usersession')->group(function(){
     Route::get('/dumpsters', [DumpsterServiceDemandController::class, 'showQuantityDumpters']);
     Route::post('/change_dumpster_number', [DumpsterServiceDemandController::class, 'updateQuantityDumpters']);
     
+    Route::get('available_dumpster', [DumpsterServiceDemandController::class, 'checkAvailableDumpster']);
+    
     // Landfill
     Route::get('createlandfill', function(){
         return view('landfill.form_cad_landfill');
@@ -78,6 +80,8 @@ Route::middleware('usersession')->group(function(){
     Route::get('status_demand',[CallDemandController::class,'showStatusDemand'])->name('calldemand.checkstatus');
 
     Route::post('changedriverdemand',[CallDemandController::class,'changeDriverDemand'])->name('changedriver.demand');
+    
+    Route::get('getdriverremovaldumpster',[CallDemandController::class,'showDriverRemovalDumpster'])->name('showremovaldumpster.demand');
     
     // Route::get("teste_lista_items/{id?}", [CallDemandController::class, 'showAPI']);
     // Route::get('getInfoDemand/{id}',[CallDemandController::class,'showInfoToForm']);
