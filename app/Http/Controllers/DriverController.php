@@ -410,7 +410,7 @@ class DriverController extends Controller
             'service_status' => $request->service_status,
             'date_start' => date('Y-m-d H:i:s'),
             'dumpster_number' => $request->dumpster_numbers,
-            'dumpster_number_substitute' => $request->dumpster_number_sub,
+            'dumpster_number_substitute' => isset($request->dumpster_number_sub) ? $request->dumpster_number_sub : 0,
             'id_landfill' => $request->id_landfill
         ]);
 
