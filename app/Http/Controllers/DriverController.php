@@ -395,12 +395,19 @@ class DriverController extends Controller
      */
     public function startDemand(Request $request)
     {
-        
         $id_user_employee = session('id_user');
         $driver_data = Driver::where('id_employee',$id_user_employee)->first();
+        
+        $callDemand  = CallDemand::select('id_parent')->where('id', $request->id_demand_reg)
+        ->where('id_demand', $request->id_demand)
+        ->where('type_service', $request->type_service)->first();
 
-
-// ATUALIZAÇÃO BEGIN
+        $updated_landfill_parent = CallDemand::where('id', $callDemand->id_parent)->update(['id_landfill' => $request->id_landfill]);
+        if(!$updated_landfill_parent){
+            return false;
+        }
+        
+        // ATUALIZAÇÃO BEGIN
 
         $call_demand_updated_data = CallDemand::where('id', $request->id_demand_reg)
         ->where('id_demand', $request->id_demand)
@@ -432,12 +439,8 @@ class DriverController extends Controller
         }else{
             return false;
         }
-
-
-
-     
-
-// ATUALIZAÇÃO END
+        
+        // ATUALIZAÇÃO END
 
 /*
         $call_demands = CallDemand::where('id','<>',$request->id_demand_reg)

@@ -56,9 +56,19 @@ class DumpsterServiceDemandController extends Controller
 
     public function checkAvailableDumpster(Request $request)
     {
-        // return "Id Chamado".$request->id_demand_reg.
-        //        "\n Número da caçamba".$request->id_demand_reg."\n";
-        return 'Funcionou até aqui!';
+        $dumpsterNumber = $request->dumpsterNumber;
+        $call_demand = CallDemand::where('id','<>',$request->id_demand_reg)
+                ->where('dumpster_number', $dumpsterNumber)
+                ->where('dumpster_number_substitute', 0)
+                ->where('service_status', 0)
+                ->orWhere(function($query) use ($dumpsterNumber){
+                    $query->where('dumpster_number_substitute', $dumpsterNumber)
+                    ->where('service_status', 0);
+                })->first();
+        
+        // Se houver registro (TRUE), retornará FALSO pois estará indisponível para uso
+        return isset($call_demand) ? false : true;
+
     }
 
     public function showNameDriverDemand()

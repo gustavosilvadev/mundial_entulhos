@@ -422,38 +422,51 @@ $(function () {
                         alert("Preencha o número da caçamba!");
                         stopExec = true;
                         return false;
-
                       }
 
-
-                      if(checkarCacambaDisponivel(checkDumpsterULR, idDemandReg, dumpsterNumbers) == false){
-
-                      }
-return false;
                       if(stopExec == false){
 
-                        $.ajax({
-                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                            method: 'POST',
-                            url: 'start_demand',
-                            data: {
-                                type_service: typeService, 
-                                id_demand_reg: idDemandReg,
-                                id_demand: idDemand,
-                                id_landfill: idLandfill,
-                                dumpster_numbers: dumpsterNumbers,
-                                dumpster_number_sub : dumpsterNumberSub,
-                                service_status  : status_do_servico
-                            },
-                            success: function(dataResponse) {
-                              if(dataResponse == true)
-                                  location.reload();
+                        $.get(checkDumpsterULR.text(),{ id_demand_reg: idDemand,  dumpsterNumber: dumpsterNumbers } )
+                        .done(function ( dataResponse ){
 
-                            },
-                            error: function(responseError){
-                                console.log(responseError);
-                            }
-                        });
+                          if(dataResponse == true){
+
+                            $.ajax({
+                                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                                method: 'POST',
+                                url: 'start_demand',
+                                data: {
+                                    type_service: typeService, 
+                                    id_demand_reg: idDemandReg,
+                                    id_demand: idDemand,
+                                    id_landfill: idLandfill,
+                                    dumpster_numbers: dumpsterNumbers,
+                                    dumpster_number_sub : dumpsterNumberSub,
+                                    service_status  : status_do_servico
+                                },
+                                success: function(dataResponse) {
+
+                                  if(dataResponse.status == false && dataResponse.message)
+                                  {
+                                    alert(dataResponse.message);
+                                  }
+                                  
+                                  if(dataResponse == true)
+                                      location.reload();
+
+                                },
+                                error: function(responseError){
+                                    console.log(responseError);
+                                }
+                            });
+
+                          }else{
+                            alert('Caçamba Indisponível no momento!');
+
+                          }
+                  
+                        });   
+
 
                       }else{
                           alert('Preencha todos os campos!');
@@ -461,6 +474,7 @@ return false;
                       // METODO INCIAR ATENDIMENTO - END                
                   }
               });
+
               $("#form_group_one").append(btn_encerrar);
             }else if(item.status_atendimento == 5){
               let btn_executa = '<div class="alert alert-success mb-2 col-12" role="alert">PEDIDO CONCLUÍDO</div>';
@@ -694,6 +708,7 @@ return false;
                     return false;
                   }
 
+
                   if(stopExec == false){
                     let btn_executa_change = '';
                     $.ajax({
@@ -745,13 +760,36 @@ return false;
     return seletorAterro;
   }
 
-  function checkarCacambaDisponivel(urlAvailableDumpster, id_chamado, numeroCacamba){
-      $.get(urlAvailableDumpster.text(),{ id_demand_reg: id_chamado,  dumpsterNumber: numeroCacamba } )
-      .done(function ( dataResponse ){
+  /*
+  async function checkarCacambaDisponivel(urlAvailableDumpster, id_chamado, numeroCacamba){
+      
+    $.get(urlAvailableDumpster.text(),{ id_demand_reg: id_chamado,  dumpsterNumber: numeroCacamba } )
+      .done(await function ( dataResponse ){
         
-        return dataResponse.is_available;
+
+        console.log("Retorno: " + dataResponse);
+        alert('Resposta');
+        return dataResponse;
 
       });
+  }
+  */
+
+  const checkarCacambaDisponivel = (urlAvailableDumpster, id_chamado, numeroCacamba) => {
+    return new Promise(resolve => {
+      setTimeout(function() {
+        $.get(urlAvailableDumpster.text(),{ id_demand_reg: id_chamado,  dumpsterNumber: numeroCacamba } )
+        .done(function ( dataResponse ){
+          
+
+          console.log("Retorno: " + dataResponse);
+          alert('Resposta');
+          return dataResponse;
+
+        });
+        resolve(5)
+      }, 3000);
+    });
   }
 
 });

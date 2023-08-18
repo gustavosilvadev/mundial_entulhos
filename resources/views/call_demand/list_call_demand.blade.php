@@ -580,8 +580,6 @@ $(document).ready(function() {
             let idDriverRemovalDumpsterSelected    = $("#name_driver_removal_selected").val();
             let nameDriverRemovalDumpsterSelected  = $("#name_driver_removal_selected").find('option:selected').text()
 
-
-
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
             let paymentStatus       = ($("#payment_status").val() == "1") ? true : false;
 
