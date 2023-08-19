@@ -125,7 +125,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
-                    <a class="dropdown-item" href="page-profile.html"><i class="mr-50" data-feather="user"></i> Motorista</a>
+                    <label class="text-dark ml-2">{{ session('name') }}</label>
+
 
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item " href="{{ url('logout') }}">

@@ -11,6 +11,11 @@
         font-weight: 600;
     }
 
+    .row_selected_bg {
+        background: rgb(218 218 218) !important;
+        font-weight: 600;
+    }
+
     .dataTables_scrollBody{
         position: relative;
         overflow: auto;
@@ -303,6 +308,15 @@
 <script>
 $(document).ready(function() {
 
+        $('.checkBoxDeleteId').click(function(){
+            let numeroFicha = $(this).val();
+            if($(this).is(':checked')){
+                $('#tbpedido tr:contains("'+ numeroFicha +'/")').addClass('row_selected_bg');
+            }else{
+                $('#tbpedido tr:contains("'+ numeroFicha +'/")').removeClass('row_selected_bg');
+            }
+        });
+
         $("#btn_delete_demand").click(function(){
             
             let idDemands = [];
@@ -559,14 +573,10 @@ $(document).ready(function() {
        
         $("#btn_replace_dumpster").click(function(){
 
-
             let idReg    = $("#idreg").val();
             let idDemand = $("#iddemand").val();
 
             window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
-           
-
-
         });
 
         $("#btn_driver_update").click(function(){

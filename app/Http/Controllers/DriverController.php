@@ -402,7 +402,10 @@ class DriverController extends Controller
         ->where('id_demand', $request->id_demand)
         ->where('type_service', $request->type_service)->first();
 
-        $updated_landfill_parent = CallDemand::where('id', $callDemand->id_parent)->update(['id_landfill' => $request->id_landfill]);
+        $updated_landfill_parent = CallDemand::where('id', $callDemand->id_parent)->update([
+            'id_landfill' => $request->id_landfill,
+            'service_status' => $request->service_status
+        ]);
         if(!$updated_landfill_parent){
             return false;
         }
