@@ -153,13 +153,13 @@
                 $('.loadingMask').show();
             
                 $("#todo-task-list li").remove();
-           
+
                 $.ajax({
                         method: 'GET',
                         url: 'driver_demand',
                         data: {
                             get_data : true,
-                            data_alocacao : dataAlocacao
+                            date_demand_filter : dataAlocacao
                         },
                         success: function(dataResponse) {
 
@@ -173,7 +173,9 @@
                                 $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">' + field.id_motorista + '</label>');
                                 $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">' + field.data_operacao + '</label>');
                                 $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand')}}</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">'+ field.listlandfill + '</label>');
+                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>');
+                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-check-dumpster" style="display: none;">{{ url('available_dumpster') }}</label>');
+                                
          
                             });                            
                             

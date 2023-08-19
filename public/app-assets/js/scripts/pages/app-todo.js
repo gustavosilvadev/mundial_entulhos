@@ -331,7 +331,7 @@ $(function () {
     let $data_alocacao = taskDataAlocacao.html();
     let rota_detalhes_pedido   = $(this).find('.todo-url-show-details_demand');    
     let listlandfill           = $(this).find('.todo-url-list-landfill');
-    let checkDumpsterULR       = $(this).find('.todo-url-check-dumpster')
+    let checkDumpsterULR       = $(this).find('.todo-url-check-dumpster');
     
 
     $("#body_modal").empty();
@@ -525,7 +525,6 @@ $(function () {
             $.get(listlandfill.text(),{ id_demand_reg: item.id_ficha})
             .done(function ( dataResponse ){
 
-              
                 $.each(dataResponse, function(key, dataItem){
 
                   let selectedStatus  = (dataItem.selected == true) ? true : false;

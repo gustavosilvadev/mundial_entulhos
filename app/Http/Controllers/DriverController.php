@@ -337,7 +337,6 @@ class DriverController extends Controller
             DB::raw('COUNT(*) as quantidade_cacamba')
         )
         ->where('call_demand.id_driver', $get_id_driver['id'])
-
         ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $dateAllocationFilter)
         ->groupBy(
             'call_demand.id_demand',
@@ -402,14 +401,16 @@ class DriverController extends Controller
         ->where('id_demand', $request->id_demand)
         ->where('type_service', $request->type_service)->first();
 
-        $updated_landfill_parent = CallDemand::where('id', $callDemand->id_parent)->update([
-            'id_landfill' => $request->id_landfill,
-            'service_status' => $request->service_status
-        ]);
-        if(!$updated_landfill_parent){
-            return false;
+        if($callDemand && trim($request->type_service) != 'TROCA'){
+            $updated_landfill_parent = CallDemand::where('id', $callDemand->id_parent)
+            ->update([
+                'id_landfill' => $request->id_landfill,
+                'service_status' => $request->service_status,
+            ]);
+            if(!$updated_landfill_parent){
+                return false;
+            }
         }
-        
         // ATUALIZAÇÃO BEGIN
 
         $call_demand_updated_data = CallDemand::where('id', $request->id_demand_reg)
@@ -444,68 +445,6 @@ class DriverController extends Controller
         }
         
         // ATUALIZAÇÃO END
-
-/*
-        $call_demands = CallDemand::where('id','<>',$request->id_demand_reg)
-        ->where('dumpster_number','<>', 0)
-        ->where('dumpster_number',$request->dumpster_numbers)
-        ->where('date_effective_removal_dumpster','=', null)
-        ->where('id_driver','=', $driver_data->id)
-        ->get();
-
-        if($call_demands->count()){
-            return false;
-        }
-
-
-        $call_demands = CallDemand::where('id_demand',$request->id_demand)->where('type_service', $request->type_service)->get();
-
-        foreach($call_demands as $key => $value){
-
-            CallDemand::where('id_demand', $request->id_demand)
-            ->where('type_service', 'RETIRADA')
-            ->where('dumpster_sequence_demand', ($key + 1))
-            ->where('dumpster_number','=', 0)
-            ->update([
-                'dumpster_number' => $request->dumpster_numbers[$key],
-                'id_landfill' => $request->id_landfill
-            ]);
-
-            CallDemand::where('id_demand', $request->id_demand)
-            ->where('type_service', $request->type_service)
-            ->where('dumpster_sequence_demand', ($key + 1))
-            ->where('id_driver','=', $driver_data->id)
-            ->update([
-                'service_status' => 1,
-                'date_start' => date('Y-m-d H:i:s'),
-                'dumpster_number' => $request->dumpster_numbers[$key],
-                'id_landfill' => $request->id_landfill
-            ]);
-
-            $call_demand_updated_data = CallDemand::where('id_demand', $request->id_demand)
-            ->where('type_service', $request->type_service)
-            ->where('id_driver','=', $driver_data->id)
-            ->first();
-
-
-                $activityUserDemandDumpster = new ActivityUserDemandDumpster();
-                $activityUserDemandDumpster->id_call_demand_reg = $call_demand_updated_data->id;
-                $activityUserDemandDumpster->id_call_demand     = $call_demand_updated_data->id_demand;
-                $activityUserDemandDumpster->id_employee        = $id_user_employee;
-                $activityUserDemandDumpster->type_service       = $call_demand_updated_data->type_service;
-                $activityUserDemandDumpster->service_status     = 1; // INICIAR CHAMADO
-            
-                if($activityUserDemandDumpster->save()){
-                    continue;
-
-                }else{
-                    return false;
-                }
-
-        }
-
-        return true;
-*/        
     }
 
     public function finishDemand(Request $request)
