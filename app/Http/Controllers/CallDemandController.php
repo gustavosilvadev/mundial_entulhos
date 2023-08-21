@@ -166,6 +166,7 @@ class CallDemandController extends Controller
                 'call_demand.district as district_address_service',
                 'call_demand.state as state_address_service',
                 'call_demand.comments as comments_demand',
+                'call_demand.comments_contract as comments_contract',
                 'call_demand.phone as phone_demand',
                 'call_demand.price_unit',
                 'call_demand.dumpster_quantity',
@@ -177,6 +178,7 @@ class CallDemandController extends Controller
                 DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
                 DB::raw('"" as name_landfill'),
                 DB::raw('"" as payment_demand'),
+                DB::raw('"" as receipt_nf'),
                 DB::raw('"" as nf'),
                 DB::raw('"" as date_issue'),
                 DB::raw('"" as date_payment_forecast')
@@ -217,19 +219,46 @@ class CallDemandController extends Controller
                 ->get([
                     'payment_call_demand.has_paid as has_paid',
                     'payment_call_demand.invoice_number as invoice_number',
+                    'payment_call_demand.receipt_or_nf as receiptnf',
                     DB::raw('DATE_FORMAT(payment_call_demand.date_issue, "%d/%m/%Y") as date_issue'),
                     DB::raw('DATE_FORMAT(payment_call_demand.date_payment_forecast, "%d/%m/%Y") as date_payment_forecast')
                 ])->first();
+          
+                if($payment){
 
-                if(empty($payment) || $payment->has_paid == false){
-                    $call_demand->payment_demand = false;
-                }else{
-                    $call_demand->payment_demand = true;
+                    if(empty($payment) || $payment->has_paid == false){
+                        $call_demand->payment_demand = false;
+                    }else{
+                        $call_demand->payment_demand = true;
+                    }
+
+                    if(isset($payment->invoice_number))
+                    {
+                        $call_demand->nf = $payment->invoice_number;
+                    }
+
+
+                    if($payment->receiptnf == 0){
+                        $call_demand->receipt_nf = '-';
+                    }else if($payment->receiptnf == 1){
+                        $call_demand->receipt_nf = 'RECIBO';
+                    }else if($payment->receiptnf == 2){
+                        $call_demand->receipt_nf = 'NF';
+                    }
+
+
+                    if(isset($payment->date_issue))
+                    {
+
+                        $call_demand->date_issue = ($payment->date_issue != '00/00/0000' ? $payment->date_issue : "" );
+                    }
+                    
+                    if(isset($payment->date_payment_forecast)){
+
+                        $call_demand->date_payment_forecast = ($payment->date_payment_forecast != '00/00/0000' ? $payment->date_payment_forecast : "" );
+                    }
+
                 }
-
-                $call_demand->nf = $payment->invoice_number;
-                $call_demand->date_issue = ($payment->date_issue != '00/00/0000' ? $payment->date_issue : "" );
-                $call_demand->date_payment_forecast = ($payment->date_payment_forecast != '00/00/0000' ? $payment->date_payment_forecast : "" );
             }
 
             $driver_name_demands = DB::table('driver')
@@ -597,7 +626,7 @@ class CallDemandController extends Controller
     public function store(Request $request)
     {
 
-   
+
         // CÓDIGO DE REFERÊNCIA LOGO ABAIXO:
         if (isset($request->client_name_new)
         && isset($request->type_service)
@@ -731,7 +760,9 @@ class CallDemandController extends Controller
                         $paymentCallDemand->by_bank_transfer = false;
                         $paymentCallDemand->by_bank_slip = true;
                     }
-                    
+        
+
+                    $paymentCallDemand->receipt_or_nf = $request->receipt_nf;
                     $paymentCallDemand->invoice_number = str_replace('.','',$request->invoice_number);
                     $paymentCallDemand->date_issue = (isset($request->date_issue) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_issue))) : '');
                     $paymentCallDemand->date_payment_forecast = (isset($request->date_payment_forecast) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_payment_forecast))) : '');
@@ -753,6 +784,7 @@ class CallDemandController extends Controller
     public function showUpdateForm($id_demand)
     {
         $showdata   = $this->showAPI($id_demand);
+       
         return view('call_demand.form_edit_call_demand',  $showdata);
     }
 
@@ -829,6 +861,7 @@ class CallDemandController extends Controller
                 'iss' => preg_replace('/[^0-9]+/','.',str_replace('.','',$request->iss)),
                 'has_paid' => $request->has_paid,
                 'by_bank_transfer' => $by_bank_transfer,
+                'receipt_or_nf' => $request->receipt_nf,
                 'by_bank_slip' => $by_bank_slip,
                 'invoice_number' => $request->invoice_number,
                 'date_issue' => (isset($request->date_issue) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->date_issue))) : ''),

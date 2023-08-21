@@ -6,8 +6,10 @@
 
 // echo "<BR />";
 // echo "date_effective_paymen: ".date('Y-m-d', strtotime($calldemandpayment->date_effective_paymen));
+// print_r($calldemandpayment->receipt_or_nf);
+// print_r($calldemandpayment);
+// print_r($calldemandpayment);
 // die();
-
 ?>
 
 @include('partials.header_teste')
@@ -336,7 +338,7 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group input-icon">
                                                                                                             <label for="iss">ISS</label>
-                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" value="{{  str_replace('.',',',$calldemandpayment->iss); }}"/>
+                                                                                                                <input type="text" name="iss" class="form-control iss" id="iss" value="{{  (isset($calldemandpayment->iss)) ? str_replace('.',',',$calldemandpayment->iss) : ''; }}"/>
                                                                                                             <i>R$</i>
                                                                                                         </div>
                                                                                                     </div>                                                                            
@@ -363,7 +365,7 @@
                                                                                                         </div>
                                                                                                     </div>
                         
-                                                                                                    <div class="col-md-3">
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="by_bank">FORMA DE PAGAMENTO</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
@@ -390,10 +392,36 @@
                                                                                                         </div>
                                                                                                     </div>
                         
-                                                                                                    <div class="col-md-3">
+                                                                                                    <div class="col-md-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="receipt_nf">RECIBO/NOTA FISCAL</label>
+                                                                                                            <select class="select2 form-control form-control-lg" id="receipt_nf" name="receipt_nf">
+                                                                                                                <option value="0">----</option>
+
+                                                                                                                <?php if(isset($calldemandpayment)): ?>
+                                                                                                                 
+                                                                                                                <?php if($calldemandpayment->receipt_or_nf == 1): ?>
+                                                                                                                    <option value="1" selected>RECIBO</option>
+                                                                                                                    <option value="2">NOTA FISCAL</option>
+                                                                                                                <?php elseif($calldemandpayment->receipt_or_nf == 2): ?>
+                                                                                                                    <option value="1">RECIBO</option>
+                                                                                                                    <option value="2" selected>NOTA FISCAL</option>
+
+                                                                                                                <?php else: ?>
+                                                                                                                    <option value="1">RECIBO</option>
+                                                                                                                    <option value="2">NOTA FISCAL</option>
+                                                                                                                <?php endif; ?>    
+
+                                                                                                            <?php endif; ?>
+
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="invoice_number">CÓDIGO NF</span>
-                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ $calldemandpayment->invoice_number }}" autocomplete="off"/>
+                                                                                                            <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ isset($calldemandpayment->invoice_number) ? $calldemandpayment->invoice_number : ''}}" autocomplete="off"/>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     
@@ -401,8 +429,7 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="date_issue">DATA DA EMISSÃO</span>
-                                                                                                            {{-- <input type="hidden" id="date_issue" value="{{ $calldemandpayment->date_issue != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_issue))) : '' }}" /> --}}
-                                                                                                            <input type="hidden" id="date_issue" value="{{ ($calldemandpayment->date_issue !== '0000-00-00 00:00:00') ? (date('d/m/Y', strtotime($calldemandpayment->date_issue))) : '' }}" />
+                                                                                                            <input type="hidden" id="date_issue" value="{{ (isset($calldemandpayment->date_issue) && $calldemandpayment->date_issue !== '0000-00-00 00:00:00') ? (date('d/m/Y', strtotime($calldemandpayment->date_issue))) : '' }}" />
                                                                                                             <input type="text" name="date_issue" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_issue_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
 
                                                                                                         </div>    
@@ -414,7 +441,7 @@
 
                                                                                                             {{-- <input type="hidden" id="date_payment_forecast" value="{{ $calldemandpayment->date_payment_forecast != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_payment_forecast))) : '' }}" /> --}}
 
-                                                                                                            <input type="hidden" id="date_payment_forecast" value="{{ ($calldemandpayment->date_payment_forecast !== '0000-00-00 00:00:00') ? (date('d/m/Y', strtotime($calldemandpayment->date_payment_forecast))) : '' }}" />
+                                                                                                            <input type="hidden" id="date_payment_forecast" value="{{ (isset($calldemandpayment->date_payment_forecast) && $calldemandpayment->date_payment_forecast !== '0000-00-00 00:00:00') ? (date('d/m/Y', strtotime($calldemandpayment->date_payment_forecast))) : '' }}" />
                                                                                                             <input type="text" name="date_payment_forecast" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_payment_forecast_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
                                                                                                         </div>    
                                                                                                     </div>
@@ -424,7 +451,7 @@
                                                                                                             <span class="title" for="date_effective_paymen">PAGAMENTO EFETIVO</span>
 
                                                                                                             {{-- <input type="hidden" id="date_effective_paymen" value="{{ $calldemandpayment->date_effective_paymen != 0 ? (date('d/m/Y', strtotime($calldemandpayment->date_effective_paymen))) : '' }}" /> --}}
-                                                                                                            <input type="hidden" id="date_effective_paymen" value="{{ ($calldemandpayment->date_effective_paymen !== '0000-00-00 00:00:00')  ? (date('d/m/Y', strtotime($calldemandpayment->date_effective_paymen))) : '' }}" />
+                                                                                                            <input type="hidden" id="date_effective_paymen" value="{{ (isset($calldemandpayment->date_effective_paymen) && $calldemandpayment->date_effective_paymen !== '0000-00-00 00:00:00')  ? (date('d/m/Y', strtotime($calldemandpayment->date_effective_paymen))) : '' }}" />
                                                                                                             <input type="text" name="date_effective_paymen" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_payment_forecast date_effective_paymen_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
 
                                                                                                         </div>    
@@ -732,6 +759,7 @@
             let iss      = $("#iss").val();
             let hasPaid      = $("#has_paid").val();
             let byBank = $('#by_bank').val();
+            let receiptNf = $('#receipt_nf').val();
             let invoiceNumber  = $('#invoice_number').val();
             let dateIssue = $("input[name=date_issue]").val();
             let datePaymentForecast = $("input[name=date_payment_forecast]").val();
@@ -765,6 +793,7 @@
                     'iss' :  iss,
                     'has_paid' :  hasPaid,
                     'by_bank' : byBank,                    
+                    'receipt_nf' : receiptNf,                    
                     'invoice_number' : invoiceNumber,
                     'date_issue' : dateIssue,
                     'date_payment_forecast' : datePaymentForecast,

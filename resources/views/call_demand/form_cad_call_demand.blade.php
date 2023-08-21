@@ -263,7 +263,7 @@
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="col-md-3">
+                                                                            <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <label for="by_bank">FORMA DE PAGAMENTO</label>
                                                                                     <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
@@ -274,7 +274,18 @@
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="col-md-3">
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="receipt_nf">RECIBO/NOTA FISCAL</label>
+                                                                                    <select class="select2 form-control form-control-lg" id="receipt_nf" name="receipt_nf">
+                                                                                        <option value="0">----</option>
+                                                                                        <option value="1">RECIBO</option>
+                                                                                        <option value="2">NOTA FISCAL</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-2">
                                                                                 <div class="form-group">
                                                                                     <span class="title" for="invoice_number">CÓDIGO NF</span>
                                                                                     <input type="text" class="form-control invoice_number" name="invoice_number" id="invoice_number" autocomplete="off"/>

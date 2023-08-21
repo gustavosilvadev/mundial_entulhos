@@ -122,11 +122,13 @@
                                                 <th>TELEFONE</th>
                                                 <th>PREÇO</th>
                                                 <th>COMENTÁRIOS</th>
+                                                <th>INFORMAÇÕES</th>
                                                 <th>NÚMERO CAÇAMBA</th>
                                                 <th>STATUS</th> 
                                                 <th>ATERRO</th>
                                                 <th>MOTORISTA</th>
                                                 <th>PAGO</th>
+                                                <th>RECIBO/NF</th>
                                                 <th>NF</th>
                                                 <th>Data Emissão NF</th>
                                                 <th>Data Vencimento NF</th>                                                
@@ -162,6 +164,7 @@
                                                 <td><?php echo $valDemand->phone_demand; ?></td>
                                                 <td><?php echo $valDemand->price_unit; ?></td>
                                                 <td><?php echo $valDemand->comments_demand; ?></td>
+                                                <td><?php echo $valDemand->comments_contract; ?></td>
                                                 <td><?php echo ($valDemand->dumpster_number_substitute > 0) ? $valDemand->dumpster_number_substitute : $valDemand->dumpster_number; ?></td>
                                                 <td>
                                                     {{-- 
@@ -190,6 +193,9 @@
                                                     <h4 class="text-danger">Não</h4>
                                                     <?php endif;?>
                                                 </td>
+                                                <td class="text-center">
+                                                    <?php echo $valDemand->receipt_nf; ?>
+                                                </td>
 
                                                 <td>{{ $valDemand->nf }}</td>
                                                 <td>{{ $valDemand->date_issue }}</td>                                                
@@ -215,11 +221,13 @@
                                                 <th>TELEFONE</th>
                                                 <th>PREÇO</th>
                                                 <th>COMENTÁRIOS</th>
+                                                <th>INFORMAÇÕES</th>
                                                 <th>NÚMERO CAÇAMBA</th>
                                                 <th>STATUS</th> 
                                                 <th>ATERRO</th>
                                                 <th>MOTORISTA</th>
                                                 <th>PAGO</th>
+                                                <th>RECIBO/NF</th>
                                                 <th>NF</th>
                                                 <th>Data Emissão NF</th>
                                                 <th>Data Vencimento NF</th>
@@ -492,10 +500,10 @@ $(document).ready(function() {
                 selectedData  = selectedRows.data();
                 id_reg        = $(this).find("td:eq(1)").text().split('/')[0];
                 id_demand     = $(this).find("td:eq(1)").text().split('/')[1];
-                nameDriver    = $(this).find("td:eq(16)").text();
+                nameDriver    = $(this).find("td:eq(17)").text();
 
                 nameDriverRemoval = "";
-                paymentStatus = $(this).find("td:eq(17)").text().toUpperCase();
+                paymentStatus = $(this).find("td:eq(18)").text().toUpperCase();
                 dateEffectiveRemoval = $(this).find("td:eq(8)").text();
 
                 $("#modal-edit").modal('toggle');
@@ -611,8 +619,8 @@ $(document).ready(function() {
                         
                         // rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
                         rowIndex = tbpedido.row().column(1).data().indexOf(numeroFicha);
-                        tbpedido.cell(":eq("+rowIndex+")", 16).data(nameDriverSelected);
-                        tbpedido.cell(":eq("+rowIndex+")", 17).data((paymentStatus) ? "<h4 class='text-primary'>SIM</h4>" : "<h4 class='text-danger'>Não</h4>");
+                        tbpedido.cell(":eq("+rowIndex+")", 17).data(nameDriverSelected);
+                        tbpedido.cell(":eq("+rowIndex+")", 18).data((paymentStatus) ? "<h4 class='text-primary'>SIM</h4>" : "<h4 class='text-danger'>Não</h4>");
                         tbpedido.cell(":eq("+rowIndex+")", 8).data(effectiveDateRemoval);
 
                         if(paymentStatus){
@@ -638,7 +646,7 @@ $(document).ready(function() {
             let namesList = String($("#name_search").val());
 
             tbpedido
-                .columns(16)
+                .columns(17)
                 .search(namesList.replace(/,/g, "|"), true,false)
                 .draw();
         });

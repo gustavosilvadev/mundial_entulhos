@@ -32,6 +32,7 @@ class TblPaymentCallDemand extends Migration
             $table->decimal('iss', $precision = 8, $scale = 2)->nullable(); // IMPOSTO ISS
             $table->boolean('has_paid')->default(0); // Pago SIM/NAO
             $table->boolean('by_bank_transfer')->default(0); // Pago por transferência bancária SIM/NAO
+            $table->integer('receipt_or_nf')->default(0); // Recibo ou Nota FISCAL [0=vazio|1=recibo|2=nota fiscal]
             $table->boolean('by_bank_slip')->default(0); // Pago por boleto bancário SIM/NAO
             $table->integer('invoice_number')->default(0); // NÚMERO DA NOTA FISCAL
             $table->dateTime('date_issue')->nullable(); // DATA DA EMISSÃO 

@@ -1,3 +1,10 @@
+
+<?php 
+// echo '<pre>';
+// print_r($lista_chamados);
+// echo '</pre>';
+// die();
+?>
 @include('partials.header_mobile')
 @include('partials.nav_mobile')
 
@@ -49,38 +56,43 @@
                                 <ul class="todo-task-list media-list" id="todo-task-list">
                                     <?php if(is_array($lista_chamados)): ?>
 
-                                        <?php foreach($lista_chamados as $id_cliente => $chamado_info): ?>
+                                        <?php foreach($lista_chamados as $id_cliente => $data_info): ?>
+                                            <?php foreach($data_info as $chamado_info): ?>
 
-                                            <li class="todo-item my-2 border">
-                                                <div class="todo-title-wrapper">
-                                                    <div class="todo-title-area">
-                                                        <i data-feather="more-vertical" class="drag-icon"></i>
+                                                <li class="todo-item my-2 border">
+                                                    <div class="todo-title-wrapper">
+                                                        <div class="todo-title-area">
+                                                            <i data-feather="more-vertical" class="drag-icon"></i>
 
-                                                        <div>
+                                                            <div>
+                                                                    <h3 class="bg-dark text-white todo-title">{{ $chamado_info['tipo_servico'] }} ({{$chamado_info['quantidade_cacamba']}})</h3>
+                                                                    
+                                                                    <h4 class="text-dark todo-title-address">
+                                                                        {{ $chamado_info['endereco'].', '
+                                                                    .$chamado_info['numero_endereco'].', '
+                                                                    .$chamado_info['bairro_endereco'].', '
+                                                                    .$chamado_info['cidade_endereco'].' - '
+                                                                    .$chamado_info['cep_endereco']
+                                                                    }}
+                                                                    </h4>
 
-                                                                <h3 class="bg-dark text-white todo-title">{{ $chamado_info['tipo_servico'] }} ({{$chamado_info['quantidade_cacamba']}})</h3>
-                                                                
-                                                                <h4 class="text-dark todo-title-address">
-                                                                    {{ $chamado_info['endereco'].', '
-                                                                .$chamado_info['numero_endereco'].', '
-                                                                .$chamado_info['bairro_endereco'].', '
-                                                                .$chamado_info['cidade_endereco'].' - '
-                                                                .$chamado_info['cep_endereco']
-                                                                }}
-                                                                </h4>
+                                                                    <?php if(isset($chamado_info['status_retirada'])): ?>
+                                                                        <label class="text-nowrap text-muted mr-1 todo-status-retirada" style="display: none;">{{ $chamado_info['status_retirada'] }}</label>
+                                                                    <?php endif; ?>
 
-                                                                <label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">{{ $id_cliente }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">{{ $chamado_info['id_motorista'] }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">{{ $chamado_info['data_operacao'] }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand') }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-url-check-dumpster" style="display: none;">{{ url('available_dumpster') }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">{{ $id_cliente }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">{{ $chamado_info['id_motorista'] }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">{{ $chamado_info['data_operacao'] }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand') }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
+                                                                    <label class="text-nowrap text-muted mr-1 todo-url-check-dumpster" style="display: none;">{{ url('available_dumpster') }}</label>
 
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                </div>
-                                            </li>
+                                                    </div>
+                                                </li>
+                                            <?php endforeach; ?>
                                         <?php endforeach; ?>
 
 

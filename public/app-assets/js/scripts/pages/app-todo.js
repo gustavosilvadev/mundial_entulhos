@@ -15,6 +15,7 @@ $(function () {
     taskIdClientDemand,
     taskIdDriver,
     taskDataAlocacao,
+    taskStatusRetirada,
     flatPickr = $('.task-due-date'),
     newTaskModal = $('.sidebar-todo-modal'),
     newTaskForm = $('#form-modal-todo'),
@@ -322,30 +323,28 @@ $(function () {
 
   
 
-    taskIdClientDemand   = $(this).find('.todo-id-client-demand');
-    taskIdDriver   = $(this).find('.todo-id-driver');
+    taskIdClientDemand = $(this).find('.todo-id-client-demand');
+    taskIdDriver       = $(this).find('.todo-id-driver');
     taskDataAlocacao   = $(this).find('.todo-data-alocacao');
-  
+    taskStatusRetirada = $(this).find('.todo-status-retirada');
+    
     let $id_cliente_chamado    = taskIdClientDemand.html();
     let $id_motorista  = taskIdDriver.html();
     let $data_alocacao = taskDataAlocacao.html();
     let rota_detalhes_pedido   = $(this).find('.todo-url-show-details_demand');    
     let listlandfill           = $(this).find('.todo-url-list-landfill');
     let checkDumpsterULR       = $(this).find('.todo-url-check-dumpster');
-    
+    let statusRetirada         = (taskStatusRetirada.html() !== undefined) ? true : false;
 
     $("#body_modal").empty();
     $("#atividade_input").empty();
-    
-    
     $("#body_modal").append('<div class="action-tags" id="atividade_input"></div>');
 
     let quantidadeAlocacao = 0;
     let quantidadeTroca    = 0;
     let quantidadeRetirada = 0;
-    let contadorItemsPorAtividade = 0;
 
-    $.get(rota_detalhes_pedido.text(),{ id_cliente_chamado: $id_cliente_chamado,  idmotorista: $id_motorista , dataalocacao: $data_alocacao} )
+    $.get(rota_detalhes_pedido.text(),{ id_cliente_chamado: $id_cliente_chamado,  idmotorista: $id_motorista , dataalocacao: $data_alocacao, status_retirada: statusRetirada} )
     .done(function ( dataResponse ){
 
       let tipo_atividade = '';
@@ -353,10 +352,8 @@ $(function () {
       quantidadeTroca    = dataResponse.filter((obj) => obj.troca === 1).length;
       quantidadeRetirada = dataResponse.filter((obj) => obj.remocao === 1).length;
       
-
-
       $("#nome_cliente").text(dataResponse[0].nome_cliente);
-      let totalAtividade = 0;
+
       let arr_colocacao = [];
       let arr_troca = [];
       let arr_retirada = [];
@@ -455,9 +452,10 @@ $(function () {
                                   {
                                     alert(dataResponse.message);
                                   }
-                                  
+                                  /*
                                   if(dataResponse == true)
                                       location.reload();
+                                  */
 
                                 },
                                 error: function(responseError){
