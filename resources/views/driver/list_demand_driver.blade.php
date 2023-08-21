@@ -76,7 +76,7 @@
                                                                     }}
                                                                     </h4>
 
-                                                                    <?php if(isset($chamado_info['status_retirada'])): ?>
+                                                                    <?php if($chamado_info['status_retirada'] == true): ?>
                                                                         <label class="text-nowrap text-muted mr-1 todo-status-retirada" style="display: none;">{{ $chamado_info['status_retirada'] }}</label>
                                                                     <?php endif; ?>
 
@@ -113,6 +113,7 @@
                                     <form id="form-modal-todo" class="todo-modal needs-validation" novalidate onsubmit="return false">
                                         <div class="modal-header align-items-center mb-1">
                                             <p class="h3" id="nome_cliente">--</p>
+
                                             <div class="todo-item-action d-flex align-items-center justify-content-between ml-auto">
                                                 <span class="todo-item-favorite cursor-pointer mr-75"><i data-feather="star" class="font-medium-2"></i></span>
                                                 <button type="button" class="close font-large-1 font-weight-normal py-0" data-dismiss="modal" aria-label="Close">
@@ -120,6 +121,13 @@
                                                 </button>
                                             </div>
                                         </div>
+
+                                        <div class="col-12 p-2 btn-group">
+                                            <a class="btn btn-info" href="" id="todo-item-address-waze" target="_blank"></a>
+                                            <a class="btn btn-danger" href="" id="todo-item-address-google-maps" target="_blank"></a>
+
+                                        </div>
+
                                         <div class="modal-body flex-grow-1 pb-sm-0 pb-3" id="body_modal">
 
 

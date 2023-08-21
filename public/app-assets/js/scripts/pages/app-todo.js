@@ -310,18 +310,14 @@ $(function () {
 // Waze
 
     let $address_to = $title;
-    newTaskForm.find('.todo-item-address-waze').attr("href", "https://www.waze.com/ul?q=" + $address_to);
-    newTaskForm.find('.todo-item-address-waze').attr("target", "_blank");;
-    newTaskForm.find('.todo-item-address-waze').text('Abrir Waze');
+    newTaskForm.find('#todo-item-address-waze').attr("href", "https://www.waze.com/ul?q=" + $address_to);
+    newTaskForm.find('#todo-item-address-waze').attr("target", "_blank");;
+    newTaskForm.find('#todo-item-address-waze').text('Waze');
 
 // Google maps 
-    newTaskForm.find('.todo-item-address-google-maps').attr("href", "https://www.google.com/maps/dir/" + addressFrom + "/" + $address_to);
-    newTaskForm.find('.todo-item-address-google-maps').attr("target", "_blank");;
-    newTaskForm.find('.todo-item-address-google-maps').text('Abrir Google Maps');
-
-
-
-  
+    newTaskForm.find('#todo-item-address-google-maps').attr("href", "https://www.google.com/maps/dir/" + addressFrom + "/" + $address_to);
+    newTaskForm.find('#todo-item-address-google-maps').attr("target", "_blank");;
+    newTaskForm.find('#todo-item-address-google-maps').text('Google Maps');
 
     taskIdClientDemand = $(this).find('.todo-id-client-demand');
     taskIdDriver       = $(this).find('.todo-id-driver');
@@ -343,10 +339,19 @@ $(function () {
     let quantidadeAlocacao = 0;
     let quantidadeTroca    = 0;
     let quantidadeRetirada = 0;
+    
+    console.log("id_cliente_chamado: " + $id_cliente_chamado +
+    "\n idmotorista: " + $id_motorista +
+    "\n dataalocacao: " + $data_alocacao +
+    "\n status_retiradaHTML: " + taskStatusRetirada.html() +
+    "\n status_retirada: " + statusRetirada);
 
     $.get(rota_detalhes_pedido.text(),{ id_cliente_chamado: $id_cliente_chamado,  idmotorista: $id_motorista , dataalocacao: $data_alocacao, status_retirada: statusRetirada} )
     .done(function ( dataResponse ){
-
+      // console.log('dataResponse');
+      // console.log(dataResponse);
+      // console.log('dataResponse');
+      // return false;
       let tipo_atividade = '';
       quantidadeAlocacao = dataResponse.filter((obj) => obj.colocacao === 1).length;
       quantidadeTroca    = dataResponse.filter((obj) => obj.troca === 1).length;
@@ -392,8 +397,14 @@ $(function () {
           $("#atividade_input").append('<br />');
           $("#form_group_one").append(cacamba1);
           
-            // BOTÕES FOOTER
+          // CAMPO OBSERVAÇÃO
+          if(item.observacao_operacao !== null){
+            let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark">Observação: </h4>'+' '+ item.observacao_operacao + '</div>';
+            $("#form_group_one").append(campo_observacao);
+          }
+          // CAMPO OBSERVAÇÃO
 
+          // BOTÕES FOOTER
             if(item.status_atendimento == 0 ){
               
               let btn_encerrar = $('<button/>',
@@ -519,6 +530,13 @@ $(function () {
           // SELECIONAR ATERRO BEGIN
             $("#form_group_two").append('<div class="col-12"><strong>Aterro: </strong> <select class="select2 form-control edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill"></div>');
             $('#landfill_' + item.id_ficha).append('<option value="0">Selecione o aterro</option>');
+
+            // CAMPO OBSERVAÇÃO
+            if(item.observacao_operacao !== null){
+              let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark">Observação: </h4>'+' '+ item.observacao_operacao + '</div>';
+              $("#form_group_two").append(campo_observacao);
+            }
+            // CAMPO OBSERVAÇÃO
 
             $.get(listlandfill.text(),{ id_demand_reg: item.id_ficha})
             .done(function ( dataResponse ){
@@ -799,7 +817,6 @@ $(function () {
           
 
           console.log("Retorno: " + dataResponse);
-          alert('Resposta');
           return dataResponse;
 
         });

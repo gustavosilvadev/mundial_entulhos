@@ -266,7 +266,12 @@ class DriverController extends Controller
                     continue;
                 }else{
 
-                    $tipo_servico       .= '|'.$call_demand->tipo_servico;
+                    // Valida se já existe titulo de serviço na variável 
+                    if(strpos($tipo_servico, $call_demand->tipo_servico) === false){
+
+                        $tipo_servico       .= '|'.$call_demand->tipo_servico;
+                    }
+
                     $quantidade_cacamba += $call_demand->quantidade_cacamba;
     
                     $dados_organizados[$call_demand->id_cliente][0] = array_replace(
@@ -281,6 +286,8 @@ class DriverController extends Controller
                 $quantidade_cacamba     = $call_demand->quantidade_cacamba;
 
                 $dados_organizados[$call_demand->id_cliente][0] = array(
+                    'id_ficha' => $call_demand->ficha,
+                    'status_retirada' => $call_demand->cacamba_retirada,
                     'id_cliente' => $chamado_indice_cliente,
                     'tipo_servico' =>$tipo_servico,
                     'periodo_dia' =>$call_demand->periodo_dia,
@@ -370,6 +377,7 @@ class DriverController extends Controller
 
     public function listarChamadosDoDia($id_employee, $dateAllocationFilter)
     {
+        
         // $dateAllocationFilter = (empty($date_demand_filter) != true ? $date_demand_filter : date('d/m/Y'));
         $get_id_driver  = Driver::select()->where("id_employee", $id_employee)->first();
         $service_status = 5; // FINALIZADOS
@@ -419,6 +427,7 @@ class DriverController extends Controller
 
     public function buscarDetahesPedidoSelecionados(Request $request)
     {
+
         $status_retirada = $request->status_retirada === "true" ? true : false;
 
         $calldemands = DB::table('call_demand')
@@ -434,6 +443,7 @@ class DriverController extends Controller
             'call_demand.id_driver as id_motorista',
             'call_demand.dumpster_number as numero_cacamba',
             'call_demand.dumpster_number_substitute as numero_cacamba_substituto',
+            'call_demand.comments as observacao_operacao',
             'call_demand.id_landfill as id_aterro',
             'call_demand.service_status as status_atendimento'
         )
@@ -453,9 +463,9 @@ class DriverController extends Controller
      */
     public function startDemand(Request $request)
     {
-
+        $numeroCacamba    = 0;
         $id_user_employee = session('id_user');
-        $driver_data = Driver::where('id_employee',$id_user_employee)->first();
+        $driver_data      = Driver::where('id_employee',$id_user_employee)->first();
         
         $callDemand  = CallDemand::select('id_parent')->where('id', $request->id_demand_reg)
         ->where('id_demand', $request->id_demand)
@@ -469,6 +479,40 @@ class DriverController extends Controller
             ]);
             if(!$updated_landfill_parent){
                 return false;
+            }
+        }
+
+        // ATUALIZAR CAÇAMBA DE RETIRADA
+        if(trim($request->type_service) == 'COLOCACAO' || trim($request->type_service) == 'TROCA'){
+
+            
+
+            // if(trim($request->type_service) == 'COLOCACAO'){
+            //     $numeroCacamba = $request->dumpster_numbers;
+            // }else if(trim($request->type_service) == 'TROCA')
+            // {
+            //     $numeroCacamba = $request->dumpster_number_sub;
+            // }
+            $numeroCacamba = (trim($request->type_service) == 'COLOCACAO') ? $request->dumpster_numbers : $request->dumpster_number_sub;
+
+            // Retirada
+            $get_dumspter_removal = CallDemand::select('id')
+            ->where('id_parent', $request->id_demand_reg)
+            ->where(function($query){
+                $query->where('dumpster_replacement', true)
+                ->orWhere('dumpster_removal', true);
+            })->where('service_status', 0)->first();
+
+            if($get_dumspter_removal){
+
+                $updated_dumpster_removal = CallDemand::where('id', $get_dumspter_removal->id)
+                ->update([
+                    'dumpster_number' => $numeroCacamba,
+                ]);
+
+                if(!$updated_dumpster_removal){
+                    return false;
+                }
             }
         }
         // ATUALIZAÇÃO BEGIN
