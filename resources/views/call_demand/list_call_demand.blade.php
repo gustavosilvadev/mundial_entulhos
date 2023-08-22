@@ -112,9 +112,7 @@
                                                 <th>COLOCAÇÃO/TROCA</th>
                                                 <th>PERÍODO DO DIA</th>
                                                 <th>CLIENTE</th>
-                                                {{-- <th>DATA OPERAÇÃO</th> --}}
                                                 <th>DATA ATEND/MOTORISTA</th>
-                                                {{-- <th>DATA ALOCAÇÃO</th> --}}
                                                 <th>DATA DA COLOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
                                                 <th>DATA RETIRADA EFETIVA</th>
@@ -167,13 +165,6 @@
                                                 <td><?php echo $valDemand->comments_contract; ?></td>
                                                 <td><?php echo ($valDemand->dumpster_number_substitute > 0) ? $valDemand->dumpster_number_substitute : $valDemand->dumpster_number; ?></td>
                                                 <td>
-                                                    {{-- 
-                                                    <?php if($valDemand->service_status == 5):?>
-                                                        <label class="text-info font-weight-bold">PEDIDO FINALIZADO</label>
-                                                    <?php else:?>
-                                                        <label class="text-warning font-weight-bold">EM ANDAMENTO</label>
-                                                    <?php endif;?> 
-                                                    --}}
 
                                                     <?php if($valDemand->service_status == 0):?>
                                                         <label class="text-warning font-weight-bold">PENDENTE</label>
@@ -211,9 +202,7 @@
                                                 <th>COLOCAÇÃO/TROCA</th>
                                                 <th>PERÍODO DO DIA</th>
                                                 <th>CLIENTE</th>
-                                                {{-- <th>DATA OPERAÇÃO</th> --}}
                                                 <th>DATA ATEND/MOTORISTA</th>
-                                                {{-- <th>DATA ALOCAÇÃO</th> --}}
                                                 <th>DATA DA COLOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
                                                 <th>DATA RETIRADA EFETIVA</th>

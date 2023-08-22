@@ -626,7 +626,6 @@ class CallDemandController extends Controller
     public function store(Request $request)
     {
 
-
         // CÓDIGO DE REFERÊNCIA LOGO ABAIXO:
         if (isset($request->client_name_new)
         && isset($request->type_service)
@@ -1092,6 +1091,12 @@ class CallDemandController extends Controller
 
             $dataDelete = DB::table('call_demand')->where('id', $idDemand)->delete();
             if($dataDelete){
+
+                $dataRemovalDumpsterDelete = CallDemand::where('id_parent', $idDemand)->delete();
+                if($dataRemovalDumpsterDelete){
+                    continue;
+                }
+
                 continue;
             }else{
                 return false;

@@ -227,6 +227,10 @@ $(document).ready(function() {
     
     let searchQuantityTypeService = (dateDemandFilter) => {
         $("#tbmotoristaservicos tr td").remove();
+        let totalColocacao = 0;
+        let totalTroca = 0;
+        let totalRetirada = 0;
+        let totalGeral = 0;
         $.ajax({
             method: 'GET',
             url: 'show_activities_driver',
@@ -250,7 +254,26 @@ $(document).ready(function() {
                     newRowContent += "<td>" + totalService + "</td>";
                     newRowContent += "</tr>";
 
+
+                    totalColocacao += parseInt(infoService.COLOCACAO);
+                    totalTroca     += parseInt(infoService.TROCA);
+                    totalRetirada  += parseInt(infoService.RETIRADA);
+
                 });
+
+
+                    newRowContent += "<tr>";
+                    newRowContent += "<td>TOTAL</td>";
+                    
+
+                    newRowContent += "<td>" + totalColocacao + "</td>";
+                    newRowContent += "<td>" + totalTroca + "</td>";
+                    newRowContent += "<td>" + totalRetirada + "</td>";
+                    totalService  = totalColocacao + totalTroca + totalRetirada;
+
+                    newRowContent += "<td>" + totalService + "</td>";
+                    newRowContent += "</tr>";
+
 
             $("#tbmotoristaservicos tbody").append(newRowContent);
 

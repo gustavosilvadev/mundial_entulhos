@@ -329,31 +329,9 @@
                                                                                                         </div>
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-3">
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="by_bank">FORMA DE PAGAMENTO</label>
-{{--                                                                                                             
-                                                                                                            <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
-                                                                                                                <option value="">----</option>
-
-                                                                                                                <?php if(isset($calldemandpayment)): ?>
-                                                                                                                
-                                                                                                                    <?php if($calldemandpayment->by_bank_transfer): ?>
-                                                                                                                        <option value="1" selected>TRANSFERÊNCA</option>
-                                                                                                                        <option value="2">BOLETO BANCÁRIO</option>
-                                                                                                                    <?php elseif($calldemandpayment->by_bank_slip): ?>
-                                                                                                                        <option value="1">TRANSFERÊNCA</option>
-                                                                                                                        <option value="2" selected>BOLETO BANCÁRIO</option>
-                                                                                                                    <?php else: ?>
-
-                                                                                                                        <option value="1">TRANSFERÊNCA</option>
-                                                                                                                        <option value="2">BOLETO BANCÁRIO</option>
-                                                                                                                    <?php endif; ?>    
-
-                                                                                                                <?php endif; ?>
-
-                                                                                                           </select>
- --}}
                                                                                                             <select class="select2 form-control form-control-lg" id="by_bank" name="by_bank">
                                                                                                                 <option value="" selected>----</option>
                                                                                                                 <option value="1">TRANSFERÊNCA</option>
@@ -362,10 +340,20 @@
                                                                                                         </div>
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-3">
+                                                                                                    <div class="col-md-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="receipt_nf">RECIBO/NOTA FISCAL</label>
+                                                                                                            <select class="select2 form-control form-control-lg" id="receipt_nf" name="receipt_nf">
+                                                                                                                <option value="0">----</option>
+                                                                                                                <option value="1">RECIBO</option>
+                                                                                                                <option value="2">NOTA FISCAL</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    </div>                                                                                                    
+
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <span class="title" for="invoice_number">CÓDIGO NF</span>
-                                                                                                            {{-- <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="{{ $calldemandpayment->invoice_number }}" autocomplete="off"/> --}}
                                                                                                             <input type="text" class="form-control only-text" name="invoice_number" id="invoice_number" value="" autocomplete="off"/>
                                                                                                         </div>
                                                                                                     </div>
@@ -723,6 +711,7 @@
             let iss      = $("#iss").val();
             let hasPaid      = $("#has_paid").val();
             let byBank = $('#by_bank').val();
+            let receiptNF = $('#receipt_nf').val();
             let invoiceNumber  = $('#invoice_number').val();
             let dateIssue = $("input[name=date_issue]").val();
             let datePaymentForecast = $("input[name=date_payment_forecast]").val();
@@ -771,21 +760,21 @@
                     'iss' :  iss,
                     'has_paid' :  hasPaid,
                     'by_bank' : byBank,                    
+                    'receipt_nf' : receiptNF,                    
                     'invoice_number' : invoiceNumber,
                     'date_issue' : dateIssue,
                     'date_payment_forecast' : datePaymentForecast,
                     'date_effective_paymen' : dateEffectivePaymen
                 },
                 success: function(dataResponse) {
-
                     if(dataResponse){
-
                         window.location.href = '{{ route('calldemand.list')}}';
                     }else
                         $("#message-error").css("display","block");
                 },
                 error: function(responseError){
                     alert("Erro interno: " + responseError);
+                    console.log("***********");
                     console.log(responseError);
                     console.log("***********");
                 }
