@@ -345,13 +345,10 @@ $(function () {
     "\n dataalocacao: " + $data_alocacao +
     "\n status_retiradaHTML: " + taskStatusRetirada.html() +
     "\n status_retirada: " + statusRetirada);
-
+// console.log("ROTA!!: " + rota_detalhes_pedido.text());
     $.get(rota_detalhes_pedido.text(),{ id_cliente_chamado: $id_cliente_chamado,  idmotorista: $id_motorista , dataalocacao: $data_alocacao, status_retirada: statusRetirada} )
     .done(function ( dataResponse ){
-      // console.log('dataResponse');
-      // console.log(dataResponse);
-      // console.log('dataResponse');
-      // return false;
+
       let tipo_atividade = '';
       quantidadeAlocacao = dataResponse.filter((obj) => obj.colocacao === 1).length;
       quantidadeTroca    = dataResponse.filter((obj) => obj.troca === 1).length;
@@ -399,7 +396,7 @@ $(function () {
           
           // CAMPO OBSERVAÇÃO
           if(item.observacao_operacao !== null){
-            let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark">Observação: </h4>'+' '+ item.observacao_operacao + '</div>';
+            let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark mr-1">Observação: </h4> ' + item.observacao_operacao + '</div>';
             $("#form_group_one").append(campo_observacao);
           }
           // CAMPO OBSERVAÇÃO
@@ -533,7 +530,7 @@ $(function () {
 
             // CAMPO OBSERVAÇÃO
             if(item.observacao_operacao !== null){
-              let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark">Observação: </h4>'+' '+ item.observacao_operacao + '</div>';
+              let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark mr-1">Observação: </h4>'+' '+ item.observacao_operacao + '</div>';
               $("#form_group_two").append(campo_observacao);
             }
             // CAMPO OBSERVAÇÃO
@@ -590,12 +587,6 @@ $(function () {
                             return false;
 
                           }
-
-                          // if((item.troca != true || item.remocao != true) && idLandfill == 0)
-                          // {
-                          //     alert('Selecione o aterro!');
-                          //     stopExec = true;
-                          // }
 
                           if(item.troca && dumpsterNumberSub == 0 || dumpsterNumberSub == '' || dumpsterNumberSub == undefined)
                           {
@@ -682,6 +673,11 @@ $(function () {
           // SELECIONAR ATERRO BEGIN
           $("#form_group_three").append('<div class="col-12 mb-1"><strong>Aterro: </strong> <select class="select2 form-control edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill_' + item.id_ficha +'"></div>');
           $('#landfill_' + item.id_ficha).append('<option value="0">Selecione o aterro</option>');
+
+          if(item.observacao_operacao !== null){
+            let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark mr-1">Observação: </h4>'+' '+ item.observacao_operacao + '</div>';
+            $("#form_group_three").append(campo_observacao);
+          }          
           
           $.get(listlandfill.text(),{ id_demand_reg: item.id_ficha})
           .done(function ( dataResponse ){

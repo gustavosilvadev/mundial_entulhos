@@ -205,40 +205,7 @@ class DriverController extends Controller
         $quantidade_cacamba = 0;
         $tipo_servico = '';
         $tipo_servico_compare = '';
-/*
-        foreach ($call_demands as $call_demand) {
-            if($call_demand->id_cliente == $chamado_indice_cliente)
-            {
-                $tipo_servico .= '|'.$call_demand->tipo_servico;
-                $quantidade_cacamba += $call_demand->quantidade_cacamba;
 
-                $dados_organizados[$call_demand->id_cliente] = array_replace(
-                    $dados_organizados[$call_demand->id_cliente], array('tipo_servico' => $tipo_servico, 'quantidade_cacamba' => $quantidade_cacamba)
-                );
-
-            }else{
-                $chamado_indice_cliente = $call_demand->id_cliente;
-                // $id_cliente = $call_demand->id_cliente;
-                $tipo_servico = $call_demand->tipo_servico;
-                $quantidade_cacamba = $call_demand->quantidade_cacamba;
-
-                $dados_organizados[$call_demand->id_cliente] = array(
-                    // 'id_chamado' => $call_demand->id_chamado,
-                    'id_cliente' => $chamado_indice_cliente,
-                    'tipo_servico' =>$tipo_servico,
-                    'periodo_dia' =>$call_demand->periodo_dia,
-                    'endereco' =>$call_demand->endereco,
-                    'numero_endereco' =>$call_demand->numero_endereco,
-                    'cep_endereco' =>$call_demand->cep_endereco,
-                    'bairro_endereco' =>$call_demand->bairro_endereco,
-                    'cidade_endereco' =>$call_demand->cidade_endereco,
-                    'quantidade_cacamba' => $quantidade_cacamba,
-                    'id_motorista' => $call_demand->id_motorista,
-                    'data_operacao' => $call_demand->data_operacao
-                );
-            }
-        }
-*/
         foreach ($call_demands as $call_demand) {
             if($call_demand->id_cliente == $chamado_indice_cliente)
             {
@@ -471,7 +438,11 @@ class DriverController extends Controller
         ->where('id_demand', $request->id_demand)
         ->where('type_service', $request->type_service)->first();
 
-        if($callDemand->id_parent != 0 && trim($request->type_service) != 'TROCA'){
+        // if($callDemand->id_parent != 0 && trim($request->type_service) != 'TROCA'){
+        if($callDemand->id_parent != 0){
+
+            // ATUALIZA ATERRO DE COLOCAÇÃO SE FINALIZAR TROCA
+            // ATUALIZA ATERRO DE TROCA QUANDO FINALIZA TROCA OU RETIRADA            
             $updated_landfill_parent = CallDemand::where('id', $callDemand->id_parent)
             ->update([
                 'id_landfill' => $request->id_landfill,
@@ -482,20 +453,12 @@ class DriverController extends Controller
             }
         }
 
-        // ATUALIZAR CAÇAMBA DE RETIRADA
+        // ATUALIZA CAÇAMBA
         if(trim($request->type_service) == 'COLOCACAO' || trim($request->type_service) == 'TROCA'){
 
-            
-
-            // if(trim($request->type_service) == 'COLOCACAO'){
-            //     $numeroCacamba = $request->dumpster_numbers;
-            // }else if(trim($request->type_service) == 'TROCA')
-            // {
-            //     $numeroCacamba = $request->dumpster_number_sub;
-            // }
             $numeroCacamba = (trim($request->type_service) == 'COLOCACAO') ? $request->dumpster_numbers : $request->dumpster_number_sub;
 
-            // Retirada
+            // ATUALIZA RETIRADA/TROCA PENDENTE
             $get_dumspter_removal = CallDemand::select('id')
             ->where('id_parent', $request->id_demand_reg)
             ->where(function($query){
@@ -515,8 +478,8 @@ class DriverController extends Controller
                 }
             }
         }
-        // ATUALIZAÇÃO BEGIN
 
+        // FINALIZA ATENDIMENTO
         $call_demand_updated_data = CallDemand::where('id', $request->id_demand_reg)
         ->where('id_demand', $request->id_demand)
         ->where('type_service', $request->type_service)
@@ -526,7 +489,7 @@ class DriverController extends Controller
             'date_start' => date('Y-m-d H:i:s'),
             'dumpster_number' => $request->dumpster_numbers,
             'dumpster_number_substitute' => isset($request->dumpster_number_sub) ? $request->dumpster_number_sub : 0,
-            'id_landfill' => $request->id_landfill
+            // 'id_landfill' => $request->id_landfill
         ]);
 
         if($call_demand_updated_data){
@@ -548,7 +511,6 @@ class DriverController extends Controller
             return false;
         }
         
-        // ATUALIZAÇÃO END
     }
 
     public function finishDemand(Request $request)

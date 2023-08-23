@@ -625,6 +625,7 @@ class CallDemandController extends Controller
 
     public function store(Request $request)
     {
+        $id_client   = 0;
 
         // CÓDIGO DE REFERÊNCIA LOGO ABAIXO:
         if (isset($request->client_name_new)
@@ -644,19 +645,13 @@ class CallDemandController extends Controller
         && isset($request->date_removal_dumpster))
         {
             // VALIDA SE CLIENTE JÁ ESTÁ CADASTRO
-            $id_client  = 0;
-            // $findCliente = Client::where([
-            //     ['name', '=', $request->client_name_new],
-            //     ['address', '=', $request->address],
-            //     ['number', '=', $request->number],
-            //     ['zipcode', '=', $request->zipcode],
-            //     ['city', '=', $request->city],
-            // ])->first();
+            $id_client = $request->id_client;
 
-            $findCliente = Client::find($request->id_client);
+            if(((int)$request->type_service == 1)){
+                $findCliente = Client::where('id',$id_client)->first();
 
-            if($findCliente === null){
-                if(((int)$request->type_service == 1)){
+                if(!$findCliente){
+
                     $cliente = new Client();
                     $cliente->name       = $request->client_name_new;
                     $cliente->address    = $request->address;
@@ -671,35 +666,36 @@ class CallDemandController extends Controller
                     $cliente->save();
 
                     $id_client =  $cliente->id;
-                }
-            }else{
 
-                if($findCliente->name       != $request->client_name_new
-                    || $findCliente->address    != $request->address
-                    || $findCliente->address_complement    != $request->address_complement
-                    || $findCliente->number     != $request->number
-                    || $findCliente->zipcode    != $request->zipcode
-                    || $findCliente->city       != $request->city
-                    || $findCliente->district   != $request->district
-                    || $findCliente->state      != $request->state
-                    || $findCliente->phone      != str_replace([" ","(",")"],"",$request->phone)
-                ){
-                    
-                    Client::where('id', $findCliente->id)
-                    ->update([
-                        'name' =>        $request->client_name_new,
-                        'address' =>     $request->address,
-                        'address_complement' =>     $request->address_complement,
-                        'number' =>      $request->number,
-                        'zipcode' =>     $request->zipcode,
-                        'city' =>        $request->city,
-                        'district' =>    $request->district,
-                        'state' =>       $request->state,
-                        'phone' =>       str_replace([" ","(",")"],"",$request->phone)                       ,
-                    ]);
-                }
+                }else{
 
-                $id_client = $findCliente->id;
+                    if($findCliente->name       != $request->client_name_new
+                        || $findCliente->address    != $request->address
+                        || $findCliente->address_complement    != $request->address_complement
+                        || $findCliente->number     != $request->number
+                        || $findCliente->zipcode    != $request->zipcode
+                        || $findCliente->city       != $request->city
+                        || $findCliente->district   != $request->district
+                        || $findCliente->state      != $request->state
+                        || $findCliente->phone      != str_replace([" ","(",")"],"",$request->phone)
+                    ){
+                        
+                        Client::where('id', $findCliente->id)
+                        ->update([
+                            'name' =>        $request->client_name_new,
+                            'address' =>     $request->address,
+                            'address_complement' =>     $request->address_complement,
+                            'number' =>      $request->number,
+                            'zipcode' =>     $request->zipcode,
+                            'city' =>        $request->city,
+                            'district' =>    $request->district,
+                            'state' =>       $request->state,
+                            'phone' =>       str_replace([" ","(",")"],"",$request->phone)                       ,
+                        ]);
+                    }
+
+                    $id_client = $findCliente->id;
+                }
             }
 
             $lastIdDemand = isset(CallDemand::orderBy('id', 'desc')->first()->id) ? (CallDemand::orderBy('id', 'desc')->first()->id + 1) : 1 ;
@@ -814,6 +810,12 @@ class CallDemandController extends Controller
             && isset($request->date_removal_dumpster_forecast)
             && isset($request->total_days)){
 
+
+            // Atualiza Pedido de Retirada BEGIN
+
+
+            // Atualiza Pedido de Retirada END
+                
             $call_demand = CallDemand::where('id',$request->id_demand_reg)
             ->where('id_demand',$request->id_demand)
             ->update([
@@ -918,7 +920,7 @@ class CallDemandController extends Controller
 
     public function changeDriverDemand(Request $request)
     {
-        // ATUALIZA NO PEDIDOD DE COLOCAÇÃO/TROCA  - USUÁRIO /  
+        // ATUALIZA NO PEDIDO DE COLOCAÇÃO/TROCA  - USUÁRIO /  
         $updateCallDemand = CallDemand::where('id',$request->id_reg)
         ->update([
             'id_driver' => $request->id_driver
@@ -970,6 +972,7 @@ class CallDemandController extends Controller
                     $calldemandDumpsterRemoval->days_allocation = $calldemandFirst->days_allocation;
                     // $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
                     $calldemandDumpsterRemoval->id_driver      = $request->id_driver_removal_dumpster;
+                    $calldemandDumpsterRemoval->comments      = $request->comments_removal;
 
                     if(!$calldemandDumpsterRemoval->save())
                         return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
@@ -1001,8 +1004,8 @@ class CallDemandController extends Controller
                         'dumpster_sequence_demand' => $calldemandFirst->dumpster_sequence_demand,
                         'dumpster_quantity' => $calldemandFirst->dumpster_quantity,
                         'days_allocation' => $calldemandFirst->days_allocation,
-                        // 'id_driver' => $request->id_driver
-                        'id_driver' => $request->id_driver_removal_dumpster
+                        'id_driver' => $request->id_driver_removal_dumpster,
+                        'comments' => $request->comments_removal
                     ]);
                     
                     // return ($updateDumpsterRemoval) ? 'true' : false;
@@ -1011,9 +1014,7 @@ class CallDemandController extends Controller
 
                         return false;
                     }
-
                 }
-
 
                 // INSERE ID DO MOTORISTA NO CHAMADO E DATA DE REMOÇÃO EFETIVA SE EXISTIR
                 $call_demand = CallDemand::where('id',$request->id_reg)
@@ -1028,7 +1029,6 @@ class CallDemandController extends Controller
                 }
             // TESTE END
             }
-
 
             // Se cliente pagou ou não 
             $paymentDemand = PaymentCallDemand::where('id_call_demand_reg',$request->id_reg)
@@ -1051,8 +1051,12 @@ class CallDemandController extends Controller
     public function showDriverRemovalDumpster(Request $request)
     {
 
+        // return "dumpster_removal: ".$request->dumpster_removal.
+        // "id_demand_reg: ".$request->id_demand_reg.
+        // "id_demand: ".$request->id_demand;
+
         $idDriverRemovalDumpster = DB::table('call_demand')
-        ->select('employee.name')
+        ->select(['employee.name', 'call_demand.comments'])
         ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
         ->join('employee', 'employee.id', '=', 'driver.id_employee')
         ->where('call_demand.dumpster_removal', (bool)$request->dumpster_removal)

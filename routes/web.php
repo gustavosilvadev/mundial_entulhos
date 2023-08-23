@@ -64,7 +64,8 @@ Route::middleware('usersession')->group(function(){
     // Call Demand
     // ALOCAÇÃO
     Route::get('createcalldemand', [CallDemandController::class,'callFormCreateDemand']);
-    Route::post('save_call_demand',[CallDemandController::class,'store'])->name('save.replacement_demand');
+    // Route::post('save_call_demand',[CallDemandController::class,'store'])->name('save.replacement_demand');
+    Route::post('save_call_demand',[CallDemandController::class,'store'])->name('save.demand');
     Route::get('call_demand/{id?}',[CallDemandController::class,'show'])->name('calldemand.list');
     Route::post('update_call_demand',[CallDemandController::class,'update']);
     Route::post('delete_demand',[CallDemandController::class,'destroy']);

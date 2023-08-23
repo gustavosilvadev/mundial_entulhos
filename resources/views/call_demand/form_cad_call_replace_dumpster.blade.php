@@ -89,28 +89,7 @@
                                                                                                             <input type="hidden" name="id_client" id="id_client"  value="{{ $value->id_client }}" required disabled/>
                                                                                                         </div>
                                                                                                     </div>
-{{-- 
-                                                                                                    <div class="col-md-6">
-                                                                                                        <div class="form-group">
-                                                                                                            <label for="type_service">Tipo de Serviço</label>
-                                                                                                            <select class="select2 form-control form-control-lg" id="type_service" name="type_service" required>
-                                                                                                                <option value="">----</option>
-                                                                                                                <?php if($value->type_service == 'COLOCACAO'): ?>
-                                                                                                                    <option value="COLOCACAO" selected>COLOCAÇÃO</option>
-                                                                                                                    <option value="TROCA">TROCA</option>
-                                                                                                                <?php elseif($value->type_service == 'TROCA'): ?>
-                                                                                                                <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                                                                <option value="TROCA" selected>TROCA</option>
-                                                                                                                <?php else: ?>
-                                                                                                                    <option value="COLOCACAO">COLOCAÇÃO</option>
-                                                                                                                    <option value="TROCA">TROCA</option>
-                                                                                                                <?php endif; ?>
-                                                                                                                
-                                                                                                            </select>            
-                                                                                                        </div>
-                                                                                                    </div> 
---}}
-                                                                                                    <input type="hidden" id="type_service" name="type_service" value="2" />
+                                                                                                    {{-- <input type="hidden" id="type_service" name="type_service" value="2" /> --}}
                                                                                                 </div>
 
                                                                                                 <hr />
@@ -271,7 +250,7 @@
                                                                                                         </div>    
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-2">
+                                                                                                    <div class="col-md-2 d-none">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">RETIRADA EFETIVA</label>
                                                                                                             <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date  date_format" data-column="5"  data-column-index="4" value="" />
@@ -295,7 +274,7 @@
                                                                                                     <div class="col-md-3">
                                                                                                         <div class="form-group input-icon">
                                                                                                             <label for="iss">ISS</label>
-                                                                                                            <input type="text" name="iss" class="form-control iss" id="iss" value="{{  str_replace('.',',',$calldemandpayment->iss); }}"/>
+                                                                                                            <input type="text" name="iss" class="form-control iss" id="iss" value="{{  isset($calldemandpayment->iss) ? str_replace('.',',',$calldemandpayment->iss) : '0' ; }}"/>
 
                                                                                                             <i>R$</i>
                                                                                                         </div>
@@ -584,9 +563,9 @@
                     client_name_new: {
                         required: true
                     },
-                    type_service: {
-                        required: true
-                    },
+                    // type_service: {
+                    //     required: true
+                    // },
                     date_begin: {
                         required: true
                     },
@@ -645,7 +624,7 @@
 
                 messages:{
                     client_name_new: "Campo <b>Campo Nome</b> deve ser preenchido!",
-                    type_service: "Campo <b>Tipo de serviço</b> deve ser preenchido!",
+                    // type_service: "Campo <b>Tipo de serviço</b> deve ser preenchido!",
                     date_begin: "Campo <b>Data Pedido</b> deve ser preenchido!",
                     date_removal_dumpster: "Campo <b>Previsao de Retirada</b> deve ser preenchido!",
                     // date_effective_removal_dumpster: "Campo <b>Previsão de Retirada Efetiva</b> deve ser preenchido!",
@@ -688,7 +667,7 @@
             let client_name_new = $("input[name=client_name_new]").val();
             let zipcode         = $("input[name=zipcode]").val();
             let address         = $("input[name=address]").val();
-            let address_complement         = $("input[name=address_complement]").val();
+            let address_complement  = $("input[name=address_complement]").val();
             let number          = $("input[name=number]").val();
             let district        = $("input[name=district]").val();
             let city            = $("input[name=city]").val();
@@ -700,7 +679,7 @@
             let dumpsterNumber  = $('#dumpster_number').val();
             let comments        = $("#note").val();
             let comments_contract = $("#note_contract").val();
-            let type_service    = $("#type_service").val();
+            let type_service    = 2;
             let period          = $("#period").val();
             let date_allocation_dumpster        = $("input[name=date_allocation_dumpster]").val();
             let date_effective_removal_dumpster = $("input[name=date_effective_removal_dumpster]").val();
@@ -732,7 +711,7 @@
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: 'POST',
-                url: '{{ route('save.replacement_demand') }}',
+                url: '{{ route('save.demand') }}',
                 data: { 
                     'id_demand' : id_demand,
                     'id_demand_reg' : id_demand_reg,

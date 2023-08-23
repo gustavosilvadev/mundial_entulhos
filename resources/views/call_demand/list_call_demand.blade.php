@@ -253,7 +253,7 @@
 
                 <div class="modal-body" id="content-modal">
                     <label for="">Motorista - DESTE CHAMADO</label>
-                    <select class="form-control" id="name_driver_selected">
+                    <select class="form-control mb-1" id="name_driver_selected">
                         <option value=""></option>
                         <?php if($driver_name_demands):?>
 
@@ -263,9 +263,15 @@
 
                         <?php endif;?>
                     </select>
+
+                    <label for="">Pago</label>
+                    <select class="form-control" id="payment_status">
+                        <option value="0">NÃO</option>
+                        <option value="1">SIM</option>
+                    </select>                    
                     <hr />
                     <label for="">Motorista - RETIRADA</label>
-                    <select class="form-control" id="name_driver_removal_selected">
+                    <select class="form-control mb-1" id="name_driver_removal_selected">
                         <option value=""></option>
                         <?php if($driver_name_demands):?>
 
@@ -277,14 +283,10 @@
                     </select>
 
                     <label for="">Data de Retirada Efetiva</label>
-                    <input type="text" name="effective_date_removal_dumpster" id="effective_date_removal_dumpster" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4"/>
-
-
-                    <label for="">Pago</label>
-                    <select class="form-control" id="payment_status">
-                        <option value="0">NÃO</option>
-                        <option value="1">SIM</option>
-                    </select>
+                    <input type="text" name="effective_date_removal_dumpster" id="effective_date_removal_dumpster" class="form-control mb-1 dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4"/>
+                    
+                    <label for="">Comentário (RETIRADA)</label>
+                    <textarea class="form-control mb-1" rows="2" id="note_removal" name="comments" ></textarea>
 
                     <input type="hidden" id="iddemand" value="" />
                     <input type="hidden" id="idreg" value="" />
@@ -473,6 +475,7 @@ $(document).ready(function() {
             $("#loading-content").show();
             $("#content-modal").hide()
             $("#button-footer").hide();
+            $("#note_removal").val("");
 
             let selectedRows    = "";
             let selectedData    = "";
@@ -481,6 +484,8 @@ $(document).ready(function() {
             let nameDriver      = "";
             let paymentStatus   = "";
             let dateEffectiveRemoval = "";
+            let comments_removal = "";
+            let comentario_vazio = "";
             let $cell=$(evt.target).closest('td');
 
             if( $cell.index()>0){
@@ -490,11 +495,12 @@ $(document).ready(function() {
                 id_reg        = $(this).find("td:eq(1)").text().split('/')[0];
                 id_demand     = $(this).find("td:eq(1)").text().split('/')[1];
                 nameDriver    = $(this).find("td:eq(17)").text();
-
+                comments_removal  = $(this).find("td:eq(12)").text();
+                comentario_vazio  = comments_removal;
                 nameDriverRemoval = "";
                 paymentStatus = $(this).find("td:eq(18)").text().toUpperCase();
                 dateEffectiveRemoval = $(this).find("td:eq(8)").text();
-
+                
                 $("#modal-edit").modal('toggle');
 
 
@@ -537,11 +543,18 @@ $(document).ready(function() {
 
                     }
 
+                    if(respData.comments !== undefined || respData.comments !== ''){
+                        comentario_vazio = respData.comments;
+
+                    }
+
                     $("#loading-content").hide();
                     $("#content-modal").show()
                     $("#button-footer").show();
 
                 });
+
+                $("#note_removal").val(comentario_vazio);
 
                 if(paymentStatus.trim() != "")
                 {
@@ -586,6 +599,7 @@ $(document).ready(function() {
             
             let idDriverRemovalDumpsterSelected    = $("#name_driver_removal_selected").val();
             let nameDriverRemovalDumpsterSelected  = $("#name_driver_removal_selected").find('option:selected').text()
+            let commentsRemoval                    = $("#note_removal").val();
 
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
             let paymentStatus       = ($("#payment_status").val() == "1") ? true : false;
@@ -597,6 +611,7 @@ $(document).ready(function() {
                 data: { 
                     id_driver : idDriverSelected,
                     id_driver_removal_dumpster : idDriverRemovalDumpsterSelected,
+                    comments_removal : commentsRemoval,
                     effective_date_removal : effectiveDateRemoval,
                     payment_status : paymentStatus,
                     id_reg: idReg, 

@@ -214,14 +214,14 @@
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="dumpster_total_opened">NÚMERO CAÇAMBA</label>
-                                                                                                            <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_number }}"/>
+                                                                                                            <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_number }}" disabled/>
                                                                                                         </div>
                                                                                                     </div>
                                                 
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="landfill">ATERRO</label>
-                                                                                                            <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill">
+                                                                                                            <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill" disabled>
                                                                                                             
                                                                                                                 <option value="">----</option>
                                                                                                                 <?php if(isset($landfills)):?>
@@ -242,7 +242,7 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <label for="driver">MOTORISTA</label>
-                                                                                                            <select class="select2 form-control form-control-lg" id="driver" name="id_driver">
+                                                                                                            <select class="select2 form-control form-control-lg" id="driver" name="id_driver" disabled>
                                                                                                                 <option value="">----</option>
                                                                                                                 <?php if(isset($drivers)):?>
                                                                                                                     <?php foreach($drivers as $driver):?>
@@ -462,10 +462,8 @@
                                                                                                 <div class="col-12 text-center">
 
                                                                                                     <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
-
-                                                                                                    {{-- <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?> --}}
                                                                                                         <button class="btn btn-dark " id="btn_finish_demand">CONCLUIR PEDIDO</button>
-                                                                                                    {{-- <?php endif; ?> --}}
+
 
                                                                                                     <h3 class="text-success text-center py-3" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
                                                                                                     <h4 class="text-danger text-center py-3" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
@@ -481,27 +479,6 @@
                                                                         </section>                            
                                                                     </div>
                                                                 </div>
-{{-- 
-                                                                <div class="col-xl-3 col-md-4 col-12">
-                                                                    <div class="card">
-                                                                        <div class="card-body">
-                                                                            
-                                                                            <button class="btn btn-success btn-block" id="btn_update" tabindex="4">ATUALIZAR</button>
-
-                                                                            <?php if($value->date_effective_removal_dumpster == null || $value->date_effective_removal_dumpster == "" ): ?>
-                                                                                <button class="btn btn-dark btn-block mb-75" id="btn_finish_demand">ENCERRAR ESTE CHAMADO</button>
-                                                                                <button class="btn btn-dark btn-warning mb-75" id="btn_finish_all_demands">ENCERRAR TODOS OS CHAMADOS RELACIONADOS</button>
-                                                                            <?php endif; ?>
-                                                                            <hr/>
-                                                                            <h3 class="text-success text-center" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
-                                                                            <h4 class="text-danger text-center" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
-                                                                            <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3>
-                                                                            <h4 class="text-danger text-center" id="message-error-finished" style="display:none"><b>Erro ao encerrar o chamado!</b></h4>
-                                                                            
-                                                                        </div>
-                                                                    </div>
-                                                                </div> 
---}}
 
                                                             </div>
                                                         </form>
@@ -800,6 +777,10 @@
                     'date_effective_paymen' : dateEffectivePaymen
                 },
                 success: function(dataResponse) {
+console.log("Form Edit,,,");
+console.log(dataResponse);
+console.log("Form Edit,,,");
+return false;
                     if(dataResponse){
 
                         window.location.href = '{{ route('calldemand.list')}}';
