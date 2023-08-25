@@ -1056,7 +1056,7 @@ class CallDemandController extends Controller
         // "id_demand: ".$request->id_demand;
 
         $idDriverRemovalDumpster = DB::table('call_demand')
-        ->select(['employee.name', 'call_demand.comments'])
+        ->select(['call_demand.id','employee.name', 'call_demand.comments'])
         ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
         ->join('employee', 'employee.id', '=', 'driver.id_employee')
         ->where('call_demand.dumpster_removal', (bool)$request->dumpster_removal)

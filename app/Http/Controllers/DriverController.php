@@ -201,6 +201,7 @@ class DriverController extends Controller
 
         foreach ($call_demands as $call_demand) { $dados_organizados[$call_demand->id_cliente] = null; }
 
+
         $chamado_indice_cliente = 0;
         $quantidade_cacamba = 0;
         $tipo_servico = '';
@@ -211,9 +212,6 @@ class DriverController extends Controller
             {
                 if($call_demand->cacamba_retirada == true){
                     $chamado_indice_cliente = $call_demand->id_cliente;
-                    // $tipo_servico           = $call_demand->tipo_servico;
-                    // $quantidade_cacamba     = $call_demand->quantidade_cacamba;
-    
                     $dados_organizados[$call_demand->id_cliente][1] = array(
                         'id_ficha' => $call_demand->ficha,
                         'status_retirada' => $call_demand->cacamba_retirada,
@@ -233,7 +231,7 @@ class DriverController extends Controller
                     continue;
                 }else{
 
-                    // Valida se já existe titulo de serviço na variável 
+                    // Valida se já existe titulo do serviço na variável 
                     if(strpos($tipo_servico, $call_demand->tipo_servico) === false){
 
                         $tipo_servico       .= '|'.$call_demand->tipo_servico;

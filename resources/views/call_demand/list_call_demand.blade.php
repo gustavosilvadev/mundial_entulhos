@@ -496,7 +496,6 @@ $(document).ready(function() {
                 id_demand     = $(this).find("td:eq(1)").text().split('/')[1];
                 nameDriver    = $(this).find("td:eq(17)").text();
                 comments_removal  = $(this).find("td:eq(12)").text();
-                comentario_vazio  = comments_removal;
                 nameDriverRemoval = "";
                 paymentStatus = $(this).find("td:eq(18)").text().toUpperCase();
                 dateEffectiveRemoval = $(this).find("td:eq(8)").text();
@@ -519,43 +518,46 @@ $(document).ready(function() {
                 }else{
 
                     $('#name_driver_selected option').eq(0).prop('selected', true);
-
                 }
-
   
                 // SELECIONA MOTORISTA DE ATENDIMENTO RETIRADA
                 $.get('{{ route('showremovaldumpster.demand') }}',{ id_demand_reg: id_reg, id_demand: id_demand, dumpster_removal: true }).done(function(respData){
+                    if(respData){
 
-                    if(respData.name !== undefined || respData.name !== ''){
-                        // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
-                        let opts = document.getElementById("name_driver_removal_selected").options;
-                        let indexOptionDriverRemoval = 0;
-                        for(var i = 0; i < opts.length; i++) {
-                            if(opts[i].innerText == respData.name) {
-                                indexOptionDriverRemoval = i;
-                                break;
+                        if(respData.name !== undefined || respData.name !== ''){
+                            // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
+                            let opts = document.getElementById("name_driver_removal_selected").options;
+                            let indexOptionDriverRemoval = 0;
+                            for(var i = 0; i < opts.length; i++) {
+                                if(opts[i].innerText == respData.name) {
+                                    indexOptionDriverRemoval = i;
+                                    break;
+                                }
                             }
+                            $('#name_driver_removal_selected option').eq(indexOptionDriverRemoval).prop('selected', true);
+                        }else{
+
+                            $('#name_driver_removal_selected option').eq(0).prop('selected', true);
+
                         }
-                        $('#name_driver_removal_selected option').eq(indexOptionDriverRemoval).prop('selected', true);
+
+                        if(respData.comments !== undefined || respData.comments !== ''){
+                            $("#note_removal").val(respData.comments);
+                        }else{
+                            $("#note_removal").val(comments_removal);
+                        }
                     }else{
 
-                        $('#name_driver_removal_selected option').eq(0).prop('selected', true);
-
+                        $("#note_removal").val(comments_removal);
                     }
-
-                    if(respData.comments !== undefined || respData.comments !== ''){
-                        comentario_vazio = respData.comments;
-
-                    }
-
+                    
                     $("#loading-content").hide();
                     $("#content-modal").show()
                     $("#button-footer").show();
 
                 });
 
-                $("#note_removal").val(comentario_vazio);
-
+                
                 if(paymentStatus.trim() != "")
                 {
                     if(paymentStatus.trim() != 'SIM'){
