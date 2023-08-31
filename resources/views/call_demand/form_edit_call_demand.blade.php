@@ -8,8 +8,16 @@
 // echo "date_effective_paymen: ".date('Y-m-d', strtotime($calldemandpayment->date_effective_paymen));
 // print_r($calldemandpayment->receipt_or_nf);
 // print_r($calldemandpayment);
-// print_r($calldemandpayment);
-// die();
+/*
+echo '<pre>';
+var_dump($calldemand[0]->dumpster_replacement == true);
+
+// [dumpster_allocation] => 1
+// [dumpster_replacement] => 0
+echo '</pre>';
+die();
+*/
+
 ?>
 
 @include('partials.header_teste')
@@ -98,7 +106,7 @@
                                                                                                     <div class="col-md-6">
                                                                                                         <div class="form-group">
                                                                                                             <label for="id_client">CLIENTE</label>
-                                                                                                            <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}" required />
+                                                                                                            <input type="text" class="form-control only-text" name="client_name_new" id="client_name_new" minlength="2" maxlength="44" value="{{ $value->name }}" required disabled/>
                                                             
                                                                                                         </div>
                                                                                                     </div>
@@ -120,6 +128,7 @@
                                                                                                                 <?php endif; ?>
                                                                                                                 
                                                                                                             </select> 
+                                                                                                            <input type="hidden" id="status_servico" name="" value="{{ $value->dumpster_allocation }}"/>
                                                                                                         </div>
                                                                                                     </div>                                                                                                     
                                                                                                 </div>
@@ -196,7 +205,7 @@
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="dumpster_total">QTD CAÇAMBAS</label>
-                                                                                                            <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_quantity }}"/>
+                                                                                                            <input type="number" name="dumpster_total" class="form-control"  id="dumpster_total" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_quantity }}" disabled/>
                                                                                                         </div>
                                                                                                     </div>
 
@@ -210,18 +219,26 @@
                                                                                                     </div>
                                                             
 
-
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="dumpster_total_opened">NÚMERO CAÇAMBA</label>
-                                                                                                            <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened" min="0" max="1000" placeholder="0" value="{{ $value->dumpster_number }}" disabled/>
+                                                                                                            <input type="number" name="dumpster_total_opened" class="form-control" id="dumpster_total_opened"  value="{{ $value->dumpster_number }}"/>
                                                                                                         </div>
                                                                                                     </div>
-                                                
+                                                                                                    
+                                                                                                    <?php if($value->dumpster_replacement == true): ?>
+
+                                                                                                        <div class="col-md-2">
+                                                                                                            <div class="form-group">
+                                                                                                                <label for="dumpster_number_substitute">NÚMERO CAÇAMBA TROCA</label>
+                                                                                                                <input type="number" name="dumpster_number_substitute" class="form-control" id="dumpster_number_substitute"  value="{{ $value->dumpster_number_substitute }}"/>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    <?php endif; ?>                                                
                                                                                                     <div class="col-md-2">
                                                                                                         <div class="form-group">
                                                                                                             <label for="landfill">ATERRO</label>
-                                                                                                            <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill" disabled>
+                                                                                                            <select class="select2 form-control form-control-lg" id="landfill" name="id_landfill" {{( $value->dumpster_replacement == true) ? '' : 'disabled'}}>
                                                                                                             
                                                                                                                 <option value="">----</option>
                                                                                                                 <?php if(isset($landfills)):?>
@@ -242,7 +259,7 @@
                                                                                                     <div class="col-md-4">
                                                                                                         <div class="form-group">
                                                                                                             <label for="driver">MOTORISTA</label>
-                                                                                                            <select class="select2 form-control form-control-lg" id="driver" name="id_driver" disabled>
+                                                                                                            <select class="select2 form-control form-control-lg" id="driver" name="id_driver">
                                                                                                                 <option value="">----</option>
                                                                                                                 <?php if(isset($drivers)):?>
                                                                                                                     <?php foreach($drivers as $driver):?>
@@ -300,8 +317,9 @@
                                                                                                         <div class="form-group">
 
                                                                                                             <label for="period">DATA ALOCAÇÃO</label>
-                                                                                                            <input type="hidden" id="date_allocation_dumpster" value="{{ $value->date_allocation_dumpster }}" />
-                                                                                                            <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/>
+                                                                                                            {{-- <input type="hidden" id="date_allocation_dumpster" value="{{ $value->date_allocation_dumpster }}" /> --}}
+                                                                                                            {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/> --}}
+                                                                                                            <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date date-mask" data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/>
                                                                                                         </div>    
                                                                                                     </div>
 
@@ -459,17 +477,18 @@
                                                                                                 </div>                                                                        
                                                                                                 <hr />
 
-                                                                                                <div class="col-12 text-center">
+                                                                                                <?php if($value->service_status == 0): ?>
+                                                                                                    <div class="col-12 text-center action-btns">
 
-                                                                                                    <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
+                                                                                                        <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
                                                                                                         <button class="btn btn-dark " id="btn_finish_demand">CONCLUIR PEDIDO</button>
 
-
-                                                                                                    <h3 class="text-success text-center py-3" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
-                                                                                                    <h4 class="text-danger text-center py-3" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
-                                                                                                    {{-- <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3> --}}
-                                                                                                    <h4 class="text-danger text-center" id="message-error-finished" style="display:none"><b>Erro ao encerrar o chamado!</b></h4>
-                                                                                                </div>                                                                                                    
+                                                                                                        <h3 class="text-success text-center py-3" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
+                                                                                                        <h4 class="text-danger text-center py-3" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
+                                                                                                        {{-- <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3> --}}
+                                                                                                        <h4 class="text-danger text-center" id="message-error-finished" style="display:none"><b>Erro ao encerrar o chamado!</b></h4>
+                                                                                                    </div>
+                                                                                                <?php endif; ?>                                                                                                 
 
                                                                                             </div>
 
@@ -507,10 +526,11 @@
 <script>
 
     $(document).ready(function(){
+        let isRtl = $('html').attr('data-textdirection') === 'rtl';
 
-        $('.date_format_allocation_edit').flatpickr({
-            dateFormat: "d/m/Y"
-        }).setDate($('#date_allocation_dumpster').val());
+        // $('.date_format_allocation_edit').flatpickr({
+        //     dateFormat: "d/m/Y"
+        // }).setDate($('#date_allocation_dumpster').val());
 
         $('.date_payment_forecast_edit').flatpickr({
             dateFormat: "d/m/Y"
@@ -616,7 +636,6 @@
         }
         
         function validateFormInputs(){
-
             $('#form').validate({
                 rules: {
                     client_name_new: {
@@ -660,10 +679,10 @@
                     price_unit: {
                         required: true
                     },
+                    // dumpster_total_opened: {
+                    //     required: false
+                    // },
                     dumpster_total: {
-                        required: true
-                    },
-                    dumpster_total_opened: {
                         required: true
                     },
                     period: {
@@ -691,7 +710,7 @@
                     phone: "Campo <b>Telefone</b> deve ser preenchido!",
                     price_unit: "Campo <b>Preço Unidade</b> deve ser preenchido!",
                     dumpster_total: "Campo <b>Total de Caçambas</b> deve ser preenchido!",
-                    dumpster_total_opened: "Campo <b>Total em aberto</b> deve ser preenchido!",
+                    // dumpster_total_opened: "Campo <b>Total em aberto</b> deve ser preenchido!",
                     id_landfill: "Campo <b>Aterro</b> deve ser preenchido!",
                     period: "Campo <b>Período</b> deve ser preenchido!",
                     id_driver: "Campo <b>Motorista</b> deve ser preenchido!",
@@ -724,6 +743,9 @@
             let state           = $("input[name=state]").val();
             let phone           = $("input[name=phone]").val();
             let price_unit      = $("input[name=price_unit]").val();
+            let dumpster_total_opened = $("#dumpster_total_opened").val();
+            let dumpster_number_substitute = $("#dumpster_number_substitute").val();
+            let landfill        = $("#landfill").val();
             let driver          = $("#driver").val();
             let dumpster_total  = $("input[name=dumpster_total]").val();
             let comments        = $("#note").val();
@@ -742,6 +764,11 @@
             let datePaymentForecast = $("input[name=date_payment_forecast]").val();
             let dateEffectivePaymen = $("input[name=date_effective_paymen]").val();
 
+// console.log("dumpster_total_opened: " + dumpster_total_opened);
+// console.log("dumpster_number_substitute: " + dumpster_number_substitute);
+// console.log("landfill: " + landfill);
+// console.log("driver: " + driver);
+
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: 'POST',
@@ -758,6 +785,9 @@
                     'state' : state,
                     'phone' : phone,
                     'price_unit' : price_unit,
+                    "dumpster_number" : dumpster_total_opened,
+                    "dumpster_number_substitute" : dumpster_number_substitute,
+                    "id_landfill" : landfill,
                     'id_driver' : driver,
                     'dumpster_total' : dumpster_total,
                     'comments' : comments,
@@ -777,18 +807,26 @@
                     'date_effective_paymen' : dateEffectivePaymen
                 },
                 success: function(dataResponse) {
-console.log("Form Edit,,,");
-console.log(dataResponse);
-console.log("Form Edit,,,");
-return false;
                     if(dataResponse){
 
-                        window.location.href = '{{ route('calldemand.list')}}';
+                        // window.location.href = '{{ route('calldemand.list')}}';
+                        toastr['success']('Dados atualizados', 'Atualizado com sucesso!', {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl
+                        });
+
                     }else
                         $("#message-error").css("display","block");
                 },
                 error: function(responseError){
-                    alert("Erro interno: " + responseError);
+                    toastr['error']('👋 Ocorreu um erro durante a atualização dos dados.', 'Erro ao atualizar!', {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl
+                    });
+
+
                     console.log(responseError);
                     console.log("***********");
                 }
@@ -910,65 +948,161 @@ return false;
 
     $("#btn_finish_demand").on('click', function(e){
         e.preventDefault();
-/*
-        if($("#landfill").val() == '')
+
+        let isRtl = $('html').attr('data-textdirection') === 'rtl';
+        let dumpster_number  = $("#dumpster_total_opened").val();
+        let dumpster_number_substitute  = $("#dumpster_number_substitute").val();
+        let landfill  = $("#landfill").val();
+        let driver    = $("#driver").val();
+
+        if(dumpster_number_substitute !== undefined && landfill == '')
         {
-            alert("Selecione o aterro!");
+            toastr['warning']('👋 Aterro não selecionado.', 'Selecione o Aterro!', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+            });
         
+            return false;
         }else if($("#driver").val() == ''){
-            alert("Selecione o motorista!");
+            toastr['warning']('👋 Motorista não foi selecionado.', 'Selecione o motorista!', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+            });
+
+            return false;
         
-        }else{
-            finishDemand(false);
+        }else if(dumpster_number === "" || dumpster_number === "0"){
+
+            toastr['warning']('👋 Preencha o númeero da caçamba.', 'Número da caçamba não preenchida!', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+            });
+        }else if(dumpster_number_substitute !== undefined && dumpster_number_substitute === "" || dumpster_number_substitute === "0"){
+
+            toastr['warning']('👋 Preencha o númeero da caçamba substituta.', 'Caçamba substituta não preenchida!', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+            });
+
+            return false;
+        }else if(driver === "" || driver === "0"){
+            toastr['warning']('👋 Preencha no formulário o nome do motorista.', 'Selecione o motorista!', {
+                closeButton: true,
+                tapToDismiss: false,
+                rtl: isRtl
+            });
+
+            return false;            
         }
-*/        
-        finishDemand();
-
-    });
-
-/*    
-    $("#btn_finish_all_demands").on('click', function(e){
-        e.preventDefault();
-
-        if($("#landfill").val() == '')
-        {
-            alert("Selecione o aterro!");
-        
-        }else if($("#driver").val() == ''){
-            alert("Selecione o motorista!");
-        
-        }else{
-            finishDemand(true);
-        }            
-    });
-*/    
-    
-    function finishDemand(){
 
         let idDemandReg = $('input[name=id_demand_reg]').val();
-        let idDemand    = $('input[name=id_demand]').val();
-        let typeService = $('#type_service').val();
-        let idLandfill  = $("#landfill").val();
+        let urlFinishDemand = '{{ route('finish.demand') }}';
 
+        // let dataResponseCheckCacamba1 = checkCacambaDisponivel(idDemandReg, dumpster_number);
+        // let dataResponseCheckCacamba2 = checkCacambaDisponivel(idDemandReg, dumpster_number_substitute);
 
-        $.ajax({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            method: 'POST',
-            url: '{{ route('finish.demand') }}',
-            data: { 
-                id_call_demand_reg: idDemandReg
-            },
-            success: function(dataResponse) {
+        // checa caçamba:
+        let checkDumpsterULR = '{{ url('available_dumpster') }}';
 
-                window.location.href = '{{ route('calldemand.list')}}';
+        $.get(checkDumpsterULR,{ id_demand_reg: idDemandReg,  dumpsterNumber: dumpster_number } )
+        .done(function ( dataResponse1 ){
+            let checkCacamba1 =  Boolean(dataResponse1) ;
 
-            },
-            error: function(responseError){
-                alert("Erro interno: " + responseError);
-                console.log(responseError);
-                console.log("***********");
+            if(dumpster_number_substitute !== undefined)
+            {
+                $.get(checkDumpsterULR,{ id_demand_reg: idDemandReg,  dumpsterNumber: dumpster_number_substitute } )
+                .done(function ( dataResponse2 ){            
+                    let checkCacamba2 = Boolean(dataResponse2);
+
+                    if(checkCacamba1 == true && checkCacamba2 == true){
+                        $.ajax({
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            method: 'POST',
+                            url: urlFinishDemand,
+                            data: { 
+                                id_call_demand_reg: idDemandReg,
+                                dumpster_number: dumpster_number,
+                                dumpster_number_substitute: dumpster_number_substitute,
+                                id_driver: driver,
+                                id_landfill: landfill,
+                                
+                            },
+                            success: function(dataResponse) {
+
+                                // window.location.href = '{{ route('calldemand.list')}}';
+
+                                toastr['success']('O pedido foi encerrado', 'Pedido encerrado com sucesso!', {
+                                        closeButton: true,
+                                        tapToDismiss: false,
+                                        rtl: isRtl
+                                        });
+
+                                        $('.action-btns').hide();
+                                        return false;
+                            },
+                            error: function(responseError){
+                                alert("Erro interno: " + responseError);
+                                console.log(responseError);
+                                console.log("***********");
+                            }
+                        }); 
+                    }else{
+                        alert("Caçamba para troca inválida!");
+                        return false;
+                    }             
+                });
+            }else{
+
+                if(checkCacamba1 == true){
+                    $.ajax({
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        method: 'POST',
+                        url: urlFinishDemand,
+                        data: { 
+                            id_call_demand_reg: idDemandReg,
+                            dumpster_number: dumpster_number,
+                            id_driver: driver
+                        },
+                        success: function(dataResponse) {
+
+                            // window.location.href = '{{ route('calldemand.list')}}';
+                            toastr['success']('O pedido foi encerrado', 'Pedido encerrado com sucesso!', {
+                                    closeButton: true,
+                                    tapToDismiss: false,
+                                    rtl: isRtl
+                                    });
+
+                                    $('.action-btns').hide();
+                                    return false;
+                        },
+                        error: function(responseError){
+                            alert("Erro interno: " + responseError);
+                            console.log(responseError);
+                            console.log("***********");
+                            return false;
+                        }
+                    }); 
+                }else{
+                    alert("Caçamba para alocação inválida!");
+                    return false;
+                }                
             }
-        });  
+        });
+    });
+
+    function checkCacambaDisponivel(id_ficha, numeroCacamba){
+
+        let checkDumpsterULR = '{{ url('available_dumpster') }}';
+
+        $.get(checkDumpsterULR,{ id_demand_reg: id_ficha,  dumpsterNumber: numeroCacamba } )
+        .done(function ( dataResponse ){
+            return Boolean(dataResponse);
+        });
+
     }
-    
+
 </script>

@@ -53,16 +53,17 @@ class DumpsterServiceDemandController extends Controller
         }
     }
 
-
     public function checkAvailableDumpster(Request $request)
     {
         $dumpsterNumber = $request->dumpsterNumber;
-        $call_demand = CallDemand::where('id','<>',$request->id_demand_reg)
+        $id_demand_reg  = $request->id_demand_reg;
+        $call_demand = CallDemand::where('id','<>',$id_demand_reg)
                 ->where('dumpster_number', $dumpsterNumber)
                 ->where('dumpster_number_substitute', 0)
                 ->where('service_status', 0)
-                ->orWhere(function($query) use ($dumpsterNumber){
-                    $query->where('dumpster_number_substitute', $dumpsterNumber)
+                ->orWhere(function($query) use ($id_demand_reg, $dumpsterNumber){
+                    $query->where('id','<>',$id_demand_reg)
+                    ->where('dumpster_number_substitute', $dumpsterNumber)
                     ->where('service_status', 0);
                 })->first();
         

@@ -42,8 +42,8 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="username">Nome</label>
-                                    <input type="text" class="form-control"  name="name" id="username" />
+                                    <label for="">Nome</label>
+                                    <input type="text" class="form-control" name="nome_user" id="username" value="&nbsp;" autocomplete="off"/>
                                 </div>
                             </div>
 
@@ -144,6 +144,7 @@
 <script>
 
     $(document).ready(function(){
+        
         $("#form").validate({
             rules: {
                 access_permission: {

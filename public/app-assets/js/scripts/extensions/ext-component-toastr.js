@@ -35,7 +35,8 @@ $(function () {
 
   // Success Type
   typeSuccess.on('click', function () {
-    toastr['success']('👋 Jelly-o macaroon brownie tart ice cream croissant jelly-o apple pie.', 'Success!', {
+    // toastr['success']('👋 Jelly-o macaroon brownie tart ice cream croissant jelly-o apple pie.', 'Success!', {
+    toastr['success']('Dados.', 'Atualizado com sucesso!', {
       closeButton: true,
       tapToDismiss: false,
       rtl: isRtl

@@ -25,6 +25,7 @@
     <script src="{{ URL::asset('public/app-assets/vendors/js/extensions/dragula.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
+    <script src="{{ URL::asset('public/app-assets/js/scripts/extensions/ext-component-toastr.js') }}"></script>
 
 
     <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>

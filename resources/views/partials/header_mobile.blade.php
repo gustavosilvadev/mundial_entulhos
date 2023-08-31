@@ -170,5 +170,23 @@
 
 
 </head>
+<style>
+
+.prevent-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.ul-list{
+    text-align:center;width:450px;
+}
+
+.li-item{
+    display:inline-block;padding:15px;
+}
+
+</style>
+
 <body class="vertical-layout vertical-menu-modern content-left-sidebar navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="content-left-sidebar">
 

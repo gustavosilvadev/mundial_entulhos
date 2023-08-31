@@ -43,7 +43,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
 
-        if (isset($request->name)
+        if (isset($request->nome_user)
             && isset($request->surname)
             && isset($request->email)
             && isset($request->login)
@@ -53,7 +53,7 @@ class EmployeeController extends Controller
 
 
             $employee = new Employee();
-                $employee->name     = $request->name;
+                $employee->name     = $request->nome_user;
                 $employee->surname  = $request->surname;
                 $employee->email    = $request->email;
                 $employee->login    = $request->login;
