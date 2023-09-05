@@ -445,7 +445,12 @@ class DriverController extends Controller
 
         if($request->get_data == true){
 
-            return $lista_chamados;
+            // return $lista_chamados;
+
+            return array(
+                'lista_chamados'=> $lista_chamados,
+                'lista_chamados_finalizados'=> $lista_chamados_finalizados
+            );
         }
 
         return view('driver.list_demand_driver',[
@@ -632,6 +637,7 @@ class DriverController extends Controller
             'call_demand.id_demand as id_chamado',
             'call_demand.name as nome_cliente',
             'call_demand.type_service  as tipo_servico',
+            'call_demand.id_parent  as id_pai',
             'call_demand.dumpster_allocation as colocacao',
             'call_demand.dumpster_replacement as troca',
             'call_demand.dumpster_removal as remocao',
@@ -640,18 +646,13 @@ class DriverController extends Controller
             'call_demand.dumpster_number as numero_cacamba',
             'call_demand.dumpster_number_substitute as numero_cacamba_substituto',
             'call_demand.comments as observacao_operacao',
-            'call_demand.id_landfill as id_aterro',
             'call_demand.service_status as status_atendimento'
-        )
+        )->selectRaw('(SELECT chamado1.id_landfill FROM call_demand chamado1 WHERE chamado1.id = call_demand.id_parent) AS id_aterro')
+
         ->where('call_demand.id', $request->id_ficha)
-        // ->where('call_demand.id_client', $request->id_cliente_chamado)
-        // ->where('call_demand.id_driver', $request->idmotorista)
         ->where('call_demand.dumpster_allocation', $status_colocacao)
         ->where('call_demand.dumpster_replacement', $status_troca)
         ->where('call_demand.dumpster_removal', $status_retirada)
-
-        // ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), $request->dataalocacao)
-
         ->get();
    
         return $calldemands;
@@ -711,35 +712,58 @@ class DriverController extends Controller
                 }
             }
         }
+        $call_demand_updated_data = null;
+        if($request->type_service == 'RETIRADA'){
 
-        // FINALIZA ATENDIMENTO
-        $call_demand_updated_data = CallDemand::where('id', $request->id_demand_reg)
-        ->where('id_demand', $request->id_demand)
-        ->where('type_service', $request->type_service)
-        ->where('id_driver','=', $driver_data->id)
-        ->update([
-            'service_status' => $request->service_status,
-            'date_start' => date('Y-m-d H:i:s'),
-            'dumpster_number' => $request->dumpster_numbers,
-            'dumpster_number_substitute' => isset($request->dumpster_number_sub) ? $request->dumpster_number_sub : 0,
-            'id_landfill' => $request->id_landfill
-        ]);
+            // FINALIZA ATENDIMENTO
+            $call_demand_updated_data = CallDemand::where('id', $request->id_demand_reg)
+            ->where('type_service', $request->type_service)
+            ->where('id_driver','=', $driver_data->id)
+            ->update([
+                'service_status' => $request->service_status,
+                'date_start' => date('Y-m-d H:i:s'),
+                'dumpster_number' => $request->dumpster_numbers,
+                'id_landfill' => $request->id_landfill
+            ]);
 
+        }else{
+
+
+            // FINALIZA ATENDIMENTO
+            $call_demand_updated_data = CallDemand::where('id', $request->id_demand_reg)
+            ->where('id_demand', $request->id_demand)
+            ->where('type_service', $request->type_service)
+            ->where('id_driver','=', $driver_data->id)
+            ->update([
+                'service_status' => $request->service_status,
+                'date_start' => date('Y-m-d H:i:s'),
+                'dumpster_number' => $request->dumpster_numbers,
+                'dumpster_number_substitute' => isset($request->dumpster_number_sub) ? $request->dumpster_number_sub : 0
+                // 'id_landfill' => $request->id_landfill
+            ]);
+        }
         if($call_demand_updated_data){
-                
-            $activityUserDemandDumpster = new ActivityUserDemandDumpster();
-            $activityUserDemandDumpster->id_call_demand_reg = $request->id_demand_reg;
-            $activityUserDemandDumpster->id_call_demand     = $request->id_demand;
-            $activityUserDemandDumpster->id_employee        = $id_user_employee;
-            $activityUserDemandDumpster->type_service       = $request->type_service;
-            $activityUserDemandDumpster->service_status     = $request->service_status; // STATUS  CHAMADO
 
-            if($activityUserDemandDumpster->save()){
-                return true;
-    
+            $checkIfActivityUserDemandDumpsterExists = ActivityUserDemandDumpster::where('id_call_demand_reg',$request->id_demand_reg)
+            ->where('id_call_demand',$request->id_demand)->get();
+
+            if(!$checkIfActivityUserDemandDumpsterExists){
+                $activityUserDemandDumpster = new ActivityUserDemandDumpster();
+                $activityUserDemandDumpster->id_call_demand_reg = $request->id_demand_reg;
+                $activityUserDemandDumpster->id_call_demand     = $request->id_demand;
+                $activityUserDemandDumpster->id_employee        = $id_user_employee;
+                $activityUserDemandDumpster->type_service       = $request->type_service;
+                $activityUserDemandDumpster->service_status     = $request->service_status; // STATUS  CHAMADO
+
+                if($activityUserDemandDumpster->save()){
+                    return true;
+        
+                }else{
+                    return false;
+                }
             }else{
-                return false;
-            }               
+                return true;
+            }
         }else{
             return false;
         }

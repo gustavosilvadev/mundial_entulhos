@@ -1,43 +1,4 @@
 
-<?php 
-// echo '<pre>';
-// print_r($lista_chamados_finalizados);
-// echo '</pre>';
-// die();
-
-// echo '<pre>';
-// print_r($lista_chamados);
-// echo '</pre>';
-// die();
-
-// foreach ($lista_chamados as $key => $lista_chamado) {
-//     echo '<pre>';
-//     print_r($lista_chamado['status_servico']);
-//     echo '</pre>';
-//     continue;
-// }
-
-
-// foreach($lista_chamados_finalizados as $id_cliente => $chamado_finalizado){
-
-
-// echo "tipo_servico: ".$chamado_finalizado->tipo_servico.
-// "<BR/>endereco: ".$chamado_finalizado->endereco.
-// "<BR/>numero_endereco: ".$chamado_finalizado->numero_endereco.
-// "<BR/>bairro_endereco: ".$chamado_finalizado->bairro_endereco.
-// "<BR/>cidade_endereco: ".$chamado_finalizado->cidade_endereco.
-// "<BR/>cep_endereco: ".$chamado_finalizado->cep_endereco.
-// "<BR/>cacamba_colocacao: ".$chamado_finalizado->cacamba_colocacao.
-// "<BR/>cacamba_retirada: ".$chamado_finalizado->cacamba_retirada.
-// "<BR/>cacamba_troca: ".$chamado_finalizado->cacamba_troca.
-// "<BR/>ficha: ".$chamado_finalizado->ficha.
-// "<BR/>id_cliente: ".$chamado_finalizado->id_cliente.
-// "<BR />***************<BR />";
-// continue;
-// }
-
-// die();
-?>
 @include('partials.header_mobile')
 @include('partials.nav_mobile')
 
@@ -63,21 +24,7 @@
                                             <input type="text" class="form-control border border-secondary dt-date flatpickr-range dt-input date_format_service_search" id="data_filter_demand" data-column="5" placeholder="Selecione a Data" data-column-index="4" name="dt_date" readonly="readonly">
                                         </div>
                                         <div class="col-md-12">
-{{-- 
-                                            <select class="select2 form-control" id="filter_tipo_servico" name="filter_tipo_servico">
-                                                <option value="" selected>
-                                                    Tipo de Serviço
-                                                </option>
-                                                <option value="1">
-                                                    Colocação
-                                                </option>
-                                                <option value="2">
-                                                    Troca
-                                                </option>
-                                                <option value="3">
-                                                    Retirada
-                                                </option>                                            
-                                            </select>    --}}
+
                                         </div>
                                     </div>
                                 </div>
@@ -95,6 +42,11 @@
 
                                 </ul>
 
+                                <div class="modal-body" id="loading-content-list" style="text-align: center;display:none">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Carregando...</span>
+                                    </div>
+                                </div>                                 
                                 <div class="tab-content" id="pills-tabContent">
                                   <div class="tab-pane fade active show" id="principal" role="tabpanel" aria-labelledby="principal-tab">
                                     <div class="todo-task-list-wrapper list-group" style="  max-height: 500px;overflow-y: auto;">
@@ -126,10 +78,6 @@
                                                                         <label class="text-nowrap text-muted mr-1 todo-status-troca" style="display: none;">{{ $chamado_info['status_troca'] }}</label>
                                                                         <label class="text-nowrap text-muted mr-1 todo-id-ficha" style="display: none;">{{ implode("|",$chamado_info['id_fichas']) }}</label>
                                                                         <label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">{{ $chamado_info['id_cliente'] }}</label> 
-        
-        
-                                                                        {{-- <label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">{{ $chamado_info['id_motorista'] }}</label> --}}
-                                                                        {{-- <label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">{{ $chamado_info['data_operacao'] }}</label> --}}
                                                                         
                                                                         <label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand') }}</label>
                                                                         <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
@@ -154,7 +102,7 @@
                                   </div>
                                   <div class="tab-pane fade" id="pedidos-finalizados" role="tabpanel" aria-labelledby="pedidos-finalizados-tab">
                                     <div class="todo-task-list-wrapper list-group" style="  max-height: 500px;overflow-y: auto;">
-                                        <ul class="todo-task-list media-list" id="todo-task-list">
+                                        <ul class="todo-task-list media-list" id="done-task-list">
                                             <?php if(is_array($lista_chamados)): ?>
         
                                                 <?php foreach($lista_chamados_finalizados as $id_cliente => $chamado_finalizado): ?>
@@ -209,63 +157,6 @@
                                 </div>
                             </div>
 
-
-
-
-                            <!-- Todo List starts -->
-                            {{-- 
-                            <div class="todo-task-list-wrapper list-group">
-                                <ul class="todo-task-list media-list" id="todo-task-list">
-                                    <?php if(is_array($lista_chamados)): ?>
-
-                                        <?php foreach($lista_chamados as $id_cliente => $chamado_info): ?>
-                                        
-
-                                            <li class="todo-item my-2 border">
-                                                <div class="todo-title-wrapper">
-                                                    <div class="todo-title-area prevent-select">
-                                                        <i data-feather="more-vertical" class="drag-icon"></i>
-
-                                                        <div>
-                                                                <h3 class="bg-dark text-white todo-title">{{ $chamado_info['tipo_servico'] }} ({{$chamado_info['quantidade_cacamba']}})</h3>
-                                                                
-                                                                <h4 class="text-dark todo-title-address">
-                                                                    {{ $chamado_info['endereco'].', '
-                                                                .$chamado_info['numero_endereco'].', '
-                                                                .$chamado_info['bairro_endereco'].', '
-                                                                .$chamado_info['cidade_endereco'].' - '
-                                                                .$chamado_info['cep_endereco']
-                                                                }}
-                                                                </h4>
-                                                                
-                                                                <label class="text-nowrap text-muted mr-1 todo-status-colocacao" style="display: none;">{{ $chamado_info['status_colocacao'] }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-status-retirada" style="display: none;">{{ $chamado_info['status_retirada'] }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-status-troca" style="display: none;">{{ $chamado_info['status_troca'] }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-id-ficha" style="display: none;">{{ implode("|",$chamado_info['id_fichas']) }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">{{ $chamado_info['id_cliente'] }}</label> 
-
-                                                                <label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand') }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>
-                                                                <label class="text-nowrap text-muted mr-1 todo-url-check-dumpster" style="display: none;">{{ url('available_dumpster') }}</label>
-
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-                                        
-                                        <?php endforeach; ?>
-
-
-                                    <?php else: ?>
-                                </ul>
-                                <div class="no-results">
-                                    <h5>Sem item disponível</h5>
-                                </div>
-                                <?php endif; ?>  
-                            </div>
-                            --}}    
-                            <!-- Todo List ends -->
                         </div>
 
                         <!-- Right Sidebar starts -->
@@ -339,9 +230,10 @@
             let dataAlocacao = $(this).val();
             
             if(dataAlocacao.length > 0){
-                $('.loadingMask').show();
+                $('#loading-content-list').show();
             
                 $("#todo-task-list li").remove();
+                $("#done-task-list li").remove();
 
                 $.ajax({
                         method: 'GET',
@@ -352,29 +244,53 @@
                         },
                         success: function(dataResponse) {
 
-                            $.each(dataResponse, function(i, field) {
-                            
-                                $("#todo-task-list").append('<li class="todo-item my-2 border"><div class="todo-title-wrapper"><div class="todo-title-area prevent-select"><i data-feather="more-vertical" class="drag-icon"></i><div id="task_'+i+'"><div ></li>');
-                                $("#task_"+i).append('<h3 class="bg-dark text-white todo-title">' + field.tipo_servico + ' (' + field.quantidade_cacamba + ')</h3>');
-                                $("#task_"+i).append('<h4 class="text-dark todo-title-address">' + field.endereco +', ' + field.numero_endereco + ', ' + field.bairro_endereco + ', ' +field.cidade_endereco + ' - ' + field.cep_endereco + '</h4>');
+                            if(dataResponse.lista_chamados != ""){
 
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-status-colocacao" style="display: none;">' + field.status_colocacao + '</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-status-retirada" style="display: none;">' + field.status_retirada + '</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-status-troca" style="display: none;">' + field.status_troca + '</label>');
-                                
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-ficha" style="display: none;">' + field.id_fichas.join("|") + '</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">' + field.id_cliente + '</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">' + field.id_motorista + '</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">' + field.data_operacao + '</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand')}}</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>');
-                                $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-check-dumpster" style="display: none;">{{ url('available_dumpster') }}</label>');
-                            });                            
-                            
-                            $('.loadingMask').hide();
+                                $.each(dataResponse.lista_chamados, function(i, field) {
+
+                                    $("#todo-task-list").append('<li class="todo-item my-2 border"><div class="todo-title-wrapper"><div class="todo-title-area prevent-select"><i data-feather="more-vertical" class="drag-icon"></i><div id="task_'+i+'"><div ></li>');
+                                    $("#task_"+i).append('<h3 class="bg-dark text-white todo-title">' + field.tipo_servico + ' (' + field.quantidade_cacamba + ')</h3>');
+                                    $("#task_"+i).append('<h4 class="text-dark todo-title-address">' + field.endereco +', ' + field.numero_endereco + ', ' + field.bairro_endereco + ', ' +field.cidade_endereco + ' - ' + field.cep_endereco + '</h4>');
+
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-status-colocacao" style="display: none;">' + field.status_colocacao + '</label>');
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-status-retirada" style="display: none;">' + field.status_retirada + '</label>');
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-status-troca" style="display: none;">' + field.status_troca + '</label>');
+                                    
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-ficha" style="display: none;">' + field.id_fichas.join("|") + '</label>');
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">' + field.id_cliente + '</label>');
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">' + field.id_motorista + '</label>');
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">' + field.data_operacao + '</label>');
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand')}}</label>');
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>');
+                                    $("#task_"+i).append('<label class="text-nowrap text-muted mr-1 todo-url-check-dumpster" style="display: none;">{{ url('available_dumpster') }}</label>');
+                                });      
+                            }                            
+
+                            if(dataResponse.lista_chamados_finalizados != ""){
+
+                                $.each(dataResponse.lista_chamados_finalizados, function(indice, fieldDoneTask) {
+
+                                    $("#done-task-list").append('<li class="todo-item my-2 border"><div class="todo-title-wrapper"><div class="todo-title-area prevent-select"><i data-feather="more-vertical" class="drag-icon"></i><div id="doneTask_'+indice+'"><div ></li>');
+                                    $("#doneTask_"+indice).append('<h3 class="bg-dark text-white todo-title">' + fieldDoneTask.tipo_servico + ' (' + fieldDoneTask.quantidade_cacamba + ')</h3>');
+                                    $("#doneTask_"+indice).append('<h4 class="text-dark todo-title-address">' + fieldDoneTask.endereco +', ' + fieldDoneTask.numero_endereco + ', ' + fieldDoneTask.bairro_endereco + ', ' +fieldDoneTask.cidade_endereco + ' - ' + fieldDoneTask.cep_endereco + '</h4>');
+
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-status-colocacao" style="display: none;">' + fieldDoneTask.cacamba_colocacao + '</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-status-retirada" style="display: none;">' + fieldDoneTask.cacamba_retirada + '</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-status-troca" style="display: none;">' + fieldDoneTask.cacamba_troca + '</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-id-ficha" style="display: none;">' + fieldDoneTask.ficha + '</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-id-client-demand" style="display: none;">' + fieldDoneTask.id_cliente + '</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-id-driver" style="display: none;">' + fieldDoneTask.id_motorista + '</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-data-alocacao" style="display: none;">' + fieldDoneTask.data_operacao + '</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-url-show-details_demand" style="display: none;">{{ url('get_details_demand')}}</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-url-list-landfill" style="display: none;">{{ url('listlandfill') }}</label>');
+                                    $("#doneTask_"+indice).append('<label class="text-nowrap text-muted mr-1 todo-url-check-dumpster" style="display: none;">{{ url('available_dumpster') }}</label>');
+                                });  
+                            }
+
+                            $('#loading-content-list').hide();
                         },
                         error: function(responseError){
-                            $('.loadingMask').hide();
+                            $('#loading-content-list').hide();
                             alert(responseError);
                         }
                 });

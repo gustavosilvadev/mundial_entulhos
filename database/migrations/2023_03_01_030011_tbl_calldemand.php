@@ -48,7 +48,7 @@ class TblCalldemand extends Migration
             $table->integer('dumpster_number_substitute')->default(0); // NÚMERO DA CAÇAMBA SUBSTITUTA
             $table->integer('days_allocation')->default(0); // QUANTIDADE DE DIAS
             
-            $table->integer('id_landfill')->nullable(); // ID DO ATERRO ++++ PARA NÃO SER OBRIGATÓRIO, O ADM E MOTORISTA DEVEM PREENCHER ESTE CAMPO || O MOTORISTA DEVE OBRIGATORIAMENTE SELECIONAR O ATERRO NO ATO DA RETIRADA 
+            $table->integer('id_landfill')->nullable()->default(0); // ID DO ATERRO ++++ PARA NÃO SER OBRIGATÓRIO, O ADM E MOTORISTA DEVEM PREENCHER ESTE CAMPO || O MOTORISTA DEVE OBRIGATORIAMENTE SELECIONAR O ATERRO NO ATO DA RETIRADA 
 
             $table->integer('id_driver')->nullable(); // MOTORISTA
             $table->integer('service_status')->default(0)->comment('0 - Pendente | 1 - OK');
