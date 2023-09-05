@@ -340,6 +340,7 @@ $(function () {
     let statusColocacao        = (taskStatusColocacao.html() !== undefined && taskStatusColocacao.html() == 1) ? true : false;
     let statusRetirada         = (taskStatusRetirada.html() !== undefined && taskStatusRetirada.html() == 1) ? true : false;
     let statusTroca            = (taskStatusTroca.html() !== undefined && taskStatusTroca.html() == 1) ? true : false;
+    let dataDeHoje             =   new Date();
 
     $("#body_modal").empty();
     $("#atividade_input").empty();
@@ -351,9 +352,7 @@ $(function () {
     let $contador_operacacao = 0;
 
     $lista_id = $id_ficha_param.split("|");
-console.log("$$lista_id$$");
-console.log($lista_id);
-console.log("$lista_id$");
+
     $.each($lista_id, function(chave, $id_ficha) {
 
       $.get(rota_detalhes_pedido.text(),{ 
@@ -423,7 +422,8 @@ console.log("$lista_id$");
                 // CAMPO OBSERVAÇÃO
 
                 // BOTÕES FOOTER
-                  if(item.status_atendimento == 0 ){
+
+                  if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') == item.data_chamado){
                     
                     let btn_encerrar = $('<button/>',
                     {
@@ -574,7 +574,7 @@ console.log("$lista_id$");
 
                   // BOTÕES FOOTER
 
-                  if(item.status_atendimento == 0 ){
+                  if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') == item.data_chamado){
                         let btn_encerrar = $('<button/>',
                         {
                             text: 'ATENDER',
@@ -722,7 +722,7 @@ console.log("$lista_id$");
 
 
               // BOTÕES FOOTER
-              if(item.status_atendimento == 0 ){
+              if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') == item.data_chamado){
 
                 let btn_encerrar = $('<button/>',
                 {

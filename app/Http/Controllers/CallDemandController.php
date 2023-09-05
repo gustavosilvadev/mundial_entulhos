@@ -1052,13 +1052,13 @@ class CallDemandController extends Controller
 
     public function showDriverRemovalDumpster(Request $request)
     {
-
-        // return "dumpster_removal: ".$request->dumpster_removal.
-        // "id_demand_reg: ".$request->id_demand_reg.
-        // "id_demand: ".$request->id_demand;
-
         $idDriverRemovalDumpster = DB::table('call_demand')
-        ->select(['call_demand.id','employee.name', 'call_demand.comments'])
+        ->select([
+        'call_demand.id',
+        'employee.name', 
+        'call_demand.comments',
+        'call_demand.service_status'
+        ])
         ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
         ->join('employee', 'employee.id', '=', 'driver.id_employee')
         ->where('call_demand.dumpster_removal', (bool)$request->dumpster_removal)

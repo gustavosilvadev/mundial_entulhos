@@ -290,7 +290,7 @@
 
                     <input type="hidden" id="iddemand" value="" />
                     <input type="hidden" id="idreg" value="" />
-                    <button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>
+                    {{-- <button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button> --}}
                 </div>
                 
                 <div class="modal-footer" id="button-footer">
@@ -523,6 +523,7 @@ $(document).ready(function() {
                 // SELECIONA MOTORISTA DE ATENDIMENTO RETIRADA
                 $.get('{{ route('showremovaldumpster.demand') }}',{ id_demand_reg: id_reg, id_demand: id_demand, dumpster_removal: true }).done(function(respData){
                     if(respData){
+                        let setDisabled = respData.service_status === 5 ? true : false;
 
                         if(respData.name !== undefined || respData.name !== ''){
                             // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
@@ -546,10 +547,34 @@ $(document).ready(function() {
                         }else{
                             $("#note_removal").val(comments_removal);
                         }
+
+                        if(setDisabled){
+                            $("#name_driver_removal_selected").prop('disabled', setDisabled);
+                            $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
+                            $("#note_removal").prop('disabled', setDisabled);
+                            
+                            if($("#btn_driver_update").length > 0){
+                                $("#btn_driver_update").remove();
+
+                            }
+                            
+                        }else{
+
+                            $("#name_driver_removal_selected").prop('disabled', setDisabled);
+                            $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
+                            $("#note_removal").prop('disabled', setDisabled);                            
+                            if($("#btn_driver_update").length === 0){
+                                $("#content-modal").append('<button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>');
+                            }
+                        }
+
                     }else{
 
                         $("#note_removal").val(comments_removal);
                     }
+
+
+
                     
                     $("#loading-content").hide();
                     $("#content-modal").show()

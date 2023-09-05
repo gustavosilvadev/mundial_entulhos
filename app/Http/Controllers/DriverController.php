@@ -646,7 +646,8 @@ class DriverController extends Controller
             'call_demand.dumpster_number as numero_cacamba',
             'call_demand.dumpster_number_substitute as numero_cacamba_substituto',
             'call_demand.comments as observacao_operacao',
-            'call_demand.service_status as status_atendimento'
+            'call_demand.service_status as status_atendimento',
+            DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as data_chamado')
         )->selectRaw('(SELECT chamado1.id_landfill FROM call_demand chamado1 WHERE chamado1.id = call_demand.id_parent) AS id_aterro')
 
         ->where('call_demand.id', $request->id_ficha)
