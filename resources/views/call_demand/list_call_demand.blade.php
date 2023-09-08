@@ -285,12 +285,26 @@
                     <label for="">Data de Retirada Efetiva</label>
                     <input type="text" name="effective_date_removal_dumpster" id="effective_date_removal_dumpster" class="form-control mb-1 dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation" data-column="5"  data-column-index="4"/>
                     
+
+                    <hr />
+                    <label for="">Aterro</label>
+                    <select class="form-control mb-1" id="landfill_selected">
+                        <option value=""></option>
+                        <?php if($driver_name_demands):?>
+
+                            <?php foreach($landfill_name_demand as $landfill_name):?>
+                                    <option value="{{ $landfill_name->id }}">{{ $landfill_name->name }}</option>
+                            <?php endforeach;?>
+
+                        <?php endif;?>
+                    </select>
+
                     <label for="">Comentário (RETIRADA)</label>
                     <textarea class="form-control mb-1" rows="2" id="note_removal" name="comments" ></textarea>
 
                     <input type="hidden" id="iddemand" value="" />
                     <input type="hidden" id="idreg" value="" />
-                    {{-- <button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button> --}}
+                    <button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>
                 </div>
                 
                 <div class="modal-footer" id="button-footer">
@@ -471,7 +485,14 @@ $(document).ready(function() {
         } );
 
         $('#tbpedido tbody tr').on('click', function (evt) {
-            
+            // reset formulárop
+            $("#content-modal :input").val('');
+            $("#name_driver_removal_selected").prop('disabled', false);
+            $("#effective_date_removal_dumpster").prop('disabled', false);
+            $("#note_removal").prop('disabled', false);
+            $("#landfill_selected").prop('disabled', false);
+
+
             $("#loading-content").show();
             $("#content-modal").hide()
             $("#button-footer").hide();
@@ -494,6 +515,7 @@ $(document).ready(function() {
                 selectedData  = selectedRows.data();
                 id_reg        = $(this).find("td:eq(1)").text().split('/')[0];
                 id_demand     = $(this).find("td:eq(1)").text().split('/')[1];
+                status_atendimento = $(this).find("td:eq(15)").text();
                 nameDriver    = $(this).find("td:eq(17)").text();
                 comments_removal  = $(this).find("td:eq(12)").text();
                 nameDriverRemoval = "";
@@ -502,7 +524,7 @@ $(document).ready(function() {
                 
                 $("#modal-edit").modal('toggle');
 
-
+console.log("status_atendimento: " + status_atendimento.trim(""));
                 if(nameDriver !== ''){
                     // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
                     let opts = document.getElementById("name_driver_selected").options;
@@ -521,9 +543,13 @@ $(document).ready(function() {
                 }
   
                 // SELECIONA MOTORISTA DE ATENDIMENTO RETIRADA
+/*                
                 $.get('{{ route('showremovaldumpster.demand') }}',{ id_demand_reg: id_reg, id_demand: id_demand, dumpster_removal: true }).done(function(respData){
                     if(respData){
                         let setDisabled = respData.service_status === 5 ? true : false;
+                        // console.log("id_demand: ::: " + id_demand);
+                        // console.log("respData.id: ::: " + respData.id);
+                        // console.log("setDisabled: ::: " + setDisabled);
 
                         if(respData.name !== undefined || respData.name !== ''){
                             // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
@@ -542,30 +568,43 @@ $(document).ready(function() {
 
                         }
 
+                        // aterro begin
+                        $("#landfill_selected").val(respData.id_landfill);
+                        // aterro end                        
+
                         if(respData.comments !== undefined || respData.comments !== ''){
                             $("#note_removal").val(respData.comments);
                         }else{
                             $("#note_removal").val(comments_removal);
                         }
-
+                        
                         if(setDisabled){
                             $("#name_driver_removal_selected").prop('disabled', setDisabled);
                             $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
                             $("#note_removal").prop('disabled', setDisabled);
+                            $("#landfill_selected").prop('disabled', setDisabled);
                             
-                            if($("#btn_driver_update").length > 0){
-                                $("#btn_driver_update").remove();
+                            // $("#btn_driver_update").hide();
 
-                            }
+                            // if($("#btn_driver_update").length > 0){
+                                // $("#btn_driver_update").remove();
+                            // }
+                                
+
                             
                         }else{
 
                             $("#name_driver_removal_selected").prop('disabled', setDisabled);
                             $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
-                            $("#note_removal").prop('disabled', setDisabled);                            
-                            if($("#btn_driver_update").length === 0){
-                                $("#content-modal").append('<button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>');
-                            }
+                            $("#note_removal").prop('disabled', setDisabled);
+                            $("#landfill_selected").prop('disabled', setDisabled);
+                            
+                            // $("#btn_driver_update").show();
+
+                            // if($("#btn_driver_update").length === 0){
+                            //     $("#content-modal").append('<button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>');
+                                
+                            // }
                         }
 
                     }else{
@@ -581,8 +620,92 @@ $(document).ready(function() {
                     $("#button-footer").show();
 
                 });
+*/
 
-                
+
+                setTimeout($.ajax({
+                    
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    method: 'GET',
+                    url: '{{ route('showremovaldumpster.demand') }}',
+                    data: { id_demand_reg: id_reg, id_demand: id_demand, dumpster_removal: true },
+                    success: function(respData) {
+                        
+                        if(respData){
+                            console.log("PASSOU! respData: " , respData);
+                            let setDisabled = respData.service_status === 5 ? true : false;
+
+                            if(respData.name !== undefined || respData.name !== ''){
+                                // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
+                                let opts = document.getElementById("name_driver_removal_selected").options;
+                                let indexOptionDriverRemoval = 0;
+                                for(var i = 0; i < opts.length; i++) {
+                                    if(opts[i].innerText == respData.name) {
+                                        indexOptionDriverRemoval = i;
+                                        break;
+                                    }
+                                }
+                                $('#name_driver_removal_selected option').eq(indexOptionDriverRemoval).prop('selected', true);
+                            }else{
+
+                                $('#name_driver_removal_selected option').eq(0).prop('selected', true);
+
+                            }
+
+                            // aterro begin
+                            $("#landfill_selected").val(respData.id_landfill);
+                            // aterro end                        
+
+                            if(respData.comments !== undefined || respData.comments !== ''){
+                                $("#note_removal").val(respData.comments);
+                            }else{
+                                $("#note_removal").val(comments_removal);
+                            }
+                            
+                            if(setDisabled){
+                                $("#name_driver_removal_selected").prop('disabled', setDisabled);
+                                $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
+                                $("#note_removal").prop('disabled', setDisabled);
+                                $("#landfill_selected").prop('disabled', setDisabled);
+                                
+
+                                
+                            }else{
+
+                                $("#name_driver_removal_selected").prop('disabled', setDisabled);
+                                $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
+                                $("#note_removal").prop('disabled', setDisabled);
+                                $("#landfill_selected").prop('disabled', setDisabled);
+                                
+                                
+                            }
+
+                        }else{
+
+                            $("#note_removal").val(comments_removal);
+
+                            if(status_atendimento.trim("") == "FINALIZADO"){
+                                $("#name_driver_removal_selected").prop('disabled', true);
+                                $("#effective_date_removal_dumpster").prop('disabled', true);
+                                $("#note_removal").prop('disabled', true);
+                                $("#landfill_selected").prop('disabled', true);
+
+                            }
+                        }        
+                    },
+                    error: function(dataResponseError) {
+                        alert("Erro ao atualizar o pedido ");
+                        console.log("dataResponseError: " , dataResponseError);
+                    },
+                    complete: function(dataResponseCompleted) {
+
+                        $("#loading-content").hide();
+                        $("#content-modal").show()
+                        $("#button-footer").show();        
+                    }
+                }), 3000);
+
+
                 if(paymentStatus.trim() != "")
                 {
                     if(paymentStatus.trim() != 'SIM'){
@@ -600,9 +723,6 @@ $(document).ready(function() {
                 $("#idreg").val(id_reg);
                 $("#iddemand").val(id_demand);
                 $("#btn_edit").attr("href","editcalldemand/" + id_reg);
-
-
-
 
             }
         });
@@ -627,9 +747,12 @@ $(document).ready(function() {
             let idDriverRemovalDumpsterSelected    = $("#name_driver_removal_selected").val();
             let nameDriverRemovalDumpsterSelected  = $("#name_driver_removal_selected").find('option:selected').text()
             let commentsRemoval                    = $("#note_removal").val();
+            let landfillSelected                   = $("#landfill_selected").val();
+            let landfillNameSelected               = $("#landfill_selected option:selected").text();
 
             let effectiveDateRemoval = $("#effective_date_removal_dumpster").val();
             let paymentStatus       = ($("#payment_status").val() == "1") ? true : false;
+
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -640,6 +763,7 @@ $(document).ready(function() {
                     id_driver_removal_dumpster : idDriverRemovalDumpsterSelected,
                     comments_removal : commentsRemoval,
                     effective_date_removal : effectiveDateRemoval,
+                    id_landfill : landfillSelected,
                     payment_status : paymentStatus,
                     id_reg: idReg, 
                     id_demand : idDemand
@@ -647,9 +771,10 @@ $(document).ready(function() {
                 success: function(dataResponse) {
 
                     if(dataResponse){
-                        
+
                         // rowIndex = tbpedido.row().column(1).data().indexOf(idReg);
                         rowIndex = tbpedido.row().column(1).data().indexOf(numeroFicha);
+                        tbpedido.cell(":eq("+rowIndex+")", 16).data(landfillNameSelected);
                         tbpedido.cell(":eq("+rowIndex+")", 17).data(nameDriverSelected);
                         tbpedido.cell(":eq("+rowIndex+")", 18).data((paymentStatus) ? "<h4 class='text-primary'>SIM</h4>" : "<h4 class='text-danger'>Não</h4>");
                         tbpedido.cell(":eq("+rowIndex+")", 8).data(effectiveDateRemoval);

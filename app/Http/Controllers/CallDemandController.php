@@ -268,10 +268,16 @@ class CallDemandController extends Controller
                                     // ->get(["driver.id", "employee.name"]);
                                     ->get(["employee.name","driver.id"]);
 
+            $landfill_name_demand = DB::table('landfill')
+                                    ->where('landfill.flg_status','=', 1)
+                                    // ->get(["driver.id", "employee.name"]);
+                                    ->get(["landfill.name","landfill.id"]);
+
 
             if($calldemands->isEmpty() != true){
                 return view('call_demand.list_call_demand',[
                     'driver_name_demands'=> $driver_name_demands,
+                    'landfill_name_demand'=> $landfill_name_demand,
                     'calldemands'=> $calldemands
                 ]);
 
@@ -279,6 +285,7 @@ class CallDemandController extends Controller
                 
                 return view('call_demand.list_call_demand',[
                     'driver_name_demands'=> $driver_name_demands,
+                    'landfill_name_demand'=> $landfill_name_demand,
                     'calldemands'=> ''
                 ]);
             }
@@ -974,7 +981,8 @@ class CallDemandController extends Controller
                     $calldemandDumpsterRemoval->days_allocation = $calldemandFirst->days_allocation;
                     // $calldemandDumpsterRemoval->id_driver      = $request->id_driver;
                     $calldemandDumpsterRemoval->id_driver      = $request->id_driver_removal_dumpster;
-                    $calldemandDumpsterRemoval->comments      = $request->comments_removal;
+                    $calldemandDumpsterRemoval->comments       = $request->comments_removal;
+                    $calldemandDumpsterRemoval->id_landfill    = $request->id_landfill;
 
                     if(!$calldemandDumpsterRemoval->save())
                         return back()->withErrors(['response' => "Erro ao cadastrar dados de Retirada"]);
@@ -1007,7 +1015,8 @@ class CallDemandController extends Controller
                         'dumpster_quantity' => $calldemandFirst->dumpster_quantity,
                         'days_allocation' => $calldemandFirst->days_allocation,
                         'id_driver' => $request->id_driver_removal_dumpster,
-                        'comments' => $request->comments_removal
+                        'comments' => $request->comments_removal,
+                        'id_landfill' => $request->id_landfill
                     ]);
                     
                     // return ($updateDumpsterRemoval) ? 'true' : false;
@@ -1024,6 +1033,7 @@ class CallDemandController extends Controller
                     // 'date_effective_removal_dumpster' => $effectiveDateRemoval,
                     // 'id_driver' => $request->id_driver
                     'date_effective_removal_dumpster' => $effectiveDateRemoval,
+                    'id_landfill' => $request->id_landfill
                 ]);
 
                 if($call_demand){
@@ -1057,7 +1067,8 @@ class CallDemandController extends Controller
         'call_demand.id',
         'employee.name', 
         'call_demand.comments',
-        'call_demand.service_status'
+        'call_demand.service_status',
+        'call_demand.id_landfill'
         ])
         ->join('driver', 'driver.id', '=', 'call_demand.id_driver')
         ->join('employee', 'employee.id', '=', 'driver.id_employee')

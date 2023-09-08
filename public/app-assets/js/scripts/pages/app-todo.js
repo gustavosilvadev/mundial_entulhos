@@ -365,8 +365,6 @@ $(function () {
 
           if(dataResponse != ""){
 
-            $("#loading-content").hide();
-
             let tipo_atividade = '';
             quantidadeAlocacao = dataResponse.filter((obj) => obj.colocacao === 1).length;
             quantidadeTroca    = dataResponse.filter((obj) => obj.troca === 1).length;
@@ -809,8 +807,10 @@ $(function () {
               $("#atividade_input").append('<br />');
 
             });
+            }
           }
-          }
+          
+          $("#loading-content").hide();
       });
     });
 
