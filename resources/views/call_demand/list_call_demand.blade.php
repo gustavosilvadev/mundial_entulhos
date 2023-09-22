@@ -524,7 +524,7 @@ $(document).ready(function() {
                 
                 $("#modal-edit").modal('toggle');
 
-console.log("status_atendimento: " + status_atendimento.trim(""));
+
                 if(nameDriver !== ''){
                     // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
                     let opts = document.getElementById("name_driver_selected").options;
@@ -542,86 +542,6 @@ console.log("status_atendimento: " + status_atendimento.trim(""));
                     $('#name_driver_selected option').eq(0).prop('selected', true);
                 }
   
-                // SELECIONA MOTORISTA DE ATENDIMENTO RETIRADA
-/*                
-                $.get('{{ route('showremovaldumpster.demand') }}',{ id_demand_reg: id_reg, id_demand: id_demand, dumpster_removal: true }).done(function(respData){
-                    if(respData){
-                        let setDisabled = respData.service_status === 5 ? true : false;
-                        // console.log("id_demand: ::: " + id_demand);
-                        // console.log("respData.id: ::: " + respData.id);
-                        // console.log("setDisabled: ::: " + setDisabled);
-
-                        if(respData.name !== undefined || respData.name !== ''){
-                            // SELECIONA MOTORISTA DE ATENDIMENTO COLOCAÇÃO/TROCA
-                            let opts = document.getElementById("name_driver_removal_selected").options;
-                            let indexOptionDriverRemoval = 0;
-                            for(var i = 0; i < opts.length; i++) {
-                                if(opts[i].innerText == respData.name) {
-                                    indexOptionDriverRemoval = i;
-                                    break;
-                                }
-                            }
-                            $('#name_driver_removal_selected option').eq(indexOptionDriverRemoval).prop('selected', true);
-                        }else{
-
-                            $('#name_driver_removal_selected option').eq(0).prop('selected', true);
-
-                        }
-
-                        // aterro begin
-                        $("#landfill_selected").val(respData.id_landfill);
-                        // aterro end                        
-
-                        if(respData.comments !== undefined || respData.comments !== ''){
-                            $("#note_removal").val(respData.comments);
-                        }else{
-                            $("#note_removal").val(comments_removal);
-                        }
-                        
-                        if(setDisabled){
-                            $("#name_driver_removal_selected").prop('disabled', setDisabled);
-                            $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
-                            $("#note_removal").prop('disabled', setDisabled);
-                            $("#landfill_selected").prop('disabled', setDisabled);
-                            
-                            // $("#btn_driver_update").hide();
-
-                            // if($("#btn_driver_update").length > 0){
-                                // $("#btn_driver_update").remove();
-                            // }
-                                
-
-                            
-                        }else{
-
-                            $("#name_driver_removal_selected").prop('disabled', setDisabled);
-                            $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
-                            $("#note_removal").prop('disabled', setDisabled);
-                            $("#landfill_selected").prop('disabled', setDisabled);
-                            
-                            // $("#btn_driver_update").show();
-
-                            // if($("#btn_driver_update").length === 0){
-                            //     $("#content-modal").append('<button type="button" class="btn btn-success btn-lg btn-block mt-1" id="btn_driver_update" data-dismiss="modal">ATUALIZAR</button>');
-                                
-                            // }
-                        }
-
-                    }else{
-
-                        $("#note_removal").val(comments_removal);
-                    }
-
-
-
-                    
-                    $("#loading-content").hide();
-                    $("#content-modal").show()
-                    $("#button-footer").show();
-
-                });
-*/
-
 
                 setTimeout($.ajax({
                     
@@ -632,7 +552,7 @@ console.log("status_atendimento: " + status_atendimento.trim(""));
                     success: function(respData) {
                         
                         if(respData){
-                            console.log("PASSOU! respData: " , respData);
+
                             let setDisabled = respData.service_status === 5 ? true : false;
 
                             if(respData.name !== undefined || respData.name !== ''){
@@ -685,10 +605,10 @@ console.log("status_atendimento: " + status_atendimento.trim(""));
                             $("#note_removal").val(comments_removal);
 
                             if(status_atendimento.trim("") == "FINALIZADO"){
-                                $("#name_driver_removal_selected").prop('disabled', true);
-                                $("#effective_date_removal_dumpster").prop('disabled', true);
-                                $("#note_removal").prop('disabled', true);
-                                $("#landfill_selected").prop('disabled', true);
+                                // $("#name_driver_removal_selected").prop('disabled', true);
+                                // $("#effective_date_removal_dumpster").prop('disabled', true);
+                                // $("#note_removal").prop('disabled', true);
+                                // $("#landfill_selected").prop('disabled', true);
 
                             }
                         }        

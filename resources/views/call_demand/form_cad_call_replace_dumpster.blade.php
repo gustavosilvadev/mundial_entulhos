@@ -203,7 +203,7 @@
                                                                                                     </div>
                                                 
 
-                                                                                                    <div class="col-md-2">
+                                                                                                    <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">PERÍODO DO DIA</label>
                                                                                                             <select class="select2 form-control form-control-lg" id="period" name="period">
@@ -224,16 +224,16 @@
                                                                                                         </div>
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-2">
+                                                                                                    <div class="col-md-2 d-none">
                                                                                                         <div class="form-group">
 
                                                                                                             <label for="period">Número da Caçamba</label>
 
                                                                                                             <input type="text" name="dumpster_number" id="dumpster_number" class="form-control" data-column="5"  value="{{ $value->dumpster_number }}" data-column-index="4" disabled/>
                                                                                                         </div>    
-                                                                                                    </div>
+                                                                                                    </div> 
 
-                                                                                                    <div class="col-md-2">
+                                                                                                    <div class="col-md-3">
                                                                                                         <div class="form-group">
 
                                                                                                             <label for="period">DATA ALOCAÇÃO</label>
@@ -242,7 +242,7 @@
                                                                                                         </div>    
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-2">
+                                                                                                    <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">PREVISÃO RETIRADA</label>                                                                                                            
                                                                                                             {{-- <input type="text" name="date_removal_dumpster_forecast" id="date_format" class="form-control dt-date date-mask" data-column="5"  data-column-index="4"  value="{{ $value->date_removal_dumpster_forecast }}"/> --}}
@@ -250,7 +250,7 @@
                                                                                                         </div>    
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-2 d-none">
+                                                                                                    <div class="col-md-3 d-none">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">RETIRADA EFETIVA</label>
                                                                                                             <input type="text" name="date_effective_removal_dumpster" id="date_format" class="form-control dt-date  date_format" data-column="5"  data-column-index="4" value="" />
@@ -258,7 +258,7 @@
                                                                                                         </div>    
                                                                                                     </div> 
 
-                                                                                                    <div class="col-md-2">
+                                                                                                    <div class="col-md-3">
                                                                                                         <div class="form-group">
                                                                                                             <label for="period">TOTAL DE DIAS</label>
                                                                                                             <input type="number" name="total_days" class="form-control total_days" min="0" max="1000"  value="{{ $value->days_allocation }}" onkeyup="validaTotalDays(this);" />

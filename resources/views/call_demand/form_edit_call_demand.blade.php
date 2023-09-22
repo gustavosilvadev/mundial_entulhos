@@ -477,19 +477,21 @@ die();
                                                                                                     </div>                                                                            
                                                                                                 </div>                                                                        
                                                                                                 <hr />
+                                                                                                <div class="col-12 text-center action-btns">
+                                                                                                
+                                                                                                    <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
+                                                                                                    <?php if($value->service_status == 0): ?>
 
-                                                                                                <?php if($value->service_status == 0): ?>
-                                                                                                    <div class="col-12 text-center action-btns">
 
-                                                                                                        <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button>
+                                                                                                        {{-- <button class="btn btn-success " id="btn_update" tabindex="4">ATUALIZAR</button> --}}
                                                                                                         <button class="btn btn-dark " id="btn_finish_demand">CONCLUIR PEDIDO</button>
 
                                                                                                         <h3 class="text-success text-center py-3" id="message-success" style="display:none"><b>Atualizado com sucesso!</b></h3>
                                                                                                         <h4 class="text-danger text-center py-3" id="message-error" style="display:none"><b>Erro ao atualizar o chamado!</b></h4>
                                                                                                         {{-- <h3 class="text-success text-center" id="message-success-finished" style="display:none"><b>Chamado encerrado com sucesso!</b></h3> --}}
                                                                                                         <h4 class="text-danger text-center" id="message-error-finished" style="display:none"><b>Erro ao encerrar o chamado!</b></h4>
+                                                                                                        <?php endif; ?>                                                                                                 
                                                                                                     </div>
-                                                                                                <?php endif; ?>                                                                                                 
 
                                                                                             </div>
 

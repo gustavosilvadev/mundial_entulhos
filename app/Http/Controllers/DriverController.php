@@ -743,6 +743,7 @@ class DriverController extends Controller
                 // 'id_landfill' => $request->id_landfill
             ]);
         }
+/*
         if($call_demand_updated_data){
 
             $checkIfActivityUserDemandDumpsterExists = ActivityUserDemandDumpster::where('id_call_demand_reg',$request->id_demand_reg)
@@ -768,6 +769,28 @@ class DriverController extends Controller
         }else{
             return false;
         }
+*/
+        $checkIfActivityUserDemandDumpsterExists = ActivityUserDemandDumpster::where('id_call_demand_reg',$request->id_demand_reg)
+        ->where('id_call_demand',$request->id_demand)->get();
+
+        if(!$checkIfActivityUserDemandDumpsterExists){
+            $activityUserDemandDumpster = new ActivityUserDemandDumpster();
+            $activityUserDemandDumpster->id_call_demand_reg = $request->id_demand_reg;
+            $activityUserDemandDumpster->id_call_demand     = $request->id_demand;
+            $activityUserDemandDumpster->id_employee        = $id_user_employee;
+            $activityUserDemandDumpster->type_service       = $request->type_service;
+            $activityUserDemandDumpster->service_status     = $request->service_status; // STATUS  CHAMADO
+
+            if($activityUserDemandDumpster->save()){
+                return true;
+
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+
         
     }
 
