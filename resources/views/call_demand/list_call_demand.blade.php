@@ -604,11 +604,12 @@ $(document).ready(function() {
 
                             $("#note_removal").val(comments_removal);
 
-                            if(status_atendimento.trim("") == "FINALIZADO"){
-                                // $("#name_driver_removal_selected").prop('disabled', true);
-                                // $("#effective_date_removal_dumpster").prop('disabled', true);
-                                // $("#note_removal").prop('disabled', true);
-                                // $("#landfill_selected").prop('disabled', true);
+                            if(status_atendimento.trim("") == "PENDENTE"){
+
+                                $("#name_driver_removal_selected").prop('disabled', true);
+                                $("#effective_date_removal_dumpster").prop('disabled', true);
+                                $("#note_removal").prop('disabled', true);
+                                $("#landfill_selected").prop('disabled', true);
 
                             }
                         }        
