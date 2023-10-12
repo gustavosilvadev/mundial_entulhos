@@ -29,6 +29,7 @@
 
 
     <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/3.3.3/js/dataTables.fixedColumns.min.js"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ URL::asset('public/app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}"></script> 

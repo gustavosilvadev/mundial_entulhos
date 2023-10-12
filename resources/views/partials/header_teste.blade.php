@@ -124,6 +124,8 @@
         
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/datatables/dataTables.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/app-assets/css/datatables/buttons.dataTables.min.css') }}">
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.3/css/fixedColumns.dataTables.min.css">
         <!-- END: Page CSS-->
 
     

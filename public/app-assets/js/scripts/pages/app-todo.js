@@ -421,7 +421,7 @@ $(function () {
 
                 // BOTÕES FOOTER
 
-                  if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') == item.data_chamado){
+                  if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') >= item.data_chamado){
                     
                     let btn_encerrar = $('<button/>',
                     {
@@ -572,7 +572,7 @@ $(function () {
 
                   // BOTÕES FOOTER
 
-                  if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') == item.data_chamado){
+                  if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') >= item.data_chamado){
                         let btn_encerrar = $('<button/>',
                         {
                             text: 'ATENDER',
@@ -720,7 +720,7 @@ $(function () {
 
 
               // BOTÕES FOOTER
-              if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') == item.data_chamado){
+              if(item.status_atendimento == 0 && dataDeHoje.toLocaleDateString('pt-BR') >= item.data_chamado){
 
                 let btn_encerrar = $('<button/>',
                 {

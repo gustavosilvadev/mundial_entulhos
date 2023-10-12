@@ -554,13 +554,6 @@ class CallDemandController extends Controller
 
     public function showInfoParamsDemand()
     {
-        
-        // $info_client_demand = DB::table('call_demand')
-        // ->groupBy('call_demand.name')
-        // ->orderBy('call_demand.id_demand', 'desc')
-        // ->select('call_demand.id', 'call_demand.id_demand', 'call_demand.name')
-        // ->get();
-
         $info_client_demand = DB::table('client')
         ->select('client.id', 'client.name')
         ->get();
@@ -925,6 +918,37 @@ class CallDemandController extends Controller
             ->first();
         
         return isset($calldemandFirst);
+    }
+
+    public function checkIfRemovalDumpsterFinished(Request $request){
+        $removalDumpster = CallDemand::where('call_demand.dumpster_removal', true)
+        ->where('call_demand.id_parent', $request->id_reg)
+        ->where('call_demand.id_demand', $request->id_demand)
+        ->where('service_status','>', 0)
+        ->first();
+
+        return isset($removalDumpster) ? true : false;
+    }
+
+    public function checkIfRemovalDumpsterCalled(Request $request){
+
+        $removalDumpster = CallDemand::where('call_demand.dumpster_removal', true)
+        ->where('call_demand.id_parent', $request->id_reg)
+        ->where('call_demand.id_demand', $request->id_demand)
+        ->where('service_status', 0)
+        ->first();
+
+        return isset($removalDumpster) ? true : false;
+    }    
+
+    public function checkIfDemandReplacement(Request $request){
+        $calldemandFirst  = CallDemand::where('id',$request->id_reg)
+        ->where('id_demand',$request->id_demand)
+        ->where('dumpster_replacement', true)
+
+        ->first();
+    
+    return isset($calldemandFirst);
     }
 
     public function changeDriverDemand(Request $request)

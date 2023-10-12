@@ -81,6 +81,9 @@ Route::middleware('usersession')->group(function(){
     Route::get('status_demand',[CallDemandController::class,'showStatusDemand'])->name('calldemand.checkstatus');
 
     Route::post('changedriverdemand',[CallDemandController::class,'changeDriverDemand'])->name('changedriver.demand');
+
+    Route::get('checkremovaldumpsterfinished',[CallDemandController::class,'checkIfRemovalDumpsterFinished'])->name('calldemand.checkremoval');
+    Route::get('checkremovaldumpstercalled',[CallDemandController::class,'checkIfRemovalDumpsterCalled'])->name('calldemand.checkremovalcalled');
     
     Route::get('getdriverremovaldumpster',[CallDemandController::class,'showDriverRemovalDumpster'])->name('showremovaldumpster.demand');
     

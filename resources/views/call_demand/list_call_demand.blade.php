@@ -28,6 +28,15 @@
         height: 20px;
     }
 
+    .bg-gray {
+    background-color: #f2f2f2; /* Cor de fundo cinza */
+    }
+
+    /* Ajuste de estilo para cabeçalhos fixos */
+    .DTFC_LeftHeadWrapper th {
+        background-color: #f2f2f2; /* Cor de fundo cinza para cabeçalhos fixos */
+    }    
+
  </style>
     <!-- BEGIN: Content-->
 
@@ -107,11 +116,11 @@
                                     <table id="tbpedido" class="table table-striped display nowrap" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>&nbsp</th>
-                                                <th>Nº FICHA</th>
-                                                <th>COLOCAÇÃO/TROCA</th>
-                                                <th>PERÍODO DO DIA</th>
-                                                <th>CLIENTE</th>
+                                                <th class="bg-gray">&nbsp</th>
+                                                <th class="bg-gray">Nº FICHA</th>
+                                                <th class="bg-gray">COLOCAÇÃO/TROCA</th>
+                                                <th class="bg-gray">PERÍODO DO DIA</th>
+                                                <th class="bg-gray">CLIENTE</th>
                                                 <th>DATA ATEND/MOTORISTA</th>
                                                 <th>DATA DA COLOCAÇÃO</th>
                                                 <th>DATA PREV RETIRADA</th>
@@ -137,12 +146,12 @@
                                                 <?php foreach($calldemands as $valDemand):?>        
                                             <tr class="{{ ($valDemand->payment_demand == true) ? 'row_bg_status' : '' }}">
 
-                                                <td><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
+                                                <td class="bg-gray"><input type="checkbox" class="checkBoxDeleteId" value="{{ $valDemand->id }}"/></td>
                                                 {{-- <td><strong>{{ $valDemand->id}}</strong>/{{$valDemand->id_demand}}</td> --}}
-                                                <td>{{ $valDemand->id}}/{{$valDemand->id_demand}}</td>
-                                                <td><?php echo $valDemand->type_service; ?></td>
-                                                <td><?php echo $valDemand->period; ?></td>
-                                                <td><?php echo $valDemand->name; ?></td>
+                                                <td class="bg-gray">{{ $valDemand->id}}/{{$valDemand->id_demand}}</td>
+                                                <td class="bg-gray"><?php echo $valDemand->type_service; ?></td>
+                                                <td class="bg-gray"><?php echo $valDemand->period; ?></td>
+                                                <td class="bg-gray"><?php echo $valDemand->name; ?></td>
                                                 {{-- <td><?php echo $valDemand->date_start; ?></td>
                                                 <td><?php echo $valDemand->date_allocation_dumpster; ?></td>
                                                 <td><?php echo $valDemand->date_removal_dumpster_forecast; ?></td>
@@ -396,13 +405,16 @@ $(document).ready(function() {
 
             scrollY: "300px",
             scrollX: true,
+            // fixedColumns: {
+            //     "leftColumns": 5 // Fixar as duas primeiras colunas
+            // },            
             autoWidth: true,
             processing: true,
             scrollCollapse: true,
             paginate: true,
-            fixedColumns: {
-            left: 2
-            },
+            // fixedColumns: {
+            // left: 2
+            // },
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel'
@@ -588,7 +600,6 @@ $(document).ready(function() {
                                 $("#note_removal").prop('disabled', setDisabled);
                                 $("#landfill_selected").prop('disabled', setDisabled);
                                 
-
                                 
                             }else{
 
@@ -596,8 +607,7 @@ $(document).ready(function() {
                                 $("#effective_date_removal_dumpster").prop('disabled', setDisabled);
                                 $("#note_removal").prop('disabled', setDisabled);
                                 $("#landfill_selected").prop('disabled', setDisabled);
-                                
-                                
+
                             }
 
                         }else{
@@ -647,15 +657,93 @@ $(document).ready(function() {
 
             }
         });
-
        
-        $("#btn_replace_dumpster").click(function(){
+        $("#btn_replace_dumpster").click(async function(){
 
-            let idReg    = $("#idreg").val();
-            let idDemand = $("#iddemand").val();
+            let validaCacambaJaRemovida = await validarCacambaJaRemovida();
 
-            window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
+            if(validaCacambaJaRemovida === false){
+
+                let validaCacambaRemocao = await validarCacambaAcionadaParaRemocao();
+                if(validaCacambaRemocao === true){
+
+                    let idReg    = $("#idreg").val();
+                    let idDemand = $("#iddemand").val();
+
+                    window.location.href = '{{ route('calldemand.replacement')}}/' + idReg;
+                }
+            }
         });
+
+        function validarCacambaJaRemovida(){
+            let idDemand            = $("#iddemand").val();
+            let idReg               = $("#idreg").val();
+            
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    method: 'GET',
+                    url: '{{ route('calldemand.checkremoval') }}',
+                    data: { 
+                        id_reg: idReg, 
+                        id_demand : idDemand
+                    },
+                    success: function(dataResponse) {
+
+                        if(dataResponse){
+                            alert("Este pedido já foi encerrado! A caçamba já foi removida do local")
+                            resolve(true);
+                        }else{
+
+                            resolve(false);
+                        }
+                    },
+                    error: function(responseError){
+                        alert("Erro interno: " + responseError);
+                        console.log(responseError);
+                        reject(responseError);
+                    }
+                });
+            });
+        }
+
+        function validarCacambaAcionadaParaRemocao(){
+            let idDemand            = $("#iddemand").val();
+            let idReg               = $("#idreg").val();
+
+            return new Promise((resolve, reject) => {
+
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    method: 'GET',
+                    url: '{{ route('calldemand.checkremovalcalled') }}',
+                    data: { 
+                        id_reg: idReg, 
+                        id_demand : idDemand
+                    },
+                    success: function(dataResponse) {
+
+                        if(dataResponse){
+
+                            let response = confirm("A caçamba já foi acionada para remoção. Deseja continuar mesmo assim? ");
+
+                            if(response === true){
+                                resolve(true);
+                            }else {
+                                resolve(false);
+                            }
+                        }else
+                            resolve(true);
+
+                    },
+                    error: function(responseError){
+                        alert("Erro interno: " + responseError);
+                        console.log(responseError);
+                        reject(responseError);
+                    }
+                });
+            });              
+        }        
 
         $("#btn_driver_update").click(function(){
 
