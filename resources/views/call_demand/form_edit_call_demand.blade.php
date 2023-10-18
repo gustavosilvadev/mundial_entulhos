@@ -320,7 +320,8 @@ die();
                                                                                                             {{-- <input type="hidden" id="date_allocation_dumpster" value="{{ $value->date_allocation_dumpster }}" /> --}}
                                                                                                             {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/> --}}
                                                                                                             {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date date-mask" data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/> --}}
-                                                                                                            <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/>
+                                                                                                            <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/>
+
                                                                                                         </div>    
                                                                                                     </div>
 
