@@ -101,6 +101,7 @@ die();
                                                                                                 <div class="media mb-2"></div>
                                                                                                 <input type="hidden" name="id_demand_reg" value={{ $value->id }}>
                                                                                                 <input type="hidden" name="id_demand" value={{ $value->id_demand }}>
+                                                                                                <input type="hidden" name="id_parent" value={{ $value->id_parent }}>
                                                                                                 <div class="row">
 
                                                                                                     <div class="col-md-6">
@@ -737,6 +738,7 @@ die();
             
             let id_demand       = $("input[name=id_demand]").val();
             let id_demand_reg   = $("input[name=id_demand_reg]").val();
+            let id_parent       = $("input[name=id_parent]").val();
             let client_name_new = $("input[name=client_name_new]").val();
             let zipcode         = $("input[name=zipcode]").val();
             let address         = $("input[name=address]").val();
@@ -780,6 +782,7 @@ die();
                 data: { 
                     'id_demand' : id_demand,
                     'id_demand_reg' : id_demand_reg,
+                    'id_parent' : id_parent,
                     'client_name_new' : client_name_new,
                     'zipcode' : zipcode,
                     'address' : address,
@@ -1004,6 +1007,9 @@ die();
         }
 
         let idDemandReg = $('input[name=id_demand_reg]').val();
+        let idParent   = $("input[name=id_parent]").val();
+        let status_do_servico = 5;
+
         let urlFinishDemand = '{{ route('finish.demand') }}';
 
         // let dataResponseCheckCacamba1 = checkCacambaDisponivel(idDemandReg, dumpster_number);
@@ -1029,6 +1035,8 @@ die();
                             url: urlFinishDemand,
                             data: { 
                                 id_call_demand_reg: idDemandReg,
+                                id_parent: idParent,
+                                service_status  : status_do_servico,
                                 dumpster_number: dumpster_number,
                                 dumpster_number_substitute: dumpster_number_substitute,
                                 id_driver: driver,

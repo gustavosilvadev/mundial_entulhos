@@ -47,7 +47,7 @@ class CallDemandController extends Controller
                     'call_demand.dumpster_quantity',
                     'call_demand.dumpster_number',
                     'call_demand.dumpster_number_substitute',
-                    'call_demand.id_landfill',
+                    // 'call_demand.id_landfill',
                     'call_demand.id_driver',
                     'call_demand.service_status',
                     DB::raw('DATE_FORMAT(call_demand.updated_at, "%d/%m/%Y") as updated_at'),
@@ -55,9 +55,12 @@ class CallDemandController extends Controller
                     'call_demand.dumpster_replacement',
                     'call_demand.dumpster_removal',
                     DB::raw('"" as name_landfill'),
+                    DB::raw('"" as id_landfill'),
+                    // DB::raw('"" as id_parent'),
                     DB::raw('"" as name_driver')
                 // )->where('call_demand.id', '=', $id_register)->where('call_demand.id_driver','>=',0)->get();
                 )->where('call_demand.id', '=', $id_register)->get();
+
 
                 foreach($calldemand as $demand){
 
@@ -71,15 +74,24 @@ class CallDemandController extends Controller
                             $demand->name_driver =  $findDriver[0]->name_driver;
                     }
 
+                    if($demand->id_parent > 0){
+                        $parendDemand = DB::table('call_demand')
+                        ->where('id',$demand->id_parent)
+                        ->first('call_demand.id_landfill');
 
-                    if($demand->id_landfill){
+                        if(isset($parendDemand) && $parendDemand->id_landfill > 0) {
+                            $findLandfill = DB::table('landfill')
+                            ->where('landfill.id', '=', $parendDemand->id_landfill)
+                            ->get();
 
-                        $findLandfill = DB::table('landfill')
-                        ->where('landfill.id', '=', $demand->id_landfill)
-                        ->get('landfill.name as name_landfill');
-                        if(isset($findLandfill))
-                            $demand->name_landfill =  $findLandfill[0]->name_landfill;
-                    }                
+                            if(isset($findLandfill)) {
+
+                                // TESTING
+                                $demand->id_landfill   = $findLandfill[0]->id;
+                                $demand->name_landfill = $findLandfill[0]->name;
+                            }
+                        }
+                    }            
                 }
                 
                 $drivers = DB::table('driver')
@@ -781,6 +793,10 @@ class CallDemandController extends Controller
     {
         $showdata   = $this->showAPI($id_demand);
        
+        // echo '<pre>';
+        // print_r($showdata);
+        // echo '</pre>';
+        // die();
         return view('call_demand.form_edit_call_demand',  $showdata);
     }
 
@@ -811,11 +827,23 @@ class CallDemandController extends Controller
             && isset($request->date_removal_dumpster_forecast)
             && isset($request->total_days)){
 
+            // Atualiza Aterro do Pedido Pai 
+            if($request->id_parent != 0){
 
-            // Atualiza Pedido de Retirada BEGIN
+                // ATUALIZA ATERRO DE COLOCAÇÃO SE FINALIZAR TROCA
+                // ATUALIZA ATERRO DE TROCA QUANDO FINALIZA TROCA OU RETIRADA            
+                $updated_landfill_parent = CallDemand::where('id', $request->id_parent)
+                ->update([
+                    'id_landfill' => $request->id_landfill,
+                    'dumpster_number' => $request->dumpster_number_substitute,
+                    // 'service_status' => $request->service_status,
+                ]);
+                if(!$updated_landfill_parent){
+                    return false;
+                }
+            }
 
-
-            // Atualiza Pedido de Retirada END
+            // Atualiza Aterro do Pedido Pai 
                 
             $call_demand = CallDemand::where('id',$request->id_demand_reg)
             ->where('id_demand',$request->id_demand)
@@ -833,7 +861,7 @@ class CallDemandController extends Controller
                 'dumpster_quantity' => $request->dumpster_total,
                 'dumpster_number' => (empty($request->dumpster_number) ? 0 : $request->dumpster_number),
                 'dumpster_number_substitute' => (empty($request->dumpster_number_substitute) ? 0 : $request->dumpster_number_substitute),
-                'id_landfill' => (empty($request->id_landfill) ? 0 : $request->id_landfill),
+                // 'id_landfill' => (empty($request->id_landfill) ? 0 : $request->id_landfill),
                 'id_driver' => (empty($request->id_driver) ? 0 : $request->id_driver),
                 'comments' => $request->comments,
                 'type_service' => $request->type_service,

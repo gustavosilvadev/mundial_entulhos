@@ -800,6 +800,23 @@ class DriverController extends Controller
         $id_employee    = session('id_user');
         $service_status = 5;
 
+        // Atualiza Aterro do Pedido Pai 
+        if($request->id_parent != 0){
+
+            // ATUALIZA ATERRO DE COLOCAÇÃO SE FINALIZAR TROCA
+            // ATUALIZA ATERRO DE TROCA QUANDO FINALIZA TROCA OU RETIRADA            
+            $updated_landfill_parent = CallDemand::where('id', $request->id_parent)
+            ->update([
+                'id_landfill' => $request->id_landfill,
+                'dumpster_number' => $request->dumpster_number_substitute,
+                'service_status' => $service_status,
+            ]);
+            if(!$updated_landfill_parent){
+                return false;
+            }
+        }
+
+
         $recordCallDemand = CallDemand::find($request->id_call_demand_reg);
 
         if($recordCallDemand)
