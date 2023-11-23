@@ -390,7 +390,7 @@ $(function () {
             {
               if($contador_operacacao == 0){
 
-                $("#atividade_input").append('<div class="form-group p-1 mb-1 bg-secondary text-white">COLOCAÇÃO</div>');
+                $("#atividade_input").append('<div class="form-group p-1 mb-1" style="text-align: center;"><h1 style="border-bottom:1px solid black">COLOCAÇÃO</h1></div>');
                 $contador_operacacao = 1;
               }
               // let contagem = 0;
@@ -405,8 +405,8 @@ $(function () {
                 }
 
                 cacamba1 =   '<div class="col-6">' +
-                '<label for="task-due-date" class="form-label ">CAÇAMBA(COLOCAÇÃO)</label>' +
-                '<input class="form-control col-6 mb-1" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '" ' + disabled + '/>' +
+                '<label for="task-due-date" class="form-label" style="font-size:20px">CAÇAMBA(COLOCAÇÃO)</label>' +
+                '<input class="form-control form-control-lg col-6 mb-1" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '" ' + disabled + '/>' +
                 '</div>';
 
                 $("#atividade_input").append('<br />');
@@ -414,7 +414,7 @@ $(function () {
                 
                 // CAMPO OBSERVAÇÃO
                 if(item.observacao_operacao !== null){
-                  let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark mr-1">Observação: </h4> ' + item.observacao_operacao + '</div>';
+                  let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="mr-1" style="margin-right: 12px;">Observação: </h4> <h2>' + item.observacao_operacao + '</h2></div>';
                   $("#form_group_one").append(campo_observacao);
                 }
                 // CAMPO OBSERVAÇÃO
@@ -426,7 +426,7 @@ $(function () {
                     let btn_encerrar = $('<button/>',
                     {
                         text: 'ATENDER',
-                        class: 'btn btn-success update-btn my-2',
+                        class: 'btn btn-success btn-lg update-btn my-2',
                         click: function () { 
 
                             // METODO INCIAR ATENDIMENTO - BEGIN
@@ -517,7 +517,7 @@ $(function () {
             // TROCA
             if(arr_troca.length > 0){
               if($contador_operacacao == 0){
-                $("#atividade_input").append('<div class="form-group p-1 mb-1 bg-secondary text-white">TROCA</div>');
+                $("#atividade_input").append('<div class="form-group p-1 mb-1" style="text-align: center;"><h1 style="border-bottom:1px solid black">TROCA</h1></div>');
                 $contador_operacacao = 1;
               }
               $.each(arr_troca, function(key, item) {
@@ -525,8 +525,8 @@ $(function () {
                 $("#atividade_input").append('<div class="form-group row" id="form_group_two"></div>');
 
                 cacamba1 =   '<div class="col-4">' +
-                '<label for="task-due-date" class="form-label ">CAÇAMBA</label>' +
-                '<input class="form-control" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '" disabled>' +
+                '<label for="task-due-date" class="form-label " style="font-size:20px">CAÇAMBA</label>' +
+                '<input class="form-control form-control-lg" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '" disabled>' +
                 '</div> ==> ';
 
                 let disabled = '';
@@ -535,8 +535,8 @@ $(function () {
                 }
 
                 cacamba2 = '<div class="col-4">'+
-                    '<label for="task-due-date" class="form-label ">TROCA</label>'+
-                    '<input class="form-control" id="cacamba_sub_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba_substituto + '" ' + disabled + '/>' + 
+                    '<label for="task-due-date" class="form-label" style="font-size:20px">TROCA</label>'+
+                    '<input class="form-control form-control-lg" id="cacamba_sub_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba_substituto + '" ' + disabled + '/>' + 
                     '</div>';
 
 
@@ -544,12 +544,12 @@ $(function () {
                 $("#form_group_two").append(cacamba2);
                 
                 // SELECIONAR ATERRO BEGIN
-                  $("#form_group_two").append('<div class="col-12"><strong>Aterro: </strong> <select class="select2 form-control edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill"></div>');
+                  $("#form_group_two").append('<div class="col-12 my-2"><strong>Aterro: </strong> <select class="select2 form-control form-select form-select-lg edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill"></div>');
                   $('#landfill_' + item.id_ficha).append('<option value="0">Selecione o aterro</option>');
 
                   // CAMPO OBSERVAÇÃO
                   if(item.observacao_operacao !== null){
-                    let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark mr-1">Observação: </h4>'+' '+ item.observacao_operacao + '</div>';
+                    let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="mr-1" style="margin-right: 12px;">Observação: </h4>' + '<h2>'+ item.observacao_operacao + '</h2></div>';
                     $("#form_group_two").append(campo_observacao);
                   }
                   // CAMPO OBSERVAÇÃO
@@ -576,7 +576,7 @@ $(function () {
                         let btn_encerrar = $('<button/>',
                         {
                             text: 'ATENDER',
-                            class: 'btn btn-success update-btn my-2 col-12',                  
+                            class: 'btn btn-success btn-lg update-btn my-2 col-12',                  
                             click: function () { 
 
                                 // METODO INCIAR ATENDIMENTO - BEGIN
@@ -677,7 +677,7 @@ $(function () {
               let seletorAterro = '';
 
               if($contador_operacacao == 0){
-                $("#atividade_input").append('<div class="form-group p-1 mb-1 bg-secondary text-white">RETIRADA</div>');
+                $("#atividade_input").append('<div class="form-group p-1 mb-1" style="text-align: center;"><h1 style="border-bottom:1px solid black">RETIRADA</h1></div>');
                 $contador_operacacao = 1;
               }
 
@@ -685,8 +685,8 @@ $(function () {
 
                 $("#atividade_input").append('<div class="form-group row" id="form_group_three"></div>');
                 cacamba1 =   '<div class="col-12 mb-1">' +
-                '<label for="task-due-date" class="form-label ">CAÇAMBA'+key+'</label>' +
-                '<input class="form-control col-2" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '" disabled>' +
+                '<label for="task-due-date" class="form-label" style="font-size:20px">CAÇAMBA'+key+'</label>' +
+                '<input class="form-control form-control-lg col-2" id="cacamba_'+ item.id_ficha +'" type="text" value="' + item.numero_cacamba + '" disabled>' +
                 '</div>';
 
                 $("#form_group_three").append(cacamba1);
@@ -694,11 +694,11 @@ $(function () {
                 // $("#atividade_input").append('<div class="form-group position-relative"></div>');
 
                 // SELECIONAR ATERRO BEGIN
-                $("#form_group_three").append('<div class="col-12 mb-1"><strong>Aterro: </strong> <select class="select2 form-control edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill_' + item.id_ficha +'"></div>');
+                $("#form_group_three").append('<div class="col-12 my-2"><strong>Aterro: </strong> <select class="select2 form-control form-select form-select-lg edit-landfill-list" id="landfill_' + item.id_ficha +'" name="landfill_' + item.id_ficha +'"></div>');
                 $('#landfill_' + item.id_ficha).append('<option value="0">Selecione o aterro</option>');
 
                 if(item.observacao_operacao !== null){
-                  let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="text-dark mr-1">Observação: </h4>'+' '+ item.observacao_operacao + '</div>';
+                  let campo_observacao = '<div class="col-12 py-1 btn-group"><h4 class="mr-1" style="margin-right: 12px;">Observação: </h4>'+'<h2>'+ item.observacao_operacao + '</h2></div>';
                   $("#form_group_three").append(campo_observacao);
                 }          
                 
@@ -725,7 +725,7 @@ $(function () {
                 let btn_encerrar = $('<button/>',
                 {
                     text: 'ATENDER',
-                    class: 'btn btn-success update-btn mb-2 col-12',
+                    class: 'btn btn-success btn-lg update-btn mb-2 col-12',
                     click: function () { 
 
                         // METODO INCIAR ATENDIMENTO - BEGIN
@@ -779,8 +779,6 @@ $(function () {
                               },
                               success: function(dataResponse) {
     
-                                // if(dataResponse == true)
-                                //     location.reload();
                                 window.location.reload(true)
                               },
                               error: function(responseError){
@@ -797,7 +795,7 @@ $(function () {
                 $("#form_group_three").append(btn_encerrar);
 
               }else if(item.status_atendimento == 5){
-                let btn_executa = '<div class="alert alert-success mb-2 col-12" role="alert">PEDIDO CONCLUÍDO</div>';
+                let btn_executa = '<div class="alert alert-success mb-2 col-12 h1" role="alert">PEDIDO CONCLUÍDO</div>';
                 $("#form_group_three").append(btn_executa);
 
               }
@@ -820,21 +818,6 @@ $(function () {
     let seletorAterro = document.querySelector(selector).value;
     return seletorAterro;
   }
-
-  /*
-  async function checkarCacambaDisponivel(urlAvailableDumpster, id_chamado, numeroCacamba){
-      
-    $.get(urlAvailableDumpster.text(),{ id_demand_reg: id_chamado,  dumpsterNumber: numeroCacamba } )
-      .done(await function ( dataResponse ){
-        
-
-        console.log("Retorno: " + dataResponse);
-        alert('Resposta');
-        return dataResponse;
-
-      });
-  }
-  */
 
   const checkarCacambaDisponivel = (urlAvailableDumpster, id_chamado, numeroCacamba) => {
     return new Promise(resolve => {

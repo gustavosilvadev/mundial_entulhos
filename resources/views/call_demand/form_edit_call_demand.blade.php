@@ -318,9 +318,6 @@ die();
                                                                                                         <div class="form-group">
 
                                                                                                             <label for="period">DATA ALOCAÇÃO</label>
-                                                                                                            {{-- <input type="hidden" id="date_allocation_dumpster" value="{{ $value->date_allocation_dumpster }}" /> --}}
-                                                                                                            {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date flatpickr-range dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);"/> --}}
-                                                                                                            {{-- <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date date-mask" data-column="5"  data-column-index="4"  value="{{ $value->date_allocation_dumpster }}"/> --}}
                                                                                                             <input type="text" name="date_allocation_dumpster" id="date_format" class="form-control dt-date dt-input date_format date_allocation_dumpster date_format_allocation_edit" data-column="5"  data-column-index="4" onchange="validaData(this);" value="{{ $value->date_allocation_dumpster }}"/>
 
                                                                                                         </div>    
@@ -769,11 +766,6 @@ die();
             let dateIssue = $("input[name=date_issue]").val();
             let datePaymentForecast = $("input[name=date_payment_forecast]").val();
             let dateEffectivePaymen = $("input[name=date_effective_paymen]").val();
-
-// console.log("dumpster_total_opened: " + dumpster_total_opened);
-// console.log("dumpster_number_substitute: " + dumpster_number_substitute);
-// console.log("landfill: " + landfill);
-// console.log("driver: " + driver);
 
             $.ajax({
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

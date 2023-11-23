@@ -35,6 +35,7 @@ Route::middleware('usersession')->group(function(){
     Route::post('/save_driver',[DriverController::class,'store']);
     Route::get('driver/{id?}',[DriverController::class,'show']);
     Route::get('/driver_demand', [DriverController::class, 'showDemands']);
+    Route::get('/pending_demand', [DriverController::class, 'showPendingDemands']);
     Route::get('/get_details_demand', [DriverController::class, 'buscarDetahesPedidoSelecionados']);
     Route::get('search_demand',[DriverController::class,'showDemandFilter']);
     

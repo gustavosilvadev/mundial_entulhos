@@ -413,7 +413,7 @@ $(document).ready(function() {
             scrollCollapse: true,
             paginate: true,
             // fixedColumns: {
-            // left: 2
+            // left: 4
             // },
             dom: 'Bfrtip',
             buttons: [

@@ -224,12 +224,12 @@
                                                                                                         </div>
                                                                                                     </div>
 
-                                                                                                    <div class="col-md-2 d-none">
+                                                                                                    <div class="col-md-2">
                                                                                                         <div class="form-group">
 
                                                                                                             <label for="period">Número da Caçamba</label>
-
-                                                                                                            <input type="text" name="dumpster_number" id="dumpster_number" class="form-control" data-column="5"  value="{{ $value->dumpster_number }}" data-column-index="4" disabled/>
+                                                                                                            <input type="text" name="dumpster_number" id="dumpster_number" class="form-control dumpster_number" data-column="5"  data-column-index="4"/>
+                                                                                                            <input type="hidden" name="before_dumspter_number" id="before_dumspter_number" value="{{ $value->dumpster_number }}" />
                                                                                                         </div>    
                                                                                                     </div> 
 
@@ -458,12 +458,11 @@
         $('.date_format_allocation_edit').flatpickr({
                 // mode: "multiple",
                 dateFormat: "d/m/Y",
-                minDate: "today",
-            });
+        });
 
-
-        // let id_demand_client = $(this).val();
-        // findDemandClient(id_demand_client);
+        $('.dumpster_number').keyup(function () {
+         this.value = this.value.replace(/[^0-9\.]/g,'');
+        });
 
         $('.date_effective_removal_dumpster').blur(function(){
 
@@ -655,7 +654,7 @@
         });        
 
         $("#btn_create").on('click', function(){
-            
+
             $("#message-success").css("display","none");
             $("#message-error").css("display","none");
 
@@ -677,6 +676,7 @@
             // let dumpster_total  = $("input[name=dumpster_total]").val();
             let dumpster_total  = 1;
             let dumpsterNumber  = $('#dumpster_number').val();
+            let beforeDumpsterNumber = $("#before_dumspter_number").val();
             let comments        = $("#note").val();
             let comments_contract = $("#note_contract").val();
             let type_service    = 2;
@@ -695,6 +695,12 @@
             let dateIssue = $("input[name=date_issue]").val();
             let datePaymentForecast = $("input[name=date_payment_forecast]").val();
             let dateEffectivePaymen = $("input[name=date_effective_paymen]").val();
+
+            if(dumpsterNumber == beforeDumpsterNumber ){
+                // dumpsterNumber.addClass('border border-danger');
+                alert("Número da caçamba inválido");
+                return false;
+            }
 
             if(date_allocation_dumpster == "" || date_allocation_dumpster == undefined)
             {

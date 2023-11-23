@@ -190,7 +190,6 @@ class DriverController extends Controller
         }
     }
 
-    // public function exibirDemandasAtivas()
     public function showDemands(Request $request)
     {
         $id_user_employee  = session('id_user');
@@ -201,164 +200,6 @@ class DriverController extends Controller
         $lista_chamados_finalizados = $this->listarChamadosDoDiaFinalizados($id_user_employee, $dateAllocationFilter);
         
         
-        
-        /*
-        $call_demands         = $this->listarChamadosDoDia($id_user_employee, $dateAllocationFilter);
-        $dados_organizados    = array();
-        foreach ($call_demands as $call_demand) { $dados_organizados[$call_demand->id_cliente] = null; }
-
-        $chamado_indice_cliente = 0;
-        $quantidade_cacamba = 0;
-        $tipo_servico = '';
-        $tipo_servico_compare = '';
-
-        foreach ($call_demands as $call_demand) {
-            if($call_demand->id_cliente == $chamado_indice_cliente)
-            {
-                if($call_demand->cacamba_colocacao == true){
-                    $indice_servico = 0;
-                    if($tipo_servico == $call_demand->tipo_servico)
-                    {
-                        $quantidade_cacamba += $call_demand->quantidade_cacamba;
-                                    
-                        $dados_organizados[$call_demand->id_cliente][$indice_servico] = array_replace(
-                            $dados_organizados[$call_demand->id_cliente][$indice_servico], array('tipo_servico' => $call_demand->tipo_servico, 'quantidade_cacamba' => $quantidade_cacamba)
-                        );
-
-                        continue;
-
-                    }else{
-                        $tipo_servico = $call_demand->tipo_servico;
-                        $quantidade_cacamba = 1;
-
-                        $dados_organizados[$call_demand->id_cliente][$indice_servico] = array(
-                            'id_ficha' => $call_demand->ficha,
-                            'status_colocacao' => $call_demand->cacamba_colocacao,
-                            'status_retirada' => $call_demand->cacamba_retirada,
-                            'status_troca' => $call_demand->cacamba_troca,
-                            'id_cliente' => $call_demand->id_cliente,
-                            'tipo_servico' =>$call_demand->tipo_servico,
-                            'periodo_dia' =>$call_demand->periodo_dia,
-                            'endereco' =>$call_demand->endereco,
-                            'numero_endereco' =>$call_demand->numero_endereco,
-                            'cep_endereco' =>$call_demand->cep_endereco,
-                            'bairro_endereco' =>$call_demand->bairro_endereco,
-                            'cidade_endereco' =>$call_demand->cidade_endereco,
-                            'quantidade_cacamba' => $call_demand->quantidade_cacamba,
-                            'id_motorista' => $call_demand->id_motorista,
-                            'data_operacao' => $call_demand->data_operacao
-                        );
-
-                        continue;
-                    }
-                    
-
-                }
-                if($call_demand->cacamba_retirada == true){
-                    $indice_servico = 1;
-                    if($tipo_servico == $call_demand->tipo_servico)
-                    {
-                        $quantidade_cacamba += $call_demand->quantidade_cacamba;
-                                    
-                        $dados_organizados[$call_demand->id_cliente][$indice_servico] = array_replace(
-                            $dados_organizados[$call_demand->id_cliente][$indice_servico], array('tipo_servico' => $call_demand->tipo_servico, 'quantidade_cacamba' => $quantidade_cacamba)
-                        );
-
-                        continue;
-
-                    }else{
-                        $tipo_servico = $call_demand->tipo_servico;
-                        $quantidade_cacamba = 1;
-
-
-                        $dados_organizados[$call_demand->id_cliente][$indice_servico] = array(
-                            'id_ficha' => $call_demand->ficha,
-                            'status_colocacao' => $call_demand->cacamba_colocacao,
-                            'status_retirada' => $call_demand->cacamba_retirada,
-                            'status_troca' => $call_demand->cacamba_troca,
-                            'id_cliente' => $call_demand->id_cliente,
-                            'tipo_servico' =>$call_demand->tipo_servico,
-                            'periodo_dia' =>$call_demand->periodo_dia,
-                            'endereco' =>$call_demand->endereco,
-                            'numero_endereco' =>$call_demand->numero_endereco,
-                            'cep_endereco' =>$call_demand->cep_endereco,
-                            'bairro_endereco' =>$call_demand->bairro_endereco,
-                            'cidade_endereco' =>$call_demand->cidade_endereco,
-                            'quantidade_cacamba' => $call_demand->quantidade_cacamba,
-                            'id_motorista' => $call_demand->id_motorista,
-                            'data_operacao' => $call_demand->data_operacao
-                        );
-
-                        continue;
-                    }    
-
-                }
-
-                if($call_demand->cacamba_troca == true){
-                    $indice_servico = 2;
-                    if($tipo_servico == $call_demand->tipo_servico)
-                    {
-                        $quantidade_cacamba += $call_demand->quantidade_cacamba;
-                                    
-                        $dados_organizados[$call_demand->id_cliente][$indice_servico] = array_replace(
-                            $dados_organizados[$call_demand->id_cliente][$indice_servico], array('tipo_servico' => $call_demand->tipo_servico, 'quantidade_cacamba' => $quantidade_cacamba)
-                        );
-
-                        continue;
-
-                    }else{
-                        $tipo_servico = $call_demand->tipo_servico;
-                        $quantidade_cacamba = 1;
-
-                        $dados_organizados[$call_demand->id_cliente][$indice_servico] = array(
-                            'id_ficha' => $call_demand->ficha,
-                            'status_colocacao' => $call_demand->cacamba_colocacao,
-                            'status_retirada' => $call_demand->cacamba_retirada,
-                            'status_troca' => $call_demand->cacamba_troca,            
-                            'id_cliente' => $call_demand->id_cliente,
-                            'tipo_servico' =>$call_demand->tipo_servico,
-                            'periodo_dia' =>$call_demand->periodo_dia,
-                            'endereco' =>$call_demand->endereco,
-                            'numero_endereco' =>$call_demand->numero_endereco,
-                            'cep_endereco' =>$call_demand->cep_endereco,
-                            'bairro_endereco' =>$call_demand->bairro_endereco,
-                            'cidade_endereco' =>$call_demand->cidade_endereco,
-                            'quantidade_cacamba' => $call_demand->quantidade_cacamba,
-                            'id_motorista' => $call_demand->id_motorista,
-                            'data_operacao' => $call_demand->data_operacao
-                        );        
-                        continue;
-                    }
-
-                }
-
-            }else{
-                $chamado_indice_cliente = $call_demand->id_cliente;
-                $tipo_servico           = $call_demand->tipo_servico;
-                $quantidade_cacamba     = $call_demand->quantidade_cacamba;
-
-                $dados_organizados[$call_demand->id_cliente][0] = array(
-                    'id_ficha' => $call_demand->ficha,
-                    'status_colocacao' => $call_demand->cacamba_colocacao,
-                    'status_retirada' => $call_demand->cacamba_retirada,
-                    'status_troca' => $call_demand->cacamba_troca,
-                    'id_cliente' => $chamado_indice_cliente,
-                    'tipo_servico' =>$tipo_servico,
-                    'periodo_dia' =>$call_demand->periodo_dia,
-                    'endereco' =>$call_demand->endereco,
-                    'numero_endereco' =>$call_demand->numero_endereco,
-                    'cep_endereco' =>$call_demand->cep_endereco,
-                    'bairro_endereco' =>$call_demand->bairro_endereco,
-                    'cidade_endereco' =>$call_demand->cidade_endereco,
-                    'quantidade_cacamba' => $quantidade_cacamba,
-                    'id_motorista' => $call_demand->id_motorista,
-                    'data_operacao' => $call_demand->data_operacao
-                );
-
-                continue;
-            }
-        }
-*/   
 
         $lista_chamados = array();
         $ficha = array();
@@ -396,6 +237,7 @@ class DriverController extends Controller
                     'status_colocacao'=> $chamado->cacamba_colocacao,
                     'status_retirada' => $chamado->cacamba_retirada,
                     'status_troca'    => $chamado->cacamba_troca,
+                    'observacao_operacao'    => $chamado->observacao_operacao,
                     'endereco'        => $endereco,
                     'numero_endereco' => $numero_endereco,
                     'bairro_endereco' => $bairro_endereco,
@@ -432,6 +274,7 @@ class DriverController extends Controller
                     'status_colocacao'=> $chamado->cacamba_colocacao,
                     'status_retirada' => $chamado->cacamba_retirada,
                     'status_troca'    => $chamado->cacamba_troca,
+                    'observacao_operacao'    => $chamado->observacao_operacao,
                     'endereco'        => $endereco,
                     'numero_endereco' => $numero_endereco,
                     'bairro_endereco' => $bairro_endereco,
@@ -459,7 +302,114 @@ class DriverController extends Controller
         ]);
     }
 
-    
+    public function showPendingDemands(Request $request){
+
+        $id_user_employee  = session('id_user');
+        
+        $calldemands = $this->buscarChamadosAtrasados($id_user_employee);
+        
+        $lista_chamados = array();
+        $ficha = array();
+        $status_servico = array();
+        $chave_demanda = 0;
+        $id_cliente = 0;
+        $quantidade_cacamba = 0;
+        $tipo_servico    = "";
+        $endereco        = "";
+        $numero_endereco = "";
+        $bairro_endereco = "";
+        $cep_endereco    = "";
+        $cidade_endereco = "";
+        $data_operacao   = "";
+
+        foreach ($calldemands as $key => $chamado) {
+
+            if(
+                $chamado->id_cliente == $id_cliente
+                && $chamado->tipo_servico == $tipo_servico 
+                && $chamado->endereco == $endereco
+                && $chamado->numero_endereco == $numero_endereco
+                && $chamado->bairro_endereco == $bairro_endereco
+                && $chamado->cep_endereco == $cep_endereco
+                && $chamado->cidade_endereco == $cidade_endereco            
+            ){
+                $quantidade_cacamba += 1;
+                $ficha[] = $chamado->ficha;
+                $status_servico[] = $chamado->status_servico;
+                
+                $lista_chamados[$chave_demanda] = array_replace($lista_chamados[$chave_demanda], array(
+                    'id_fichas'     => $ficha,
+                    'id_motorista'  => $chamado->id_motorista,
+                    'id_cliente'    => $id_cliente,
+                    'tipo_servico'  => $tipo_servico,
+                    'status_colocacao'=> $chamado->cacamba_colocacao,
+                    'status_retirada' => $chamado->cacamba_retirada,
+                    'status_troca'    => $chamado->cacamba_troca,
+                    'observacao_operacao'    => $chamado->observacao_operacao,
+                    'endereco'        => $endereco,
+                    'numero_endereco' => $numero_endereco,
+                    'bairro_endereco' => $bairro_endereco,
+                    'cep_endereco'    => $cep_endereco,
+                    'cidade_endereco' => $cidade_endereco,
+                    'quantidade_cacamba' => $quantidade_cacamba,
+                    'status_servico'  => $status_servico,
+                    'data_operacao'  => $data_operacao
+                ));
+
+
+            }else{
+
+                $ficha = array();
+                $status_servico = array();
+                $ficha[] = $chamado->ficha;
+                $status_servico[] = $chamado->status_servico;
+                $data_operacao  = $chamado->data_operacao;
+
+                $id_cliente      = $chamado->id_cliente;
+                $tipo_servico    = $chamado->tipo_servico;
+                $endereco        = $chamado->endereco;
+                $numero_endereco = $chamado->numero_endereco;
+                $bairro_endereco = $chamado->bairro_endereco;
+                $cep_endereco    = $chamado->cep_endereco;
+                $cidade_endereco = $chamado->cidade_endereco;
+                $quantidade_cacamba = 1;
+                $chave_demanda = $key;
+                
+
+                $lista_chamados[$key] = array(
+                    'id_fichas' => $ficha,
+                    'id_motorista'  => $chamado->id_motorista,
+                    'id_cliente' => $id_cliente,
+                    'tipo_servico' => $tipo_servico,
+                    'status_colocacao'=> $chamado->cacamba_colocacao,
+                    'status_retirada' => $chamado->cacamba_retirada,
+                    'status_troca'    => $chamado->cacamba_troca,
+                    'observacao_operacao'    => $chamado->observacao_operacao,
+                    'endereco'        => $endereco,
+                    'numero_endereco' => $numero_endereco,
+                    'bairro_endereco' => $bairro_endereco,
+                    'cep_endereco'    => $cep_endereco,
+                    'cidade_endereco' => $cidade_endereco,
+                    'quantidade_cacamba' => $quantidade_cacamba,
+                    'status_servico'  => $status_servico,
+                    'data_operacao'  => $data_operacao
+                );
+            }
+        }
+
+        if($request->get_data == true){
+
+            return array(
+                'lista_chamados'=> $lista_chamados,
+
+            );
+        }
+
+        return view('driver.list_pending_demand_driver',[
+            'lista_chamados'=> $lista_chamados,
+        ]);
+
+    }
 
     public function showDemandFilter(Request $request)
     {
@@ -525,7 +475,6 @@ class DriverController extends Controller
 
     public function listarChamadosDoDia($id_employee, $dateAllocationFilter)
     {
-        // $dateAllocationFilter = (empty($date_demand_filter) != true ? $date_demand_filter : date('d/m/Y'));
         $get_id_driver  = Driver::select()->where("id_employee", $id_employee)->first();
         $service_status = 5; // FINALIZADOS
 
@@ -536,6 +485,7 @@ class DriverController extends Controller
             'call_demand.id_demand as id_chamado',
             'call_demand.id_client as id_cliente',
             'call_demand.type_service  as tipo_servico',
+            'call_demand.comments as observacao_operacao',
             'call_demand.dumpster_allocation  as cacamba_colocacao',
             'call_demand.dumpster_replacement  as cacamba_troca',
             'call_demand.dumpster_removal  as cacamba_retirada',
@@ -584,10 +534,11 @@ class DriverController extends Controller
             'call_demand.service_status as status_servico',
             'call_demand.id_demand as id_chamado',
             'call_demand.id_client as id_cliente',
-            'call_demand.type_service  as tipo_servico',
-            'call_demand.dumpster_allocation  as cacamba_colocacao',
-            'call_demand.dumpster_replacement  as cacamba_troca',
-            'call_demand.dumpster_removal  as cacamba_retirada',
+            'call_demand.type_service as tipo_servico',
+            'call_demand.dumpster_allocation as cacamba_colocacao',
+            'call_demand.dumpster_replacement as cacamba_troca',
+            'call_demand.dumpster_removal as cacamba_retirada',
+            'call_demand.comments as observacao_operacao',
             'call_demand.address as endereco',
             'call_demand.period as periodo_dia',
             'call_demand.address as endereco',
@@ -622,6 +573,56 @@ class DriverController extends Controller
 
         return $calldemands;
     }
+
+    public function buscarChamadosAtrasados($id_employee)
+    {
+        $get_id_driver  = Driver::select()->where("id_employee", $id_employee)->first();
+
+        $calldemands = DB::table('call_demand')
+        ->select(
+            'call_demand.id as ficha',
+            'call_demand.service_status as status_servico',
+            'call_demand.id_demand as id_chamado',
+            'call_demand.id_client as id_cliente',
+            'call_demand.type_service  as tipo_servico',
+            'call_demand.comments as observacao_operacao',
+            'call_demand.dumpster_allocation  as cacamba_colocacao',
+            'call_demand.dumpster_replacement  as cacamba_troca',
+            'call_demand.dumpster_removal  as cacamba_retirada',
+            'call_demand.address as endereco',
+            'call_demand.period as periodo_dia',
+            'call_demand.address as endereco',
+            'call_demand.number as numero_endereco',
+            'call_demand.zipcode as cep_endereco',
+            'call_demand.district as bairro_endereco',
+            'call_demand.city as cidade_endereco',
+            'call_demand.id_driver as id_motorista',
+            DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y") as data_operacao'),
+            DB::raw('COUNT(*) as quantidade_cacamba')
+        )
+        ->where('call_demand.service_status', 0)
+        ->where('call_demand.id_driver', $get_id_driver['id'])
+        ->where(DB::raw('DATE_FORMAT(call_demand.date_allocation_dumpster, "%d/%m/%Y")'), "<" , date("d/m/Y"))
+        ->groupBy(
+            'call_demand.id',
+            'call_demand.id_demand',
+            'call_demand.period',
+            'call_demand.address',
+            'call_demand.number',
+            'call_demand.zipcode',
+            'call_demand.district',
+            'call_demand.city',
+            'call_demand.id_driver',
+            'call_demand.date_allocation_dumpster',
+
+        )
+        ->orderBy('call_demand.id_client', 'asc')
+        ->orderBy('call_demand.address', 'asc')
+        ->orderBy('call_demand.type_service', 'asc')
+        ->get();
+
+        return $calldemands;
+    }    
 
     public function buscarDetahesPedidoSelecionados(Request $request)
     {
